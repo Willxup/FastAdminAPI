@@ -1,0 +1,99 @@
+﻿using DotNetCore.CAP;
+using FastAdminAPI.Business.PrivateFunc.Applications.Business;
+using FastAdminAPI.Business.PrivateFunc.Applications.Models;
+using FastAdminAPI.Common.Attributes;
+using FastAdminAPI.Common.BASE;
+using FastAdminAPI.Common.Enums;
+using FastAdminAPI.Common.Redis;
+using FastAdminAPI.Network.Interfaces;
+using Microsoft.Extensions.Configuration;
+using SqlSugar;
+using System.Threading.Tasks;
+
+namespace FastAdminAPI.Business.PrivateFunc.Applications
+{
+    /// <summary>
+    /// 申请处理器
+    /// </summary>
+    public class ApplicationProcessor : IApplicationProcessor
+    {
+        /// <summary>
+        /// SugarScope
+        /// </summary>
+        private readonly SqlSugarScope _dbContext;
+        /// <summary>
+        /// Redis
+        /// </summary>
+        private readonly IRedisHelper _redis;
+        /// <summary>
+        /// 配置
+        /// </summary>
+        private readonly IConfiguration _configuration;
+        /// <summary>
+        /// 企业微信API
+        /// </summary>
+        private readonly IQyWechatApi _qyWechatApi;
+        /// <summary>
+        /// 事件总线
+        /// </summary>
+        private readonly ICapPublisher _capPublisher;
+
+        /// <summary>
+        /// 构造
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <param name="redis"></param>
+        /// <param name="configuration"></param>
+        /// <param name="capPublisher"></param>
+        public ApplicationProcessor(ISqlSugarClient dbContext, IRedisHelper redis, IConfiguration configuration, IQyWechatApi qyWechatApi, ICapPublisher capPublisher)
+        {
+            _dbContext = dbContext as SqlSugarScope;
+            _redis = redis;
+            _configuration = configuration; ;
+            _qyWechatApi = qyWechatApi;
+            _capPublisher = capPublisher;
+        }
+
+        /// <summary>
+        /// 获取申请处理器
+        /// </summary>
+        /// <param name="applicationCategory"></param>
+        /// <returns></returns>
+        /// <exception cref="UserOperationException"></exception>
+        private AbstractApplicationProcessor GetApplicationProcessor(byte applicationCategory)
+        {
+            return applicationCategory switch
+            {
+                //测试
+                (int)ApplicationEnums.ApplicationCategory.Test => new TestApplicationProcessor(_dbContext, _redis, _configuration, _qyWechatApi, _capPublisher),
+                //其他
+                _ => throw new UserOperationException("无法识别的申请类别!")
+            };
+        }
+
+        /// <summary>
+        /// 完成申请
+        /// </summary>
+        /// <param name="applicationCategory">申请类别</param>
+        /// <param name="applicationType">申请类型</param>
+        /// <param name="data">完成申请所需数据</param>
+        /// <returns></returns>
+        /// <exception cref="UserOperationException"></exception>
+        public async Task<ResponseModel> CompleteApplication(byte applicationCategory, long applicationType, CompleteApplicationModel data)
+        {
+
+            return await GetApplicationProcessor(applicationCategory).CompleteApplication(applicationType, data);
+        }
+        /// <summary>
+        /// 拒绝申请
+        /// </summary>
+        /// <param name="applicationCategory">申请类别</param>
+        /// <param name="applicationType">申请类型</param>
+        /// <param name="data">完成申请所需数据</param>
+        /// <returns></returns>
+        public async Task<ResponseModel> RejectApplication(byte applicationCategory, long applicationType, CompleteApplicationModel data)
+        {
+            return await GetApplicationProcessor(applicationCategory).RejectApplication(applicationType, data);
+        }
+    }
+}

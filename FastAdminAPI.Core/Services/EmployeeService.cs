@@ -1,0 +1,954 @@
+﻿using FastAdminAPI.Business.IServices;
+using FastAdminAPI.Common.Attributes;
+using FastAdminAPI.Common.BASE;
+using FastAdminAPI.Common.Enums;
+using FastAdminAPI.Core.IServices;
+using FastAdminAPI.Core.Models.Employee;
+using FastAdminAPI.Core.Services.BASE;
+using FastAdminAPI.Framework.Entities;
+using FastAdminAPI.Framework.Extensions;
+using FastAdminAPI.Framework.Extensions.DbQueryExtensions;
+using Microsoft.AspNetCore.Http;
+using SqlSugar;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace FastAdminAPI.Core.Services
+{
+    /// <summary>
+    /// 员工信息
+    /// </summary>
+    public class EmployeeService : BaseService, IEmployeeService
+    {
+        /// <summary>
+        /// 数据权限Service
+        /// </summary>
+        private readonly IDataPermissionService _dataPermission;
+
+        /// <summary>
+        /// 构造
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <param name="httpContext"></param>
+        /// <param name="dataPermission"></param>
+        public EmployeeService(ISqlSugarClient dbContext, IHttpContextAccessor httpContext,
+            IDataPermissionService dataPermission) : base(dbContext, httpContext)
+        {
+            _dataPermission = dataPermission;
+        }
+
+        #region 员工
+
+        #region 内部方法
+        /// <summary>
+        /// 新增用户功能权限
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="userId">用户Id</param>
+        /// <param name="isDelPermission">是否删除角色权限</param>
+        /// <returns></returns>
+        private async Task<ResponseModel> AddUserPermission(EmployeeBaseInfoModel model, long userId, bool isDelPermission = false)
+        {
+            ResponseModel result = ResponseModel.Success();
+
+            //创建用户角色
+            if (model.RoleIds?.Count <= 0)
+                throw new UserOperationException("角色不能为空!");
+
+            if (isDelPermission)
+            {
+                //删除该用户的角色与权限
+                result = await _dbContext.Deleteable<S09_UserPermission>().Where(S09 => S09.S01_UserId == userId).ExecuteAsync(false);
+            }
+
+            //创建List储存功能权限
+            List<S09_UserPermission> permissionList = new();
+
+            DateTime dbTime = _dbContext.GetDate();
+
+            //循环获取角色
+            model.RoleIds.ForEach(item =>
+            {
+                S09_UserPermission permission = new()
+                {
+                    S01_UserId = userId,
+                    S09_PermissionType = (byte)BusinessEnums.PermissionType.Role,
+                    S09_CommonId = item,
+
+                    S09_CreateId = _employeeId,
+                    S09_CreateBy = _employeeName,
+                    S09_CreateTime = dbTime
+                };
+                //添加到List
+                permissionList.Add(permission);
+            });
+
+            //创建用户模块
+            if (model.ModuleIds?.Count > 0)
+            {
+                //去重
+                model.ModuleIds = model.ModuleIds.Distinct().ToList();
+                //循环获取模块
+                model.ModuleIds.ForEach(item =>
+                {
+                    S09_UserPermission permission = new()
+                    {
+                        S01_UserId = userId,
+                        S09_PermissionType = (byte)BusinessEnums.PermissionType.User,
+                        S09_CommonId = item,
+
+                        S09_CreateId = _employeeId,
+                        S09_CreateBy = _employeeName,
+                        S09_CreateTime = dbTime
+                    };
+                    permissionList.Add(permission);
+                });
+            }
+
+            //判断list是否存在功能权限
+            if (result?.Code == ResponseCode.Success && permissionList?.Count > 0)
+            {
+                result = await _dbContext.Insertable(permissionList).ExecuteAsync();
+            }
+
+            return result;
+        }
+        #endregion
+
+        /// <summary>
+        /// 按部门Ids获取员工简要列表(不含子部门)
+        /// </summary>
+        /// <param name="departIds">部门Ids</param>
+        /// <param name="isMainPost">是否获取员工主岗位</param>
+        /// <returns></returns>
+        public async Task<List<EmployeeSimpleModel>> GetEmployeeListByDepartIds(List<long> departIds, bool isMainPost)
+        {
+            return await _dbContext.Queryable<S07_Employee>()
+                .Where(S07 => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid)
+                .WhereIF(departIds?.Count > 0, S07 => SqlFunc.Subqueryable<S08_EmployeePost>()
+                                                             .Where(S08 => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                                                           S08.S07_EmployeeId == S07.S07_EmployeeId &&
+                                                                           departIds.Contains(S08.S05_DepartId))
+                                                             .WhereIF(isMainPost, S08 => S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True)
+                                                             .Any())
+                .OrderBy(S07 => S07.S07_Name)
+                .Select(S07 => new EmployeeSimpleModel
+                {
+                    EmployeeId = S07.S07_EmployeeId,
+                    EmployeeName = S07.S07_Name,
+                    Phone = S07.S07_Phone
+                }).ToListAsync();
+        }
+        /// <summary>
+        /// 按岗位Ids获取员工简要列表(不含子岗位)
+        /// </summary>
+        /// <param name="postIds">岗位Ids</param>
+        /// <param name="isMainPost">是否获取员工主岗位</param>
+        /// <returns></returns>
+        public async Task<List<EmployeeSimpleModel>> GetEmployeeListByPostIds(List<long> postIds, bool isMainPost)
+        {
+            return await _dbContext.Queryable<S07_Employee>()
+                .Where(S07 => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid)
+                .WhereIF(postIds?.Count > 0, S07 => SqlFunc.Subqueryable<S08_EmployeePost>()
+                                                             .Where(S08 => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                                                           S08.S07_EmployeeId == S07.S07_EmployeeId &&
+                                                                           postIds.Contains(S08.S06_PostId))
+                                                             .WhereIF(isMainPost, S08 => S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True)
+                                                             .Any())
+                .OrderBy(S07 => S07.S07_Name)
+                .Select(S07 => new EmployeeSimpleModel
+                {
+                    EmployeeId = S07.S07_EmployeeId,
+                    EmployeeName = S07.S07_Name,
+                    Phone = S07.S07_Phone
+                }).ToListAsync();
+        }
+        /// <summary>
+        /// 获取下属员工简要列表
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<EmployeeSimpleModel>> GetSubordinateEmployeeList()
+        {
+            var dataPermission = await _dataPermission.GetDataPermission();
+
+            return await _dbContext.Queryable<S07_Employee>()
+                .Where(S07 => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid && dataPermission.Contains(S07.S07_EmployeeId))
+                .OrderBy(S07 => S07.S07_Name)
+                .Select(S07 => new EmployeeSimpleModel
+                {
+                    EmployeeId = S07.S07_EmployeeId,
+                    EmployeeName = S07.S07_Name,
+                    Phone = S07.S07_Phone
+                }).ToListAsync();
+        }
+        /// <summary>
+        /// 获取全部员工简要列表
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<EmployeeSimpleModel>> GetAllEmployeeList()
+        {
+            return await _dbContext.Queryable<S07_Employee>()
+                .Where(S07 => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid)
+                .OrderBy(S07 => S07.S07_Name)
+                .Select(S07 => new EmployeeSimpleModel
+                {
+                    EmployeeId = S07.S07_EmployeeId,
+                    EmployeeName = S07.S07_Name,
+                    Phone = S07.S07_Phone
+                }).ToListAsync();
+        }
+        /// <summary>
+        /// 通过部门Id获取员工(主岗位)列表(包含子部门)
+        /// </summary>
+        /// <param name="departId"></param>
+        /// <returns></returns>
+        public async Task<ResponseModel> GetEmployeeListByDepartId(long departId)
+        {
+            var cornerMark = await _dbContext.Queryable<S05_Department>()
+                             .Where(S05 => S05.S05_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                  S05.S05_DepartId == departId)
+                             .Select(S05 => S05.S05_CornerMark)
+                             .FirstAsync();
+            if (cornerMark != null)
+            {
+                return await GetEmployeeList(new EmployeePageSearch() { CornerMark = cornerMark });
+            }
+            return null;
+        }
+        /// <summary>
+        /// 获取员工列表
+        /// </summary>
+        /// <param name="pageSearch"></param>
+        /// <returns></returns>
+        public async Task<ResponseModel> GetEmployeeList(EmployeePageSearch pageSearch)
+        {
+            List<long> departIds = new();
+            if (!string.IsNullOrEmpty(pageSearch.CornerMark))
+            {
+                //查询部门角标获取该部门下全部下级部门
+                departIds = await _dbContext.Queryable<S05_Department>()
+                    .Where(S05 => S05.S05_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                  S05.S05_CornerMark.StartsWith(pageSearch.CornerMark))
+                    .Select(S05 => S05.S05_DepartId)
+                    .ToListAsync();
+            }
+            var result = await _dbContext.Queryable<S07_Employee>()
+                .LeftJoin<S08_EmployeePost>((S07, S08) => S07.S07_EmployeeId == S08.S07_EmployeeId &&
+                                                         S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True && //查询主岗位
+                                                         S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid)
+                .LeftJoin<S01_User>((S07, S08, S01) => S07.S01_UserId == S01.S01_UserId &&
+                                                     S01.S01_IsValid == (byte)BaseEnums.IsValid.Valid)
+                .Where((S07, S08) => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid)
+                .WhereIF(!string.IsNullOrEmpty(pageSearch.Name), (S07, S08) => S07.S07_Name.Contains(pageSearch.Name))
+                .WhereIF(!string.IsNullOrEmpty(pageSearch.Phone), (S07, S08) => S07.S07_Phone.Contains(pageSearch.Phone))
+                .WhereIF(pageSearch.Statuss?.Count > 0, (S07, S08) => pageSearch.Statuss.Contains((byte)S07.S07_Status))
+                .WhereIF(departIds?.Count > 0, (S07, S08) => departIds.Contains(S08.S05_DepartId))
+                .WhereIF(pageSearch.UserIds?.Count > 0, (S07, S08, S01) => pageSearch.UserIds.Contains(S01.S01_UserId))
+                .Select((S07, S08) => new EmployeePageResult
+                {
+                    EmployeeId = S07.S07_EmployeeId,
+                    UserId = S07.S01_UserId,
+                    CompanyId = S07.S10_CompanyId,
+                    CompanyName = null,
+                    QyUserId = S07.S07_QyUserId,
+                    Name = S07.S07_Name,
+                    Phone = S07.S07_Phone,
+                    Gender = S07.S07_Gender,
+                    DepartmentName = SqlFunc.Subqueryable<S05_Department>()
+                                                    .Where(S05 => S05.S05_DepartId == S08.S05_DepartId)
+                                                    .Select(S05 => S05.S05_DepartName),
+                    PostName = SqlFunc.Subqueryable<S06_Post>()
+                                              .Where(S06 => S06.S06_PostId == S08.S06_PostId)
+                                              .Select(S06 => S06.S06_PostName),
+                    Kind = S07.S07_Kind,
+                    Status = S07.S07_Status
+                })
+                .ToResultAsync(pageSearch.Index, pageSearch.Size);
+            if (result?.Code == ResponseCode.Success)
+            {
+                var list = result.ToConvertData<List<EmployeePageResult>>();
+                if (list?.Count > 0)
+                {
+                    //查询员工角色
+                    var permissionList = await _dbContext.Queryable<S09_UserPermission>()
+                        .Where(S09 => S09.S09_PermissionType == (byte)BusinessEnums.PermissionType.Role)
+                        .Select(S09 => new
+                        {
+                            UserId = S09.S01_UserId,
+                            RoleId = S09.S09_CommonId,
+                            RoleName = SqlFunc.Subqueryable<S03_Role>()
+                                       .Where(S03 => S03.S03_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                                     S03.S03_RoleId == S09.S09_CommonId)
+                                       .Select(S03 => S03.S03_RoleName)
+                        }).ToListAsync();
+                    list.ForEach(item =>
+                    {
+                        if (item.UserId != null)
+                        {
+                            //角色
+                            item.Roles = permissionList?.Where(c => c.UserId == item.UserId)
+                                         .Select(c => new EmployeeRoleModel
+                                         {
+                                             RoleId = c.RoleId,
+                                             RoleName = c.RoleName
+                                         }).ToList();
+                        }
+                    });
+                    result.Data = list;
+                }
+            }
+            return result;
+        }
+        /// <summary>
+        /// 获取员工信息
+        /// </summary>
+        /// <param name="employeeId">员工Id</param>
+        /// <returns></returns>
+        public async Task<EmployeeInfoModel> GetEmployeeInfo(long employeeId)
+        {
+            var employeeInfo = await _dbContext.Queryable<S07_Employee>()
+                .Where(S07 => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid && S07.S07_EmployeeId == employeeId)
+                .Select(S07 => new EmployeeInfoModel
+                {
+                    EmployeeId = S07.S07_EmployeeId,
+                    UserId = S07.S01_UserId,
+                    CompanyId = S07.S10_CompanyId,
+                    CompanyName = null,
+                    QyUserId = S07.S07_QyUserId,
+                    Name = S07.S07_Name,
+                    Phone = S07.S07_Phone,
+                    Gender = S07.S07_Gender,
+                    Avatar = S07.S07_Avatar,
+                    Email = S07.S07_Email,
+                    Kind = S07.S07_Kind,
+                    Status = S07.S07_Status,
+                    Bio = S07.S07_Bio,
+                    HireDate = S07.S07_HireDate,
+                    TrialPeriodDate = S07.S07_TrialPeriodDate,
+                    ConfirmationDate = S07.S07_ConfirmationDate,
+                    TerminationDate = S07.S07_TerminationDate,
+                })
+                .FirstAsync();
+            if (employeeInfo != null)
+            {
+                //查询部门岗位
+                var employeePostList = await _dbContext.Queryable<S08_EmployeePost>()
+                                       .Where(S08 => S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True && //查询主岗位
+                                                     S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid)
+                                       .Select(S08 => new
+                                       {
+                                           EmployeeId = S08.S07_EmployeeId,
+                                           PostName = SqlFunc.Subqueryable<S06_Post>()
+                                                             .Where(S06 => S06.S06_PostId == S08.S06_PostId)
+                                                             .Select(S06 => S06.S06_PostName),
+                                           DepartmentName = SqlFunc.Subqueryable<S05_Department>()
+                                                                   .Where(S05 => S05.S05_DepartId == S08.S05_DepartId)
+                                                                   .Select(S05 => S05.S05_DepartName),
+                                       }).ToListAsync();
+                //部门
+                employeeInfo.DepartmentName = employeePostList.Where(c => c.EmployeeId == employeeInfo.EmployeeId)
+                                                              .Select(c => c.DepartmentName).FirstOrDefault();
+                //岗位
+                employeeInfo.PostName = employeePostList.Where(c => c.EmployeeId == employeeInfo.EmployeeId)
+                                                .Select(c => c.PostName).FirstOrDefault();
+                //判断是否存在用户Id
+                if (employeeInfo.UserId != null)
+                {
+                    //查询用户
+                    employeeInfo.Account = await _dbContext.Queryable<S01_User>()
+                        .Where(S01 => S01.S01_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                      S01.S01_UserId == employeeInfo.UserId)
+                        .Select(c => new EmployeeAccountModel
+                        {
+                            Account = c.S01_Account,
+                            Password = c.S01_Password,
+                            AccountStatus = c.S01_AccountStatus
+                        }).FirstAsync();
+                    //查询员工功能权限
+                    var permissionList = await _dbContext.Queryable<S09_UserPermission>()
+                        .Where(S09 => S09.S01_UserId == employeeInfo.UserId)
+                        .Select(S09 => new
+                        {
+                            S09.S01_UserId,
+                            S09.S09_PermissionType,
+                            S09.S09_CommonId
+                        }).ToListAsync();
+                    //员工角色
+                    var roleIds = permissionList?.Where(c => c.S09_PermissionType == (byte)BusinessEnums.PermissionType.Role).Select(c => c.S09_CommonId).ToList();
+                    if (roleIds?.Count > 0)
+                    {
+                        employeeInfo.Roles = await _dbContext.Queryable<S03_Role>()
+                            .Where(S03 => S03.S03_IsValid == (byte)BaseEnums.IsValid.Valid && roleIds.Contains(S03.S03_RoleId))
+                            .Select(S03 => new EmployeeRoleModel
+                            {
+                                RoleId = S03.S03_RoleId,
+                                RoleName = S03.S03_RoleName
+                            }).ToListAsync();
+                    }
+                    //员工模块
+                    var moduleIds = permissionList?.Where(c => c.S09_PermissionType == (byte)BusinessEnums.PermissionType.User).Select(c => c.S09_CommonId).ToList();
+                    if (moduleIds?.Count > 0)
+                    {
+                        employeeInfo.Permissions = await _dbContext.Queryable<S02_Module>()
+                             .Where(S02 => S02.S02_IsValid == (byte)BaseEnums.IsValid.Valid && moduleIds.Contains(S02.S02_ModuleId))
+                             .Select(c => new EmployeePermissionModel
+                             {
+                                 ModuleId = c.S02_ModuleId,
+                                 ModuleName = c.S02_ModuleName,
+                                 Kind = c.S02_Kind
+                             }).ToListAsync();
+                    }
+                }
+            }
+            return employeeInfo;
+        }
+        /// <summary>
+        /// 新增员工
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<ResponseModel> AddEmployee(AddEmployeeInfoModel model)
+        {
+            //名称重复校验
+            bool isExist = await _dbContext.Queryable<S07_Employee>()
+                .Where(S07 => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                              S07.S07_Status != (byte)BusinessEnums.EmployeeStatus.Dimission && //查询未离职的员工
+                              S07.S07_Phone == model.Phone)
+                .AnyAsync();
+            if (isExist) throw new UserOperationException("当前联系方式已存在!");
+
+            //开启事务
+            return await _dbContext.TransactionAsync(async () =>
+            {
+                ResponseModel result = ResponseModel.Success();
+
+                //用户Id
+                long? userId = null;
+
+                //判断是否创建用户
+                if (model.AccountStatus)
+                {
+                    if (model.Account == null)
+                        throw new UserOperationException("账号不能为空!");
+                    if (model.Password == null)
+                        throw new UserOperationException("密码不能为空!");
+
+                    //名称重复校验
+                    bool isExist = await _dbContext.Queryable<S01_User>()
+                        .Where(S01 => S01.S01_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                      S01.S01_Account == model.Account)
+                        .AnyAsync();
+                    if (isExist) throw new UserOperationException("账号已存在!");
+
+                    //创建用户
+                    S01_User user = new()
+                    {
+                        S01_Account = model.Account,
+                        S01_Password = model.Password,
+                        S01_AccountStatus = (byte)BusinessEnums.AccountStatus.Enable,
+
+                        S01_IsValid = (byte)BaseEnums.IsValid.Valid,
+                        S01_CreateId = _employeeId,
+                        S01_CreateBy = _employeeName,
+                        S01_CreateTime = _dbContext.GetDate()
+                    };
+                    //创建用户返回主键
+                    result = await _dbContext.Insertable(user).ExecuteAsync();
+
+                    if (result?.Code == ResponseCode.Success)
+                    {
+                        userId = Convert.ToInt64(result.Data);
+
+                        //创建用户角色权限
+                        result = await AddUserPermission(model, (long)userId, false);
+                    }
+                }
+
+                if (result?.Code == ResponseCode.Success)
+                {
+                    //创建员工
+                    S07_Employee employee = new()
+                    {
+                        S01_UserId = userId,
+                        S10_CompanyId = model.CompanyId,
+                        S07_Name = model.Name,
+                        S07_Phone = model.Phone,
+                        S07_Gender = model.Gender,
+                        S07_Avatar = model.Avatar,
+                        S07_Email = model.Email,
+                        S07_Kind = model.Kind,
+                        S07_Status = model.Status,
+                        S07_Bio = model.Bio,
+                        S07_HireDate = model.HireDate,
+                        S07_TrialPeriodDate = model.TrialPeriodDate,
+                        S07_ConfirmationDate = model.ConfirmationDate,
+                        S07_TerminationDate = model.TerminationDate,
+
+                        S07_IsValid = (byte)BaseEnums.IsValid.Valid,
+                        S07_CreateId = _employeeId,
+                        S07_CreateBy = _employeeName,
+                        S07_CreateTime = _dbContext.GetDate()
+                    };
+                    //创建员工返回主键
+                    result = await _dbContext.Insertable(employee).ExecuteAsync();
+
+                    if (result?.Code == ResponseCode.Success)
+                    {
+                        //员工Id
+                        long employeeId = Convert.ToInt64(result.Data);
+
+                        //创建部门岗位
+                        S08_EmployeePost employeePost = new()
+                        {
+                            S07_EmployeeId = employeeId,
+                            S05_DepartId = (long)model.DepartmentId,
+                            S06_PostId = (long)model.PostId,
+                            S08_IsMainPost = (byte)BaseEnums.TrueOrFalse.True,
+
+                            S08_IsValid = (byte)BaseEnums.IsValid.Valid,
+                            S08_CreateId = _employeeId,
+                            S08_CreateBy = _employeeName,
+                            S08_CreateTime = _dbContext.GetDate()
+                        };
+                        result = await _dbContext.Insertable(employeePost).ExecuteAsync();
+
+                        if (result?.Code == ResponseCode.Success)
+                        {
+                            //清除数据权限
+                            await _dataPermission.ReleaseDataPermissions();
+                        }
+                    }
+                }
+                return result;
+            });
+        }
+        /// <summary>
+        /// 编辑员工
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<ResponseModel> EditEmployee(EditEmployeeInfoModel model)
+        {
+            return await _dbContext.TransactionAsync(async () =>
+            {
+                //编辑员工
+                var result = await _dbContext.Updateable<S07_Employee>()
+                            .SetColumns(S07 => new S07_Employee
+                            {
+                                S10_CompanyId = model.CompanyId,
+                                S07_Name = model.Name,
+                                S07_Phone = model.Phone,
+                                S07_Gender = model.Gender,
+                                S07_Avatar = model.Avatar,
+                                S07_Email = model.Email,
+                                S07_Kind = model.Kind,
+                                S07_Status = model.Status,
+                                S07_Bio = model.Bio,
+                                S07_HireDate = model.HireDate,
+                                S07_TrialPeriodDate = model.TrialPeriodDate,
+                                S07_ConfirmationDate = model.ConfirmationDate,
+                                S07_TerminationDate = model.TerminationDate,
+
+                                S07_ModifyId = _employeeId,
+                                S07_ModifyBy = _employeeName,
+                                S07_ModifyTime = SqlFunc.GetDate()
+                            })
+                            .Where(S07 => S07.S07_EmployeeId == model.EmployeeId)
+                            .ExecuteAsync();
+
+                if (result?.Code == ResponseCode.Success)
+                {
+                    //密码进行解密
+                    //model.Password = UserPasswordCryptionHelper.DecryptPassword(model.Password);
+
+                    //查询该员工是否存在用户账号，存在则进行无效
+                    var userId = await _dbContext.Queryable<S07_Employee>()
+                                 .Where(S07 => S07.S07_EmployeeId == model.EmployeeId)
+                                 .Select(S07 => S07.S01_UserId)
+                                 .FirstAsync();
+
+                    //启用账号
+                    if (model.AccountStatus)
+                    {
+                        if (model.Account == null)
+                            throw new UserOperationException("账号不能为空!");
+                        if (model.Password == null)
+                            throw new UserOperationException("密码不能为空!");
+
+                        //用户ID为null时新增用户
+                        if (userId == null)
+                        {
+                            //名称重复校验
+                            bool isExist = await _dbContext.Queryable<S01_User>()
+                                .Where(S01 => S01.S01_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                              S01.S01_Account == model.Account)
+                                .AnyAsync();
+                            if (isExist) throw new UserOperationException("账号已存在!");
+                            //创建用户
+                            S01_User user = new()
+                            {
+                                S01_Account = model.Account,
+                                S01_Password = model.Password,
+                                S01_AccountStatus = (byte)BusinessEnums.AccountStatus.Enable,
+
+                                S01_IsValid = (byte)BaseEnums.IsValid.Valid,
+                                S01_CreateId = _employeeId,
+                                S01_CreateBy = _employeeName,
+                                S01_CreateTime = _dbContext.GetDate()
+                            };
+                            //创建用户返回主键
+                            result = await _dbContext.Insertable(user).ExecuteAsync();
+
+                            if (result?.Code == ResponseCode.Success)
+                            {
+                                userId = Convert.ToInt64(result.Data);
+
+                                //创建用户角色权限
+                                result = await AddUserPermission(model, (long)userId, false); //新增用户，无需删除角色权限
+                            }
+                        }
+                        //用户ID不为null时修改账号状态为启用并清除用户权限重新添加新传入的用户权限
+                        else
+                        {
+                            //名称重复校验
+                            bool isExist = await _dbContext.Queryable<S01_User>()
+                                .Where(S01 => S01.S01_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                              S01.S01_Account == model.Account && S01.S01_UserId != userId)
+                                .AnyAsync();
+                            if (isExist) throw new UserOperationException("账号已存在!");
+
+                            //修改用户账号及密码
+                            result = await _dbContext.Updateable<S01_User>()
+                                .SetColumns(S01 => new S01_User
+                                {
+                                    S01_Account = model.Account,
+                                    S01_Password = model.Password,
+                                    S01_AccountStatus = (byte)BusinessEnums.AccountStatus.Enable,
+
+                                    S01_ModifyId = _employeeId,
+                                    S01_ModifyBy = _employeeName,
+                                    S01_ModifyTime = SqlFunc.GetDate()
+                                })
+                                .Where(S01 => S01.S01_UserId == userId)
+                                .ExecuteAsync();
+                            if (result?.Code == ResponseCode.Success)
+                            {
+                                //先删除已存在的用户角色权限，在新增用户角色权限
+                                result = await AddUserPermission(model, (long)userId, true); //编辑用户，需要删除角色权限
+                            }
+                        }
+                    }
+                    else //禁用账号时更改用户账号状态为禁用
+                    {
+                        if (userId != null)
+                        {
+                            result = await _dbContext.Updateable<S01_User>()
+                                .SetColumns(S01 => new S01_User
+                                {
+                                    S01_AccountStatus = (byte)BusinessEnums.AccountStatus.Disable,
+                                    S01_ModifyId = _employeeId,
+                                    S01_ModifyBy = _employeeName,
+                                    S01_ModifyTime = SqlFunc.GetDate()
+                                })
+                                .Where(S01 => S01.S01_UserId == userId)
+                                .ExecuteAsync();
+                        }
+
+                    }
+                }
+                return result;
+            });
+        }
+        /// <summary>
+        /// 离职员工
+        /// </summary>
+        /// <param name="employeeId">员工Id</param>
+        /// <returns></returns>
+        public async Task<ResponseModel> DimissionEmployee(long employeeId)
+        {
+            return await _dbContext.TransactionAsync(async () =>
+            {
+                //更改员工状态为离职
+                var result = await _dbContext.Updateable<S07_Employee>()
+                            .SetColumns(S07 => new S07_Employee
+                            {
+                                S07_Status = (byte)BusinessEnums.EmployeeStatus.Dimission,
+                                S07_ModifyId = _employeeId,
+                                S07_ModifyBy = _employeeName,
+                                S07_ModifyTime = SqlFunc.GetDate()
+                            })
+                            .Where(S07 => S07.S07_EmployeeId == employeeId)
+                            .ExecuteAsync();
+
+                //查询该员工是否存在用户账号，存在则禁用账号
+                var userId = await _dbContext.Queryable<S07_Employee>()
+                             .Where(S07 => S07.S07_EmployeeId == employeeId)
+                             .Select(S07 => S07.S01_UserId)
+                             .FirstAsync();
+
+                //无效员工账号
+                if (userId != null && result?.Code == ResponseCode.Success)
+                {
+
+                    result = await _dbContext.Updateable<S01_User>()
+                        .SetColumns(S01 => new S01_User
+                        {
+                            S01_AccountStatus = (byte)BusinessEnums.AccountStatus.Disable,
+                            S01_ModifyId = _employeeId,
+                            S01_ModifyBy = _employeeName,
+                            S01_ModifyTime = SqlFunc.GetDate()
+                        })
+                        .Where(S01 => S01.S01_UserId == userId)
+                        .ExecuteAsync();
+                }
+
+                //无效员工岗位
+                if (result?.Code == ResponseCode.Success)
+                {
+                    result = await _dbContext.Updateable<S08_EmployeePost>()
+                           .SetColumns(S08 => new S08_EmployeePost
+                           {
+                               S08_IsValid = (byte)BaseEnums.IsValid.InValid,
+                               S08_DeleteId = _employeeId,
+                               S08_DeleteBy = _employeeName,
+                               S08_DeleteTime = SqlFunc.GetDate()
+                           })
+                           .Where(S08 => S08.S07_EmployeeId == employeeId)
+                           .ExecuteAsync();
+                }
+
+                //清除数据权限
+                if (result?.Code == ResponseCode.Success)
+                {
+                    await _dataPermission.ReleaseDataPermissions();
+                }
+                return result;
+            });
+        }
+        /// <summary>
+        /// 删除员工
+        /// </summary>
+        /// <param name="employeeId">员工Id</param>
+        /// <returns></returns>
+        public async Task<ResponseModel> DelEmployee(long employeeId)
+        {
+            return await _dbContext.TransactionAsync(async () =>
+            {
+                var result = await _dbContext.Updateable<S07_Employee>()
+                            .SetColumns(S07 => new S07_Employee
+                            {
+                                S07_IsValid = (byte)BaseEnums.IsValid.InValid,
+                                S07_DeleteId = _employeeId,
+                                S07_DeleteBy = _employeeName,
+                                S07_DeleteTime = SqlFunc.GetDate()
+                            })
+                            .Where(S07 => S07.S07_EmployeeId == employeeId)
+                            .ExecuteAsync();
+                //查询该员工是否存在用户账号，存在则进行无效
+                var userId = await _dbContext.Queryable<S07_Employee>()
+                             .Where(S07 => S07.S07_EmployeeId == employeeId)
+                             .Select(S07 => S07.S01_UserId)
+                             .FirstAsync();
+
+                //无效员工账号
+                if (result?.Code == ResponseCode.Success && userId != null)
+                {
+                    
+
+                    result = await _dbContext.Updateable<S01_User>()
+                                .SetColumns(S01 => new S01_User
+                                {
+                                    S01_IsValid = (byte)BaseEnums.IsValid.InValid,
+                                    S01_DeleteId = _employeeId,
+                                    S01_DeleteBy = _employeeName,
+                                    S01_DeleteTime = SqlFunc.GetDate()
+                                })
+                                .Where(S01 => S01.S01_UserId == userId)
+                                .ExecuteAsync();
+
+                }
+
+                //无效员工岗位
+                if (result?.Code == ResponseCode.Success)
+                {
+                    result = await _dbContext.Updateable<S08_EmployeePost>()
+                           .SetColumns(S08 => new S08_EmployeePost
+                           {
+                               S08_IsValid = (byte)BaseEnums.IsValid.InValid,
+                               S08_DeleteId = _employeeId,
+                               S08_DeleteBy = _employeeName,
+                               S08_DeleteTime = SqlFunc.GetDate()
+                           })
+                           .Where(S08 => S08.S07_EmployeeId == employeeId)
+                           .ExecuteAsync();
+                }
+
+
+                //清除数据权限
+                if (result?.Code == ResponseCode.Success)
+                {
+                    await _dataPermission.ReleaseDataPermissions();
+                }
+
+                return result;
+            });
+        }
+        #endregion
+
+        #region 员工岗位
+        /// <summary>
+        /// 获取员工岗位列表
+        /// </summary>
+        /// <param name="employeeId">员工Id</param>
+        /// <returns></returns>
+        public async Task<ResponseModel> GetEmployeePostList(long employeeId)
+        {
+            return await _dbContext.Queryable<S08_EmployeePost>()
+                   .Where(S08 => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                 S08.S07_EmployeeId == employeeId)
+                   .Select(S08 => new EmployeePostResult
+                   {
+                       EmployeePostId = S08.S08_EmployeePostId,
+                       DepartmentId = S08.S05_DepartId,
+                       DepartmentName = SqlFunc.Subqueryable<S05_Department>()
+                                                       .Where(S05 => S05.S05_DepartId == S08.S05_DepartId)
+                                                       .Select(S05 => S05.S05_DepartName),
+                       PostId = S08.S06_PostId,
+                       PostName = SqlFunc.Subqueryable<S06_Post>()
+                                                 .Where(S06 => S06.S06_PostId == S08.S06_PostId)
+                                                 .Select(S06 => S06.S06_PostName),
+                       IsMainPost = S08.S08_IsMainPost
+                   })
+                   .ToResultAsync(null, null);
+        }
+        /// <summary>
+        /// 新增员工岗位
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<ResponseModel> AddEmployeePost(AddEmployeePostModel model)
+        {
+            //部门岗位重复校验
+            bool isExist = await _dbContext.Queryable<S08_EmployeePost>()
+                .Where(S08 => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                              S08.S07_EmployeeId == model.EmployeeId &&
+                              S08.S05_DepartId == model.DepartId &&
+                              S08.S06_PostId == model.PostId)
+                .AnyAsync();
+            if (isExist) throw new UserOperationException("该岗位已存在!");
+
+            //不存在岗位的员工默认设置的第一条为主岗位
+            if (!await _dbContext.Queryable<S08_EmployeePost>()
+                .Where(S08 => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                              S08.S07_EmployeeId == model.EmployeeId)
+                .AnyAsync())
+            {
+                model.IsMainPost = (byte)BaseEnums.TrueOrFalse.True;
+            }
+
+            model.OperationId = _employeeId;
+            model.OperationName = _employeeName;
+            model.OperationTime = _dbContext.GetDate();
+            var result = await _dbContext.InsertResultAsync<AddEmployeePostModel, S08_EmployeePost>(model);
+            if (result?.Code == ResponseCode.Success)
+            {
+                //释放数据权限
+                await _dataPermission.ReleaseDataPermissions();
+            }
+            return result;
+        }
+        /// <summary>
+        /// 设置员工主岗位
+        /// </summary>
+        /// <param name="employeePostId">员工岗位Id</param>
+        /// <returns></returns>
+        public async Task<ResponseModel> SetEmployeeMainPost(long employeePostId)
+        {
+            //部门岗位是否为主账号
+            var employeePostInfo = await _dbContext.Queryable<S08_EmployeePost>()
+                .Where(S08 => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                              S08.S08_EmployeePostId == employeePostId)
+                .Select(S08 => new
+                {
+                    S08.S07_EmployeeId,
+                    S08.S08_IsMainPost
+                })
+                .FirstAsync() ?? throw new UserOperationException("暂未找到该员工岗位!");
+
+            if (employeePostInfo.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True)
+                throw new UserOperationException("当前岗位已是主岗位!");
+
+            //开启事务
+            return await _dbContext.TransactionAsync(async () =>
+            {
+                //去除当前操作的岗位，更新该员工其他岗位为副岗位
+                var result = await _dbContext.Updateable<S08_EmployeePost>()
+                            .SetColumns(S08 => new S08_EmployeePost
+                            {
+                                S08_IsMainPost = (byte)BaseEnums.TrueOrFalse.False,
+                                S08_ModifyId = _employeeId,
+                                S08_ModifyBy = _employeeName,
+                                S08_ModifyTime = SqlFunc.GetDate()
+                            })
+                            .Where(S08 => S08.S07_EmployeeId == employeePostInfo.S07_EmployeeId && S08.S08_EmployeePostId != employeePostId)
+                            .ExecuteAsync();
+                if (result?.Code == ResponseCode.Success)
+                {
+                    result = await _dbContext.Updateable<S08_EmployeePost>()
+                                .SetColumns(S08 => new S08_EmployeePost
+                                {
+                                    S08_IsMainPost = (byte)BaseEnums.TrueOrFalse.True,
+                                    S08_ModifyId = _employeeId,
+                                    S08_ModifyBy = _employeeName,
+                                    S08_ModifyTime = SqlFunc.GetDate()
+                                })
+                                .Where(S08 => S08.S08_EmployeePostId == employeePostId)
+                                .ExecuteAsync();
+                }
+                if (result?.Code == ResponseCode.Success)
+                {
+                    //释放数据权限
+                    await _dataPermission.ReleaseDataPermissions();
+                }
+                return result;
+            });
+
+        }
+        /// <summary>
+        /// 删除员工岗位
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<ResponseModel> DelEmployeePost(DelEmployeePostModel model)
+        {
+            //部门岗位是否为主账号
+            var employeePostInfo = await _dbContext.Queryable<S08_EmployeePost>()
+                .Where(S08 => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                              S08.S08_EmployeePostId == model.EmployeePostId)
+                .Select(S08 => new
+                {
+                    S08.S07_EmployeeId,
+                    S08.S08_IsMainPost
+                })
+                .FirstAsync() ?? throw new UserOperationException("暂未找到该员工岗位!");
+
+            if (employeePostInfo.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True)
+                throw new UserOperationException("当前为主岗位,不允许删除!");
+
+
+            model.OperationId = _employeeId;
+            model.OperationName = _employeeName;
+            model.OperationTime = _dbContext.GetDate();
+            var result = await _dbContext.SoftDeleteAsync<DelEmployeePostModel, S08_EmployeePost>(model);
+            if (result?.Code == ResponseCode.Success)
+            {
+                //释放数据权限
+                await _dataPermission.ReleaseDataPermissions();
+            }
+            return result;
+        }
+        #endregion
+    }
+}

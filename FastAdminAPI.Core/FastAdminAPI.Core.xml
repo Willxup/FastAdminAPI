@@ -1,0 +1,3896 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FastAdminAPI.Core</name>
+    </assembly>
+    <members>
+        <member name="T:FastAdminAPI.Core.Controllers.BASE.BaseController">
+            <summary>
+            控制器基类
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BASE.BaseController.Success(System.Object,System.String)">
+            <summary>
+            通用响应-成功
+            </summary>
+            <param name="data"></param>
+            <param name="msg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BASE.BaseController.Error(System.String,FastAdminAPI.Common.BASE.ResponseCode)">
+            <summary>
+            通用响应-错误
+            </summary>
+            <param name="msg"></param>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BASE.BaseController.Warn(System.String,System.Object,FastAdminAPI.Common.BASE.ResponseCode)">
+            <summary>
+            通用响应-警告
+            </summary>
+            <param name="msg"></param>
+            <param name="data"></param>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Controllers.BASE.EntityController">
+            <summary>
+            实体
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BASE.EntityController.GenerateEntities">
+            <summary>
+            生成实体类(本地环境使用)
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BASE.EntityController.GenerateEntitiesByTables(System.String[])">
+            <summary>
+            按所需表生成实体(本地环境使用)
+            </summary>
+            <param name="tables">需要生成的表</param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BASE.EntityController.GenerateEntitiesByCustom(FastAdminAPI.Core.Models.BASE.GenerateDbEntitiesModel)">
+            <summary>
+            自定义生成实体(本地环境使用)
+            </summary>
+            <param name="model"></param>
+        </member>
+        <member name="T:FastAdminAPI.Core.Controllers.BasicSettingsController">
+            <summary>
+            基础设置
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.BasicSettingsController._basicSettingsService">
+            <summary>
+            基础设置Service
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.#ctor(FastAdminAPI.Core.IServices.IBasicSettingsService)">
+            <summary>
+            构造
+            </summary>
+            <param name="basicSettingsService"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.GetCodeList(FastAdminAPI.Core.Models.BasicSettings.CodePageSearch)">
+            <summary>
+            获取字典列表
+            </summary>
+            <param name="pageSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.GetGroupCodeList">
+            <summary>
+            获取字典分组列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.AddCode(FastAdminAPI.Core.Models.BasicSettings.AddCodeModel)">
+            <summary>
+            新增字典
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.EditCode(FastAdminAPI.Core.Models.BasicSettings.EditCodeModel)">
+            <summary>
+            编辑字典
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.DelCode(System.Nullable{System.Int64})">
+            <summary>
+            删除字典
+            </summary>
+            <param name="CodeId">字典Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.GetDataPermissionSettingList(FastAdminAPI.Core.Models.BasicSettings.DataPermissionSettingsPageSearch)">
+            <summary>
+            获取数据权限设置列表
+            </summary>
+            <param name="pageSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.AddDataPermissionSetting(FastAdminAPI.Core.Models.BasicSettings.AddDataPermissionSettingModel)">
+            <summary>
+            新增数据权限设置
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.EditDataPermissionSetting(FastAdminAPI.Core.Models.BasicSettings.EditDataPermissionSettingModel)">
+            <summary>
+            编辑数据权限设置
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.DelDataPermissionSetting(System.Nullable{System.Int64})">
+            <summary>
+            删除数据权限设置
+            </summary>
+            <param name="DataPermissionId">数据权限设置Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.GetCheckProcessList(FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageSearch)">
+            <summary>
+            获取审批流程列表
+            </summary>
+            <param name="pageSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.AddCheckProcess(FastAdminAPI.Core.Models.BasicSettings.AddCheckProcessModel)">
+            <summary>
+            新增审批流程
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.EditCheckProcess(FastAdminAPI.Core.Models.BasicSettings.EditCheckProcessModel)">
+            <summary>
+            编辑审批流程
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.DelCheckProcess(FastAdminAPI.Core.Models.BasicSettings.DelCheckProcessModel)">
+            <summary>
+            删除审批流程
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Controllers.CommonController">
+            <summary>
+            公共
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.CommonController._commonService">
+            <summary>
+            公共服务
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.CommonController.ExportExcelTemplate">
+            <summary>
+            导出Excel模板
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Controllers.DepartmentController">
+            <summary>
+            部门设置
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.DepartmentController._departmentSercvice">
+            <summary>
+            部门Service
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.DepartmentController.#ctor(FastAdminAPI.Core.IServices.IDepartmentService)">
+            <summary>
+            构造
+            </summary>
+            <param name="departmentSercvice"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.DepartmentController.GetDepartmentTree(System.String)">
+            <summary>
+            获取部门树
+            </summary>
+            <param name="departName">部门名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.DepartmentController.AddDepartment(FastAdminAPI.Core.Models.Departments.AddDepartmentModel)">
+            <summary>
+            新增部门
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.DepartmentController.EditDepartment(FastAdminAPI.Core.Models.Departments.EditDepartmentModel)">
+            <summary>
+            编辑部门
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.DepartmentController.DelDepartment(FastAdminAPI.Core.Models.Departments.DelDepartmentModel)">
+            <summary>
+            删除部门
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.DepartmentController.GetDepartmentPostStaffing(System.String)">
+            <summary>
+            获取部门岗位编制
+            </summary>
+            <param name="cornerMark">角标</param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Controllers.EmailApiController">
+            <summary>
+            EmailAPI
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmailApiController.#ctor">
+            <summary>
+            构造
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmailApiController.SendSmtpEmail(FastAdminAPI.Common.Email.SendSmtpEmailModel)">
+            <summary>
+            发送Smtp邮件
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmailApiController.SendMultipleSmtpEmail(FastAdminAPI.Common.Email.SendMultipleSmtpEmailModel)">
+            <summary>
+            发送smtp邮件(支持多个收件人及抄送人)
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmailApiController.SendEmailByDefault(System.String,System.String)">
+            <summary>
+            默认配置发送邮件
+            </summary>
+            <param name="subject">邮件主题</param>
+            <param name="body">邮件内容</param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Controllers.EmployeeController">
+            <summary>
+            员工信息
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.EmployeeController._employeeService">
+            <summary>
+            员工Service
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.#ctor(FastAdminAPI.Core.IServices.IEmployeeService)">
+            <summary>
+            构造
+            </summary>
+            <param name="employeeService"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.GetEmployeeListByDepartIds(System.Collections.Generic.List{System.Int64},System.Boolean)">
+            <summary>
+            按部门Ids获取员工简要列表(不含子部门)
+            </summary>
+            <param name="DepartIds">部门Ids</param>
+            <param name="IsMainPost">是否获取员工主岗位(默认主子岗位都获取)</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.GetEmployeeListByPostIds(System.Collections.Generic.List{System.Int64},System.Boolean)">
+            <summary>
+            按岗位Ids获取员工简要列表(不含子岗位)
+            </summary>
+            <param name="PostIds">岗位Ids</param>
+            <param name="IsMainPost">是否获取员工主岗位(默认主子岗位都获取)</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.GetSubordinateEmployeeList">
+            <summary>
+            获取下属员工简要列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.GetAllEmployeeList">
+            <summary>
+            获取全部员工简要列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.GetEmployeeListByDepartId(System.Nullable{System.Int64})">
+            <summary>
+            通过部门Id获取员工(只能获取主岗位)列表(包含子部门)
+            </summary>
+            <param name="departId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.GetEmployeeList(FastAdminAPI.Core.Models.Employee.EmployeePageSearch)">
+            <summary>
+            获取员工信息列表
+            </summary>
+            <param name="pageSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.GetEmployeeInfo(System.Nullable{System.Int64})">
+            <summary>
+            获取员工信息
+            </summary>
+            <param name="employeeId">员工Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.AddEmployee(FastAdminAPI.Core.Models.Employee.AddEmployeeInfoModel)">
+            <summary>
+            新增员工
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.EditEmployee(FastAdminAPI.Core.Models.Employee.EditEmployeeInfoModel)">
+            <summary>
+            编辑员工
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.DimissionEmployee(System.Nullable{System.Int64})">
+            <summary>
+            离职员工
+            </summary>
+            <param name="employeeId">员工Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.DelEmployee(System.Nullable{System.Int64})">
+            <summary>
+            删除员工
+            </summary>
+            <param name="employeeId">员工Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.GetEmployeePostList(System.Nullable{System.Int64})">
+            <summary>
+            获取员工岗位列表
+            </summary>
+            <param name="employeeId">员工Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.AddEmployeePost(FastAdminAPI.Core.Models.Employee.AddEmployeePostModel)">
+            <summary>
+            新增员工岗位
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.SetEmployeeMainPost(System.Nullable{System.Int64})">
+            <summary>
+            设置员工主岗位
+            </summary>
+            <param name="employeePostId">员工岗位Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.DelEmployeePost(FastAdminAPI.Core.Models.Employee.DelEmployeePostModel)">
+            <summary>
+            删除员工岗位
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Controllers.EventBusController">
+            <summary>
+            事件总线
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.EventBusController._evenBus">
+            <summary>
+            事件总线
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.EventBusController.PublishMessage(System.String)">
+            <summary>
+            发布信息
+            </summary>
+            <param name="Msg"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Controllers.LoginController">
+            <summary>
+            登录
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.LoginController._redis">
+            <summary>
+            Redis
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.LoginController._configuration">
+            <summary>
+            配置
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.LoginController._loginService">
+            <summary>
+            登录Service
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.LoginController._qyWechatApi">
+            <summary>
+            企业微信API
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.LoginController.LOGIN_PERMIT_KEY">
+            <summary>
+            登录许可Key
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.LoginController.LOGIN_PERMIT_EXPIRES">
+            <summary>
+            登录许可有效期
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.LoginController.LOGIN_PERMIT_IP_WHITE_LIST">
+            <summary>
+            登录许可IP白名单
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.LoginController.#ctor(FastAdminAPI.Common.Redis.IRedisHelper,Microsoft.Extensions.Configuration.IConfiguration,FastAdminAPI.Core.IServices.ILoginService,FastAdminAPI.Network.Interfaces.IQyWechatApi)">
+            <summary>
+            构造
+            </summary>
+            <param name="redis"></param>
+            <param name="configuration"></param>
+            <param name="loginService"></param>
+            <param name="qyWechatApi"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.LoginController.IsPermittedIPAddress(System.String)">
+            <summary>
+            是否为被许可的IP地址
+            </summary>
+            <param name="IP">IP地址</param>
+            <returns>true/false</returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.LoginController.LoginByPassword(FastAdminAPI.Core.Models.Login.LoginByPasswordModel)">
+            <summary>
+            密码登录
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.LoginController.LoginByQyWechat(FastAdminAPI.Core.Models.Login.LoginByQyWechatModel)">
+            <summary>
+            企业微信登录
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="T:FastAdminAPI.Core.Controllers.ModuleController">
+            <summary>
+            模块
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.ModuleController._moduleService">
+            <summary>
+            模块Service
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.ModuleController._employeeService">
+            <summary>
+            员工Service
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.ModuleController.#ctor(FastAdminAPI.Core.IServices.IModuleService,FastAdminAPI.Core.IServices.IEmployeeService)">
+            <summary>
+            构造
+            </summary>
+            <param name="moduleService"></param>
+            <param name="employeeService"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.ModuleController.GetModuleTree(System.String)">
+            <summary>
+            获取模块树
+            </summary>
+            <param name="moduleName">模块名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.ModuleController.AddModule(FastAdminAPI.Core.Models.Modules.AddModuleModel)">
+            <summary>
+            新增模块
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.ModuleController.EditModule(FastAdminAPI.Core.Models.Modules.EditModuleModel)">
+            <summary>
+            编辑模块
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.ModuleController.DelModule(FastAdminAPI.Core.Models.Modules.DelModuleModel)">
+            <summary>
+            删除模块
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.ModuleController.GetEmployeeListByModuleId(System.Nullable{System.Int64})">
+            <summary>
+            按模块Id获取员工列表
+            </summary>
+            <param name="ModuleId">模块Id</param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Controllers.PostController">
+            <summary>
+            岗位设置
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.PostController._postService">
+            <summary>
+            岗位Service
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.PostController.#ctor(FastAdminAPI.Core.IServices.IPostService)">
+            <summary>
+            构造
+            </summary>
+            <param name="postService"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.PostController.GetPostTree(System.Nullable{System.Int64})">
+            <summary>
+            获取岗位树
+            </summary>
+            <param name="departId">部门Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.PostController.AddPost(FastAdminAPI.Core.Models.Posts.AddPostModel)">
+            <summary>
+            新增岗位
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.PostController.EditPost(FastAdminAPI.Core.Models.Posts.EditPostModel)">
+            <summary>
+            编辑岗位
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.PostController.DelPost(FastAdminAPI.Core.Models.Posts.DelPostModel)">
+            <summary>
+            删除岗位
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Controllers.QyWechatApiController">
+            <summary>
+            企业微信API
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.QyWechatApiController._qyWechatApiService">
+            <summary>
+            企业微信API Service
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.QyWechatApiController.#ctor(FastAdminAPI.Core.IServices.IQyWechatApiService)">
+            <summary>
+            构造
+            </summary>
+            <param name="qyWechatApiService"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.QyWechatApiController.GetUserId(System.String)">
+            <summary>
+            获取企业微信UserId
+            </summary>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.QyWechatApiController.SendTextMessage(FastAdminAPI.Network.QyWechat.Model.MessageSendModel,System.Int64,System.String)">
+            <summary>
+            发送企业微信文本消息
+            </summary>
+            <param name="model"></param>
+            <param name="Id"></param>
+            <param name="task"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.QyWechatApiController.SendCardMessage(FastAdminAPI.Network.QyWechat.Model.CardMsgSendModel,System.Int64,System.String)">
+            <summary>
+            发送企业微信卡片消息
+            </summary>
+            <param name="model"></param>
+            <param name="Id"></param>
+            <param name="task"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Controllers.RolePermissionController">
+            <summary>
+            角色权限
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.RolePermissionController._rolePermissionService">
+            <summary>
+            角色权限Service
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.RolePermissionController.#ctor(FastAdminAPI.Core.IServices.IRolePermissionService)">
+            <summary>
+            构造
+            </summary>
+            <param name="rolePermissionService"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.RolePermissionController.GetRoleTree(System.String)">
+            <summary>
+            获取角色树
+            </summary>
+            <param name="roleName">角色名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.RolePermissionController.AddRole(FastAdminAPI.Core.Models.RolePermission.AddRoleModel)">
+            <summary>
+            新增角色
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.RolePermissionController.EditRole(FastAdminAPI.Core.Models.RolePermission.EditRoleModel)">
+            <summary>
+            编辑角色
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.RolePermissionController.DelRole(FastAdminAPI.Core.Models.RolePermission.DelRoleModel)">
+            <summary>
+            删除角色
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.RolePermissionController.CopyRole(FastAdminAPI.Core.Models.RolePermission.CopyRoleModel)">
+            <summary>
+            复制角色
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.RolePermissionController.GetRolePermission(System.Nullable{System.Int64})">
+            <summary>
+            获取角色权限
+            </summary>
+            <param name="RoleId">角色Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.RolePermissionController.SaveRolePermission(FastAdminAPI.Core.Models.RolePermission.SaveRolePermissionModel)">
+            <summary>
+            保存角色权限
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Controllers.TestController">
+            <summary>
+            测试
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.TestController._testService">
+            <summary>
+            测试Service
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.TestController.#ctor(FastAdminAPI.Core.IServices.ITestService)">
+            <summary>
+            构造
+            </summary>
+            <param name="testService"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.TestController.GetCodeListWithMapster(System.String)">
+            <summary>
+            获取code列表 mapster方式
+            </summary>
+            <param name="Code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.TestController.GetCodeListWithAutoBox(FastAdminAPI.Core.Models.Test.CodePageSearch)">
+            <summary>
+            获取code列表 AutoBox方式
+            </summary>
+            <param name="Search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.TestController.AddCode(FastAdminAPI.Core.Models.Test.AddCodeModel)">
+            <summary>
+            新增Code
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.TestController.EditCode(FastAdminAPI.Core.Models.Test.EditCodeModel)">
+            <summary>
+            编辑Code
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.TestController.DelCode(FastAdminAPI.Core.Models.Test.DelCodeModel)">
+            <summary>
+            删除Code
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.TestController.DelCodeById(System.Nullable{System.Int64})">
+            <summary>
+            通过Id删除Code
+            </summary>
+            <param name="CodeId">字典Id</param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Controllers.TokenPassController">
+            <summary>
+            令牌过滤
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.TokenPassController._tokenPassService">
+            <summary>
+            令牌过滤Service
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.TokenPassController.#ctor(FastAdminAPI.Core.IServices.ITokenPassService)">
+            <summary>
+            构造
+            </summary>
+            <param name="tokenPassService"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.TokenPassController.GetCodeList(System.String)">
+            <summary>
+            获取一组字典列表(单层)
+            </summary>
+            <param name="Code">分组代号</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.TokenPassController.GetMultiCodeList(System.Collections.Generic.List{System.String})">
+            <summary>
+            获取多组字典列表(单层)
+            </summary>
+            <param name="codeList">分组代号</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.TokenPassController.GetCodeTree(System.String)">
+            <summary>
+            获取一组字典树(多层)
+            </summary>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.TokenPassController.GetRegions">
+            <summary>
+            获取地区信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Controllers.UserController">
+            <summary>
+            用户
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.UserController._userService">
+            <summary>
+            用户Service
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.UserController.#ctor(FastAdminAPI.Core.IServices.IUserService)">
+            <summary>
+            构造
+            </summary>
+            <param name="userService"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.UserController.GetPermissions">
+            <summary>
+            获取功能权限(当前登录用户所有权限)
+            【角色权限+用户权限】
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.UserController.GetMenuPermissionsTree">
+            <summary>
+            获取菜单权限树
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.UserController.GetCheckList(FastAdminAPI.Core.Models.Users.CheckPageSearch)">
+            <summary>
+            获取我的审批列表
+            </summary>
+            <param name="pageSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.UserController.ApprovalApplication(FastAdminAPI.Core.Models.Users.ApprovalModel)">
+            <summary>
+            审批申请
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.UserController.CancelApplication(System.Nullable{System.Int64})">
+            <summary>
+            撤销申请
+            </summary>
+            <param name="CheckId">审批Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.UserController.GetCheckRecordList(FastAdminAPI.Core.Models.Users.CheckRecordPageSearch)">
+            <summary>
+            获取我的审批记录列表
+            </summary>
+            <param name="pageSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.UserController.GetApplicationCheckRecords(System.Nullable{System.Int64})">
+            <summary>
+            获取申请审批记录列表
+            </summary>
+            <param name="CheckId">审批Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.BASE.IEntityService.GenerateEntities">
+            <summary>
+            生成实体类(本地环境使用)
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.BASE.IEntityService.GenerateEntitiesByTables(System.String[])">
+            <summary>
+            按所需表生成实体(本地环境使用)
+            </summary>
+            <param name="tables">需要生成的表</param>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.BASE.IEntityService.GenerateEntitiesByCustom(FastAdminAPI.Core.Models.BASE.GenerateDbEntitiesModel)">
+            <summary>
+            自定义生成实体(本地环境使用)
+            </summary>
+            <param name="model"></param>
+        </member>
+        <member name="T:FastAdminAPI.Core.IServices.IBasicSettingsService">
+            <summary>
+            基础设置
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.GetCodeList(FastAdminAPI.Core.Models.BasicSettings.CodePageSearch)">
+            <summary>
+            获取字典列表
+            </summary>
+            <param name="pageSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.GetGroupCodeList">
+            <summary>
+            获取字典分组列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.AddCode(FastAdminAPI.Core.Models.BasicSettings.AddCodeModel)">
+            <summary>
+            新增字典
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.EditCode(FastAdminAPI.Core.Models.BasicSettings.EditCodeModel)">
+            <summary>
+            编辑字典
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.DelCode(System.Int64)">
+            <summary>
+            删除字典
+            </summary>
+            <param name="codeId">字典Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.GetDataPermissionSettingList(FastAdminAPI.Core.Models.BasicSettings.DataPermissionSettingsPageSearch)">
+            <summary>
+            获取数据权限设置列表
+            </summary>
+            <param name="pageSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.AddDataPermissionSetting(FastAdminAPI.Core.Models.BasicSettings.AddDataPermissionSettingModel)">
+            <summary>
+            新增数据权限设置
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.EditDataPermissionSetting(FastAdminAPI.Core.Models.BasicSettings.EditDataPermissionSettingModel)">
+            <summary>
+            编辑数据权限设置
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.DelDataPermissionSetting(System.Int64)">
+            <summary>
+            删除数据权限设置
+            </summary>
+            <param name="dataPermissionId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.GetCheckProcessList(FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageSearch)">
+            <summary>
+            获取审批流程列表
+            </summary>
+            <param name="pageSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.AddCheckProcess(FastAdminAPI.Core.Models.BasicSettings.AddCheckProcessModel)">
+            <summary>
+            新增审批流程
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.EditCheckProcess(FastAdminAPI.Core.Models.BasicSettings.EditCheckProcessModel)">
+            <summary>
+            编辑审批流程
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.DelCheckProcess(FastAdminAPI.Core.Models.BasicSettings.DelCheckProcessModel)">
+            <summary>
+            删除审批流程
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.ICommonService.ExportExcelTemplate">
+            <summary>
+            导出EXCEL模板
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.IServices.IDepartmentService">
+            <summary>
+            部门设置
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IDepartmentService.GetDepartmentTree(System.String)">
+            <summary>
+            获取部门树
+            </summary>
+            <param name="departName">部门名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IDepartmentService.AddDepartment(FastAdminAPI.Core.Models.Departments.AddDepartmentModel)">
+            <summary>
+            新增部门
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IDepartmentService.EditDepartment(FastAdminAPI.Core.Models.Departments.EditDepartmentModel)">
+            <summary>
+            编辑部门
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IDepartmentService.DelDepartment(FastAdminAPI.Core.Models.Departments.DelDepartmentModel)">
+            <summary>
+            删除部门
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IDepartmentService.GetDepartmentPostStaffing(System.String)">
+            <summary>
+            获取部门岗位编制
+            </summary>
+            <param name="cornerMark">角标</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IEmployeeService.GetEmployeeListByDepartIds(System.Collections.Generic.List{System.Int64},System.Boolean)">
+            <summary>
+            按部门Ids获取员工简要列表(不含子部门)
+            </summary>
+            <param name="departIds">部门Ids</param>
+            <param name="isMainPost">是否获取员工主岗位</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IEmployeeService.GetEmployeeListByPostIds(System.Collections.Generic.List{System.Int64},System.Boolean)">
+            <summary>
+            按岗位Ids获取员工简要列表(不含子岗位)
+            </summary>
+            <param name="postIds">岗位Ids</param>
+            <param name="isMainPost">是否获取员工主岗位</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IEmployeeService.GetSubordinateEmployeeList">
+            <summary>
+            获取下属员工简要列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IEmployeeService.GetAllEmployeeList">
+            <summary>
+            获取全部员工简要列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IEmployeeService.GetEmployeeListByDepartId(System.Int64)">
+            <summary>
+            通过部门Id获取员工(主岗位)列表(包含子部门)
+            </summary>
+            <param name="departId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IEmployeeService.GetEmployeeList(FastAdminAPI.Core.Models.Employee.EmployeePageSearch)">
+            <summary>
+            获取员工信息列表
+            </summary>
+            <param name="pageSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IEmployeeService.GetEmployeeInfo(System.Int64)">
+            <summary>
+            获取员工信息
+            </summary>
+            <param name="employeeId">员工Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IEmployeeService.AddEmployee(FastAdminAPI.Core.Models.Employee.AddEmployeeInfoModel)">
+            <summary>
+            新增员工
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IEmployeeService.EditEmployee(FastAdminAPI.Core.Models.Employee.EditEmployeeInfoModel)">
+            <summary>
+            编辑员工
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IEmployeeService.DimissionEmployee(System.Int64)">
+            <summary>
+            离职员工
+            </summary>
+            <param name="employeeId">员工Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IEmployeeService.DelEmployee(System.Int64)">
+            <summary>
+            删除员工
+            </summary>
+            <param name="employeeId">员工Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IEmployeeService.GetEmployeePostList(System.Int64)">
+            <summary>
+            获取员工岗位列表
+            </summary>
+            <param name="employeeId">员工Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IEmployeeService.AddEmployeePost(FastAdminAPI.Core.Models.Employee.AddEmployeePostModel)">
+            <summary>
+            新增员工岗位
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IEmployeeService.SetEmployeeMainPost(System.Int64)">
+            <summary>
+            设置员工主岗位
+            </summary>
+            <param name="employeePostId">员工岗位Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IEmployeeService.DelEmployeePost(FastAdminAPI.Core.Models.Employee.DelEmployeePostModel)">
+            <summary>
+            删除员工岗位
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IEventBusService.PublishMessage(System.String)">
+            <summary>
+            发布信息
+            </summary>
+            <param name="msg"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.IServices.ILoginService">
+            <summary>
+            登录
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.ILoginService.GetUser(System.String)">
+            <summary>
+            获取用户信息
+            </summary>
+            <param name="qyUserId">企业微信UserId</param>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.ILoginService.GetUser(System.String,System.String)">
+            <summary>
+            获取用户信息
+            </summary>
+            <param name="account">账号</param>
+            <param name="password">密码</param>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="T:FastAdminAPI.Core.IServices.IModuleService">
+            <summary>
+            模块
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IModuleService.GetModuleTree(System.String)">
+            <summary>
+            获取模块树
+            </summary>
+            <param name="moduleName">模块名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IModuleService.AddModule(FastAdminAPI.Core.Models.Modules.AddModuleModel)">
+            <summary>
+            新增模块
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IModuleService.EditModule(FastAdminAPI.Core.Models.Modules.EditModuleModel)">
+            <summary>
+            编辑模块
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IModuleService.DelModule(FastAdminAPI.Core.Models.Modules.DelModuleModel)">
+            <summary>
+            删除模块
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IModuleService.GetEmployeeListByModuleId(System.Int64)">
+            <summary>
+            按模块Id获取员工列表
+            </summary>
+            <param name="moduleId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.IServices.IPostService">
+            <summary>
+            岗位设置
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IPostService.GetPostTree(System.Int64)">
+            <summary>
+            获取岗位树
+            </summary>
+            <param name="departId">部门Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IPostService.AddPost(FastAdminAPI.Core.Models.Posts.AddPostModel)">
+            <summary>
+            新增岗位
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IPostService.EditPost(FastAdminAPI.Core.Models.Posts.EditPostModel)">
+            <summary>
+            编辑岗位
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IPostService.DelPost(FastAdminAPI.Core.Models.Posts.DelPostModel)">
+            <summary>
+            删除岗位
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IQyWechatApiService.GetUserId(System.String)">
+            <summary>
+            获取企业微信UserId
+            </summary>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IQyWechatApiService.SendTextMessage(FastAdminAPI.Network.QyWechat.Model.MessageSendModel,System.Int64,System.String)">
+            <summary>
+            发送企业微信文本消息
+            </summary>
+            <param name="model"></param>
+            <param name="Id"></param>
+            <param name="task"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IQyWechatApiService.SendCardMessage(FastAdminAPI.Network.QyWechat.Model.CardMsgSendModel,System.Int64,System.String)">
+            <summary>
+            发送企业微信卡片消息
+            </summary>
+            <param name="model"></param>
+            <param name="Id"></param>
+            <param name="task"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.IServices.IRolePermissionService">
+            <summary>
+            角色权限
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IRolePermissionService.GetRoleTree(System.String)">
+            <summary>
+            获取角色树
+            </summary>
+            <param name="roleName">角色名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IRolePermissionService.AddRole(FastAdminAPI.Core.Models.RolePermission.AddRoleModel)">
+            <summary>
+            新增角色
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IRolePermissionService.EditRole(FastAdminAPI.Core.Models.RolePermission.EditRoleModel)">
+            <summary>
+            编辑角色
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IRolePermissionService.DelRole(FastAdminAPI.Core.Models.RolePermission.DelRoleModel)">
+            <summary>
+            删除角色
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IRolePermissionService.CopyRole(FastAdminAPI.Core.Models.RolePermission.CopyRoleModel)">
+            <summary>
+            复制角色
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IRolePermissionService.GetRolePermission(System.Int64)">
+            <summary>
+            获取角色权限
+            </summary>
+            <param name="roleId">角色Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IRolePermissionService.SaveRolePermission(FastAdminAPI.Core.Models.RolePermission.SaveRolePermissionModel)">
+            <summary>
+            保存角色权限
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.IServices.ITestService">
+            <summary>
+            测试
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.ITestService.GetCodeListWithMapster(System.String)">
+            <summary>
+            获取code列表 mapster方式
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.ITestService.GetCodeListWithAutoBox(FastAdminAPI.Core.Models.Test.CodePageSearch)">
+            <summary>
+            获取code列表 Extension方式
+            </summary>
+            <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.ITestService.AddCode(FastAdminAPI.Core.Models.Test.AddCodeModel)">
+            <summary>
+            新增Code
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.ITestService.EditCode(FastAdminAPI.Core.Models.Test.EditCodeModel)">
+            <summary>
+            编辑Code
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.ITestService.DelCode(FastAdminAPI.Core.Models.Test.DelCodeModel)">
+            <summary>
+            删除Code
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.ITestService.DelCodeById(System.Int64)">
+            <summary>
+            通过Id删除Code
+            </summary>
+            <param name="codeId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.IServices.ITokenPassService">
+            <summary>
+            令牌过滤
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.ITokenPassService.GetCodeList(System.String)">
+            <summary>
+            获取一组字典列表
+            </summary>
+            <param name="code">分组代号</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.ITokenPassService.GetMultiCodeList(System.Collections.Generic.List{System.String})">
+            <summary>
+            获取多组字典列表(单层)
+            </summary>
+            <param name="codeList">分组代号</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.ITokenPassService.GetCodeTree(System.String)">
+            <summary>
+            获取一组字典树(多层)
+            </summary>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.ITokenPassService.GetRegions">
+            <summary>
+            获取地区信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.IServices.IUserService">
+            <summary>
+            用户
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IUserService.GetPermissions">
+            <summary>
+            获取功能权限(当前登录用户所有权限)
+            【角色权限+用户权限】
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IUserService.GetMenuPermissionsTree">
+            <summary>
+            获取菜单权限树
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IUserService.GetCheckList(FastAdminAPI.Core.Models.Users.CheckPageSearch)">
+            <summary>
+            获取我的审批列表
+            </summary>
+            <param name="pageSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IUserService.ApprovalApplication(FastAdminAPI.Core.Models.Users.ApprovalModel)">
+            <summary>
+            审批申请
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IUserService.CancelApplication(System.Int64)">
+            <summary>
+            撤销申请
+            </summary>
+            <param name="checkId">审批Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IUserService.GetCheckRecordList(FastAdminAPI.Core.Models.Users.CheckRecordPageSearch)">
+            <summary>
+            获取我的审批记录列表
+            </summary>
+            <param name="pageSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IUserService.GetApplicationCheckRecords(System.Int64)">
+            <summary>
+            获取申请审批记录列表
+            </summary>
+            <param name="checkId">审批Id</param>
+            <returns></returns>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BASE.GenerateDbEntitiesModel.Path">
+            <summary>
+            生成路径（默认）
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BASE.GenerateDbEntitiesModel.Namespace">
+            <summary>
+            命名空间（默认）
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BASE.GenerateDbEntitiesModel.TablesName">
+            <summary>
+            指定表名
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BASE.GenerateDbEntitiesModel.InterfaceName">
+            <summary>
+            实现接口
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BASE.GenerateDbEntitiesModel.IsSerializable">
+            <summary>
+            是否序列化（默认是）
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageSearch.CheckProcessTypes">
+            <summary>
+            审批类型 关联S99_Code表
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageSearch.Applicants">
+            <summary>
+            申请人
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageSearch.Approvers">
+            <summary>
+            审核人
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageSearch.CarbonCopies">
+            <summary>
+            抄送人
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageSearch.ApproveTypes">
+            <summary>
+            审批类型 0直接上级 1指定人员 2自选 3上级+指定人员  4上级+指定人员+金额
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageResult.CheckProcessId">
+            <summary>
+            审批流程Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageResult.CheckProcessType">
+            <summary>
+            审批类型 关联S99_Code表
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageResult.CheckProcessTypeName">
+            <summary>
+            审批类型名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageResult.Applicants">
+            <summary>
+            申请人 
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageResult.ApplicantName">
+            <summary>
+            申请人名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageResult.Approvers">
+            <summary>
+            审核人
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageResult.ApproverName">
+            <summary>
+            审核人名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageResult.CarbonCopies">
+            <summary>
+            抄送人 
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageResult.CarbonCopieName">
+            <summary>
+            抄送人名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageResult.Amounts">
+            <summary>
+            审批金额上限 使用,隔开
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageResult.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageResult.ApproveType">
+            <summary>
+            审批类型 0直接上级 1指定人员 2自选 3上级+指定人员 4上级+指定人员+金额
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.CheckProcessType">
+            <summary>
+            申请类型 关联S99_Code表
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.ApplicantList">
+            <summary>
+            申请人 
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.Applicants">
+            <summary>
+            申请人 
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.ApproverList">
+            <summary>
+            审核人 
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.Approvers">
+            <summary>
+            审核人 
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.CarbonCopieList">
+            <summary>
+            抄送人
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.CarbonCopies">
+            <summary>
+            抄送人
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.AmountList">
+            <summary>
+            审批金额上限
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.Amounts">
+            <summary>
+            审批金额上限 使用,隔开
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.ApproveType">
+            <summary>
+            审批类型 0直接上级 1指定人员 2自选 3上级+指定人员 4上级+指定人员+金额
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.EditCheckProcessModel.CheckProcessId">
+            <summary>
+            审批流程Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.DelCheckProcessModel.CheckProcessId">
+            <summary>
+            审批流程Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CodePageSearch.GroupCode">
+            <summary>
+            分组代号
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CodePageSearch.GroupName">
+            <summary>
+            分组名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CodePageSearch.Name">
+            <summary>
+            字典名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CodePageResult.CodeId">
+            <summary>
+            字典Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CodePageResult.GroupCode">
+            <summary>
+            分组代号
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CodePageResult.GroupName">
+            <summary>
+            分组名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CodePageResult.Name">
+            <summary>
+            字典名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CodePageResult.SeqNo">
+            <summary>
+            序号 组内排序使用
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CodePageResult.SysFlag">
+            <summary>
+            系统标记 0系统 1用户
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.GroupCodeModel.GroupCode">
+            <summary>
+            分组代号
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.GroupCodeModel.GroupName">
+            <summary>
+            分组名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.AddCodeModel.GroupCode">
+            <summary>
+            分组代号
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.AddCodeModel.GroupName">
+            <summary>
+            分组名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.AddCodeModel.Name">
+            <summary>
+            字典名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.AddCodeModel.SeqNo">
+            <summary>
+            序号 组内排序使用
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.AddCodeModel.SysFlag">
+            <summary>
+            系统标记 0系统 1用户
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.AddCodeModel.IsValid">
+            <summary>
+            是否有效 0有效 1无效
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.AddCodeModel.OperationId">
+            <summary>
+            操作者Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.AddCodeModel.OperationName">
+            <summary>
+            操作者名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.AddCodeModel.OperationTime">
+            <summary>
+            操作日期
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.EditCodeModel.CodeId">
+            <summary>
+            字典Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.EditCodeModel.GroupCode">
+            <summary>
+            分组代号
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.EditCodeModel.GroupName">
+            <summary>
+            分组名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.EditCodeModel.Name">
+            <summary>
+            字典名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.EditCodeModel.SeqNo">
+            <summary>
+            序号 组内排序使用
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.EditCodeModel.OperationId">
+            <summary>
+            操作者Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.EditCodeModel.OperationName">
+            <summary>
+            操作者名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.EditCodeModel.OperationTime">
+            <summary>
+            操作日期
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.DataPermissionSettingsPageResult.DataPermissionId">
+            <summary>
+            数据权限设置Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.DataPermissionSettingsPageResult.EmployeeId">
+            <summary>
+            员工Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.DataPermissionSettingsPageResult.EmployeeName">
+            <summary>
+            员工名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.DataPermissionSettingsPageResult.DepartId">
+            <summary>
+            员工部门Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.DataPermissionSettingsPageResult.DepartName">
+            <summary>
+            员工部门名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.DataPermissionSettingsPageResult.PermitDepartIds">
+            <summary>
+            权限：部门Ids
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.DataPermissionSettingsPageResult.PermitDepartIdList">
+            <summary>
+            权限：部门Id集合
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.DataPermissionSettingsPageResult.PermitDepartsName">
+            <summary>
+            权限：部门集合名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.AddDataPermissionSettingModel.EmployeeId">
+            <summary>
+            员工Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.AddDataPermissionSettingModel.DepartIdList">
+            <summary>
+            部门Id集合
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.EditDataPermissionSettingModel.DataPermissionId">
+            <summary>
+            数据权限设置Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.EditDataPermissionSettingModel.EmployeeId">
+            <summary>
+            员工Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.EditDataPermissionSettingModel.DepartIdList">
+            <summary>
+            部门Id集合
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentInfoModel.Property">
+            <summary>
+            部门属性 S99_Code
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentInfoModel.PropertyName">
+            <summary>
+            部门属性名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentInfoModel.Label">
+            <summary>
+            部门标签 -1无 0线索 1客户 2代理，多个以,号分隔
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentInfoModel.ParentName">
+            <summary>
+            上级部门名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentInfoModel.CornerMark">
+            <summary>
+            角标 每一级4位数字
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentInfoModel.DirectordName">
+            <summary>
+            部门负责人
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentBaseModel.Property">
+            <summary>
+            部门属性 S99_Code
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentBaseModel.DepartLabelList">
+            <summary>
+            部门标签 -1无 0线索 1客户 2代理，多个以,号分隔
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentBaseModel.Priority">
+            <summary>
+            优先级
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentBaseModel.DepartName">
+            <summary>
+            部门名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Departments.AddDepartmentModel.ParentDepartId">
+            <summary>
+            父级部门Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Departments.AddDepartmentModel.CornerMark">
+            <summary>
+            角标 每一级4位数字
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Departments.EditDepartmentModel.DepartId">
+            <summary>
+            部门Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Departments.DelDepartmentModel.DepartId">
+            <summary>
+            部门Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentPostStaffingModel.DepartmentSum">
+            <summary>
+            下级部门数
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentPostStaffingModel.PostSum">
+            <summary>
+            下级岗位数
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentPostStaffingModel.Staffing">
+            <summary>
+            编制 (当前编制/总编制)
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageSearch.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageSearch.Phone">
+            <summary>
+            手机
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageSearch.Statuss">
+            <summary>
+            状态 0正式 1实习 2离职
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageSearch.CornerMark">
+            <summary>
+            部门角标
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageSearch.UserIds">
+            <summary>
+            用户Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageResult.EmployeeId">
+            <summary>
+            员工Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageResult.UserId">
+            <summary>
+            用户Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageResult.CompanyId">
+            <summary>
+            企业Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageResult.CompanyName">
+            <summary>
+            企业名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageResult.QyUserId">
+            <summary>
+            企业微信UserId
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageResult.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageResult.Phone">
+            <summary>
+            手机
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageResult.Gender">
+            <summary>
+            性别 0男 1女
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageResult.DepartmentName">
+            <summary>
+            部门名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageResult.PostName">
+            <summary>
+            岗位名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageResult.Kind">
+            <summary>
+            类别 0全职 1兼职
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageResult.Status">
+            <summary>
+            状态 0正式 1实习 2离职
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageResult.Roles">
+            <summary>
+            角色
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeSimpleModel.EmployeeId">
+            <summary>
+            员工Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeSimpleModel.EmployeeName">
+            <summary>
+            员工名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeSimpleModel.Phone">
+            <summary>
+            手机号
+            </summary>
+        </member>
+        <member name="T:FastAdminAPI.Core.Models.Employee.EmployeeAccountModel">
+            <summary>
+            员工账号
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeAccountModel.Account">
+            <summary>
+            账号
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeAccountModel.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeAccountModel.AccountStatus">
+            <summary>
+            账号状态 0启用 1禁用
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeRoleModel.RoleId">
+            <summary>
+            角色Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeRoleModel.RoleName">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="T:FastAdminAPI.Core.Models.Employee.EmployeePermissionModel">
+            <summary>
+            员工模块
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePermissionModel.ModuleId">
+            <summary>
+            模块Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePermissionModel.ModuleName">
+            <summary>
+            模块名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePermissionModel.Kind">
+            <summary>
+            属性 0菜单 1页面 2按钮 3列表 9其他
+            </summary>
+        </member>
+        <member name="T:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel">
+            <summary>
+            员工详情信息
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.EmployeeId">
+            <summary>
+            员工Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.UserId">
+            <summary>
+            用户Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.CompanyId">
+            <summary>
+            企业Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.CompanyName">
+            <summary>
+            企业名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.QyUserId">
+            <summary>
+            企业微信UserId
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.Phone">
+            <summary>
+            手机
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.Gender">
+            <summary>
+            性别 0男 1女
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.Avatar">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.Email">
+            <summary>
+            邮箱
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.Kind">
+            <summary>
+            类别 0全职 1兼职
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.Status">
+            <summary>
+            状态 0正式 1实习 2离职
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.Bio">
+            <summary>
+            个人简介
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.HireDate">
+            <summary>
+            入职日期
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.TrialPeriodDate">
+            <summary>
+            试用期日期
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.ConfirmationDate">
+            <summary>
+            转正日期
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.TerminationDate">
+            <summary>
+            离职日期
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.DepartmentName">
+            <summary>
+            部门名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.PostName">
+            <summary>
+            岗位名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.Account">
+            <summary>
+            账号
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.Roles">
+            <summary>
+            角色
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.Permissions">
+            <summary>
+            模块
+            </summary>
+        </member>
+        <member name="T:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel">
+            <summary>
+            员工基础信息
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.CompanyId">
+            <summary>
+            企业Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.Phone">
+            <summary>
+            手机
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.Gender">
+            <summary>
+            性别 0男 1女
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.Avatar">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.Email">
+            <summary>
+            邮箱
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.Kind">
+            <summary>
+            类别 0全职 1兼职
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.Status">
+            <summary>
+            状态 0正式 1实习 2离职
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.Bio">
+            <summary>
+            个人简介
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.HireDate">
+            <summary>
+            入职日期
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.TrialPeriodDate">
+            <summary>
+            试用期日期
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.ConfirmationDate">
+            <summary>
+            转正日期
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.TerminationDate">
+            <summary>
+            离职日期
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.Account">
+            <summary>
+            账号
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.AccountStatus">
+            <summary>
+            账号状态 false禁用(默认) true启用
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.RoleIds">
+            <summary>
+            角色Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.ModuleIds">
+            <summary>
+            模块Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.AddEmployeeInfoModel.DepartmentId">
+            <summary>
+            部门Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.AddEmployeeInfoModel.PostId">
+            <summary>
+            岗位Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EditEmployeeInfoModel.EmployeeId">
+            <summary>
+            员工Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePostResult.EmployeePostId">
+            <summary>
+            员工岗位Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePostResult.DepartmentId">
+            <summary>
+            部门Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePostResult.DepartmentName">
+            <summary>
+            部门名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePostResult.PostId">
+            <summary>
+            岗位Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePostResult.PostName">
+            <summary>
+            岗位名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePostResult.IsMainPost">
+            <summary>
+            是否为主岗位 0否 1是
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.AddEmployeePostModel.EmployeeId">
+            <summary>
+            员工Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.AddEmployeePostModel.PostId">
+            <summary>
+            岗位Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.AddEmployeePostModel.DepartId">
+            <summary>
+            部门Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.AddEmployeePostModel.IsMainPost">
+            <summary>
+            是否为主岗位 0否 1是
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.DelEmployeePostModel.EmployeePostId">
+            <summary>
+            员工岗位Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Login.LoginByPasswordModel.Account">
+            <summary>
+            账号
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Login.LoginByPasswordModel.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Login.LoginByPasswordModel.Device">
+            <summary>
+            设备 0PC 1企业微信
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Login.LoginByQyWechatModel.Code">
+            <summary>
+            企业微信Code
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Login.LoginByQyWechatModel.Device">
+            <summary>
+            设备 0PC 1企业微信
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Login.LoginByQyWechatResponseModel.Token">
+            <summary>
+            令牌
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Login.LoginByQyWechatResponseModel.QyUserId">
+            <summary>
+            企业微信UserId
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Modules.ModuleInfoModel.Kind">
+            <summary>
+            属性 0菜单 1页面 2按钮 3列表 9其他
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Modules.ModuleInfoModel.Depth">
+            <summary>
+            深度 0根菜单 1一级菜单 2二级菜单 （以此类推）
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Modules.ModuleInfoModel.FrontRoute">
+            <summary>
+            前端路由 Url路径/控件Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Modules.ModuleInfoModel.Logo">
+            <summary>
+            图标
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Modules.ModuleInfoModel.BackInterface">
+            <summary>
+            后端接口 调用的接口，多个以|号分隔
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Modules.ModuleInfoModel.CornerMark">
+            <summary>
+            角标 每一级4位数字
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Modules.ModuleBaseModel.ParentModuleId">
+            <summary>
+            父模块Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Modules.ModuleBaseModel.Kind">
+            <summary>
+            属性 0菜单 1页面 2按钮 3列表 9其他
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Modules.ModuleBaseModel.ModuleName">
+            <summary>
+            模块名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Modules.ModuleBaseModel.Priority">
+            <summary>
+            优先级
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Modules.ModuleBaseModel.Depth">
+            <summary>
+            深度 0根菜单 1一级菜单 2二级菜单 （以此类推）
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Modules.ModuleBaseModel.FrontRoute">
+            <summary>
+            前端路由 Url路径/控件Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Modules.ModuleBaseModel.Logo">
+            <summary>
+            图标
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Modules.ModuleBaseModel.BackInterface">
+            <summary>
+            后端接口 调用的接口，多个以|号分隔
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Modules.AddModuleModel.CornerMark">
+            <summary>
+            角标 每一级4位数字
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Modules.AddModuleModel.IsValid">
+            <summary>
+            是否有效 0有效 1无效
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Modules.EditModuleModel.ModuleId">
+            <summary>
+            模块Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Modules.DelModuleModel.ModuleId">
+            <summary>
+            模块Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Modules.DelModuleModel.IsValid">
+            <summary>
+            是否有效 0有效 1无效
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Posts.PostInfoModel.DepartId">
+            <summary>
+            部门Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Posts.PostInfoModel.Staffing">
+            <summary>
+            岗位编制
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Posts.PostInfoModel.Responsibility">
+            <summary>
+            岗位职责
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Posts.PostInfoModel.AbilityDemand">
+            <summary>
+            能力需求
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Posts.PostInfoModel.CornerMark">
+            <summary>
+            角标 每一级4位数字
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Posts.PostBaseModel.PostName">
+            <summary>
+            岗位名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Posts.PostBaseModel.Staffing">
+            <summary>
+            岗位编制
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Posts.PostBaseModel.Responsibility">
+            <summary>
+            岗位职责
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Posts.PostBaseModel.AbilityDemand">
+            <summary>
+            能力需求
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Posts.AddPostModel.ParentPostId">
+            <summary>
+            父级岗位Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Posts.AddPostModel.DepartId">
+            <summary>
+            部门Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Posts.AddPostModel.CornerMark">
+            <summary>
+            角标 每一级4位数字
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Posts.EditPostModel.PostId">
+            <summary>
+            岗位Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Posts.DelPostModel.PostId">
+            <summary>
+            岗位Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.RolePermission.SaveRolePermissionModel.RoleId">
+            <summary>
+            角色Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.RolePermission.SaveRolePermissionModel.ModuleIds">
+            <summary>
+            模块Ids
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.RolePermission.AddRoleModel.RoleName">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.RolePermission.AddRoleModel.ParentRoleId">
+            <summary>
+            父角色Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.RolePermission.AddRoleModel.CornerMark">
+            <summary>
+            角标 每一级4位数字
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.RolePermission.AddRoleModel.IsValid">
+            <summary>
+            是否有效 0有效 1无效
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.RolePermission.EditRoleModel.RoleId">
+            <summary>
+            角色Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.RolePermission.EditRoleModel.RoleName">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.RolePermission.DelRoleModel.RoleId">
+            <summary>
+            角色Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.RolePermission.DelRoleModel.S03_IsValid">
+            <summary>
+            是否有效 0有效 1无效
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.RolePermission.CopyRoleModel.SourceRoleId">
+            <summary>
+            源角色Id(复制时的源角色Id)
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.RolePermission.CopyRoleModel.RoleName">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.RolePermission.CopyRoleModel.ParentRoleId">
+            <summary>
+            父角色Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.CodeMapsterModel.CodeId">
+            <summary>
+            系统代号Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.CodeMapsterModel.CodeName">
+            <summary>
+            系统代号名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.CodePageSearch.GroupCode">
+            <summary>
+            分组代号
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.CodePageSearch.GroupName">
+            <summary>
+            分组名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.CodePageSearch.CodeIds">
+            <summary>
+            系统代号Ids集合
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.CodePageSearch.CreateStartDate">
+            <summary>
+            开始时间
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.CodePageSearch.CreateEndDate">
+            <summary>
+            结束时间
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.CodePageResult.CodeId">
+            <summary>
+            系统代号Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.CodePageResult.CodeName">
+            <summary>
+            系统代号名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.CodeBaseModel.Name">
+            <summary>
+            系统代号名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.CodeBaseModel.ParentCodeId">
+            <summary>
+            父级系统代号Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.CodeBaseModel.SeqNo">
+            <summary>
+            序号 组内排序使用
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.CodeBaseModel.SysFlag">
+            <summary>
+            系统标记 1不可修改
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.AddCodeModel.GroupCode">
+            <summary>
+            分组代号
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.AddCodeModel.GroupName">
+            <summary>
+            分组名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.AddCodeModel.IsValid">
+            <summary>
+            是否有效 0有效 1无效
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.AddCodeModel.OperationId">
+            <summary>
+            创建者Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.AddCodeModel.OperationName">
+            <summary>
+            创建者名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.AddCodeModel.OperationTime">
+            <summary>
+            创建日期
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.EditCodeModel.CodeId">
+            <summary>
+            系统代号Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.EditCodeModel.OperationId">
+            <summary>
+            更新者Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.EditCodeModel.OperationName">
+            <summary>
+            更新者名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.EditCodeModel.OperationTime">
+            <summary>
+            更新日期
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.DelCodeModel.CodeId">
+            <summary>
+            系统代号Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.DelCodeModel.IsValid">
+            <summary>
+            是否有效 0有效 1无效
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.DelCodeModel.OperationId">
+            <summary>
+            更新者Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.DelCodeModel.OperationName">
+            <summary>
+            更新者名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Test.DelCodeModel.OperationTime">
+            <summary>
+            更新日期
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.CodeModel.CodeId">
+            <summary>
+            字典Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.CodeModel.CodeName">
+            <summary>
+            字典名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.MarketingActivityInfoModel.ActivityId">
+            <summary>
+            营销活动推广Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.MarketingActivityInfoModel.ActivityName">
+            <summary>
+            活动名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.MarketingActivityInfoModel.StartTime">
+            <summary>
+            开始时间
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.MarketingActivityInfoModel.EndTime">
+            <summary>
+            结束时间
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.MarketingActivityInfoModel.Address">
+            <summary>
+            活动地点
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.MarketingActivityInfoModel.RegisterLink">
+            <summary>
+            报名页面链接
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.MarketingActivityInfoModel.Form">
+            <summary>
+            活动形式
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.MarketingActivityInfoModel.Goal">
+            <summary>
+            活动目标
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.MarketingActivityInfoModel.Scheme">
+            <summary>
+            活动方案
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.MarketingActivityInfoModel.Result">
+            <summary>
+            活动结果
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.MarketingActivityInfoModel.Optimization">
+            <summary>
+            优化方向
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.MarketingActivityInfoModel.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.MarketingActivityInfoModel.TemplateId">
+            <summary>
+            营销模板Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.MarketingActivityInfoModel.TemplateLink">
+            <summary>
+            营销模板链接
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.MarketingActivityInfoModel.Background">
+            <summary>
+            营销模板背景图
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.QyWechatConfigParameterModel.Url">
+            <summary>
+            前端地址
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.QyWechatUserRequestModel.Code">
+            <summary>
+            企业微信返回的Code
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.TokenPass.QyWechatUserResponseModel.UserId">
+            <summary>
+            企业微信UserId
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckPageSearch.Category">
+            <summary>
+            申请大类 0项目管理 1代理管理 2线索 3客户
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckPageSearch.Type">
+            <summary>
+            申请类型 S99_Code 001
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckPageSearch.ApplicantIds">
+            <summary>
+            申请人Ids
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckPageSearch.ApplyTimeStart">
+            <summary>
+            申请时间 开始
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckPageSearch.ApplyTimeEnd">
+            <summary>
+            申请时间 结束
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckPageResult.CheckId">
+            <summary>
+            审批Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckPageResult.ApplicationId">
+            <summary>
+            申请Id 与业务数据关联
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckPageResult.Category">
+            <summary>
+            申请大类 0项目管理 1代理管理 2线索 3客户
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckPageResult.Type">
+            <summary>
+            申请类型 S99_Code 001
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckPageResult.TypeName">
+            <summary>
+            申请类型名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckPageResult.ApplicantId">
+            <summary>
+            申请人Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckPageResult.ApplicantName">
+            <summary>
+            申请人名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckPageResult.ApplyTime">
+            <summary>
+            申请时间
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckPageResult.Description">
+            <summary>
+            内容描述
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckPageResult.Reason">
+            <summary>
+            申请理由
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.ApprovalModel.CheckIds">
+            <summary>
+            审批Ids
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.ApprovalModel.IsApprove">
+            <summary>
+            是否通过 0否 1是
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.ApprovalModel.Reason">
+            <summary>
+            审批理由
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageSearch.Category">
+            <summary>
+            申请大类 0项目管理 1代理管理 2线索 3客户
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageSearch.Type">
+            <summary>
+            申请类型 S99_Code 001
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageSearch.ApplicantIds">
+            <summary>
+            申请人Ids
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageSearch.ApplyTimeStart">
+            <summary>
+            申请时间 开始
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageSearch.ApplyTimeEnd">
+            <summary>
+            申请时间 结束
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageSearch.IsApprove">
+            <summary>
+            是否通过 0否 1是
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageSearch.ApprovalimeStart">
+            <summary>
+            审批时间 开始
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageSearch.ApprovalTimeEnd">
+            <summary>
+            审批时间 结束
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageResult.CheckRecordId">
+            <summary>
+            审批记录Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageResult.IsApprove">
+            <summary>
+            是否通过 0否 1是
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageResult.ApprovalTime">
+            <summary>
+            审批时间
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageResult.ApplyReason">
+            <summary>
+            申请理由
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageResult.ApprovalReason">
+            <summary>
+            审批理由
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageResult.CheckId">
+            <summary>
+            审批Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageResult.ApplicationId">
+            <summary>
+            申请Id 与业务数据关联
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageResult.Category">
+            <summary>
+            申请大类 0项目管理 1代理管理 2线索 3客户
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageResult.Type">
+            <summary>
+            申请类型 S99_Code 001
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageResult.TypeName">
+            <summary>
+            申请类型名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageResult.ApplicantId">
+            <summary>
+            申请人Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageResult.ApplicantName">
+            <summary>
+            申请人名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageResult.ApplyTime">
+            <summary>
+            申请时间
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordPageResult.Description">
+            <summary>
+            内容描述
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordModel.CheckRecordId">
+            <summary>
+            审批记录Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordModel.CheckId">
+            <summary>
+            审批Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordModel.ApproverId">
+            <summary>
+            审批人Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordModel.ApproverName">
+            <summary>
+            审批人名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordModel.ApprovalTime">
+            <summary>
+            审批日期
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordModel.IsApprove">
+            <summary>
+            是否通过 -1待审批 0否 1是
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordModel.Reason">
+            <summary>
+            理由
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.CheckRecordModel.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.UserModel.UserId">
+            <summary>
+            用户Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.UserModel.QyUserId">
+            <summary>
+            企业微信UserId
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.UserModel.Account">
+            <summary>
+            账号
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.UserModel.EmployeeId">
+            <summary>
+            员工Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.UserModel.EmployeeName">
+            <summary>
+            员工名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Users.UserModel.Avatar">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="T:FastAdminAPI.Core.Services.BASE.BaseService">
+            <summary>
+            服务层公用部分
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Services.BASE.BaseService._userId">
+            <summary>
+            用户Id
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Services.BASE.BaseService._account">
+            <summary>
+            账号
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Services.BASE.BaseService._employeeId">
+            <summary>
+            员工Id
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Services.BASE.BaseService._employeeName">
+            <summary>
+            员工名称
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Services.BASE.BaseService._avatar">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Services.BASE.BaseService._dbContext">
+            <summary>
+            SugarScope
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.BASE.EntityService.GenerateEntities">
+            <summary>
+            生成实体类(本地环境使用)
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.BASE.EntityService.GenerateEntitiesByTables(System.String[])">
+            <summary>
+            按所需表生成实体(本地环境使用)
+            </summary>
+            <param name="tables">需要生成的表</param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.BASE.EntityService.GenerateEntitiesByCustom(FastAdminAPI.Core.Models.BASE.GenerateDbEntitiesModel)">
+            <summary>
+            自定义生成实体(本地环境使用)
+            </summary>
+            <param name="model"></param>
+        </member>
+        <member name="T:FastAdminAPI.Core.Services.BasicSettingsService">
+            <summary>
+            基础设置
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Services.BasicSettingsService._dataPermission">
+            <summary>
+            数据权限Service
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,FastAdminAPI.Business.IServices.IDataPermissionService)">
+            <summary>
+            构造
+            </summary>
+            <param name="dbContext"></param>
+            <param name="httpContext"></param>
+            <param name="dataPermission"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.GetCodeList(FastAdminAPI.Core.Models.BasicSettings.CodePageSearch)">
+            <summary>
+            获取字典列表
+            </summary>
+            <param name="pageSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.GetGroupCodeList">
+            <summary>
+            获取字典分组列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.AddCode(FastAdminAPI.Core.Models.BasicSettings.AddCodeModel)">
+            <summary>
+            新增字典
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.EditCode(FastAdminAPI.Core.Models.BasicSettings.EditCodeModel)">
+            <summary>
+            编辑字典
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.DelCode(System.Int64)">
+            <summary>
+            删除字典
+            </summary>
+            <param name="codeId">字典Id</param>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.GetDataPermissionSettingList(FastAdminAPI.Core.Models.BasicSettings.DataPermissionSettingsPageSearch)">
+            <summary>
+            获取数据权限设置列表
+            </summary>
+            <param name="pageSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.AddDataPermissionSetting(FastAdminAPI.Core.Models.BasicSettings.AddDataPermissionSettingModel)">
+            <summary>
+            新增数据权限设置
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.EditDataPermissionSetting(FastAdminAPI.Core.Models.BasicSettings.EditDataPermissionSettingModel)">
+            <summary>
+            编辑数据权限设置
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.DelDataPermissionSetting(System.Int64)">
+            <summary>
+            删除数据权限设置
+            </summary>
+            <param name="dataPermissionId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.GetCheckProcessList(FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageSearch)">
+            <summary>
+            获取审批流程列表
+            </summary>
+            <param name="pageSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.AddCheckProcess(FastAdminAPI.Core.Models.BasicSettings.AddCheckProcessModel)">
+            <summary>
+            新增审批流程
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.EditCheckProcess(FastAdminAPI.Core.Models.BasicSettings.EditCheckProcessModel)">
+            <summary>
+            编辑审批流程
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.DelCheckProcess(FastAdminAPI.Core.Models.BasicSettings.DelCheckProcessModel)">
+            <summary>
+            删除审批流程
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.CommonService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            构造
+            </summary>
+            <param name="dbContext"></param>
+            <param name="httpContext"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.CommonService.ExportExcelTemplate">
+            <summary>
+            导出EXCEL模板
+            </summary>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="T:FastAdminAPI.Core.Services.DepartmentService">
+            <summary>
+            部门设置
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Services.DepartmentService._dataPermissionService">
+            <summary>
+            数据权限Service
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.DepartmentService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,FastAdminAPI.Business.IServices.IDataPermissionService)">
+            <summary>
+            构造
+            </summary>
+            <param name="dbContext"></param>
+            <param name="httpContext"></param>
+            <param name="dataPermissionService"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.DepartmentService.GetDepartmentTree(System.String)">
+            <summary>
+            获取部门树
+            </summary>
+            <param name="departName">部门名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.DepartmentService.AddDepartment(FastAdminAPI.Core.Models.Departments.AddDepartmentModel)">
+            <summary>
+            新增部门
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.DepartmentService.EditDepartment(FastAdminAPI.Core.Models.Departments.EditDepartmentModel)">
+            <summary>
+            编辑部门
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.DepartmentService.DelDepartment(FastAdminAPI.Core.Models.Departments.DelDepartmentModel)">
+            <summary>
+            删除部门
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.DepartmentService.GetDepartmentPostStaffing(System.String)">
+            <summary>
+            获取部门岗位编制
+            </summary>
+            <param name="cornerMark">角标</param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Services.EmployeeService">
+            <summary>
+            员工信息
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Services.EmployeeService._dataPermission">
+            <summary>
+            数据权限Service
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.EmployeeService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,FastAdminAPI.Business.IServices.IDataPermissionService)">
+            <summary>
+            构造
+            </summary>
+            <param name="dbContext"></param>
+            <param name="httpContext"></param>
+            <param name="dataPermission"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.EmployeeService.AddUserPermission(FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel,System.Int64,System.Boolean)">
+            <summary>
+            新增用户功能权限
+            </summary>
+            <param name="model"></param>
+            <param name="userId">用户Id</param>
+            <param name="isDelPermission">是否删除角色权限</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.EmployeeService.GetEmployeeListByDepartIds(System.Collections.Generic.List{System.Int64},System.Boolean)">
+            <summary>
+            按部门Ids获取员工简要列表(不含子部门)
+            </summary>
+            <param name="departIds">部门Ids</param>
+            <param name="isMainPost">是否获取员工主岗位</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.EmployeeService.GetEmployeeListByPostIds(System.Collections.Generic.List{System.Int64},System.Boolean)">
+            <summary>
+            按岗位Ids获取员工简要列表(不含子岗位)
+            </summary>
+            <param name="postIds">岗位Ids</param>
+            <param name="isMainPost">是否获取员工主岗位</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.EmployeeService.GetSubordinateEmployeeList">
+            <summary>
+            获取下属员工简要列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.EmployeeService.GetAllEmployeeList">
+            <summary>
+            获取全部员工简要列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.EmployeeService.GetEmployeeListByDepartId(System.Int64)">
+            <summary>
+            通过部门Id获取员工(主岗位)列表(包含子部门)
+            </summary>
+            <param name="departId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.EmployeeService.GetEmployeeList(FastAdminAPI.Core.Models.Employee.EmployeePageSearch)">
+            <summary>
+            获取员工列表
+            </summary>
+            <param name="pageSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.EmployeeService.GetEmployeeInfo(System.Int64)">
+            <summary>
+            获取员工信息
+            </summary>
+            <param name="employeeId">员工Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.EmployeeService.AddEmployee(FastAdminAPI.Core.Models.Employee.AddEmployeeInfoModel)">
+            <summary>
+            新增员工
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.EmployeeService.EditEmployee(FastAdminAPI.Core.Models.Employee.EditEmployeeInfoModel)">
+            <summary>
+            编辑员工
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.EmployeeService.DimissionEmployee(System.Int64)">
+            <summary>
+            离职员工
+            </summary>
+            <param name="employeeId">员工Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.EmployeeService.DelEmployee(System.Int64)">
+            <summary>
+            删除员工
+            </summary>
+            <param name="employeeId">员工Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.EmployeeService.GetEmployeePostList(System.Int64)">
+            <summary>
+            获取员工岗位列表
+            </summary>
+            <param name="employeeId">员工Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.EmployeeService.AddEmployeePost(FastAdminAPI.Core.Models.Employee.AddEmployeePostModel)">
+            <summary>
+            新增员工岗位
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.EmployeeService.SetEmployeeMainPost(System.Int64)">
+            <summary>
+            设置员工主岗位
+            </summary>
+            <param name="employeePostId">员工岗位Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.EmployeeService.DelEmployeePost(FastAdminAPI.Core.Models.Employee.DelEmployeePostModel)">
+            <summary>
+            删除员工岗位
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="F:FastAdminAPI.Core.Services.EventBusService._capPublisher">
+            <summary>
+            事件总线发布
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.EventBusService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,DotNetCore.CAP.ICapPublisher)">
+            <summary>
+            构造
+            </summary>
+            <param name="dbContext"></param>
+            <param name="httpContext"></param>
+            <param name="capPublisher"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.EventBusService.PublishMessage(System.String)">
+            <summary>
+            发布信息
+            </summary>
+            <param name="msg"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Services.LoginService">
+            <summary>
+            登录
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.LoginService.#ctor(SqlSugar.ISqlSugarClient)">
+            <summary>
+            构造
+            </summary>
+            <param name="dbContext"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.LoginService.GetUser(System.String)">
+            <summary>
+            获取用户信息
+            </summary>
+            <param name="qyUserId">企业微信UserId</param>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.LoginService.GetUser(System.String,System.String)">
+            <summary>
+            获取用户信息
+            </summary>
+            <param name="account">账号</param>
+            <param name="password">密码</param>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="T:FastAdminAPI.Core.Services.ModuleService">
+            <summary>
+            模块
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.ModuleService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            构造
+            </summary>
+            <param name="dbContext"></param>
+            <param name="httpContext"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.ModuleService.GetModuleTree(System.String)">
+            <summary>
+            获取模块树
+            </summary>
+            <param name="moduleName">模块名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.ModuleService.AddModule(FastAdminAPI.Core.Models.Modules.AddModuleModel)">
+            <summary>
+            新增模块
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.ModuleService.EditModule(FastAdminAPI.Core.Models.Modules.EditModuleModel)">
+            <summary>
+            编辑模块
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.ModuleService.DelModule(FastAdminAPI.Core.Models.Modules.DelModuleModel)">
+            <summary>
+            删除模块
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.ModuleService.GetEmployeeListByModuleId(System.Int64)">
+            <summary>
+            按模块Id获取员工列表
+            </summary>
+            <param name="moduleId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Services.PostService">
+            <summary>
+            岗位设置
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Services.PostService._dataPermissionService">
+            <summary>
+            数据权限Service
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.PostService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,FastAdminAPI.Business.IServices.IDataPermissionService)">
+            <summary>
+            构造
+            </summary>
+            <param name="dbContext"></param>
+            <param name="httpContext"></param>
+            <param name="dataPermissionService"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.PostService.GetPostTree(System.Int64)">
+            <summary>
+            获取岗位树
+            </summary>
+            <param name="departId">部门Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.PostService.AddPost(FastAdminAPI.Core.Models.Posts.AddPostModel)">
+            <summary>
+            新增岗位
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.PostService.EditPost(FastAdminAPI.Core.Models.Posts.EditPostModel)">
+            <summary>
+            编辑岗位
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.PostService.DelPost(FastAdminAPI.Core.Models.Posts.DelPostModel)">
+            <summary>
+            删除岗位
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Services.QyWechatApiService">
+            <summary>
+            企业微信API
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Services.QyWechatApiService._redis">
+            <summary>
+            Redis
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Services.QyWechatApiService._qyWechatProvider">
+            <summary>
+            企业微信提供者
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.QyWechatApiService.#ctor(FastAdminAPI.Common.Redis.IRedisHelper,FastAdminAPI.Network.QyWechat.Common.IQyWechatProvider)">
+            <summary>
+            构造
+            </summary>
+            <param name="redis"></param>
+            <param name="qyWechatProvider"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.QyWechatApiService.GetUserId(System.String)">
+            <summary>
+            获取企业微信UserId
+            </summary>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.QyWechatApiService.SendTextMessage(FastAdminAPI.Network.QyWechat.Model.MessageSendModel,System.Int64,System.String)">
+            <summary>
+            发送企业微信文本消息
+            </summary>
+            <param name="model"></param>
+            <param name="Id"></param>
+            <param name="task"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.QyWechatApiService.SendCardMessage(FastAdminAPI.Network.QyWechat.Model.CardMsgSendModel,System.Int64,System.String)">
+            <summary>
+            发送企业微信卡片消息
+            </summary>
+            <param name="model"></param>
+            <param name="Id"></param>
+            <param name="task"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Services.RolePermissionService">
+            <summary>
+            角色权限
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.RolePermissionService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            构造
+            </summary>
+            <param name="dbContext"></param>
+            <param name="httpContext"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.RolePermissionService.GetRoleTree(System.String)">
+            <summary>
+            获取角色树
+            </summary>
+            <param name="roleName">角色名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.RolePermissionService.AddRole(FastAdminAPI.Core.Models.RolePermission.AddRoleModel)">
+            <summary>
+            新增角色
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.RolePermissionService.EditRole(FastAdminAPI.Core.Models.RolePermission.EditRoleModel)">
+            <summary>
+            编辑角色
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.RolePermissionService.DelRole(FastAdminAPI.Core.Models.RolePermission.DelRoleModel)">
+            <summary>
+            删除角色
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.RolePermissionService.CopyRole(FastAdminAPI.Core.Models.RolePermission.CopyRoleModel)">
+            <summary>
+            复制角色
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.RolePermissionService.GetRolePermission(System.Int64)">
+            <summary>
+            获取角色权限
+            </summary>
+            <param name="roleId">角色Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.RolePermissionService.SaveRolePermission(FastAdminAPI.Core.Models.RolePermission.SaveRolePermissionModel)">
+            <summary>
+            保存角色权限
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="T:FastAdminAPI.Core.Services.TestService">
+            <summary>
+            测试
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.TestService.#ctor(SqlSugar.ISqlSugarClient)">
+            <summary>
+            构造
+            </summary>
+            <param name="dbContext"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.TestService.GetCodeListWithMapster(System.String)">
+            <summary>
+            获取code列表 mapster方式
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.TestService.GetCodeListWithAutoBox(FastAdminAPI.Core.Models.Test.CodePageSearch)">
+            <summary>
+            获取code列表 AutoBox方式
+            </summary>
+            <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.TestService.AddCode(FastAdminAPI.Core.Models.Test.AddCodeModel)">
+            <summary>
+            新增Code
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.TestService.EditCode(FastAdminAPI.Core.Models.Test.EditCodeModel)">
+            <summary>
+            编辑Code
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.TestService.DelCode(FastAdminAPI.Core.Models.Test.DelCodeModel)">
+            <summary>
+            删除Code
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.TestService.DelCodeById(System.Int64)">
+            <summary>
+            通过Id删除Code
+            </summary>
+            <param name="codeId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Services.TokenPassService">
+            <summary>
+            令牌过滤
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Services.TokenPassService._regionService">
+            <summary>
+            区域服务
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.TokenPassService.#ctor(SqlSugar.ISqlSugarClient,FastAdminAPI.Business.IServices.IRegionService)">
+            <summary>
+            构造
+            </summary>
+            <param name="dbContext"></param>
+            <param name="regionService"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.TokenPassService.GetCodeList(System.String)">
+            <summary>
+            获取一组字典列表(单层)
+            </summary>
+            <param name="code">分组代号</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.TokenPassService.GetMultiCodeList(System.Collections.Generic.List{System.String})">
+            <summary>
+            获取多组字典列表(单层)
+            </summary>
+            <param name="codeList">分组代号</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.TokenPassService.GetCodeTree(System.String)">
+            <summary>
+            获取一组字典树(多层)
+            </summary>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.TokenPassService.GetRegions">
+            <summary>
+            获取地区信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Services.UserService">
+            <summary>
+            用户
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Services.UserService._applicationHandler">
+            <summary>
+            审批处理接口
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Services.UserService._redis">
+            <summary>
+            Redis
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Services.UserService.REDIS_LOCK_PREFIX">
+            <summary>
+            Redis锁前缀
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.UserService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,FastAdminAPI.Business.IServices.IApplicationHandler,FastAdminAPI.Common.Redis.IRedisHelper)">
+            <summary>
+            构造
+            </summary>
+            <param name="dbContext"></param>
+            <param name="httpContext"></param>
+            <param name="applicationHandler"></param>
+            <param name="redis"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.UserService.GetUserModuleIds">
+            <summary>
+            获取模块功能
+            【角色权限+用户权限】
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.UserService.GetPermissions">
+            <summary>
+            获取功能权限(当前登录用户所有权限)
+            【角色权限+用户权限】
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.UserService.GetMenuPermissionsTree">
+            <summary>
+            获取菜单权限树
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.UserService.GetCheckList(FastAdminAPI.Core.Models.Users.CheckPageSearch)">
+            <summary>
+            获取我的审批列表
+            </summary>
+            <param name="pageSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.UserService.ApprovalApplication(FastAdminAPI.Core.Models.Users.ApprovalModel)">
+            <summary>
+            审批申请
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.UserService.CancelApplication(System.Int64)">
+            <summary>
+            通用撤销申请
+            </summary>
+            <param name="checkId">审批Id</param>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.UserService.GetCheckRecordList(FastAdminAPI.Core.Models.Users.CheckRecordPageSearch)">
+            <summary>
+            获取我的审批记录列表
+            </summary>
+            <param name="pageSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.UserService.GetApplicationCheckRecords(System.Int64)">
+            <summary>
+            获取申请审批记录列表
+            </summary>
+            <param name="checkId">审批Id</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

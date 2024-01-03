@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "FastAdminAPI.Tasks": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "dashboard",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:9002"
+    }
+  }
+}
