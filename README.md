@@ -4,7 +4,7 @@
 
 # 项目结构
 
-```ssh
+```bash
 FastAdminAPI.Business/   通用业务类库
 FastAdminAPI.CAP/        开源项目CAP类库(基于dotnetcore/CAP项目开发及配置)
 FastAdminAPI.Common/     通用工具类库
@@ -28,7 +28,7 @@ FastAdminAPI.sln         解决方案
 
 本项目除了引用其他类库外，自身已包含所有业务相关代码，无其他依赖，结构简单，上手非常容易。
 
-```ssh
+```bash
 Controllers/   Controller层-数据返回
 IServices/     服务层接口
 Models/        dto模型层-数据传输及ORM配置
@@ -42,7 +42,8 @@ Services/      服务层-业务数据操作
 
 通用工具类库，包含很多实用工具。
 
-```ssh
+### 结构
+```bash
 Attributes/           各类特性类
 Authentications/      jwt校验
 BASE/                 返回统一参数，通用参数等
@@ -66,8 +67,10 @@ SystemUtilities/      系统工具
 Utilities/            实用工具
 ```
 
-在以上工具类中，有一些是配置，需要在`program.cs`文件中进行配置：
-### 配置 Model规则有效性验证 和 全局异常捕获
+在以上工具类中，有一些是配置，需要在`program.cs`文件中进行配置。
+
+### 配置
+#### 配置Model规则验证和全局异常捕获
 ```C#
 //配置 Model规则有效性验证 和 全局异常捕获
 builder.Services.AddControllers(c =>
@@ -79,14 +82,14 @@ builder.Services.AddControllers(c =>
 	});
 ```
 
-### 配置Redis
+#### 配置Redis
 
 ```C#
 // Redis
 builder.Services.AddSingleton<IRedisHelper, RedisHelper>();
 ```
 
-### 配置HttpClient
+#### 配置HttpClient
 
 ```C#
 //使用Refit的情况下，可以不注入
@@ -95,14 +98,14 @@ builder.Services.AddHttpClient();
 builder.Services.AddSingleton<HttpClientHelper>();
 ```
 
-### 配置service层
+#### 配置service层
 
 ```C#
 // 服务层注入 将所有Service文件注入
 builder.Services.AddAllServices();
 ```
 
-### 配置响应压缩
+#### 配置响应压缩
 
 ```C#
 //接口响应压缩
@@ -112,7 +115,7 @@ builder.Services.AddCompressResponse();
 app.UseResponseCompression();
 ```
 
-### Swagger配置
+#### Swagger配置
 
 ```C#
 builder.Services.AddEndpointsApiExplorer();
@@ -123,7 +126,7 @@ app.UseSwagger();
 app.UseSwaggerUI(c => { c.Configure(serviceName); });
 ```
 
-### Jwt配置
+#### Jwt配置
 
 ```C#
 //jwt配置
@@ -134,137 +137,20 @@ app.UseAuthentication();
 app.UseJwtTokenAuth();
 ```
 
-## FastAdminAPI.Business
-
-该类库包含一些通用的业务，例如：数据权限，通用审批等，多服务皆可引用该项目，减少重复代码，并降低修改代码带来的问题。
-
-引用该类库，需要依赖注入，相关依赖注入的配置如下：
-```C#
-//注入数据权限业务服务
-builder.Services.AddDataPermissionService();
-
-//注入通用审批业务服务
-builder.Services.AddApplicationService();
-
-//注入通用区域业务服务
-builder.Services.AddRegionService();
-```
-
-如果想要全部注入，可以这样进行配置：
-```C#
-//注入所有业务服务
-builder.Services.AddBusinessServices();
-```
-
-## FastAdminAPI.CAP
-
-该类库是基于[dotnetcore/CAP开源项目](https://github.com/dotnetcore/CAP)进行开发的，将配置简单化，直接可以开始使用。该类库使用`MySQL`进行持久化存储，使用`Redis`进行消息的发布及消费。
-
-- 仅使用功能
-```C#
-builder.Services.AddEventBus(configuration);
-```
-
-- 需要个性化配置
-```C#
-builder.Services.AddCap(opt =>
-{
-	opt.ConfigureCAP(configuration);
-	opt.UseDashboard(config => { config.PathMatch = ""; });
-});
-```
-
-需要说明的是，如果要编写 订阅 或 发布 时，需要指定 订阅 的名称，订阅的名称放在`FastAdminAPI.CAP/Subscribes`目录下，进行统一管理。
-
-`CAP`的配置放在`appsettings.json`文件中，可以按需求修改。
-
-## FastAdminAPI.Email
-
-邮件相关的类库，基于[jstedfast/MailKit开源项目](https://github.com/jstedfast/MailKit)
-
-
-## FastAdminAPI.NPOI
-
-Excel相关类库，基于[nissl-lab/npoi开源项目](https://github.com/nissl-lab/npoi)，
-
-- 如果仅仅是简单的使用Excel导入和导出，可以使用`FastAdminAPI.Common`中的`MiniExcel`，该功能是引入了[mini-software/MiniExcel开源项目](https://github.com/mini-software/MiniExcel)，更加高效快捷，无需引入`FastAdminAPI.NPOI`类库
-- 比较复杂的Excel操作可以引用`FastAdminAPI.NPOI`进行更多的操作。
-
-## FastAdminAPI.Network
-
-网络请求类库，基于[reactiveui/refit开源项目](https://github.com/reactiveui/refit)进行开发，进行了统一的配置。
-
-```C#
-//配置refit，并依赖注入
-builder.Services.AddRefitClients(configuration);
-```
-
-调用外部接口只需要像调用本地方法一样使用。
-```C#
-public interface IEmailApi
-{
-	/// <summary>
-	/// 发送Smtp邮件
-	/// </summary>
-	/// <param name="model"></param>
-	/// <returns></returns>
-	[Post("/api/EmailApi/SendSmtpEmail")]
-	Task SendSmtpEmail([Body] SendSmtpEmailModel model);
-}
-
-public class Test
-{
-	//依赖注入
-	private readonly IEmailApi _emailApi;
-	public Test(IEmailApi emailApi)
-	{
-		_emailApi = emailApi;
-	}
-
-	public async Task SendEmail(model)
-	{
-		//直接使用
-		await emailApi.SendSmtpEmail(model);
-	} 
-}
-```
-
-
-## FastAdminAPI.EventBus
-
-事件总线，基于[dotnetcore/CAP开源项目](https://github.com/dotnetcore/CAP)进行开发，启动后会展示`CAP.Dashboard`，该事件总线使用`MySQL`进行持久化存储，使用`Redis`进行消息的发布及消费。当前项目主要用于消费业务数据。
-
-`CAP`的配置放在`appsettings.json`文件中，可以按需求修改。
-
-## FastAdminAPI.Tasks
-
-定时任务，基于[HangfireIO/Hangfire开源项目](https://github.com/HangfireIO/Hangfire)进行开发，依赖于`Redis`。简化了相关配置。
-
-- 修改`dashboard`登录账号和密码，可以修改`Program.cs`文件。
-```C#
-new BasicAuthAuthorizationUser
-{
-	Login = "fastadminapi",
-	PasswordClear =  "123456"
-}
-```
-
-- 定时任务只需要继承`BaseTask.cs`基类即可，要配置定时任务执行的周期，可以在`appsettings.json中进行配置`。
-```json
-"Task.Configures": "TestTask,daily,1,0;TestTask2,min,5"
-```
-> 配置方式：任务名称，任务执行周期`min/hour/daily/monthly/yearly/cron`，任务时间
-> 多个定时任务以`;`分号分隔
-> 也可以直接配置`cron`，例如：TestTask,cron, `0 0/2 * * *`，每两小时整执行一次。
-
-
 ## FastAdminAPI.Framework
 
 ORM框架，基于[DotNetNext/SqlSugar开源项目](https://github.com/DotNetNext/SqlSugar)进行开发。`sqlsugar`的用法直接看官方文档即可。
 
-本项目类库增加了一些扩展，可以更加快速的进行业务开发。
+### 结构
+```bash
+Database/        数据库SQL文件
+Entities/        数据库实体类
+Extensions/      ORM扩展
+```
 
-### 查询
+本项目类库增加了一些扩展，可以更加快速的进行业务开发。
+### ORM扩展
+#### 查询
 ```C#
 //自动包装映射
 await _dbContext.Queryable<Table_Name>().ToAutoBoxResultAsync(search, new Result());
@@ -311,7 +197,7 @@ if (result?.Code == ResponseCode.Success)
 }
 ```
 
-### 新增
+#### 新增
 
 ```C#
 await _dbContext.InsertResultAsync<AddModel, Table_Name>(model)
@@ -333,7 +219,7 @@ public class AddModel
 INSERT INTO Table_Name (t_Name, t_Address) VALUES (@Name, @Address);
 ```
 
-### 编辑
+#### 编辑
 
 ```C#
 await _dbContext.UpdateResultAsync<EditModel, Table_Name>(model);
@@ -359,7 +245,7 @@ UPDATE Table_Name SET t_Name = @Name, t_Address = @Address
 WHERE t_Id = @Id;
 ```
 
-### 软删除
+#### 软删除
 
 ```C#
 await _dbContext.SoftDeleteAsync<DelModel, Table_Name>(model);
@@ -382,7 +268,7 @@ UPDATE Table_Name SET t_Name = @Name, t_IsValid = @IsValid
 WHERE t_Id = @Id;
 ```
 
-### 事务
+#### 事务
 
 ```C#
 await _dbContext.TransactionAsync(async () => 
@@ -391,13 +277,149 @@ await _dbContext.TransactionAsync(async () =>
 });
 ```
 
-### 执行结果转换
+#### 执行结果转换
 
 将`SqlSugar`的返回结果转换为 统一返回结果(`ResponseModel`)
 ```C#
 await _dbContext.Updateable(entity).ExecuteAsync();
 ```
 
+## FastAdminAPI.Business
+
+该类库包含一些通用的业务，例如：数据权限，通用审批等，多服务皆可引用该项目，减少重复代码，并降低修改代码带来的问题。
+
+### 结构
+```bash
+Common/          公用类
+Extensions/      扩展配置文件
+IServices/       接口
+Models/          dto模型
+PrivateFunc/     接口实现的私有方法
+Services/        接口实现层
+```
+### 配置
+引用该类库，需要依赖注入，相关依赖注入的配置如下：
+```C#
+//注入数据权限业务服务
+builder.Services.AddDataPermissionService();
+
+//注入通用审批业务服务
+builder.Services.AddApplicationService();
+
+//注入通用区域业务服务
+builder.Services.AddRegionService();
+```
+
+如果想要全部注入，可以这样进行配置：
+```C#
+//注入所有业务服务
+builder.Services.AddBusinessServices();
+```
+
+## FastAdminAPI.CAP
+
+该类库是基于[dotnetcore/CAP开源项目](https://github.com/dotnetcore/CAP)进行开发的，将配置简单化，直接可以开始使用。该类库使用`MySQL`进行持久化存储，使用`Redis`进行消息的发布及消费。
+
+- 仅使用功能
+```C#
+builder.Services.AddEventBus(configuration);
+```
+
+- 需要个性化配置
+```C#
+builder.Services.AddCap(opt =>
+{
+	opt.ConfigureCAP(configuration);
+	opt.UseDashboard(config => { config.PathMatch = ""; });
+});
+```
+
+需要说明的是，如果要编写 订阅 或 发布 时，需要指定 订阅 的名称，订阅的名称放在`FastAdminAPI.CAP/Subscribes`目录下，进行统一管理。
+
+`CAP`的配置放在`appsettings.json`文件中，可以按需求修改。
+
+## FastAdminAPI.Email
+
+邮件相关的类库，基于[jstedfast/MailKit开源项目](https://github.com/jstedfast/MailKit)开发。
+
+
+## FastAdminAPI.NPOI
+
+Excel相关类库，基于[nissl-lab/npoi开源项目](https://github.com/nissl-lab/npoi)开发。
+
+- 如果仅仅是简单的使用Excel导入和导出，可以使用`FastAdminAPI.Common`中的`MiniExcel`，该功能是引入了[mini-software/MiniExcel开源项目](https://github.com/mini-software/MiniExcel)，更加高效快捷，无需引入`FastAdminAPI.NPOI`类库
+- 比较复杂的Excel操作可以引用`FastAdminAPI.NPOI`进行更多的操作。
+
+## FastAdminAPI.Network
+
+网络请求类库，基于[reactiveui/refit开源项目](https://github.com/reactiveui/refit)进行开发，进行了统一的配置。
+
+### 配置
+```C#
+//配置refit，并依赖注入
+builder.Services.AddRefitClients(configuration);
+```
+
+### 使用
+调用外部接口只需要像调用本地方法一样使用。
+```C#
+public interface IEmailApi
+{
+	/// <summary>
+	/// 发送Smtp邮件
+	/// </summary>
+	/// <param name="model"></param>
+	/// <returns></returns>
+	[Post("/api/EmailApi/SendSmtpEmail")]
+	Task SendSmtpEmail([Body] SendSmtpEmailModel model);
+}
+
+public class Test
+{
+	//依赖注入
+	private readonly IEmailApi _emailApi;
+	public Test(IEmailApi emailApi)
+	{
+		_emailApi = emailApi;
+	}
+
+	public async Task SendEmail(model)
+	{
+		//直接使用
+		await emailApi.SendSmtpEmail(model);
+	} 
+}
+```
+
+
+## FastAdminAPI.EventBus
+
+事件总线，基于[dotnetcore/CAP开源项目](https://github.com/dotnetcore/CAP)进行开发，启动后会展示`CAP.Dashboard`，该事件总线使用`MySQL`进行持久化存储，使用`Redis`进行消息的发布及消费。当前项目主要用于消费业务数据。
+
+`CAP`的配置放在`appsettings.json`文件中，可以按需求修改。
+
+## FastAdminAPI.Tasks
+
+定时任务，基于[HangfireIO/Hangfire开源项目](https://github.com/HangfireIO/Hangfire)进行开发，依赖于`Redis`。简化了相关配置。
+
+### Dashboard
+- 修改`dashboard`登录账号和密码，可以修改`Program.cs`文件。
+```C#
+new BasicAuthAuthorizationUser
+{
+	Login = "fastadminapi",
+	PasswordClear =  "123456"
+}
+```
+
+### 配置
+- 定时任务只需要继承`BaseTask.cs`基类即可，要配置定时任务执行的周期，可以在`appsettings.json中进行配置`。
+```json
+"Task.Configures": "TestTask,daily,1,0;TestTask2,min,5"
+```
+> 配置方式：任务名称，任务执行周期`min/hour/daily/monthly/yearly/cron`，任务时间
+> 多个定时任务以`;`分号分隔
+> 也可以直接配置`cron`，例如：TestTask,cron, `0 0/2 * * *`，每两小时整执行一次。
 
 # 感谢
 
