@@ -41,11 +41,7 @@ namespace FastAdminAPI.Common.Enums
             /// <summary>
             /// 上级+指定人员
             /// </summary>
-            SuperiorAndDesignee,
-            /// <summary>
-            /// 上级+指定人员+金额
-            /// </summary>
-            SuperiorAndDesigneeWithAmount
+            SuperiorAndDesignee
         }
 
         /// <summary>
