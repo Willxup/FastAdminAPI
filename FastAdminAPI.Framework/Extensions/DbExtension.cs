@@ -7,6 +7,7 @@ using FastAdminAPI.Framework.Extensions.DbQueryExtensions;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -133,7 +134,57 @@ namespace FastAdminAPI.Framework.Extensions
         {
             try
             {
-                var res = await db.ExecuteReturnBigIdentityAsync();
+                var provider = db as InsertableProvider<T>;
+                if (provider.InsertObjs?.Length > 1)
+                {
+                    var res = await db.ExecuteCommandAsync();
+                    if (res > 0)
+                        return ResponseModel.Success(res);
+                    else
+                        throw new UserOperationException("未插入任何数据!");
+                }
+                else
+                {
+                    //查看是否有自增主键
+                    if (provider.EntityInfo.Columns?.Any(c => c.IsIdentity == true) ?? false)
+                    {
+                        //有自增 返回主键
+                        var res = await db.ExecuteReturnBigIdentityAsync();
+                        if (res > 0)
+                            return ResponseModel.Success(res);
+                        else
+                            throw new UserOperationException("未插入任何数据!");
+                    }
+                    else
+                    {
+                        //无自增 不返回主键
+                        var res = await db.ExecuteCommandAsync();
+                        if (res > 0)
+                            return ResponseModel.Success(res);
+                        else
+                            throw new UserOperationException("未插入任何数据!");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return ResponseModel.Error(!string.IsNullOrEmpty(errorMessage) ? errorMessage : ex.Message);
+            }
+        }
+        /// <summary>
+        /// 大数据写入 直接返回通用消息类
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="db">大数据写入</param>
+        /// <param name="data">要插入的数据</param>
+        /// <param name="errorMessage">错误信息</param>
+        /// <returns></returns>
+        public static async Task<ResponseModel> ExecuteAsync<T>(this IFastest<T> db, List<T> data, string errorMessage = null)
+            where T : class, new()
+        {
+            try
+            {
+                var res = await db.BulkCopyAsync(data);
                 if (res > 0)
                     return ResponseModel.Success(res);
                 else
