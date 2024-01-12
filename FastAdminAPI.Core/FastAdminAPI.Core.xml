@@ -3610,17 +3610,11 @@
             Redis
             </summary>
         </member>
-        <member name="F:FastAdminAPI.Core.Services.QyWechatApiService._qyWechatProvider">
-            <summary>
-            企业微信提供者
-            </summary>
-        </member>
-        <member name="M:FastAdminAPI.Core.Services.QyWechatApiService.#ctor(FastAdminAPI.Common.Redis.IRedisHelper,FastAdminAPI.Network.QyWechat.Common.IQyWechatProvider)">
+        <member name="M:FastAdminAPI.Core.Services.QyWechatApiService.#ctor(FastAdminAPI.Common.Redis.IRedisHelper)">
             <summary>
             构造
             </summary>
             <param name="redis"></param>
-            <param name="qyWechatProvider"></param>
         </member>
         <member name="M:FastAdminAPI.Core.Services.QyWechatApiService.GetUserId(System.String)">
             <summary>

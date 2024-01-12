@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FastAdminAPI.Network.QyWechat.Common
 {
-    public interface IQyWechatProvider
+    internal interface IQyWechatProvider
     {
         /// <summary>
         /// 获取企业微信访问令牌
@@ -14,7 +14,7 @@ namespace FastAdminAPI.Network.QyWechat.Common
         /// <param name="corpid"></param>
         /// <param name="corpsecret"></param>
         /// <returns></returns>
-        [Get(BaseQyWechatConfiguration.GetAccessToken)]
+        [Get(BaseQyWechatConfiguration.GET_ACCESS_TOKEN)]
         AccessTokenModel GetAccessToken([Query] string corpid, [Query] string corpsecret);
         /// <summary>
         /// 获取企业微信UserId
@@ -22,7 +22,7 @@ namespace FastAdminAPI.Network.QyWechat.Common
         /// <param name="access_token"></param>
         /// <param name="code"></param>
         /// <returns></returns>
-        [Get(BaseQyWechatConfiguration.GetQyWechatUserId)]
+        [Get(BaseQyWechatConfiguration.GET_USER_ID)]
         Task<QyUserInfoModel> GeUserId([Query] string access_token, [Query] string code);
         /// <summary>
         /// 发送企业微信信息
@@ -30,7 +30,7 @@ namespace FastAdminAPI.Network.QyWechat.Common
         /// <param name="access_token"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        [Post(BaseQyWechatConfiguration.SendMessage)]
+        [Post(BaseQyWechatConfiguration.SEND_MESSAGE)]
         Task<MessageSendResultModel> SendMessage([FromQuery] string access_token, [Body] MessageSendBaseModel message);
     }
 }

@@ -4,7 +4,6 @@ using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Services.BASE;
 using FastAdminAPI.Network.QyWechat;
-using FastAdminAPI.Network.QyWechat.Common;
 using FastAdminAPI.Network.QyWechat.Model;
 using System;
 using System.Threading.Tasks;
@@ -20,20 +19,14 @@ namespace FastAdminAPI.Core.Services
         /// Redis
         /// </summary>
         private readonly IRedisHelper _redis;
-        /// <summary>
-        /// 企业微信提供者
-        /// </summary>
-        private readonly IQyWechatProvider _qyWechatProvider;
 
         /// <summary>
         /// 构造
         /// </summary>
         /// <param name="redis"></param>
-        /// <param name="qyWechatProvider"></param>
-        public QyWechatApiService(IRedisHelper redis, IQyWechatProvider qyWechatProvider) : base()
+        public QyWechatApiService(IRedisHelper redis) : base()
         {
             _redis = redis;
-            _qyWechatProvider = qyWechatProvider;
         }
 
         /// <summary>
@@ -45,7 +38,7 @@ namespace FastAdminAPI.Core.Services
         {
             try
             {
-                QyWechatClient client = new(_redis, _qyWechatProvider);
+                QyWechatClient client = new(_redis);
                 string result = await client.GetUserId(code);
                 return ResponseModel.Success(result);
             }
@@ -65,7 +58,7 @@ namespace FastAdminAPI.Core.Services
         {
             try
             {
-                QyWechatClient client = new(_redis, _qyWechatProvider);
+                QyWechatClient client = new(_redis);
                 return await client.SendMessage(model);
             }
             catch (Exception ex)
@@ -84,7 +77,7 @@ namespace FastAdminAPI.Core.Services
         {
             try
             {
-                QyWechatClient client = new(_redis, _qyWechatProvider);
+                QyWechatClient client = new(_redis);
                 return await client.SendMessage(model);
             }
             catch (Exception ex)

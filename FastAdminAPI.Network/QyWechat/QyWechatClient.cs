@@ -2,9 +2,11 @@ using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Common.SystemUtilities;
+using FastAdminAPI.Network.Config;
 using FastAdminAPI.Network.QyWechat.Common;
 using FastAdminAPI.Network.QyWechat.Config;
 using FastAdminAPI.Network.QyWechat.Model;
+using Refit;
 using System;
 using System.Threading.Tasks;
 
@@ -35,7 +37,7 @@ namespace FastAdminAPI.Network.QyWechat
         /// <param name="redis"></param>
         /// <param name="httpClient"></param>
         /// <exception cref="Exception"></exception>
-        public QyWechatClient(IRedisHelper redis, IQyWechatProvider qyWechatProvider)
+        public QyWechatClient(IRedisHelper redis)
         {
             if (EnvironmentHelper.IsDevelop)
                 _qyWechatConfig = new DevQyWechatConfiguration();
@@ -43,7 +45,8 @@ namespace FastAdminAPI.Network.QyWechat
                 throw new Exception("当前环境暂不支持企业微信!");
 
             _redis = redis;
-            _qyWechatProvider = qyWechatProvider;
+            _qyWechatProvider = RestService.For<IQyWechatProvider>(BaseQyWechatConfiguration.QYWECHAT_DOMAIN_ADDRESS, RefitConfigExtension.REFIT_SETTINGS);
+            
             ACCESS_TOKEN = GetAccessTokenAsync().Result;
         }
 

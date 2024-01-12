@@ -1,10 +1,10 @@
-﻿using FastAdminAPI.Core.IServices;
-using FastAdminAPI.Core.Models.BasicSettings;
-using FastAdminAPI.Core.Services.BASE;
-using FastAdminAPI.Business.IServices;
+﻿using FastAdminAPI.Business.IServices;
 using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Enums;
+using FastAdminAPI.Core.IServices;
+using FastAdminAPI.Core.Models.BasicSettings;
+using FastAdminAPI.Core.Services.BASE;
 using FastAdminAPI.Framework.Entities;
 using FastAdminAPI.Framework.Extensions;
 using FastAdminAPI.Framework.Extensions.DbQueryExtensions;
@@ -459,35 +459,6 @@ namespace FastAdminAPI.Core.Services
                 else
                     throw new UserOperationException("请选择审批人!");
             }
-            else if (model.ApproveType == (byte)ApplicationEnums.ApproveType.SuperiorAndDesigneeWithAmount)
-            {
-                if (model.ApproverList?.Count > 0)
-                {
-                    if (model.ApproverList.GroupBy(i => i).Any(g => g.Count() > 1))
-                        throw new UserOperationException("审批人重复!");
-                    else
-                        model.Approvers = string.Join(",", model.ApproverList);
-                }
-                else
-                    throw new UserOperationException("请选择审批人!");
-                //判断审批金额是否为空
-                if (model.AmountList?.Count > 0)
-                {
-                    //判断审批金额数和审批人数相等
-                    if (model.ApproverList?.Count > model.AmountList?.Count)
-                    {
-                        throw new UserOperationException("请选择审批人!");
-                    }
-                    else if (model.ApproverList?.Count < model.AmountList?.Count)
-                    {
-                        throw new UserOperationException("请选择审批金额!");
-                    }
-                    else
-                        model.Amounts = string.Join(",", model.AmountList);
-                }
-                else
-                    throw new UserOperationException("请选择审批金额!");
-            }
 
             if (model.ApplicantList?.Count > 0)
             {
@@ -587,35 +558,6 @@ namespace FastAdminAPI.Core.Services
                 }
                 else
                     throw new UserOperationException("请选择审批人!");
-            }
-            else if (model.ApproveType == (byte)ApplicationEnums.ApproveType.SuperiorAndDesigneeWithAmount)
-            {
-                if (model.ApproverList?.Count > 0)
-                {
-                    if (model.ApproverList.GroupBy(i => i).Any(g => g.Count() > 1))
-                        throw new UserOperationException("审批人重复!");
-                    else
-                        model.Approvers = string.Join(",", model.ApproverList);
-                }
-                else
-                    throw new UserOperationException("请选择审批人!");
-                //判断审批金额是否为空
-                if (model.AmountList?.Count > 0)
-                {
-                    //判断审批金额数和审批人数相等
-                    if (model.ApproverList?.Count > model.AmountList?.Count)
-                    {
-                        throw new UserOperationException("请选择审批人!");
-                    }
-                    else if (model.ApproverList?.Count < model.AmountList?.Count)
-                    {
-                        throw new UserOperationException("请选择审批金额!");
-                    }
-                    else
-                        model.Amounts = string.Join(",", model.AmountList);
-                }
-                else
-                    throw new UserOperationException("请选择审批金额!");
             }
 
             if (model.ApplicantList?.Count > 0)
