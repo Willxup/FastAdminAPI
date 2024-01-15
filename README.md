@@ -1,5 +1,5 @@
 # 项目简介
-
+![FastAdminAPI-ico](https://images.willxup.top/images/2024/01/15/vkpjkj.png)
 [FastAdminAPI](https://github.com/Willxup/FastAdminAPI)是一个可以快速开发的OA系统项目，适用于中小型规模快速使用，基于`.net6`和`AspNetCore`进行开发。该项目包含部门，岗位，用户，员工，角色权限，数据权限，通用审批，事件总线，服务间调用，定时任务等功能，能够快速开发并部署使用。
 
 # 项目结构
