@@ -1,12 +1,12 @@
-﻿using FastAdminAPI.Core.IServices;
-using FastAdminAPI.Core.Models.Departments;
-using FastAdminAPI.Core.Services.BASE;
-using FastAdminAPI.Business.Common;
+﻿using FastAdminAPI.Business.Common;
 using FastAdminAPI.Business.IServices;
 using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Enums;
 using FastAdminAPI.Common.JsonTree;
+using FastAdminAPI.Core.IServices;
+using FastAdminAPI.Core.Models.Departments;
+using FastAdminAPI.Core.Services.BASE;
 using FastAdminAPI.Framework.Entities;
 using FastAdminAPI.Framework.Extensions;
 using Microsoft.AspNetCore.Http;
@@ -124,21 +124,34 @@ namespace FastAdminAPI.Core.Services
         /// <summary>
         /// 删除部门
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="departId">部门Id</param>
         /// <returns></returns>
-        public async Task<ResponseModel> DelDepartment(DelDepartmentModel model)
+        public async Task<ResponseModel> DelDepartment(long departId)
         {
-            //校验
+            //校验子部门
+            bool isExistChild = await _dbContext.Queryable<S05_Department>()
+                .Where(S05 => S05.S05_IsValid == (byte)BaseEnums.IsValid.Valid && S05.S05_ParentDepartId == departId)
+                .AnyAsync();
+            if (isExistChild)
+                throw new UserOperationException("该部门下存在子部门，无法删除!");
+
+            //校验岗位
             bool isExist = await _dbContext.Queryable<S06_Post>()
-                .Where(S06 => S06.S05_DepartId == model.DepartId && S06.S06_IsValid == (byte)BaseEnums.IsValid.Valid)
+                .Where(S06 => S06.S05_DepartId == departId && S06.S06_IsValid == (byte)BaseEnums.IsValid.Valid)
                 .AnyAsync();
             if (isExist)
                 throw new UserOperationException("该部门已存在岗位，请移除岗位后删除!");
 
-            model.OperationId = _employeeId;
-            model.OperationName = _employeeName;
-            model.OperationTime = _dbContext.GetDate();
-            var result = await _dbContext.SoftDeleteAsync<DelDepartmentModel, S05_Department>(model);
+            var result = await _dbContext.Deleteable<S05_Department>()
+                .Where(S05 => S05.S05_DepartId == departId)
+                .SoftDeleteAsync(S05 => new S05_Department 
+                {
+                    S05_IsValid = (byte)BaseEnums.IsValid.InValid,
+                    S05_DeleteId = _employeeId,
+                    S05_DeleteBy = _employeeName,
+                    S05_DeleteTime = SqlFunc.GetDate()
+                });
+
             if (result?.Code == ResponseCode.Success)
             {
                 //释放数据权限

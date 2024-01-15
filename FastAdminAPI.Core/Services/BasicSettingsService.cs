@@ -13,7 +13,6 @@ using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.Services
@@ -287,36 +286,7 @@ namespace FastAdminAPI.Core.Services
         /// <returns></returns>
         public async Task<ResponseModel> GetCheckProcessList(CheckProcessPageSearch pageSearch)
         {
-            string sql = $"";
-            //申请人
-            if (pageSearch.Applicants?.Count > 0)
-            {
-                foreach (var item in pageSearch.Applicants)
-                {
-                    sql += $" FIND_IN_SET('{item}', S11.S07_Applicants ) > 0 OR";
-                }
-            }
-            //审核人
-            if (pageSearch.Approvers?.Count > 0)
-            {
-                foreach (var item in pageSearch.Approvers)
-                {
-                    sql += $" FIND_IN_SET('{item}', S11.S07_Approvers ) > 0 OR";
-                }
-            }
-            //抄送人
-            if (pageSearch.CarbonCopies?.Count > 0)
-            {
-                foreach (var item in pageSearch.CarbonCopies)
-                {
-                    sql += $" FIND_IN_SET('{item}', S11.S07_CarbonCopies ) > 0 OR";
-                }
-            }
-
-            sql += Regex.Replace(sql, "OR$", "");//去除末尾多余OR
-
             var result = await _dbContext.Queryable<S11_CheckProcess>()
-                .WhereIF(pageSearch.Applicants?.Count > 0 || pageSearch.Approvers?.Count > 0 || pageSearch.CarbonCopies?.Count > 0, sql)
                 .WhereIF(pageSearch.CheckProcessTypes?.Count > 0, S11 => pageSearch.CheckProcessTypes.Contains((long)S11.S99_ApplicationType))
                 .WhereIF(pageSearch.ApproveTypes?.Count > 0, S11 => pageSearch.ApproveTypes.Contains(S11.S11_ApproveType))
                 .Where(S11 => S11.S11_IsValid == (byte)BaseEnums.IsValid.Valid)
@@ -585,14 +555,19 @@ namespace FastAdminAPI.Core.Services
         /// <summary>
         /// 删除审批流程
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="checkProcessId">审批流程Id</param>
         /// <returns></returns>
-        public async Task<ResponseModel> DelCheckProcess(DelCheckProcessModel model)
+        public async Task<ResponseModel> DelCheckProcess(long checkProcessId)
         {
-            model.OperationId = _employeeId;
-            model.OperationName = _employeeName;
-            model.OperationTime = _dbContext.GetDate();
-            return await _dbContext.SoftDeleteAsync<DelCheckProcessModel, S11_CheckProcess>(model);
+            return await _dbContext.Deleteable<S11_CheckProcess>()
+                .Where(S11 => S11.S11_CheckProcessId == checkProcessId)
+                .SoftDeleteAsync(S11 => new S11_CheckProcess 
+                {
+                    S11_IsValid = (byte)BaseEnums.IsValid.InValid,
+                    S11_DeleteId = _employeeId,
+                    S11_DeleteBy = _employeeName,
+                    S11_DeleteTime = SqlFunc.GetDate()
+                });
         }
         #endregion
 

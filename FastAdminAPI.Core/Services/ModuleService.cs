@@ -80,21 +80,26 @@ namespace FastAdminAPI.Core.Services
         /// <summary>
         /// 删除模块
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="moduleId">模块Id</param>
         /// <returns></returns>
-        public async Task<ResponseModel> DelModule(DelModuleModel model)
+        public async Task<ResponseModel> DelModule(long moduleId)
         {
             //校验
             bool isExistChild = await _dbContext.Queryable<S02_Module>()
-                .Where(S02 => S02.S02_IsValid == (byte)BaseEnums.IsValid.Valid && S02.S02_ParentModuleId == model.ModuleId)
+                .Where(S02 => S02.S02_IsValid == (byte)BaseEnums.IsValid.Valid && S02.S02_ParentModuleId == moduleId)
                 .AnyAsync();
             if (isExistChild)
                 throw new UserOperationException("当前模块下存在子模块，请删除子模块后再进行删除!");
 
-            model.OperationId = _employeeId;
-            model.OperationName = _employeeName;
-            model.OperationTime = _dbContext.GetDate();
-            return await _dbContext.SoftDeleteAsync<DelModuleModel, S02_Module>(model);
+            return await _dbContext.Deleteable<S02_Module>()
+                .Where(S02 => S02.S02_ModuleId == moduleId)
+                .SoftDeleteAsync(S02 => new S02_Module
+                {
+                    S02_IsValid = (byte)BaseEnums.IsValid.InValid,
+                    S02_DeleteId = _employeeId,
+                    S02_DeleteBy = _employeeName,
+                    S02_DeleteTime = SqlFunc.GetDate()
+                });
         }
         /// <summary>
         /// 按模块Id获取员工列表

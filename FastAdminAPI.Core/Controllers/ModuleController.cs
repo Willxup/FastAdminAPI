@@ -1,8 +1,8 @@
-﻿using FastAdminAPI.Core.Controllers.BASE;
+﻿using FastAdminAPI.Common.BASE;
+using FastAdminAPI.Core.Controllers.BASE;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Models.Employee;
 using FastAdminAPI.Core.Models.Modules;
-using FastAdminAPI.Common.BASE;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -69,23 +69,23 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 删除模块
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="moduleId">模块Id</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<ResponseModel> DelModule([FromBody] DelModuleModel model)
+        public async Task<ResponseModel> DelModule([FromQuery][Required(ErrorMessage = "模块Id不能为空!")] long? moduleId)
         {
-            return await _moduleService.DelModule(model);
+            return await _moduleService.DelModule((long)moduleId);
         }
         /// <summary>
         /// 按模块Id获取员工列表
         /// </summary>
-        /// <param name="ModuleId">模块Id</param>
+        /// <param name="moduleId">模块Id</param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(List<EmployeePageResult>), 200)] //todo 改为员工列表的返回结果dto
-        public async Task<ResponseModel> GetEmployeeListByModuleId([FromQuery][Required(ErrorMessage = "模块Id不能为空!")] long? ModuleId)
+        [ProducesResponseType(typeof(List<EmployeePageResult>), 200)]
+        public async Task<ResponseModel> GetEmployeeListByModuleId([FromQuery][Required(ErrorMessage = "模块Id不能为空!")] long? moduleId)
         {
-            var userIds = await _moduleService.GetEmployeeListByModuleId((long)ModuleId);
+            var userIds = await _moduleService.GetEmployeeListByModuleId((long)moduleId);
             if (userIds?.Count > 0)
             {
                 return await _employeeService.GetEmployeeList(new EmployeePageSearch { UserIds = userIds });

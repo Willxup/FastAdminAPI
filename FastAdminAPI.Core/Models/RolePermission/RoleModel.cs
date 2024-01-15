@@ -1,6 +1,5 @@
 ﻿using FastAdminAPI.Common.Enums;
 using FastAdminAPI.Common.JsonTree;
-using FastAdminAPI.Framework.Extensions;
 using FastAdminAPI.Framework.Extensions.DbOperationExtensions;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -72,30 +71,6 @@ namespace FastAdminAPI.Core.Models.RolePermission
         public string OperationName { get; set; }
         [JsonIgnore]
         [DbOperationField("S03_ModifyTime")]
-        public DateTime OperationTime { get; set; }
-    }
-    public class DelRoleModel : DbOperationBaseModel
-    {
-        /// <summary>
-        /// 角色Id
-        /// </summary>
-        [Required(ErrorMessage = "模块Id不能为空!")]
-        [DbOperationField("S03_RoleId", true)]
-        public long? RoleId { get; set; }
-        /// <summary>
-        /// 是否有效 0有效 1无效
-        /// </summary>
-        [JsonIgnore]
-        [DbOperationField("S03_IsValid")]
-        public byte S03_IsValid { get; private set; } = (byte)BaseEnums.IsValid.InValid;
-        [JsonIgnore]
-        [DbOperationField("S03_DeleteId")]
-        public long OperationId { get; set; }
-        [JsonIgnore]
-        [DbOperationField("S03_DeleteBy")]
-        public string OperationName { get; set; }
-        [JsonIgnore]
-        [DbOperationField("S03_DeleteTime")]
         public DateTime OperationTime { get; set; }
     }
     public class CopyRoleModel

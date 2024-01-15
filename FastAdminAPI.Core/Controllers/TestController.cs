@@ -1,7 +1,7 @@
-﻿using FastAdminAPI.Core.Controllers.BASE;
+﻿using FastAdminAPI.Common.BASE;
+using FastAdminAPI.Core.Controllers.BASE;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Models.Test;
-using FastAdminAPI.Common.BASE;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -35,24 +35,24 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 获取code列表 mapster方式
         /// </summary>
-        /// <param name="Code"></param>
+        /// <param name="code"></param>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(List<CodeMapsterModel>), 200)]
-        public async Task<ResponseModel> GetCodeListWithMapster([FromQuery] string Code)
+        public async Task<ResponseModel> GetCodeListWithMapster([FromQuery] string code)
         {
-            return Success(await _testService.GetCodeListWithMapster(Code));
+            return Success(await _testService.GetCodeListWithMapster(code));
         }
         /// <summary>
         /// 获取code列表 AutoBox方式
         /// </summary>
-        /// <param name="Search"></param>
+        /// <param name="search"></param>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(List<CodePageResult>), 200)]
-        public async Task<ResponseModel> GetCodeListWithAutoBox([FromBody] CodePageSearch Search)
+        public async Task<ResponseModel> GetCodeListWithAutoBox([FromBody] CodePageSearch search)
         {
-            return await _testService.GetCodeListWithAutoBox(Search);
+            return await _testService.GetCodeListWithAutoBox(search);
         }
         /// <summary>
         /// 新增Code
@@ -87,12 +87,12 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 通过Id删除Code
         /// </summary>
-        /// <param name="CodeId">字典Id</param>
+        /// <param name="codeId">字典Id</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<ResponseModel> DelCodeById([FromQuery][Required(ErrorMessage = "字典Id不能为空!")] long? CodeId)
+        public async Task<ResponseModel> DelCodeById([FromQuery][Required(ErrorMessage = "字典Id不能为空!")] long? codeId)
         {
-            return await _testService.DelCodeById((long)CodeId);
+            return await _testService.DelCodeById((long)codeId);
         }
     }
 }

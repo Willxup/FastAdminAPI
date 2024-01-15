@@ -1,7 +1,5 @@
-﻿using FastAdminAPI.Core.Models.Modules;
+﻿using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Core.Models.RolePermission;
-using FastAdminAPI.Common.Attributes;
-using FastAdminAPI.Common.BASE;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -34,15 +32,14 @@ namespace FastAdminAPI.Core.IServices
         /// <summary>
         /// 删除角色
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="roleId">角色Id</param>
         /// <returns></returns>
-        Task<ResponseModel> DelRole(DelRoleModel model);
+        Task<ResponseModel> DelRole(long roleId);
         /// <summary>
         /// 复制角色
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        /// <exception cref="UserOperationException"></exception>
         Task<ResponseModel> CopyRole(CopyRoleModel model);
         #endregion
 

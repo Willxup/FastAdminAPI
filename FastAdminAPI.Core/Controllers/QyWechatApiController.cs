@@ -41,27 +41,27 @@ namespace FastAdminAPI.Core.Controllers
         /// 发送企业微信文本消息
         /// </summary>
         /// <param name="model"></param>
-        /// <param name="Id"></param>
+        /// <param name="id"></param>
         /// <param name="task"></param>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(ResponseModel), 200)]
-        public async Task<ResponseModel> SendTextMessage([FromBody] MessageSendModel model, [FromQuery] long Id = 0, [FromQuery] string task = "")
+        public async Task<ResponseModel> SendTextMessage([FromBody] MessageSendModel model, [FromQuery] long id = 0, [FromQuery] string task = "")
         {
-            return await _qyWechatApiService.SendTextMessage(model, Id, task);
+            return await _qyWechatApiService.SendTextMessage(model, id, task);
         }
         /// <summary>
         /// 发送企业微信卡片消息
         /// </summary>
         /// <param name="model"></param>
-        /// <param name="Id"></param>
+        /// <param name="id"></param>
         /// <param name="task"></param>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(ResponseModel), 200)]
-        public async Task<ResponseModel> SendCardMessage([FromBody] CardMsgSendModel model, [FromQuery] long Id = 0, [FromQuery] string task = "")
+        public async Task<ResponseModel> SendCardMessage([FromBody] CardMsgSendModel model, [FromQuery] long id = 0, [FromQuery] string task = "")
         {
-            return await _qyWechatApiService.SendCardMessage(model, Id, task);
+            return await _qyWechatApiService.SendCardMessage(model, id, task);
         }
     }
 

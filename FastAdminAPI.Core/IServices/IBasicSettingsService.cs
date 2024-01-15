@@ -94,9 +94,9 @@ namespace FastAdminAPI.Core.IServices
         /// <summary>
         /// 删除审批流程
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="checkProcessId">审批流程Id</param>
         /// <returns></returns>
-        Task<ResponseModel> DelCheckProcess(DelCheckProcessModel model);
+        Task<ResponseModel> DelCheckProcess(long checkProcessId);
         #endregion
 
     }

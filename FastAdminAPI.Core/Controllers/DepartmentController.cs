@@ -1,7 +1,7 @@
-﻿using FastAdminAPI.Core.Controllers.BASE;
+﻿using FastAdminAPI.Common.BASE;
+using FastAdminAPI.Core.Controllers.BASE;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Models.Departments;
-using FastAdminAPI.Common.BASE;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -61,12 +61,12 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 删除部门
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="departId">部门Id</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<ResponseModel> DelDepartment([FromBody] DelDepartmentModel model)
+        public async Task<ResponseModel> DelDepartment([FromQuery] [Required(ErrorMessage = "部门Id不能为空!")] long? departId)
         {
-            return await _departmentSercvice.DelDepartment(model);
+            return await _departmentSercvice.DelDepartment((long)departId);
         }
         /// <summary>
         /// 获取部门岗位编制

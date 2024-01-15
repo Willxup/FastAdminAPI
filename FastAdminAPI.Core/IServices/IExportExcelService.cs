@@ -2,7 +2,10 @@
 
 namespace FastAdminAPI.Core.IServices
 {
-    public interface ICommonService
+    /// <summary>
+    /// 导出Excel
+    /// </summary>
+    public interface IExportExcelService
     {
         #region 通用审批
         /// <summary>

@@ -16,14 +16,17 @@ using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.Services
 {
-    public class CommonService : BaseService, ICommonService
+    /// <summary>
+    /// 导出Excel
+    /// </summary>
+    public class ExportExcelService : BaseService, IExportExcelService
     {
         /// <summary>
         /// 构造
         /// </summary>
         /// <param name="dbContext"></param>
         /// <param name="httpContext"></param>
-        public CommonService(ISqlSugarClient dbContext, IHttpContextAccessor httpContext) : base(dbContext, httpContext) { }
+        public ExportExcelService(ISqlSugarClient dbContext, IHttpContextAccessor httpContext) : base(dbContext, httpContext) { }
 
         #region 通用
         /// <summary>
@@ -58,11 +61,11 @@ namespace FastAdminAPI.Core.Services
 
             #region 设置下拉数据源
             //设置下拉数据源(数据大小大于255长度)
-            List<string> schoolList = await _dbContext.Queryable<S99_Code>()
+            List<string> codeList = await _dbContext.Queryable<S99_Code>()
                 .Where(code => code.S99_IsValid == (byte)BaseEnums.IsValid.Valid)
                 .Select(code => code.S99_Name)
                 .ToListAsync();
-            NPOIExcelHelper.SetMoreDropDownList(sheet, schoolList, 0, "测试下拉数据源");
+            NPOIExcelHelper.SetMoreDropDownList(sheet, codeList, 0, "测试下拉数据源");
 
             //设置下拉数据(数据大小小于255长度)
             List<string> enrollTypeList = new()

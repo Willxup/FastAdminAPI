@@ -98,9 +98,9 @@ namespace FastAdminAPI.Core.IServices
         /// <summary>
         /// 删除员工岗位
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="employeePostId">员工岗位Id</param>
         /// <returns></returns>
-        Task<ResponseModel> DelEmployeePost(DelEmployeePostModel model); 
+        Task<ResponseModel> DelEmployeePost(long employeePostId);
         #endregion
     }
 }

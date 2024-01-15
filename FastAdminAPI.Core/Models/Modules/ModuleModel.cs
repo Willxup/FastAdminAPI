@@ -1,12 +1,8 @@
 ﻿using FastAdminAPI.Common.Enums;
 using FastAdminAPI.Common.JsonTree;
-using FastAdminAPI.Framework.Extensions;
 using FastAdminAPI.Framework.Extensions.DbOperationExtensions;
-using FastAdminAPI.Framework.Extensions.DbQueryExtensions;
-using SqlSugar;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Security.Principal;
 using System.Text.Json.Serialization;
 
 namespace FastAdminAPI.Core.Models.Modules
@@ -128,30 +124,6 @@ namespace FastAdminAPI.Core.Models.Modules
         public string OperationName { get; set; }
         [JsonIgnore]
         [DbOperationField("S02_ModifyTime")]
-        public DateTime OperationTime { get; set; }
-    }
-    public class DelModuleModel : DbOperationBaseModel
-    {
-        /// <summary>
-        /// 模块Id
-        /// </summary>
-        [Required(ErrorMessage = "模块Id不能为空!")]
-        [DbOperationField("S02_ModuleId", true)]
-        public long? ModuleId { get; set; }
-        /// <summary>
-        /// 是否有效 0有效 1无效
-        /// </summary>
-        [JsonIgnore]
-        [DbOperationField("S02_IsValid")]
-        public byte IsValid { get; private set; } = (byte)BaseEnums.IsValid.InValid;
-        [JsonIgnore]
-        [DbOperationField("S02_DeleteId")]
-        public long OperationId { get; set; }
-        [JsonIgnore]
-        [DbOperationField("S02_DeleteBy")]
-        public string OperationName { get; set; }
-        [JsonIgnore]
-        [DbOperationField("S02_DeleteTime")]
         public DateTime OperationTime { get; set; }
     }
     #endregion

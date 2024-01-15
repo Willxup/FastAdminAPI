@@ -1,12 +1,12 @@
-﻿using Mapster;
+﻿using FastAdminAPI.Common.Enums;
+using FastAdminAPI.Framework.Extensions;
+using FastAdminAPI.Framework.Extensions.DbOperationExtensions;
+using FastAdminAPI.Framework.Extensions.DbQueryExtensions;
+using Mapster;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using FastAdminAPI.Common.Enums;
-using FastAdminAPI.Framework.Extensions;
-using FastAdminAPI.Framework.Extensions.DbOperationExtensions;
-using FastAdminAPI.Framework.Extensions.DbQueryExtensions;
 
 namespace FastAdminAPI.Core.Models.Test
 {

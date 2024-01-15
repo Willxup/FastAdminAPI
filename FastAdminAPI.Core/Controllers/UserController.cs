@@ -78,12 +78,12 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 撤销申请
         /// </summary>
-        /// <param name="CheckId">审批Id</param>
+        /// <param name="checkId">审批Id</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ResponseModel> CancelApplication([FromQuery][Required(ErrorMessage = "审批Id不能为空!")] long? CheckId)
+        public async Task<ResponseModel> CancelApplication([FromQuery][Required(ErrorMessage = "审批Id不能为空!")] long? checkId)
         {
-            return await _userService.CancelApplication((long)CheckId);
+            return await _userService.CancelApplication((long)checkId);
         }
         /// <summary>
         /// 获取我的审批记录列表
@@ -99,13 +99,13 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 获取申请审批记录列表
         /// </summary>
-        /// <param name="CheckId">审批Id</param>
+        /// <param name="checkId">审批Id</param>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(List<CheckRecordModel>), 200)]
-        public async Task<ResponseModel> GetApplicationCheckRecords([FromQuery][Required(ErrorMessage = "审批Id不能为空!")] long? CheckId)
+        public async Task<ResponseModel> GetApplicationCheckRecords([FromQuery][Required(ErrorMessage = "审批Id不能为空!")] long? checkId)
         {
-            return Success(await _userService.GetApplicationCheckRecords((long)CheckId));
+            return Success(await _userService.GetApplicationCheckRecords((long)checkId));
         }
         #endregion
     }

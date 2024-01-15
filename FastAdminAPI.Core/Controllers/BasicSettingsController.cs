@@ -73,12 +73,12 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 删除字典
         /// </summary>
-        /// <param name="CodeId">字典Id</param>
+        /// <param name="codeId">字典Id</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<ResponseModel> DelCode([FromQuery][Required(ErrorMessage = "字典Id不能为空!")] long? CodeId)
+        public async Task<ResponseModel> DelCode([FromQuery][Required(ErrorMessage = "字典Id不能为空!")] long? codeId)
         {
-            return await _basicSettingsService.DelCode((long)CodeId);
+            return await _basicSettingsService.DelCode((long)codeId);
         }
         #endregion
 
@@ -117,12 +117,12 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 删除数据权限设置
         /// </summary>
-        /// <param name="DataPermissionId">数据权限设置Id</param>
+        /// <param name="dataPermissionId">数据权限设置Id</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<ResponseModel> DelDataPermissionSetting([FromQuery][Required(ErrorMessage = "数据权限设置Id不能为空!")] long? DataPermissionId)
+        public async Task<ResponseModel> DelDataPermissionSetting([FromQuery][Required(ErrorMessage = "数据权限设置Id不能为空!")] long? dataPermissionId)
         {
-            return await _basicSettingsService.DelDataPermissionSetting((long)DataPermissionId);
+            return await _basicSettingsService.DelDataPermissionSetting((long)dataPermissionId);
         }
         #endregion
 
@@ -161,12 +161,12 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 删除审批流程
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="checkProcessId">审批流程Id</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<ResponseModel> DelCheckProcess([FromBody] DelCheckProcessModel model)
+        public async Task<ResponseModel> DelCheckProcess([FromQuery][Required(ErrorMessage = "审批流程Id不能为空!")] long? checkProcessId)
         {
-            return await _basicSettingsService.DelCheckProcess(model);
+            return await _basicSettingsService.DelCheckProcess((long)checkProcessId);
         }
         #endregion
 

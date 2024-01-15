@@ -34,13 +34,13 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 获取一组字典列表(单层)
         /// </summary>
-        /// <param name="Code">分组代号</param>
+        /// <param name="code">分组代号</param>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(List<CodeModel>), 200)]
-        public async Task<ResponseModel> GetCodeList([FromQuery][Required(ErrorMessage = "分组代号不能为空!")] string Code)
+        public async Task<ResponseModel> GetCodeList([FromQuery][Required(ErrorMessage = "分组代号不能为空!")] string code)
         {
-            return Success(await _tokenPassService.GetCodeList(Code));
+            return Success(await _tokenPassService.GetCodeList(code));
         }
         /// <summary>
         /// 获取多组字典列表(单层)

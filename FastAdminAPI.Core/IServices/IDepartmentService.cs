@@ -1,5 +1,5 @@
-﻿using FastAdminAPI.Core.Models.Departments;
-using FastAdminAPI.Common.BASE;
+﻿using FastAdminAPI.Common.BASE;
+using FastAdminAPI.Core.Models.Departments;
 using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.IServices
@@ -30,9 +30,9 @@ namespace FastAdminAPI.Core.IServices
         /// <summary>
         /// 删除部门
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="departId">部门Id</param>
         /// <returns></returns>
-        Task<ResponseModel> DelDepartment(DelDepartmentModel model);
+        Task<ResponseModel> DelDepartment(long departId);
         /// <summary>
         /// 获取部门岗位编制
         /// </summary>

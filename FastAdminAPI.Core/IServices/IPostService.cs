@@ -1,5 +1,5 @@
-﻿using FastAdminAPI.Core.Models.Posts;
-using FastAdminAPI.Common.BASE;
+﻿using FastAdminAPI.Common.BASE;
+using FastAdminAPI.Core.Models.Posts;
 using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.IServices
@@ -30,8 +30,8 @@ namespace FastAdminAPI.Core.IServices
         /// <summary>
         /// 删除岗位
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="postId">岗位Id</param>
         /// <returns></returns>
-        Task<ResponseModel> DelPost(DelPostModel model);
+        Task<ResponseModel> DelPost(long postId);
     }
 }

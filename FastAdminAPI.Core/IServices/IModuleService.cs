@@ -1,5 +1,5 @@
-﻿using FastAdminAPI.Core.Models.Modules;
-using FastAdminAPI.Common.BASE;
+﻿using FastAdminAPI.Common.BASE;
+using FastAdminAPI.Core.Models.Modules;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -31,9 +31,9 @@ namespace FastAdminAPI.Core.IServices
         /// <summary>
         /// 删除模块
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="moduleId">模块Id</param>
         /// <returns></returns>
-        Task<ResponseModel> DelModule(DelModuleModel model);
+        Task<ResponseModel> DelModule(long moduleId);
         /// <summary>
         /// 按模块Id获取员工列表
         /// </summary>

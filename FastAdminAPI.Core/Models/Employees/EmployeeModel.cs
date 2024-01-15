@@ -8,7 +8,9 @@ using System.Text.Json.Serialization;
 
 namespace FastAdminAPI.Core.Models.Employee
 {
-    #region 员工查询类
+    #region 员工
+
+    #region 查询
 
     #region 列表
     public class EmployeePageSearch : DbQueryPagingModel
@@ -24,7 +26,7 @@ namespace FastAdminAPI.Core.Models.Employee
         /// <summary>
         /// 状态 0正式 1实习 2离职
         /// </summary>
-        public List<byte> Statuss { get; set; }
+        public List<byte> Status { get; set; }
         /// <summary>
         /// 部门角标
         /// </summary>
@@ -90,7 +92,7 @@ namespace FastAdminAPI.Core.Models.Employee
         /// 角色
         /// </summary>
         public List<EmployeeRoleModel> Roles { get; set; }
-    } 
+    }
     public class EmployeeSimpleModel
     {
         /// <summary>
@@ -126,6 +128,9 @@ namespace FastAdminAPI.Core.Models.Employee
         /// </summary>
         public byte? AccountStatus { get; set; }
     }
+    /// <summary>
+    /// 员工角色
+    /// </summary>
     public class EmployeeRoleModel
     {
         /// <summary>
@@ -255,7 +260,7 @@ namespace FastAdminAPI.Core.Models.Employee
     }
     #endregion
 
-    #region 员工操作
+    #region 操作
     /// <summary>
     /// 员工基础信息
     /// </summary>
@@ -363,11 +368,13 @@ namespace FastAdminAPI.Core.Models.Employee
         [Required(ErrorMessage = "员工Id不能为空!")]
         public long? EmployeeId { get; set; }
     }
+    #endregion 
+
     #endregion
 
-    #region 员工岗位model
+    #region 员工岗位
 
-    #region 列表
+    #region 查询
     public class EmployeePostResult
     {
         /// <summary>
@@ -435,27 +442,6 @@ namespace FastAdminAPI.Core.Models.Employee
         public string OperationName { get; set; }
         [JsonIgnore]
         [DbOperationField("S08_CreateTime")]
-        public DateTime OperationTime { get; set; }
-    }
-    public class DelEmployeePostModel : DbOperationBaseModel
-    {
-        /// <summary>
-        /// 员工岗位Id
-        /// </summary>
-        [Required(ErrorMessage = "员工岗位Id不能为空!")]
-        [DbOperationField("S08_EmployeePostId", true)]
-        public long? EmployeePostId { get; set; }
-        [JsonIgnore]
-        [DbOperationField("S08_IsValid")]
-        public byte IsValid { get; private set; } = (byte)BaseEnums.IsValid.InValid;
-        [JsonIgnore]
-        [DbOperationField("S08_DeleteId")]
-        public long OperationId { get; set; }
-        [JsonIgnore]
-        [DbOperationField("S08_DeleteBy")]
-        public string OperationName { get; set; }
-        [JsonIgnore]
-        [DbOperationField("S08_DeleteTime")]
         public DateTime OperationTime { get; set; }
     }
     #endregion

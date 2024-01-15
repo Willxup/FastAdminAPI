@@ -1,8 +1,8 @@
-﻿using FastAdminAPI.Core.IServices;
+﻿using FastAdminAPI.Common.Attributes;
+using FastAdminAPI.Common.Enums;
+using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Models.Users;
 using FastAdminAPI.Core.Services.BASE;
-using FastAdminAPI.Common.Attributes;
-using FastAdminAPI.Common.Enums;
 using FastAdminAPI.Framework.Entities;
 using SqlSugar;
 using System.Threading.Tasks;

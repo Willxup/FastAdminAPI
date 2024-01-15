@@ -1,10 +1,10 @@
 ﻿using FastAdminAPI.Common.Enums;
 using FastAdminAPI.Common.JsonTree;
 using FastAdminAPI.Framework.Extensions.DbOperationExtensions;
-using System.ComponentModel.DataAnnotations;
 using System;
-using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace FastAdminAPI.Core.Models.Departments
 {
@@ -111,27 +111,6 @@ namespace FastAdminAPI.Core.Models.Departments
         public string OperationName { get; set; }
         [JsonIgnore]
         [DbOperationField("S05_ModifyTime")]
-        public DateTime OperationTime { get; set; }
-    }
-    public class DelDepartmentModel : DbOperationBaseModel
-    {
-        /// <summary>
-        /// 部门Id
-        /// </summary>
-        [Required(ErrorMessage = "部门Id不能为空!")]
-        [DbOperationField("S05_DepartId", true)]
-        public long? DepartId { get; set; }
-        [JsonIgnore]
-        [DbOperationField("S05_IsValid")]
-        public byte IsValid { get; private set; } = (byte)BaseEnums.IsValid.InValid;
-        [JsonIgnore]
-        [DbOperationField("S05_DeleteId")]
-        public long OperationId { get; set; }
-        [JsonIgnore]
-        [DbOperationField("S05_DeleteBy")]
-        public string OperationName { get; set; }
-        [JsonIgnore]
-        [DbOperationField("S05_DeleteTime")]
         public DateTime OperationTime { get; set; }
     }
     #endregion

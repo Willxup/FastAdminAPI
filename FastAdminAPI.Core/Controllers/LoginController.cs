@@ -1,12 +1,12 @@
-﻿using FastAdminAPI.Core.Controllers.BASE;
-using FastAdminAPI.Core.IServices;
-using FastAdminAPI.Core.Models.Login;
-using FastAdminAPI.Common.Attributes;
+﻿using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.Authentications;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Common.SystemUtilities;
+using FastAdminAPI.Core.Controllers.BASE;
+using FastAdminAPI.Core.IServices;
+using FastAdminAPI.Core.Models.Login;
 using FastAdminAPI.Network.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -75,17 +75,17 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 是否为被许可的IP地址
         /// </summary>
-        /// <param name="IP">IP地址</param>
+        /// <param name="ip">IP地址</param>
         /// <returns>true/false</returns>
         [HttpGet]
-        public async Task<ResponseModel> IsPermittedIPAddress([FromQuery][Required(ErrorMessage = "IP地址不能为空!")] string IP)
+        public async Task<ResponseModel> IsPermittedIPAddress([FromQuery][Required(ErrorMessage = "IP地址不能为空!")] string ip)
         {
             bool isPermit = false;
             //验证密码登录时域名限制
             if (EnvironmentHelper.IsProduction)
             {
                 //如果IP不为空并且在白名单中
-                if (!string.IsNullOrEmpty(IP) && (LOGIN_PERMIT_IP_WHITE_LIST?.Contains(IP) ?? false))
+                if (!string.IsNullOrEmpty(ip) && (LOGIN_PERMIT_IP_WHITE_LIST?.Contains(ip) ?? false))
                 {
                     isPermit = true;
                 }
@@ -155,7 +155,6 @@ namespace FastAdminAPI.Core.Controllers
         {
             try
             {
-                //var res = await _httpClient.InternalGetAsync<ResponseModel>(OPEN_API_SERVICE_DOMAIN + $"/api/QyWechatApi/GetQyUserId?code={model.Code}");
                 var res = await _qyWechatApi.GetUserId(model.Code);
                 if (res?.Code == ResponseCode.Success)
                 {

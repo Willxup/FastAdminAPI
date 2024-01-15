@@ -1,5 +1,5 @@
-﻿using FastAdminAPI.Core.Models.Users;
-using FastAdminAPI.Common.Attributes;
+﻿using FastAdminAPI.Common.Attributes;
+using FastAdminAPI.Core.Models.Users;
 using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.IServices

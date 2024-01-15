@@ -100,21 +100,34 @@ namespace FastAdminAPI.Core.Services
         /// <summary>
         /// 删除岗位
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="postId">岗位Id</param>
         /// <returns></returns>
-        public async Task<ResponseModel> DelPost(DelPostModel model)
+        public async Task<ResponseModel> DelPost(long postId)
         {
-            //校验
-            bool isExist = await _dbContext.Queryable<S08_EmployeePost>()
-                .Where(S08 => S08.S06_PostId == model.PostId && S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid)
+            //校验子岗位
+            bool isExistChild = await _dbContext.Queryable<S06_Post>()
+                .Where(S06 => S06.S06_IsValid == (byte)BaseEnums.IsValid.Valid && S06.S06_ParentPostId == postId)
                 .AnyAsync();
-            if (isExist)
+            if (isExistChild)
+                throw new UserOperationException("该岗位有子岗位存在，无法删除!");
+
+            //校验员工岗位
+            bool isExistEmployeePost = await _dbContext.Queryable<S08_EmployeePost>()
+                .Where(S08 => S08.S06_PostId == postId && S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid)
+                .AnyAsync();
+            if (isExistEmployeePost)
                 throw new UserOperationException("该岗位已存在员工，请移除员工后删除!");
 
-            model.OperationId = _employeeId;
-            model.OperationName = _employeeName;
-            model.OperationTime = _dbContext.GetDate();
-            var result = await _dbContext.SoftDeleteAsync<DelPostModel, S06_Post>(model);
+            var result = await _dbContext.Deleteable<S06_Post>()
+                .Where(S06 => S06.S06_PostId == postId)
+                .SoftDeleteAsync(S06 => new S06_Post 
+                {
+                    S06_IsValid = (byte)BaseEnums.IsValid.InValid,
+                    S06_DeleteId = _employeeId,
+                    S06_DeleteBy = _employeeName,
+                    S06_DeleteTime = SqlFunc.GetDate()
+                });
+
             if (result?.Code == ResponseCode.Success)
             {
                 //释放数据权限

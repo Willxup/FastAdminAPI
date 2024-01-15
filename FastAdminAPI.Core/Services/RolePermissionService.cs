@@ -102,14 +102,25 @@ namespace FastAdminAPI.Core.Services
         /// <summary>
         /// 删除角色
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="roleId">角色Id</param>
         /// <returns></returns>
-        public async Task<ResponseModel> DelRole(DelRoleModel model)
+        public async Task<ResponseModel> DelRole(long roleId)
         {
-            model.OperationId = _employeeId;
-            model.OperationName = _employeeName;
-            model.OperationTime = _dbContext.GetDate();
-            return await _dbContext.SoftDeleteAsync<DelRoleModel, S03_Role>(model);
+            bool isExistChild = await _dbContext.Queryable<S03_Role>()
+                .Where(S03 => S03.S03_IsValid == (byte)BaseEnums.IsValid.Valid && S03.S03_ParentRoleId == roleId)
+                .AnyAsync();
+            if (isExistChild)
+                throw new UserOperationException("该角色下有子角色，无法删除!");
+
+            return await _dbContext.Deleteable<S03_Role>()
+                .Where(S03 => S03.S03_RoleId == roleId)
+                .SoftDeleteAsync(S03 => new S03_Role
+                {
+                    S03_IsValid = (byte)BaseEnums.IsValid.InValid,
+                    S03_DeleteId = _employeeId,
+                    S03_DeleteBy = _employeeName,
+                    S03_DeleteTime = SqlFunc.GetDate()
+                });
         }
         /// <summary>
         /// 复制角色

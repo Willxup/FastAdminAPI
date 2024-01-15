@@ -1,8 +1,7 @@
-﻿using FastAdminAPI.Core.Controllers.BASE;
+﻿using FastAdminAPI.Common.BASE;
+using FastAdminAPI.Core.Controllers.BASE;
 using FastAdminAPI.Core.IServices;
-using FastAdminAPI.Core.Models.Modules;
 using FastAdminAPI.Core.Models.RolePermission;
-using FastAdminAPI.Common.BASE;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -64,12 +63,12 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 删除角色
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="roleId">角色Id</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<ResponseModel> DelRole([FromBody] DelRoleModel model)
+        public async Task<ResponseModel> DelRole([FromQuery][Required(ErrorMessage = "角色Id不能为空!")] long? roleId)
         {
-            return await _rolePermissionService.DelRole(model);
+            return await _rolePermissionService.DelRole((long)roleId);
         }
         /// <summary>
         /// 复制角色
@@ -87,13 +86,13 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 获取角色权限
         /// </summary>
-        /// <param name="RoleId">角色Id</param>
+        /// <param name="roleId">角色Id</param>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(List<long>), 200)]
-        public async Task<ResponseModel> GetRolePermission([FromQuery][Required(ErrorMessage = "角色Id不能为空!")] long? RoleId) 
+        public async Task<ResponseModel> GetRolePermission([FromQuery][Required(ErrorMessage = "角色Id不能为空!")] long? roleId) 
         {
-            return Success(await _rolePermissionService.GetRolePermission((long)RoleId));
+            return Success(await _rolePermissionService.GetRolePermission((long)roleId));
         }
         /// <summary>
         /// 保存角色权限

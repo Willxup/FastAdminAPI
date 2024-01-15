@@ -24,12 +24,12 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 发布信息
         /// </summary>
-        /// <param name="Msg"></param>
+        /// <param name="msg"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task PublishMessage([FromQuery][Required(ErrorMessage = "信息不能为空!")] string Msg)
+        public async Task PublishMessage([FromQuery][Required(ErrorMessage = "信息不能为空!")] string msg)
         {
-            await _evenBus.PublishMessage(Msg);
+            await _evenBus.PublishMessage(msg);
         }
     }
 }

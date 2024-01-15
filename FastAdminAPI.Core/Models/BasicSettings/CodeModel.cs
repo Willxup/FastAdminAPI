@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 
 namespace FastAdminAPI.Core.Models.BasicSettings
 {
+    #region 查询
     public class CodePageSearch : DbQueryPagingModel
     {
         /// <summary>
@@ -72,7 +73,10 @@ namespace FastAdminAPI.Core.Models.BasicSettings
         /// 分组名称
         /// </summary>
         public string GroupName { get; set; }
-    }
+    } 
+    #endregion
+
+    #region 操作
     public class AddCodeModel : DbOperationBaseModel
     {
         /// <summary>
@@ -178,5 +182,6 @@ namespace FastAdminAPI.Core.Models.BasicSettings
         [JsonIgnore]
         [DbOperationField("S99_ModifyTime")]
         public DateTime OperationTime { get; set; }
-    }
+    } 
+    #endregion
 }

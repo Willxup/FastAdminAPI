@@ -1,5 +1,4 @@
-﻿using FastAdminAPI.Common.JsonTree;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace FastAdminAPI.Core.Models.RolePermission

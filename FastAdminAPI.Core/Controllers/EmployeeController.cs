@@ -32,26 +32,26 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 按部门Ids获取员工简要列表(不含子部门)
         /// </summary>
-        /// <param name="DepartIds">部门Ids</param>
-        /// <param name="IsMainPost">是否获取员工主岗位(默认主子岗位都获取)</param>
+        /// <param name="departIds">部门Ids</param>
+        /// <param name="isMainPost">是否获取员工主岗位(默认主子岗位都获取)</param>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(List<EmployeeSimpleModel>), 200)]
-        public async Task<ResponseModel> GetEmployeeListByDepartIds([FromQuery] List<long> DepartIds, bool IsMainPost = false)
+        public async Task<ResponseModel> GetEmployeeListByDepartIds([FromQuery] List<long> departIds, bool isMainPost = false)
         {
-            return Success(await _employeeService.GetEmployeeListByDepartIds(DepartIds, IsMainPost));
+            return Success(await _employeeService.GetEmployeeListByDepartIds(departIds, isMainPost));
         }
         /// <summary>
         /// 按岗位Ids获取员工简要列表(不含子岗位)
         /// </summary>
-        /// <param name="PostIds">岗位Ids</param>
-        /// <param name="IsMainPost">是否获取员工主岗位(默认主子岗位都获取)</param>
+        /// <param name="postIds">岗位Ids</param>
+        /// <param name="isMainPost">是否获取员工主岗位(默认主子岗位都获取)</param>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(List<EmployeeSimpleModel>), 200)]
-        public async Task<ResponseModel> GetEmployeeListByPostIds([FromQuery] List<long> PostIds, [FromQuery] bool IsMainPost = false)
+        public async Task<ResponseModel> GetEmployeeListByPostIds([FromQuery] List<long> postIds, [FromQuery] bool isMainPost = false)
         {
-            return Success(await _employeeService.GetEmployeeListByPostIds(PostIds, IsMainPost));
+            return Success(await _employeeService.GetEmployeeListByPostIds(postIds, isMainPost));
         }
         /// <summary>
         /// 获取下属员工简要列表
@@ -175,7 +175,7 @@ namespace FastAdminAPI.Core.Controllers
         /// </summary>
         /// <param name="employeePostId">员工岗位Id</param>
         /// <returns></returns>
-        [HttpPut]
+        [HttpGet]
         public async Task<ResponseModel> SetEmployeeMainPost([FromQuery][Required(ErrorMessage = "员工岗位Id不能为空!")] long? employeePostId)
         {
             return await _employeeService.SetEmployeeMainPost((long)employeePostId);
@@ -183,12 +183,12 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 删除员工岗位
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="employeePostId">员工岗位Id</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<ResponseModel> DelEmployeePost([FromBody] DelEmployeePostModel model)
+        public async Task<ResponseModel> DelEmployeePost([FromQuery][Required(ErrorMessage = "员工岗位Id不能为空!")] long? employeePostId)
         {
-            return await _employeeService.DelEmployeePost(model);
+            return await _employeeService.DelEmployeePost((long)employeePostId);
         } 
         #endregion
     }

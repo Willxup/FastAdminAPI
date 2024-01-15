@@ -51,10 +51,10 @@ namespace FastAdminAPI.Core.Services
         /// 发送企业微信文本消息
         /// </summary>
         /// <param name="model"></param>
-        /// <param name="Id"></param>
+        /// <param name="id"></param>
         /// <param name="task"></param>
         /// <returns></returns>
-        public async Task<ResponseModel> SendTextMessage(MessageSendModel model, long Id = 0, string task = "")
+        public async Task<ResponseModel> SendTextMessage(MessageSendModel model, long id = 0, string task = "")
         {
             try
             {
@@ -70,10 +70,10 @@ namespace FastAdminAPI.Core.Services
         /// 发送企业微信卡片消息
         /// </summary>
         /// <param name="model"></param>
-        /// <param name="Id"></param>
+        /// <param name="id"></param>
         /// <param name="task"></param>
         /// <returns></returns>
-        public async Task<ResponseModel> SendCardMessage(CardMsgSendModel model, long Id = 0, string task = "")
+        public async Task<ResponseModel> SendCardMessage(CardMsgSendModel model, long id = 0, string task = "")
         {
             try
             {

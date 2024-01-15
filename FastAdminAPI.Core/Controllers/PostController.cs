@@ -61,12 +61,12 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 删除岗位
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="postId">岗位Id</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<ResponseModel> DelPost([FromBody] DelPostModel model)
+        public async Task<ResponseModel> DelPost([FromQuery][Required(ErrorMessage = "岗位Id不能为空!")] long? postId)
         {
-            return await _postService.DelPost(model);
+            return await _postService.DelPost((long)postId);
         }
     }
 }

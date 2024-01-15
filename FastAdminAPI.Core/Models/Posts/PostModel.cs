@@ -1,8 +1,8 @@
 ﻿using FastAdminAPI.Common.Enums;
 using FastAdminAPI.Common.JsonTree;
 using FastAdminAPI.Framework.Extensions.DbOperationExtensions;
-using System.ComponentModel.DataAnnotations;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace FastAdminAPI.Core.Models.Posts
@@ -109,27 +109,6 @@ namespace FastAdminAPI.Core.Models.Posts
         public string OperationName { get; set; }
         [JsonIgnore]
         [DbOperationField("S06_ModifyTime")]
-        public DateTime OperationTime { get; set; }
-    }
-    public class DelPostModel : DbOperationBaseModel
-    {
-        /// <summary>
-        /// 岗位Id
-        /// </summary>
-        [Required(ErrorMessage = "岗位Id不能为空!")]
-        [DbOperationField("S06_PostId", true)]
-        public long? PostId { get; set; }
-        [JsonIgnore]
-        [DbOperationField("S06_IsValid")]
-        public byte IsValid { get; private set; } = (byte)BaseEnums.IsValid.InValid;
-        [JsonIgnore]
-        [DbOperationField("S06_DeleteId")]
-        public long OperationId { get; set; }
-        [JsonIgnore]
-        [DbOperationField("S06_DeleteBy")]
-        public string OperationName { get; set; }
-        [JsonIgnore]
-        [DbOperationField("S06_DeleteTime")]
         public DateTime OperationTime { get; set; }
     }
     #endregion 

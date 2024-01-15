@@ -16,19 +16,7 @@ namespace FastAdminAPI.Core.Models.BasicSettings
         /// </summary>
         public List<long> CheckProcessTypes { get; set; }
         /// <summary>
-        /// 申请人
-        /// </summary>
-        public List<long> Applicants { get; set; }
-        /// <summary>
-        /// 审核人
-        /// </summary>
-        public List<long> Approvers { get; set; }
-        /// <summary>
-        /// 抄送人
-        /// </summary>
-        public List<long> CarbonCopies { get; set; }
-        /// <summary>
-        /// 审批类型 0直接上级 1指定人员 2自选 3上级+指定人员  4上级+指定人员+金额
+        /// 审批类型 0直接上级 1指定人员 2自选 3上级+指定人员
         /// </summary>
         public List<byte> ApproveTypes { get; set; }
     }
@@ -177,27 +165,6 @@ namespace FastAdminAPI.Core.Models.BasicSettings
         public string OperationName { get; set; }
         [JsonIgnore]
         [DbOperationField("S11_ModifyTime")]
-        public DateTime OperationTime { get; set; }
-    }
-    public class DelCheckProcessModel : DbOperationBaseModel
-    {
-        /// <summary>
-        /// 审批流程Id
-        /// </summary>
-        [Required(ErrorMessage = "审批流程Id不能为空!")]
-        [DbOperationField("S11_CheckProcessId", true)]
-        public long? CheckProcessId { get; set; }
-        [JsonIgnore]
-        [DbOperationField("S11_IsValid")]
-        public byte IsValid { get; private set; } = (byte)BaseEnums.IsValid.InValid;
-        [JsonIgnore]
-        [DbOperationField("S11_DeleteId")]
-        public long OperationId { get; set; }
-        [JsonIgnore]
-        [DbOperationField("S11_DeleteBy")]
-        public string OperationName { get; set; }
-        [JsonIgnore]
-        [DbOperationField("S11_DeleteTime")]
         public DateTime OperationTime { get; set; }
     }
     #endregion

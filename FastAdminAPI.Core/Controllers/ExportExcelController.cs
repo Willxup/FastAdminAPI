@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 namespace FastAdminAPI.Core.Controllers
 {
     /// <summary>
-    /// 公共
+    /// 导出Excel
     /// </summary>
-    public class CommonController: BaseController
+    public class ExportExcelController: BaseController
     {
         /// <summary>
-        /// 公共服务
+        /// 导出Excel服务
         /// </summary>
-        private readonly ICommonService _commonService;
+        private readonly IExportExcelService _commonService;
 
-        public CommonController(ICommonService commonService)
+        public ExportExcelController(IExportExcelService commonService)
         {
             _commonService = commonService;
         }
