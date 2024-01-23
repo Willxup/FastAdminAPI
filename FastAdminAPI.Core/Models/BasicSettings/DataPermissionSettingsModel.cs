@@ -24,12 +24,12 @@ namespace FastAdminAPI.Core.Models.BasicSettings
         /// <summary>
         /// 员工名称
         /// </summary>
-        [DbQueryField("(SELECT S07_Name FROM S07_Employee WHERE S07_EmployeeId = S10_DataPermission.S07_EmployeeId)")]
+        [DbSubQuery("(SELECT S07_Name FROM S07_Employee WHERE S07_EmployeeId = S10_DataPermission.S07_EmployeeId)")]
         public string EmployeeName { get; set; }
         /// <summary>
         /// 员工部门Id
         /// </summary>
-        [DbQueryField("(SELECT S05_DepartId FROM S08_EmployeePost WHERE " +
+        [DbSubQuery("(SELECT S05_DepartId FROM S08_EmployeePost WHERE " +
             "S07_EmployeeId = S10_DataPermission.S07_EmployeeId AND S08_IsMainPost = 1 LIMIT 1)")]
         public long? DepartId { get; set; }
         /// <summary>

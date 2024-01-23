@@ -179,22 +179,37 @@ namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
                     {
                         continue;
                     }
-                    if (prop.GetCustomAttributes(typeof(DbQueryFieldAttribute), true).Length == 0)
+                    if (prop.GetCustomAttributes(typeof(DbQueryAttribute), true).Length == 0)
                     {
                         continue;
+                    }
+                    if (prop.GetCustomAttributes(typeof(DbQueryAttribute), true).Length > 1)
+                    {
+                        throw new UserOperationException("[DbQueryFieldAttribute]和[DbSubQueryAttribute]不能同时使用!");
                     }
 
                     string sql = string.Empty;
                     if (prop.IsDefined(typeof(DbTableAliasAttribute), true))
                     {
                         var attr = prop.GetCustomAttributes(typeof(DbTableAliasAttribute), true)[0] as DbTableAliasAttribute;
-                        sql += attr.GetTableAlias() + ".";
+                        if (prop.IsDefined(typeof(DbSubQueryAttribute), true))
+                        {
+                            throw new UserOperationException("使用[DbSubQueryAttribute]子查询时，请去除[DbTableAliasAttribute]!");
+                        }
+
+                        sql += "`" + attr.GetTableAlias() + "`" + ".";
                     }
 
                     if (prop.IsDefined(typeof(DbQueryFieldAttribute), true))
                     {
                         var attr = prop.GetCustomAttributes(typeof(DbQueryFieldAttribute), true)[0] as DbQueryFieldAttribute;
-                        sql += attr.GetFieldName();
+                        sql += "`" + attr.GetFieldName() + "`";
+                    }
+
+                    if (prop.IsDefined(typeof(DbSubQueryAttribute), true))
+                    {
+                        var attr = prop.GetCustomAttributes(typeof(DbSubQueryAttribute), true)[0] as DbSubQueryAttribute;
+                        sql += "(" + attr.GetSubQuery() + ")";
                     }
 
                     if (!string.IsNullOrEmpty(sql))

@@ -6,7 +6,7 @@ namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
     /// 数据库查询表字段名
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
-    public class DbQueryFieldAttribute : Attribute
+    public class DbQueryFieldAttribute : DbQueryAttribute
     {
         private readonly string _fieldName;
         private readonly bool _isDate = false;

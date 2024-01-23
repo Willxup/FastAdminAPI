@@ -154,39 +154,66 @@ Extensions/      ORM扩展
 ```C#
 //自动包装映射
 await _dbContext.Queryable<Table_Name>().ToAutoBoxResultAsync(search, new Result());
+
+//自动包装映射，指定表别名
+await _dbContext.Queryable<Table_Name>("t").ToAutoBoxResultAsync(search, new Result());
 ```
 
 ```C#
 public class Search
 {
-	//[DbTableAlias("t")] //表别名，多表关联使用，单表不需要
+	//[DbTableAlias("t")] //表别名，多表关联使用，单表需要查询时指定表别名
 	[DbQueryField("t_Name")] //字段名
 	[DbQueryOperator(DbOperator.Like)]  //操作符, Like查询
 	public string Name { get; set; }
-	//[DbTableAlias("t")] //表别名，多表关联使用，单表不需要
+	//[DbTableAlias("t")] //表别名，多表关联使用，单表需要查询时指定表别名
 	[DbQueryField("t_CodeId")] //字段名
 	[DbQueryOperator(DbOperator.In)] //操作符，IN查询
 	public List<long> CodeIds { get; set; }
 }
 public class Result
 {
-	//[DbTableAlias("t")] //表别名，多表关联使用，单表不需要
+	//[DbTableAlias("t")] //表别名，多表关联使用，单表需要查询时指定表别名
 	[DbQueryField("t_Id")] //字段名
 	public long Id { get; set; }
-	//[DbTableAlias("t")] //表别名，多表关联使用，单表不需要
+	//[DbTableAlias("t")] //表别名，多表关联使用，单表需要查询时指定表别名
 	[DbQueryField("t_Name")] //字段名
 	public string Name { get; set; }
+    //子查询，如果指定了表别名，可以使用表别名，否则直接写表名
+	//[DbSubQuery("(SELECT name FROM Table_Name2 WHERE t.t_Id = Id ")]
+    [DbSubQuery("(SELECT name FROM Table_Name2 WHERE Table_Name.t_Id = Id ")]
+    public string OtherName { get; set; }
 }
 ```
 
 上述生成的`SQL`如下：
+
+- 正常查询
+
 ```sql
-SELECT t_Id as Id, t_Name as Name 
+SELECT 
+t_Id as Id, 
+t_Name as Name, 
+(SELECT name FROM Table_Name2 WHERE Table_Name.t_Id = Id) AS OtherName
 FROM Table_Name
 WHERE t_Name LIKE '%@Name%' AND t_CodeId IN (@CodeIds);
 ```
 
+- 指定表别名查询
+
+```sql
+SELECT 
+t.t_Id as Id, 
+t.t_Name as Name,
+(SELECT name FROM Table_Name2 WHERE t.t_Id = Id) AS OtherName
+FROM Table_Name t
+WHERE t.t_Name LIKE '%@Name%' AND t.t_CodeId IN (@CodeIds);
+```
+
+
+
 上面的方法返回结果为 统一返回结果(`ResponseModel`)，如需将结果转换回`List<T>`类型，可以使用下面的方法：
+
 ```C#
 var result = await _dbContext.Queryable<Table_Name>().ToAutoBoxResultAsync(search, new Result());
 

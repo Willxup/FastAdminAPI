@@ -69,7 +69,7 @@ namespace FastAdminAPI.Core.Models.Users
         /// <summary>
         /// 申请类型名称
         /// </summary>
-        [DbQueryField("(SELECT S99_Name FROM S99_Code WHERE S99_CodeId = S12_Check.S99_ApplicationType)")]
+        [DbSubQuery("(SELECT S99_Name FROM S99_Code WHERE S99_CodeId = S12_Check.S99_ApplicationType)")]
         public string TypeName { get; set; }
         /// <summary>
         /// 申请人Id
@@ -240,7 +240,7 @@ namespace FastAdminAPI.Core.Models.Users
         /// <summary>
         /// 申请类型名称
         /// </summary>
-        [DbQueryField("(SELECT S99_Name FROM S99_Code WHERE S99_CodeId = S12.S99_ApplicationType)")]
+        [DbSubQuery("(SELECT S99_Name FROM S99_Code WHERE S99_CodeId = S12.S99_ApplicationType)")]
         public string TypeName { get; set; }
         /// <summary>
         /// 申请人Id
