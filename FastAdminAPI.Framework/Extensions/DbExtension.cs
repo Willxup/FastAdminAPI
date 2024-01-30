@@ -116,6 +116,18 @@ namespace FastAdminAPI.Framework.Extensions
         /// 自动装箱查询DTO 直接返回通用消息类
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="queryable"></param>
+        /// <param name="result">查询结果</param>
+        /// <returns></returns>
+        public static async Task<TResult> ToFirstAsync<T, TResult>(this ISugarQueryable<T> queryable, TResult result)
+        {
+            return await queryable.Select(result).FirstAsync();
+        }
+        /// <summary>
+        /// 自动装箱条件查询DTO 直接返回通用消息类
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <typeparam name="TSearch"></typeparam>
         /// <typeparam name="TResult"></typeparam>
         /// <param name="queryable"></param>
@@ -129,6 +141,28 @@ namespace FastAdminAPI.Framework.Extensions
         }
         /// <summary>
         /// 自动装箱查询DTO 直接返回通用消息类
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TSearch"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="queryable"></param>
+        /// <param name="result">查询结果</param>
+        /// <returns></returns>
+        public static async Task<ResponseModel> ToFirstResultAsync<T, TResult>(this ISugarQueryable<T> queryable, TResult result)
+        {
+            try
+            {
+                var query = await queryable.Select(result).FirstAsync();
+
+                return ResponseModel.Success(query);
+            }
+            catch (Exception ex)
+            {
+                return ResponseModel.Error(ex.Message);
+            }
+        }
+        /// <summary>
+        /// 自动装箱条件查询DTO 直接返回通用消息类
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="TSearch"></typeparam>
@@ -493,7 +527,7 @@ namespace FastAdminAPI.Framework.Extensions
                 //用法：.Select(a => DbExtension.GroupConcat(a.Name, ","))
                 new SqlFuncExternal
                 {
-                    UniqueMethodName = "GROUP_CONCAT",
+                    UniqueMethodName = "GroupConcat",
                     MethodValue = (expInfo, dbType, expContext) =>
                     {
                         if (dbType == DbType.MySql)
@@ -507,10 +541,10 @@ namespace FastAdminAPI.Framework.Extensions
                     }
                 },
                 //FIND_IN_SET
-                //用法：.Where(a => DbExtension.FindInSetWhere("1", a.Name))
+                //用法：.Where(a => DbExtension.FindInSet("1", a.Name))
                 new SqlFuncExternal
                 {
-                    UniqueMethodName = "FIND_IN_SET_WHERE",
+                    UniqueMethodName = "FindInSet",
                     MethodValue = (expInfo, dbType, expContext) =>
                     {
                         if(dbType == DbType.MySql)
@@ -541,15 +575,15 @@ namespace FastAdminAPI.Framework.Extensions
             throw new NotSupportedException("Can only be used in expressions");
         }
         /// <summary>
-        /// FIND_IN_SET_WHERE
-        /// 用法：.Where(a => DbExtension.FindInSetWhere("1", a.Name))
+        /// FIND_IN_SET
+        /// 用法：.Where(a => DbExtension.FindInSe("1", a.Name))
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="column"></param>
         /// <param name="separator"></param>
         /// <returns></returns>
         /// <exception cref="NotSupportedException"></exception>
-        public static bool FindInSetWhere<T>(T column, string separator)
+        public static bool FindInSet<T>(T column, string separator)
         {
             throw new NotSupportedException("Can only be used in expressions");
         }

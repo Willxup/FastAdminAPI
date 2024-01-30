@@ -219,7 +219,7 @@ namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
                     }
                 }
             }
-            if(select.Length > 0)
+            if (select.Length > 0)
             {
                 return select.Remove(select.Length - 2, 2).ToString();
             }
@@ -238,7 +238,7 @@ namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
         /// <returns></returns>
         public static ISugarQueryable<T> Where<T, TSearch>(this ISugarQueryable<T> queryable, TSearch search)
         {
-            return queryable.Where(search.GetWhereParameters());
+                return queryable.Where(search.GetWhereParameters());
         }
         #endregion
 
@@ -274,7 +274,7 @@ namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
                 var query = queryable;
                 foreach (var item in search.SortFields)
                 {
-                    if(!string.IsNullOrEmpty(item.Key) && !string.IsNullOrEmpty(item.Value))
+                    if (!string.IsNullOrEmpty(item.Key) && !string.IsNullOrEmpty(item.Value))
                     {
                         if (DbCommonUtils.IsDbSortWay(item.Value))
                             throw new UserOperationException("排序方式错误!");
@@ -287,10 +287,10 @@ namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
             else
             {
                 object[] sort = search.GetType().GetCustomAttributes(typeof(DbDefaultOrderByAttribute), true);
-                if(sort?.Length > 0)
+                if (sort?.Length > 0)
                 {
                     var query = queryable;
-                    foreach(var item in sort)
+                    foreach (var item in sort)
                     {
                         var attr = item as DbDefaultOrderByAttribute;
                         query = query.OrderBy($"{attr.GetOrderField()} {attr.GetSortWay()}");

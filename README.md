@@ -1,6 +1,38 @@
 # 项目简介
 [FastAdminAPI](https://github.com/Willxup/FastAdminAPI)是一个可以快速开发的OA系统项目，适用于中小型规模快速使用，基于`.net6`和`AspNetCore`进行开发。该项目包含部门，岗位，用户，员工，角色权限，数据权限，通用审批，事件总线，服务间调用，定时任务等功能，能够快速开发并部署使用。
 
+
+
+# 快速开始
+
+本项目启动需要以下环境，请先配置环境：
+
+- `MySQL`
+- `Redis`
+- `.NET6`
+- `Microsoft Visual Studio 2022`
+
+
+
+修改`appsettings.Development.json`文件
+
+```json
+{
+  "Database.ConnectionString": "数据库连接字符串",
+  "Redis.ConnectionString": "Redis连接字符串",
+  "Redis.DbNum": 0, //Redis库
+  "Login.IPAddress.WhiteList": "", //IP白名单
+  "Common.Applications.DefaultApprover": 1, //通用审批 默认审批人
+  "FastAdminAPI.Core.Url": "http://localhost:9000" //多服务用于配置RefitClient
+}
+```
+
+
+
+点击`vs2022`运行，将会启动`swagger`文档。
+
+
+
 # 项目结构
 
 ```bash
