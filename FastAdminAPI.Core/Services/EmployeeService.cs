@@ -269,7 +269,7 @@ namespace FastAdminAPI.Core.Services
                     Kind = S07.S07_Kind,
                     Status = S07.S07_Status
                 })
-                .ToResultAsync(pageSearch.Index, pageSearch.Size);
+                .ToListResultAsync(pageSearch.Index, pageSearch.Size);
             if (result?.Code == ResponseCode.Success)
             {
                 var list = result.ToConvertData<List<EmployeePageResult>>();
@@ -826,7 +826,7 @@ namespace FastAdminAPI.Core.Services
                                                  .Select(S06 => S06.S06_PostName),
                        IsMainPost = S08.S08_IsMainPost
                    })
-                   .ToResultAsync(null, null);
+                   .ToListResultAsync(null, null);
         }
         /// <summary>
         /// 新增员工岗位

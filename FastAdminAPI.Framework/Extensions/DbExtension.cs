@@ -16,6 +16,23 @@ namespace FastAdminAPI.Framework.Extensions
     public static class DbExtension
     {
         #region 通用方法
+
+        #region 列表查询
+        /// <summary>
+        /// 自动装箱查询列表(不带分页)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TSearch"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="queryable"></param>
+        /// <param name="search">查询条件</param>
+        /// <param name="result">查询结果</param>
+        /// <returns></returns>
+        public static async Task<List<TResult>> ToListAsync<T, TSearch, TResult>(this ISugarQueryable<T> queryable, TSearch search, TResult result)
+            where TSearch : DbQueryPagingModel
+        {
+            return await queryable.Where(search).Select(result).OrderBy(search).ToListAsync();
+        }
         /// <summary>
         /// 灵活查询 直接返回通用消息类
         /// </summary>
@@ -24,7 +41,7 @@ namespace FastAdminAPI.Framework.Extensions
         /// <param name="index">页数</param>
         /// <param name="size">行数</param>
         /// <returns></returns>
-        public static async Task<ResponseModel> ToResultAsync<T>(this ISugarQueryable<T> queryable, int? index = null, int? size = null)
+        public static async Task<ResponseModel> ToListResultAsync<T>(this ISugarQueryable<T> queryable, int? index = null, int? size = null)
         {
             try
             {
@@ -53,21 +70,6 @@ namespace FastAdminAPI.Framework.Extensions
             }
         }
         /// <summary>
-        /// 自动装箱查询(不带分页)
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TSearch"></typeparam>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="queryable"></param>
-        /// <param name="search">查询条件</param>
-        /// <param name="result">查询结果</param>
-        /// <returns></returns>
-        public static async Task<List<TResult>> ToAutoBoxAsync<T, TSearch, TResult>(this ISugarQueryable<T> queryable, TSearch search, TResult result)
-            where TSearch : DbQueryPagingModel
-        {
-            return await queryable.Where(search).Select(result).OrderBy(search).ToListAsync();
-        }
-        /// <summary>
         /// 自动装箱查询 直接返回通用消息类
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -77,7 +79,7 @@ namespace FastAdminAPI.Framework.Extensions
         /// <param name="search">查询条件</param>
         /// <param name="result">查询结果</param>
         /// <returns></returns>
-        public static async Task<ResponseModel> ToAutoBoxResultAsync<T, TSearch, TResult>(this ISugarQueryable<T> queryable, TSearch search, TResult result)
+        public static async Task<ResponseModel> ToListResultAsync<T, TSearch, TResult>(this ISugarQueryable<T> queryable, TSearch search, TResult result)
             where TSearch : DbQueryPagingModel
         {
             try
@@ -107,6 +109,51 @@ namespace FastAdminAPI.Framework.Extensions
                 return ResponseModel.Error(ex.Message);
             }
         }
+        #endregion
+
+        #region DTO查询
+        /// <summary>
+        /// 自动装箱查询DTO 直接返回通用消息类
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TSearch"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="queryable"></param>
+        /// <param name="search">查询条件</param>
+        /// <param name="result">查询结果</param>
+        /// <returns></returns>
+        public static async Task<TResult> ToFirstAsync<T, TSearch, TResult>(this ISugarQueryable<T> queryable, TSearch search, TResult result)
+            where TSearch : class, new()
+        {
+            return await queryable.Where(search).Select(result).FirstAsync();
+        }
+        /// <summary>
+        /// 自动装箱查询DTO 直接返回通用消息类
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TSearch"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="queryable"></param>
+        /// <param name="search">查询条件</param>
+        /// <param name="result">查询结果</param>
+        /// <returns></returns>
+        public static async Task<ResponseModel> ToFirstResultAsync<T, TSearch, TResult>(this ISugarQueryable<T> queryable, TSearch search, TResult result)
+            where TSearch : class, new()
+        {
+            try
+            {
+                var query = await queryable.Where(search).Select(result).FirstAsync();
+
+                return ResponseModel.Success(query);
+            }
+            catch (Exception ex)
+            {
+                return ResponseModel.Error(ex.Message);
+            }
+        }
+        #endregion
+
+        #region 插入
         /// <summary>
         /// DTO新增 直接返回通用消息类
         /// </summary>
@@ -195,6 +242,9 @@ namespace FastAdminAPI.Framework.Extensions
                 return ResponseModel.Error(!string.IsNullOrEmpty(errorMessage) ? errorMessage : ex.Message);
             }
         }
+        #endregion
+
+        #region 更新
         /// <summary>
         /// DTO更新 直接返回通用消息类
         /// </summary>
@@ -235,6 +285,9 @@ namespace FastAdminAPI.Framework.Extensions
                 return ResponseModel.Error(!string.IsNullOrEmpty(errorMessage) ? errorMessage : ex.Message);
             }
         }
+        #endregion
+
+        #region 删除
         /// <summary>
         /// DTO软删除 直接返回通用消息类
         /// </summary>
@@ -325,6 +378,9 @@ namespace FastAdminAPI.Framework.Extensions
                 return ResponseModel.Error(!string.IsNullOrEmpty(errorMessage) ? errorMessage : ex.Message);
             }
         }
+        #endregion
+
+        #region 事务
         /// <summary>
         /// 事务 直接返回通用消息类
         /// </summary>
@@ -418,7 +474,9 @@ namespace FastAdminAPI.Framework.Extensions
                 return ResponseModel.Success(result.Data);
             else
                 return ResponseModel.Error(!string.IsNullOrEmpty(errorMessage) ? errorMessage : result.ErrorMessage);
-        }
+        } 
+        #endregion
+
         #endregion
 
         #region 扩展

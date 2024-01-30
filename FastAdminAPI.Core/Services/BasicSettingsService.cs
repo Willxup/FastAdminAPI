@@ -50,7 +50,7 @@ namespace FastAdminAPI.Core.Services
         {
             return await _dbContext.Queryable<S99_Code>()
                 .Where(S99 => S99.S99_IsValid == (byte)BaseEnums.IsValid.Valid)
-                .ToAutoBoxResultAsync(pageSearch, new CodePageResult());
+                .ToListResultAsync(pageSearch, new CodePageResult());
         }
         /// <summary>
         /// 获取字典分组列表
@@ -134,7 +134,7 @@ namespace FastAdminAPI.Core.Services
         public async Task<ResponseModel> GetDataPermissionSettingList(DataPermissionSettingsPageSearch pageSearch)
         {
             var result = await _dbContext.Queryable<S10_DataPermission>()
-                .ToAutoBoxResultAsync(pageSearch, new DataPermissionSettingsPageResult());
+                .ToListResultAsync(pageSearch, new DataPermissionSettingsPageResult());
             if (result?.Code == ResponseCode.Success)
             {
                 var list = result.ToConvertData<List<DataPermissionSettingsPageResult>>();
@@ -305,7 +305,7 @@ namespace FastAdminAPI.Core.Services
                     Amounts = S11.S11_Amounts,
                     Remark = S11.S11_Remark
                 })
-                .ToResultAsync(pageSearch.Index, pageSearch.Size);
+                .ToListResultAsync(pageSearch.Index, pageSearch.Size);
             if (result?.Code == ResponseCode.Success)
             {
                 var list = result.ToConvertData<List<CheckProcessPageResult>>();

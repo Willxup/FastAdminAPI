@@ -179,7 +179,7 @@ namespace FastAdminAPI.Core.Services
                 .Where(S12 => S12.S12_IsValid == (byte)BaseEnums.IsValid.Valid &&
                               S12.S12_IsFinishCheck == (byte)BaseEnums.IsFinish.Unfinish &&
                               S12.S07_ApproverId == _employeeId)
-                .ToAutoBoxResultAsync(pageSearch, new CheckPageResult());
+                .ToListResultAsync(pageSearch, new CheckPageResult());
         }
         /// <summary>
         /// 审批申请
@@ -314,7 +314,7 @@ namespace FastAdminAPI.Core.Services
                 .InnerJoin<S12_Check>((S13, S12) => S13.S12_CheckId == S12.S12_CheckId)
                 .Where((S13, S12) => S12.S12_IsValid == (byte)BaseEnums.IsValid.Valid &&
                                      S13.S07_ApproverId == _employeeId)
-                .ToAutoBoxResultAsync(pageSearch, new CheckRecordPageResult());
+                .ToListResultAsync(pageSearch, new CheckRecordPageResult());
         }
         /// <summary>
         /// 获取申请审批记录列表

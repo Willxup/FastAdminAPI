@@ -48,7 +48,7 @@ namespace FastAdminAPI.Core.Services
         {
             return await _dbContext.Queryable<S99_Code>()
                 .InnerJoin<S99_Code>((a, b) => a.S99_CodeId == b.S99_CodeId)
-                .ToAutoBoxResultAsync(search, new CodePageResult()); //查询条件 - 查询结果
+                .ToListResultAsync(search, new CodePageResult()); //查询条件 - 查询结果
         }
         /// <summary>
         /// 新增Code
