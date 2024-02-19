@@ -4,7 +4,7 @@ using FastAdminAPI.Framework.Extensions.DbQueryExtensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace FastAdminAPI.Core.Models.Employee
 {

@@ -61,7 +61,11 @@ try
         })
         .AddControllersAsServices()
         .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNamingPolicy = null; })// 取消默认驼峰
-        .AddNewtonsoftJson(options => { options.SerializerSettings.ContractResolver = new DefaultContractResolver(); }); //Newtonsoft.Json
+        .AddNewtonsoftJson(options => //Newtonsoft.Json
+        {
+            options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+            options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss.fff";
+        });
 
     //健康检查
     builder.Services.AddHealthChecks();

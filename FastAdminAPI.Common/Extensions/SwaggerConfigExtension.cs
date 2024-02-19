@@ -75,6 +75,8 @@ namespace FastAdminAPI.Common.Extensions
                 #endregion
             });
 
+            services.AddSwaggerGenNewtonsoftSupport(); //swagger使用newtonsoft.json
+
             return services;
         }
     }
