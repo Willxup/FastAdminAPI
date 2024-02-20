@@ -20,10 +20,10 @@
 {
   "Database.ConnectionString": "数据库连接字符串",
   "Redis.ConnectionString": "Redis连接字符串",
-  "Redis.DbNum": 0, //Redis库
-  "Login.IPAddress.WhiteList": "", //IP白名单
-  "Common.Applications.DefaultApprover": 1, //通用审批 默认审批人
-  "FastAdminAPI.Core.Url": "http://localhost:9000" //多服务用于配置RefitClient
+  "Redis.DbNum": 0, #Redis库编号
+  "Login.IPAddress.WhiteList": "", #IP白名单
+  "Common.Applications.DefaultApprover": 1, #通用审批 默认审批人
+  "FastAdminAPI.Core.Url": "http://localhost:9000" #多服务用于配置RefitClient
 }
 ```
 
