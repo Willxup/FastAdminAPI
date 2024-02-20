@@ -27,13 +27,14 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications
         /// </summary>
         protected readonly IConfiguration _configuration;
         /// <summary>
-        /// 企业微信API
-        /// </summary>
-        protected readonly IQyWechatApi _qyWechatApi;
-        /// <summary>
         /// 事件总线
         /// </summary>
         protected readonly ICapPublisher _capPublisher;
+        /// <summary>
+        /// 企业微信API
+        /// </summary>
+        protected readonly IQyWechatApi _qyWechatApi;
+        protected readonly IEmailApi _emailApi;
 
         /// <summary>
         /// 构造
@@ -42,13 +43,15 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications
         /// <param name="redis"></param>
         /// <param name="configuration"></param>
         /// <param name="capPublisher"></param>
-        internal AbstractApplicationProcessor(ISqlSugarClient dbContext, IRedisHelper redis, IConfiguration configuration, IQyWechatApi qyWechatApi, ICapPublisher capPublisher)
+        internal AbstractApplicationProcessor(ISqlSugarClient dbContext, IRedisHelper redis, IConfiguration configuration, 
+            ICapPublisher capPublisher, IQyWechatApi qyWechatApi, IEmailApi emailApi)
         {
             _dbContext = dbContext as SqlSugarScope;
             _redis = redis;
             _configuration = configuration;
-            _qyWechatApi = qyWechatApi;
             _capPublisher = capPublisher;
+            _qyWechatApi = qyWechatApi;
+            _emailApi = emailApi;
         }
         /// <summary>
         /// 完成申请

@@ -30,13 +30,18 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications
         /// </summary>
         private readonly IConfiguration _configuration;
         /// <summary>
+        /// 事件总线
+        /// </summary>
+        private readonly ICapPublisher _capPublisher;
+        /// <summary>
         /// 企业微信API
         /// </summary>
         private readonly IQyWechatApi _qyWechatApi;
         /// <summary>
-        /// 事件总线
+        /// 邮件Api
         /// </summary>
-        private readonly ICapPublisher _capPublisher;
+        private readonly IEmailApi _emailApi;
+
 
         /// <summary>
         /// 构造
@@ -45,13 +50,15 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications
         /// <param name="redis"></param>
         /// <param name="configuration"></param>
         /// <param name="capPublisher"></param>
-        public ApplicationProcessor(ISqlSugarClient dbContext, IRedisHelper redis, IConfiguration configuration, IQyWechatApi qyWechatApi, ICapPublisher capPublisher)
+        public ApplicationProcessor(ISqlSugarClient dbContext, IRedisHelper redis, IConfiguration configuration, 
+            ICapPublisher capPublisher, IQyWechatApi qyWechatApi, IEmailApi emailApi)
         {
             _dbContext = dbContext as SqlSugarScope;
             _redis = redis;
-            _configuration = configuration; ;
-            _qyWechatApi = qyWechatApi;
+            _configuration = configuration;
             _capPublisher = capPublisher;
+            _qyWechatApi = qyWechatApi;
+            _emailApi = emailApi;
         }
 
         /// <summary>
@@ -65,7 +72,7 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications
             return applicationCategory switch
             {
                 //测试
-                (int)ApplicationEnums.ApplicationCategory.Test => new TestApplicationProcessor(_dbContext, _redis, _configuration, _qyWechatApi, _capPublisher),
+                (int)ApplicationEnums.ApplicationCategory.Test => new TestApplicationProcessor(_dbContext, _redis, _configuration, _capPublisher, _qyWechatApi, _emailApi),
                 //其他
                 _ => throw new UserOperationException("无法识别的申请类别!")
             };

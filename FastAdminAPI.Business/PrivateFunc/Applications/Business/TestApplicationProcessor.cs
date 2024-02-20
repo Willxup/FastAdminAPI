@@ -24,8 +24,9 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications.Business
         /// <param name="redis"></param>
         /// <param name="configuration"></param>
         /// <param name="qyWechatApi"></param>
-        internal TestApplicationProcessor(ISqlSugarClient dbContext, IRedisHelper redis, IConfiguration configuration, 
-            IQyWechatApi qyWechatApi, ICapPublisher capPublisher) : base(dbContext, redis, configuration, qyWechatApi, capPublisher) { }
+        internal TestApplicationProcessor(ISqlSugarClient dbContext, IRedisHelper redis, 
+            IConfiguration configuration, ICapPublisher capPublisher, IQyWechatApi qyWechatApi, IEmailApi emailApi) 
+            : base(dbContext, redis, configuration, capPublisher, qyWechatApi, emailApi) { }
 
         /// <summary>
         /// 通过申请

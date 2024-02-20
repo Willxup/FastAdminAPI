@@ -53,10 +53,6 @@ namespace FastAdminAPI.Business.Services
         /// </summary>
         private readonly IRedisHelper _redis;
         /// <summary>
-        /// 企业微信API
-        /// </summary>
-        private readonly IQyWechatApi _qyWechatApi;
-        /// <summary>
         /// 申请处理器
         /// </summary>
         private readonly IApplicationProcessor _processor;
@@ -64,6 +60,10 @@ namespace FastAdminAPI.Business.Services
         /// 事件总线
         /// </summary>
         private readonly ICapPublisher _capPublisher;
+        /// <summary>
+        /// 企业微信API
+        /// </summary>
+        private readonly IQyWechatApi _qyWechatApi;
 
 
         /// <summary>
@@ -73,14 +73,14 @@ namespace FastAdminAPI.Business.Services
         /// <param name="redis"></param>
         /// <param name="configuration"></param>
         /// <param name="dataPermission"></param>
-        public ApplicationHandler(ISqlSugarClient dbContext, IRedisHelper redis, IConfiguration configuration, 
-            IQyWechatApi qyWechatApi, IApplicationProcessor processor, ICapPublisher capPublisher)
+        public ApplicationHandler(ISqlSugarClient dbContext, IRedisHelper redis, IConfiguration configuration,
+            IApplicationProcessor processor, ICapPublisher capPublisher, IQyWechatApi qyWechatApi)
         {
             _dbContext = dbContext as SqlSugarScope;
             _redis = redis;
-            _qyWechatApi = qyWechatApi;
             _processor = processor;
             _capPublisher = capPublisher;
+            _qyWechatApi = qyWechatApi;
             DEFAULT_APPROVER = configuration.GetValue<long>("Common.Applications.DefaultApprover");
         }
 
@@ -1124,7 +1124,7 @@ namespace FastAdminAPI.Business.Services
         /// <returns></returns>
         private async Task SendBatchSystemNotice(long checkId, List<long> receivers, string message)
         {
-            foreach(var item in receivers)
+            foreach (var item in receivers)
             {
                 await SendSystemNotice(checkId, item, message);
             }
