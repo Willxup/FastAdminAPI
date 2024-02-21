@@ -59,7 +59,7 @@ namespace FastAdminAPI.Framework.Entities
         /// Nullable:True
         /// </summary>
 
-        public long? S06_Staffing { get; set; }
+        public int S06_MaxEmployeeNums { get; set; }
         /// <summary>
         /// Desc:岗位职责
         /// Default:

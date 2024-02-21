@@ -551,6 +551,20 @@
             <param name="departId">部门Id</param>
             <returns></returns>
         </member>
+        <member name="M:FastAdminAPI.Core.Controllers.PostController.GetMultiPostTree(System.Int64[])">
+            <summary>
+            获取多个岗位树
+            </summary>
+            <param name="departIds">部门Ids</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.PostController.GetPostById(System.Int64)">
+            <summary>
+            获取岗位信息
+            </summary>
+            <param name="postId">岗位Id</param>
+            <returns></returns>
+        </member>
         <member name="M:FastAdminAPI.Core.Controllers.PostController.AddPost(FastAdminAPI.Core.Models.Posts.AddPostModel)">
             <summary>
             新增岗位
@@ -1192,6 +1206,20 @@
             获取岗位树
             </summary>
             <param name="departId">部门Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IPostService.GetMultiPostTree(System.Int64[])">
+            <summary>
+            获取多个岗位树
+            </summary>
+            <param name="departIds">部门Ids</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IPostService.GetPostById(System.Int64)">
+            <summary>
+            获取岗位信息
+            </summary>
+            <param name="postId">岗位Id</param>
             <returns></returns>
         </member>
         <member name="M:FastAdminAPI.Core.IServices.IPostService.AddPost(FastAdminAPI.Core.Models.Posts.AddPostModel)">
@@ -1880,14 +1908,14 @@
             状态 0正式 1实习 2离职
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageSearch.CornerMark">
-            <summary>
-            部门角标
-            </summary>
-        </member>
         <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageSearch.UserIds">
             <summary>
             用户Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageSearch.CornerMark">
+            <summary>
+            部门角标
             </summary>
         </member>
         <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageResult.EmployeeId">
@@ -2425,7 +2453,12 @@
             部门Id
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Posts.PostInfoModel.Staffing">
+        <member name="P:FastAdminAPI.Core.Models.Posts.PostInfoModel.CurrentEmployeeNums">
+            <summary>
+            在编人数
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Posts.PostInfoModel.MaxEmployeeNums">
             <summary>
             岗位编制
             </summary>
@@ -2442,7 +2475,7 @@
         </member>
         <member name="P:FastAdminAPI.Core.Models.Posts.PostInfoModel.CornerMark">
             <summary>
-            角标 每一级4位数字
+            角标
             </summary>
         </member>
         <member name="P:FastAdminAPI.Core.Models.Posts.PostBaseModel.PostName">
@@ -3446,6 +3479,21 @@
             获取岗位树
             </summary>
             <param name="departId">部门Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.PostService.GetMultiPostTree(System.Int64[])">
+            <summary>
+            获取多个岗位树
+            </summary>
+            <param name="departIds">部门Ids</param>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.PostService.GetPostById(System.Int64)">
+            <summary>
+            获取岗位信息
+            </summary>
+            <param name="postId">岗位Id</param>
             <returns></returns>
         </member>
         <member name="M:FastAdminAPI.Core.Services.PostService.AddPost(FastAdminAPI.Core.Models.Posts.AddPostModel)">

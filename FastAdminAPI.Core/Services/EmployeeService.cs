@@ -229,6 +229,8 @@ namespace FastAdminAPI.Core.Services
         public async Task<ResponseModel> GetEmployeeList(EmployeePageSearch pageSearch)
         {
             List<long> departIds = new();
+
+            //部门查询
             if (!string.IsNullOrEmpty(pageSearch.CornerMark))
             {
                 //查询部门角标获取该部门下全部下级部门
@@ -238,38 +240,15 @@ namespace FastAdminAPI.Core.Services
                     .Select(S05 => S05.S05_DepartId)
                     .ToListAsync();
             }
+
             var result = await _dbContext.Queryable<S07_Employee>()
                 .LeftJoin<S08_EmployeePost>((S07, S08) => S07.S07_EmployeeId == S08.S07_EmployeeId &&
                                                          S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True && //查询主岗位
                                                          S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid)
-                .LeftJoin<S01_User>((S07, S08, S01) => S07.S01_UserId == S01.S01_UserId &&
-                                                     S01.S01_IsValid == (byte)BaseEnums.IsValid.Valid)
                 .Where((S07, S08) => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid)
-                .WhereIF(!string.IsNullOrEmpty(pageSearch.Name), (S07, S08) => S07.S07_Name.Contains(pageSearch.Name))
-                .WhereIF(!string.IsNullOrEmpty(pageSearch.Phone), (S07, S08) => S07.S07_Phone.Contains(pageSearch.Phone))
-                .WhereIF(pageSearch.Status?.Count > 0, (S07, S08) => pageSearch.Status.Contains((byte)S07.S07_Status))
                 .WhereIF(departIds?.Count > 0, (S07, S08) => departIds.Contains(S08.S05_DepartId))
-                .WhereIF(pageSearch.UserIds?.Count > 0, (S07, S08, S01) => pageSearch.UserIds.Contains(S01.S01_UserId))
-                .Select((S07, S08) => new EmployeePageResult
-                {
-                    EmployeeId = S07.S07_EmployeeId,
-                    UserId = S07.S01_UserId,
-                    CompanyId = S07.S10_CompanyId,
-                    CompanyName = null,
-                    QyUserId = S07.S07_QyUserId,
-                    Name = S07.S07_Name,
-                    Phone = S07.S07_Phone,
-                    Gender = S07.S07_Gender,
-                    DepartmentName = SqlFunc.Subqueryable<S05_Department>()
-                                                    .Where(S05 => S05.S05_DepartId == S08.S05_DepartId)
-                                                    .Select(S05 => S05.S05_DepartName),
-                    PostName = SqlFunc.Subqueryable<S06_Post>()
-                                              .Where(S06 => S06.S06_PostId == S08.S06_PostId)
-                                              .Select(S06 => S06.S06_PostName),
-                    Kind = S07.S07_Kind,
-                    Status = S07.S07_Status
-                })
-                .ToListResultAsync(pageSearch.Index, pageSearch.Size);
+                .ToListResultAsync(pageSearch, new EmployeePageResult());
+
             if (result?.Code == ResponseCode.Success)
             {
                 var list = result.ToConvertData<List<EmployeePageResult>>();
@@ -312,7 +291,7 @@ namespace FastAdminAPI.Core.Services
         /// <returns></returns>
         public async Task<EmployeeInfoModel> GetEmployeeInfo(long employeeId)
         {
-            var employeeInfo = await _dbContext.Queryable<S07_Employee>()
+            var employee = await _dbContext.Queryable<S07_Employee>()
                 .Where(S07 => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid && S07.S07_EmployeeId == employeeId)
                 .Select(S07 => new EmployeeInfoModel
                 {
@@ -335,7 +314,7 @@ namespace FastAdminAPI.Core.Services
                     TerminationDate = S07.S07_TerminationDate,
                 })
                 .FirstAsync();
-            if (employeeInfo != null)
+            if (employee != null)
             {
                 //查询部门岗位
                 var employeePostList = await _dbContext.Queryable<S08_EmployeePost>()
@@ -352,18 +331,18 @@ namespace FastAdminAPI.Core.Services
                                                                    .Select(S05 => S05.S05_DepartName),
                                        }).ToListAsync();
                 //部门
-                employeeInfo.DepartmentName = employeePostList.Where(c => c.EmployeeId == employeeInfo.EmployeeId)
+                employee.DepartmentName = employeePostList.Where(c => c.EmployeeId == employee.EmployeeId)
                                                               .Select(c => c.DepartmentName).FirstOrDefault();
                 //岗位
-                employeeInfo.PostName = employeePostList.Where(c => c.EmployeeId == employeeInfo.EmployeeId)
+                employee.PostName = employeePostList.Where(c => c.EmployeeId == employee.EmployeeId)
                                                 .Select(c => c.PostName).FirstOrDefault();
                 //判断是否存在用户Id
-                if (employeeInfo.UserId != null)
+                if (employee.UserId != null)
                 {
                     //查询用户
-                    employeeInfo.Account = await _dbContext.Queryable<S01_User>()
+                    employee.Account = await _dbContext.Queryable<S01_User>()
                         .Where(S01 => S01.S01_IsValid == (byte)BaseEnums.IsValid.Valid &&
-                                      S01.S01_UserId == employeeInfo.UserId)
+                                      S01.S01_UserId == employee.UserId)
                         .Select(c => new EmployeeAccountModel
                         {
                             Account = c.S01_Account,
@@ -372,7 +351,7 @@ namespace FastAdminAPI.Core.Services
                         }).FirstAsync();
                     //查询员工功能权限
                     var permissionList = await _dbContext.Queryable<S09_UserPermission>()
-                        .Where(S09 => S09.S01_UserId == employeeInfo.UserId)
+                        .Where(S09 => S09.S01_UserId == employee.UserId)
                         .Select(S09 => new
                         {
                             S09.S01_UserId,
@@ -383,7 +362,7 @@ namespace FastAdminAPI.Core.Services
                     var roleIds = permissionList?.Where(c => c.S09_PermissionType == (byte)BusinessEnums.PermissionType.Role).Select(c => c.S09_CommonId).ToList();
                     if (roleIds?.Count > 0)
                     {
-                        employeeInfo.Roles = await _dbContext.Queryable<S03_Role>()
+                        employee.Roles = await _dbContext.Queryable<S03_Role>()
                             .Where(S03 => S03.S03_IsValid == (byte)BaseEnums.IsValid.Valid && roleIds.Contains(S03.S03_RoleId))
                             .Select(S03 => new EmployeeRoleModel
                             {
@@ -395,7 +374,7 @@ namespace FastAdminAPI.Core.Services
                     var moduleIds = permissionList?.Where(c => c.S09_PermissionType == (byte)BusinessEnums.PermissionType.User).Select(c => c.S09_CommonId).ToList();
                     if (moduleIds?.Count > 0)
                     {
-                        employeeInfo.Permissions = await _dbContext.Queryable<S02_Module>()
+                        employee.Permissions = await _dbContext.Queryable<S02_Module>()
                              .Where(S02 => S02.S02_IsValid == (byte)BaseEnums.IsValid.Valid && moduleIds.Contains(S02.S02_ModuleId))
                              .Select(c => new EmployeePermissionModel
                              {
@@ -406,7 +385,7 @@ namespace FastAdminAPI.Core.Services
                     }
                 }
             }
-            return employeeInfo;
+            return employee;
         }
         /// <summary>
         /// 新增员工

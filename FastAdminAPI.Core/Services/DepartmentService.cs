@@ -182,7 +182,7 @@ namespace FastAdminAPI.Core.Services
                     .Select(S06 => new
                     {
                         S06.S06_PostId,
-                        S06.S06_Staffing
+                        S06.S06_MaxEmployeeNums
                     })
                     .ToListAsync();
                 //查询员工岗位信息
@@ -200,7 +200,7 @@ namespace FastAdminAPI.Core.Services
                 {
                     DepartmentSum = departIds?.Count - 1,
                     PostSum = postList?.Count,
-                    Staffing = $"{employeePostList?.Count}/{postList.Sum(c => c.S06_Staffing)}"
+                    Staffing = $"{employeePostList?.Count}/{postList.Sum(c => c.S06_MaxEmployeeNums)}"
                 };
                 response.Data = staffingModel;
                 return response;

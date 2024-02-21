@@ -138,7 +138,7 @@ namespace FastAdminAPI.Business.Services
         private async Task<ApproverInfoModel> GetSuperiorByDepart(long operationId, string operationName, long operationDepartId)
         {
             ApproverInfoModel superior = null;
-            if (operationDepartId == 1) //如果当前部门为留归集团，且前一步按岗位递归寻找上级未找到上级，说明该用户为最高上级
+            if (operationDepartId == 1) //如果当前部门为顶级部门，且前一步按岗位递归寻找上级未找到上级，说明该用户为最高上级
             {
                 superior = new ApproverInfoModel
                 {
@@ -218,7 +218,7 @@ namespace FastAdminAPI.Business.Services
                 superior ??= await GetDepartSuperiorRecursive(departList, postList, parentDepartId, originDepartId);
 
             }
-            //如果递归中的当前部门(非员工原始部门)没有父级部门，说明已递归至留归集团
+            //如果递归中的当前部门(非员工原始部门)没有父级部门，说明已递归至顶级集团
             else
             {
                 //todo 启用分管配置功能，匹配员工原始部门

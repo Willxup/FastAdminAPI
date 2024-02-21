@@ -17,9 +17,13 @@ namespace FastAdminAPI.Core.Models.Posts
         /// </summary>
         public long? DepartId { get; set; }
         /// <summary>
+        /// 在编人数
+        /// </summary>
+        public int CurrentEmployeeNums { get; set; } = 0;
+        /// <summary>
         /// 岗位编制
         /// </summary>
-        public long? Staffing { get; set; }
+        public int MaxEmployeeNums { get; set; } = 0;
         /// <summary>
         /// 岗位职责
         /// </summary>
@@ -29,7 +33,7 @@ namespace FastAdminAPI.Core.Models.Posts
         /// </summary>
         public string AbilityDemand { get; set; }
         /// <summary>
-        /// 角标 每一级4位数字
+        /// 角标
         /// </summary>
         public string CornerMark { get; set; }
     }

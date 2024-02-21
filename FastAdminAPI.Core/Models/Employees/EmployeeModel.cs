@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
+using FastAdminAPI.Framework.Extensions;
 
 namespace FastAdminAPI.Core.Models.Employee
 {
@@ -18,79 +19,109 @@ namespace FastAdminAPI.Core.Models.Employee
         /// <summary>
         /// 姓名
         /// </summary>
+        [DbTableAlias("S07")]
+        [DbQueryField("S07_Name")]
         public string Name { get; set; }
         /// <summary>
         /// 手机
         /// </summary>
+        [DbTableAlias("S07")]
+        [DbQueryField("S07_Phone")]
         public string Phone { get; set; }
         /// <summary>
         /// 状态 0正式 1实习 2离职
         /// </summary>
+        [DbTableAlias("S07")]
+        [DbQueryField("S07_Status")]
         public List<byte> Status { get; set; }
-        /// <summary>
-        /// 部门角标
-        /// </summary>
-        public string CornerMark { get; set; }
-
         /// <summary>
         /// 用户Id
         /// </summary>
+        [DbTableAlias("S07")]
+        [DbQueryField("S01_UserId")]
         public List<long> UserIds { get; set; }
+        /// <summary>
+        /// 部门角标
+        /// </summary>
+        [DbIgnoreField]
+        public string CornerMark { get; set; }
     }
     public class EmployeePageResult
     {
         /// <summary>
         /// 员工Id
         /// </summary>
+        [DbTableAlias("S07")]
+        [DbQueryField("S07_EmployeeId")]
         public long? EmployeeId { get; set; }
         /// <summary>
         /// 用户Id
         /// </summary>
+        [DbTableAlias("S07")]
+        [DbQueryField("S01_UserId")]
         public long? UserId { get; set; }
         /// <summary>
         /// 企业Id
         /// </summary>
+        [DbTableAlias("S07")]
+        [DbQueryField("S10_CompanyId")]
         public long? CompanyId { get; set; }
         /// <summary>
         /// 企业名称
         /// </summary>
+        [DbIgnoreField]
         public string CompanyName { get; set; }
         /// <summary>
         /// 企业微信UserId
         /// </summary>
+        [DbTableAlias("S07")]
+        [DbQueryField("S07_QyUserId")]
         public string QyUserId { get; set; }
         /// <summary>
         /// 姓名
         /// </summary>
+        [DbTableAlias("S07")]
+        [DbQueryField("S07_Name")]
         public string Name { get; set; }
         /// <summary>
         /// 手机
         /// </summary>
+        [DbTableAlias("S07")]
+        [DbQueryField("S07_Phone")]
         public string Phone { get; set; }
         /// <summary>
         /// 性别 0男 1女
         /// </summary>
+        [DbTableAlias("S07")]
+        [DbQueryField("S07_Gender")]
         public byte? Gender { get; set; }
         /// <summary>
         /// 部门名称
         /// </summary>
+        [DbSubQuery("(SELECT S05_DepartName FROM S05_Department WHERE S08.S05_DepartId = S05_DepartId)")]
         public string DepartmentName { get; set; }
         /// <summary>
         /// 岗位名称
         /// </summary>
+        [DbSubQuery("(SELECT S06_PostName FROM S06_Post WHERE S08.S06_PostId = S06_PostId)")]
         public string PostName { get; set; }
         /// <summary>
         /// 类别 0全职 1兼职
         /// </summary>
+        [DbTableAlias("S07")]
+        [DbQueryField("S07_Kind")]
         public byte? Kind { get; set; }
         /// <summary>
         /// 状态 0正式 1实习 2离职
         /// </summary>
+        [DbTableAlias("S07")]
+        [DbQueryField("S07_Status")]
         public byte? Status { get; set; }
 
         /// <summary>
         /// 角色
         /// </summary>
+        [DbIgnoreField]
         public List<EmployeeRoleModel> Roles { get; set; }
     }
     public class EmployeeSimpleModel

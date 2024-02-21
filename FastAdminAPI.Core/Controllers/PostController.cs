@@ -1,7 +1,7 @@
-﻿using FastAdminAPI.Core.Controllers.BASE;
+﻿using FastAdminAPI.Common.BASE;
+using FastAdminAPI.Core.Controllers.BASE;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Models.Posts;
-using FastAdminAPI.Common.BASE;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -37,6 +37,28 @@ namespace FastAdminAPI.Core.Controllers
         public async Task<ResponseModel> GetPostTree([FromQuery][Required(ErrorMessage = "部门Id不能为空!")] long? departId)
         {
             return Success(await _postService.GetPostTree((long)departId));
+        }
+        /// <summary>
+        /// 获取多个岗位树
+        /// </summary>
+        /// <param name="departIds">部门Ids</param>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(PostInfoModel), 200)]
+        public async Task<ResponseModel> GetMultiPostTree([FromQuery] long[] departIds)
+        {
+            return Success(await _postService.GetMultiPostTree(departIds));
+        }
+        /// <summary>
+        /// 获取岗位信息
+        /// </summary>
+        /// <param name="postId">岗位Id</param>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(PostInfoModel), 200)]
+        public async Task<ResponseModel> GetPostById([FromQuery][Required(ErrorMessage = "岗位Id不能为空!")] long postId)
+        {
+            return Success(await GetPostById(postId));
         }
         /// <summary>
         /// 新增岗位

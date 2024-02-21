@@ -142,7 +142,7 @@ CREATE TABLE `S06_Post`  (
   `S06_ParentPostId` bigint NULL DEFAULT NULL COMMENT '上级岗位Id',
   `S05_DepartId` bigint NOT NULL COMMENT '部门Id',
   `S06_CornerMark` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '角标 每一级4位数字',
-  `S06_Staffing` bigint NULL DEFAULT NULL COMMENT '岗位编制',
+  `S06_MaxEmployeeNums` int NOT NULL DEFAULT NULL COMMENT '岗位编制',
   `S06_Responsibility` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '岗位职责',
   `S06_AbilityDemand` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '能力需求',
   `S06_IsValid` tinyint NOT NULL DEFAULT 0 COMMENT '是否有效 0有效 1无效',

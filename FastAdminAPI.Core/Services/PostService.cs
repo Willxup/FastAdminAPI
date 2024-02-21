@@ -11,6 +11,7 @@ using FastAdminAPI.Framework.Entities;
 using FastAdminAPI.Framework.Extensions;
 using Microsoft.AspNetCore.Http;
 using SqlSugar;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.Services
@@ -54,10 +55,81 @@ namespace FastAdminAPI.Core.Services
 
                    DepartId = S06.S05_DepartId,
                    CornerMark = S06.S06_CornerMark,
-                   Staffing = S06.S06_Staffing,
+                   CurrentEmployeeNums = SqlFunc.Subqueryable<S08_EmployeePost>()
+                                                     .InnerJoin<S07_Employee>((S08, S07) => S08.S07_EmployeeId == S07.S07_EmployeeId)
+                                                     .Where((S08, S07) => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                                                          S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                                                          S07.S07_Status != (byte)BusinessEnums.EmployeeStatus.Dimission &&
+                                                                          S08.S06_PostId == S06.S06_PostId)
+                                                     .Count(),
+                   MaxEmployeeNums = S06.S06_MaxEmployeeNums,
                    Responsibility = S06.S06_Responsibility,
                    AbilityDemand = S06.S06_AbilityDemand
                }).ToListAsync());
+        }
+        /// <summary>
+        /// 获取多个岗位树
+        /// </summary>
+        /// <param name="departIds">部门Ids</param>
+        /// <returns></returns>
+        /// <exception cref="UserOperationException"></exception>
+        public async Task<string> GetMultiPostTree(long[] departIds)
+        {
+            if (departIds?.Length > 0)
+            {
+                return JsonTree.CreateJsonTrees(await _dbContext.Queryable<S06_Post>()
+                    .Where(S06 => S06.S06_IsValid == (byte)BaseEnums.IsValid.Valid && departIds.Contains(S06.S05_DepartId))
+                   .Select(S06 => new PostInfoModel
+                   {
+                       Id = S06.S06_PostId,
+                       Name = S06.S06_PostName,
+                       ParentId = S06.S06_ParentPostId,
+
+                       DepartId = S06.S05_DepartId,
+                       CornerMark = S06.S06_CornerMark,
+                       CurrentEmployeeNums = SqlFunc.Subqueryable<S08_EmployeePost>()
+                                                     .InnerJoin<S07_Employee>((S08, S07) => S08.S07_EmployeeId == S07.S07_EmployeeId)
+                                                     .Where((S08, S07) => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                                                          S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                                                          S07.S07_Status != (byte)BusinessEnums.EmployeeStatus.Dimission &&
+                                                                          S08.S06_PostId == S06.S06_PostId)
+                                                     .Count(),
+                       MaxEmployeeNums = S06.S06_MaxEmployeeNums,
+                       Responsibility = S06.S06_Responsibility,
+                       AbilityDemand = S06.S06_AbilityDemand
+                   }).ToListAsync());
+            }
+            else
+                throw new UserOperationException("请选择部门!");
+        }
+        /// <summary>
+        /// 获取岗位信息
+        /// </summary>
+        /// <param name="postId">岗位Id</param>
+        /// <returns></returns>
+        public async Task<PostInfoModel> GetPostById(long postId)
+        {
+            return await _dbContext.Queryable<S06_Post>()
+                .Where(S06 => S06.S06_IsValid == (byte)BaseEnums.IsValid.Valid && S06.S06_PostId == postId)
+                .Select(S06 => new PostInfoModel
+                {
+                    Id = S06.S06_PostId,
+                    Name = S06.S06_PostName,
+                    ParentId = S06.S06_ParentPostId,
+
+                    DepartId = S06.S05_DepartId,
+                    CornerMark = S06.S06_CornerMark,
+                    CurrentEmployeeNums = SqlFunc.Subqueryable<S08_EmployeePost>()
+                                                     .InnerJoin<S07_Employee>((S08, S07) => S08.S07_EmployeeId == S07.S07_EmployeeId)
+                                                     .Where((S08, S07) => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                                                          S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                                                          S07.S07_Status != (byte)BusinessEnums.EmployeeStatus.Dimission &&
+                                                                          S08.S06_PostId == S06.S06_PostId)
+                                                     .Count(),
+                    MaxEmployeeNums = S06.S06_MaxEmployeeNums,
+                    Responsibility = S06.S06_Responsibility,
+                    AbilityDemand = S06.S06_AbilityDemand
+                }).FirstAsync();
         }
         /// <summary>
         /// 新增岗位
