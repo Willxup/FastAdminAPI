@@ -17,12 +17,15 @@ namespace FastAdminAPI.NPOI.Extensions
         {
             XSSFCellStyle style = (XSSFCellStyle)workbook.CreateCellStyle();
 
-            style.Alignment = HorizontalAlignment.Justify;//两端自动对齐（自动换行）
-            style.VerticalAlignment = VerticalAlignment.Center;
+            //设置单元格样式
+            style.Alignment = HorizontalAlignment.Justify; //两端自动对齐（自动换行）
+            style.VerticalAlignment = VerticalAlignment.Center; //垂直居中对齐
 
-            IDataFormat dataformat = workbook.CreateDataFormat();
+            //设置单元格格式
+            IDataFormat dataformat = workbook.CreateDataFormat(); 
             style.DataFormat = dataformat.GetFormat("@"); //dataformat.GetFormat("test") 两种方式都可以
 
+            //设置单元格字体
             style.SetFont(GetFontStyle(workbook, "Arial", 10, true));
 
             return style;
@@ -38,10 +41,10 @@ namespace FastAdminAPI.NPOI.Extensions
         public static IFont GetFontStyle(IWorkbook workbook, string fontName, short point, bool isBold = false)
         {
             XSSFFont font = (XSSFFont)workbook.CreateFont();
-            font.FontName = fontName;
-            font.FontHeightInPoints = point;
+            font.FontName = fontName; //字体名称
+            font.FontHeightInPoints = point; //字体大小
             if (isBold)
-                font.IsBold = true;
+                font.IsBold = true; //是否加粗
             return font;
         }
         /// <summary>
@@ -54,17 +57,24 @@ namespace FastAdminAPI.NPOI.Extensions
         public static XSSFCellStyle GetTitleCellStyle(IWorkbook workbook, IFont fontStyle, XSSFColor color = null)
         {
             XSSFCellStyle titleStyle = (XSSFCellStyle)workbook.CreateCellStyle();
-            titleStyle.Alignment = HorizontalAlignment.Center;
-            titleStyle.VerticalAlignment = VerticalAlignment.Center;
+            
+            //设置单元格样式
+            titleStyle.Alignment = HorizontalAlignment.Center; //两端居中对齐
+            titleStyle.VerticalAlignment = VerticalAlignment.Center; //垂直居中对齐
+
+            //设置单元格格式
+            IDataFormat dataformat = workbook.CreateDataFormat();
+            titleStyle.DataFormat = dataformat.GetFormat("@"); //dataformat.GetFormat("text") 两种方式都可以
+
+            //设置单元格字体
             titleStyle.SetFont(fontStyle);
+
+            //设置填充颜色
             if (color != null)
             {
                 titleStyle.FillForegroundColorColor = color;
                 titleStyle.FillPattern = FillPattern.SolidForeground;
             }
-
-            IDataFormat dataformat = workbook.CreateDataFormat();
-            titleStyle.DataFormat = dataformat.GetFormat("@"); //dataformat.GetFormat("text") 两种方式都可以
 
             return titleStyle;
         }
@@ -77,12 +87,17 @@ namespace FastAdminAPI.NPOI.Extensions
         public static XSSFCellStyle GetNormalCellStyle(IWorkbook workbook, IFont font)
         {
             XSSFCellStyle cellStyle = (XSSFCellStyle)workbook.CreateCellStyle();
-            cellStyle.Alignment = HorizontalAlignment.Justify;//两端自动对齐（自动换行）
-            cellStyle.VerticalAlignment = VerticalAlignment.Center;
-            cellStyle.SetFont(font);
 
+            //设置单元格样式
+            cellStyle.Alignment = HorizontalAlignment.Justify; //两端自动对齐（自动换行）
+            cellStyle.VerticalAlignment = VerticalAlignment.Center; //垂直居中对齐
+
+            //设置单元格格式
             IDataFormat dataformat = workbook.CreateDataFormat();
             cellStyle.DataFormat = dataformat.GetFormat("@"); //dataformat.GetFormat("text") 两种方式都可以
+
+            //设置单元格字体
+            cellStyle.SetFont(font);
 
             return cellStyle;
         }
@@ -91,7 +106,7 @@ namespace FastAdminAPI.NPOI.Extensions
         /// <summary>
         /// 获取模板标题行
         /// </summary>
-        /// <param name="cellInfoDic">单元格内容字典(名字：样式索引)</param>
+        /// <param name="cellInfoDic">单元格内容字典(单元格内容：样式索引)</param>
         /// <param name="cellStyleList">样式列表</param>
         /// <returns></returns>
         public static List<NPOIExcelTitleCellModel> GetExcelTemplateTitleRow(Dictionary<string, int> cellInfoDic, ICellStyle[] cellStyleList)
@@ -100,12 +115,13 @@ namespace FastAdminAPI.NPOI.Extensions
             if (cellInfoDic?.Count > 0 && cellStyleList?.Length > 0)
             {
                 titleCellList = new List<NPOIExcelTitleCellModel>();
+
                 foreach (var cellInfo in cellInfoDic)
                 {
                     NPOIExcelTitleCellModel cell = new()
                     {
-                        TitleCellName = cellInfo.Key,
-                        TitleCellStyle = cellStyleList[cellInfo.Value]
+                        TitleCellName = cellInfo.Key, //key为单元格内容
+                        TitleCellStyle = cellStyleList[cellInfo.Value] //value为单元格样式
                     };
                     titleCellList.Add(cell);
                 }
@@ -188,10 +204,16 @@ namespace FastAdminAPI.NPOI.Extensions
                     IRow row = sheet.CreateRow(rowNum);
                     //单元格序号
                     int cellNum = 0;
+
+                    //循环反射赋值
                     foreach (PropertyInfo p in propertyInfos)
                     {
+                        //创建单元格，设置单元格内容
                         row.CreateCell(cellNum).SetCellValue(p.GetValue(item).ToString());
+
+                        //设置单元格样式
                         row.GetCell(cellNum).CellStyle = cellStyle;
+
                         cellNum++;
                     }
                     rowNum++;
@@ -210,10 +232,19 @@ namespace FastAdminAPI.NPOI.Extensions
         /// <param name="lastRow">需要下拉列表的单元格结束行(默认65535)</param>
         public static void SetLessDropDownList(XSSFSheet sheet, string[] dropDownList, int column, int startRow = 1, int lastRow = 65535)
         {
+            //数据校验帮助类
             XSSFDataValidationHelper dvHelper = new(sheet);
+
+            //创建需要校验的数据
             XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint)dvHelper.CreateExplicitListConstraint(dropDownList);
+
+            //被数据校验的单元格范围
             CellRangeAddressList addressList = new(startRow, lastRow, column, column);
+
+            //创建数据校验
             XSSFDataValidation validation = (XSSFDataValidation)dvHelper.CreateValidation(dvConstraint, addressList);
+
+            //添加数据校验
             sheet.AddValidationData(validation);
         }
         /// <summary>
@@ -228,25 +259,45 @@ namespace FastAdminAPI.NPOI.Extensions
         public static void SetMoreDropDownList(XSSFSheet sheet, List<string> dropDownList, int column, string sheetName = "HiddenSheet", int startRow = 1, int lastRow = 65535)
         {
             if (sheet == null) return;
+
             IWorkbook workbook = sheet.Workbook;
+
+            //创建 数据校验sheet
             ISheet hiddenSheet = workbook.CreateSheet(sheetName); ;
 
+            //循环将数据填入 数据校验sheet 中
             for (int i = 0, length = dropDownList.Count; i < length; i++)
             {
-                string name = dropDownList[i];
+                string value = dropDownList[i];
                 IRow row = hiddenSheet.CreateRow(i);
                 ICell cell = row.CreateCell(0);
-                cell.SetCellValue(name);
+                cell.SetCellValue(value);
             }
+
+            //创建单元格范围
             IName namedCell = workbook.CreateName();
             namedCell.NameName = sheetName;
             namedCell.RefersToFormula = sheetName + "!$A$1:$A$" + dropDownList.Count;
+
+            //数据校验帮助类
             XSSFDataValidationHelper dvHelper = new(sheet);
+
+            //创建需要校验的数据
             XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint)dvHelper.CreateFormulaListConstraint(sheetName);
+
+            //被数据校验的单元格范围
             CellRangeAddressList addressList = new(startRow, lastRow, column, column);
+
+            //创建数据校验
             XSSFDataValidation validation = (XSSFDataValidation)dvHelper.CreateValidation(dvConstraint, addressList);
+
+            //获取 数据校验sheet 的索引
             int hiddenSheetIndex = workbook.GetSheetIndex(hiddenSheet);
+
+            //设置该 数据校验sheet 为隐藏sheet
             workbook.SetSheetHidden(hiddenSheetIndex, SheetState.Hidden);
+
+            //添加数据校验
             sheet.AddValidationData(validation);
         }
     }
