@@ -46,6 +46,7 @@ namespace FastAdminAPI.Email.Extensions
         /// <exception cref="Exception"></exception>
         private static TextFormat ConvertTextFormat(EmailTextFormat format)
         {
+            //将文本模式进行转换，转换为MimeKit的枚举类型
             return format switch
             {
                 EmailTextFormat.Plain => TextFormat.Plain,
@@ -67,25 +68,30 @@ namespace FastAdminAPI.Email.Extensions
         {
             try
             {
-                var message = new MimeMessage();
+                MimeMessage message = new();
 
+                //发送人
                 message.From.Add(new MailboxAddress(emailModel.FromName, emailModel.FromAddress));
 
+                //接收人
                 message.To.Add(new MailboxAddress(emailModel.ToName, emailModel.ToAddress));
 
+                //抄送人
                 if (!string.IsNullOrEmpty(emailModel.CCAddress))
                 {
                     message.Cc.Add(new MailboxAddress(emailModel.CCName, emailModel.CCAddress));
                 }
 
+                //主题
                 message.Subject = emailModel.Subject;
 
+                //内容
                 message.Body = new TextPart(ConvertTextFormat(emailModel.Format))
                 {
                     Text = @emailModel.Body
                 };
 
-                using var client = new SmtpClient();
+                using SmtpClient client = new();
 
                 client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 
@@ -114,13 +120,16 @@ namespace FastAdminAPI.Email.Extensions
                 {
                     MimeMessage message = new();
 
+                    //发送人
                     message.From.Add(new MailboxAddress(emailModel.FromName, emailModel.FromAddress));
 
+                    //接收人
                     emailModel.ReceiverList.ForEach(item =>
                     {
                         message.To.Add(new MailboxAddress(item.ToName, item.ToAddress));
                     });
 
+                    //抄送人
                     if (emailModel.CCReceiverList?.Count > 0)
                     {
                         emailModel.CCReceiverList.ForEach(item =>
@@ -129,14 +138,16 @@ namespace FastAdminAPI.Email.Extensions
                         });
                     }
 
+                    //主题
                     message.Subject = emailModel.Subject;
 
+                    //内容
                     message.Body = new TextPart(ConvertTextFormat(emailModel.Format))
                     {
                         Text = @emailModel.Body
                     };
 
-                    using var client = new SmtpClient();
+                    using SmtpClient client = new();
 
                     client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 
@@ -170,6 +181,7 @@ namespace FastAdminAPI.Email.Extensions
             emailModel.SmtpServer = !string.IsNullOrWhiteSpace(emailModel.SmtpServer) ? emailModel.SmtpServer : SMTP_SERVER;
             emailModel.SmtpPort = emailModel.SmtpPort != null ? emailModel.SmtpPort : SMTP_PORT;
 
+            //同步转异步
             await Task.Run(() =>
             {
                 SendSmtpEmail(emailModel);
@@ -186,6 +198,7 @@ namespace FastAdminAPI.Email.Extensions
             emailModel.SmtpServer = !string.IsNullOrWhiteSpace(emailModel.SmtpServer) ? emailModel.SmtpServer : SMTP_SERVER;
             emailModel.SmtpPort = emailModel.SmtpPort != null ? emailModel.SmtpPort : SMTP_PORT;
 
+            //同步转异步
             await Task.Run(() =>
             {
                 SendMultipleSmtpEmail(emailModel);
@@ -193,7 +206,7 @@ namespace FastAdminAPI.Email.Extensions
 
         }
         /// <summary>
-        /// 从配置中心获取信息,批量发送邮件
+        /// 默认配置发送邮件
         /// </summary>
         /// <param name="configuration"></param>
         /// <param name="subject"></param>
@@ -222,6 +235,7 @@ namespace FastAdminAPI.Email.Extensions
                 ToAllAddress.ForEach(item => { receivers.Add(new SendEmailReceiveModel { ToAddress = item }); });
                 emailModel.ReceiverList = receivers;
 
+                //同步转异步
                 await Task.Run(() =>
                 {
                     SendMultipleSmtpEmail(emailModel);
