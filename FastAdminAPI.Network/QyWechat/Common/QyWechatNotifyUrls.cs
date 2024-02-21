@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-
-namespace FastAdminAPI.Network.QyWechat.Common
+﻿namespace FastAdminAPI.Network.QyWechat.Common
 {
     /// <summary>
     /// 企业微信通知地址
@@ -23,6 +21,6 @@ namespace FastAdminAPI.Network.QyWechat.Common
         /// <summary>
         /// 测试通知地址
         /// </summary>
-        public const string NOTIFY_TEST_URL = "/cluesNotice";
+        public const string NOTIFY_TEST_URL = "/notice";
     }
 }

@@ -17,7 +17,7 @@ namespace FastAdminAPI.Network.Config
         {
             ContentSerializer = new NewtonsoftJsonContentSerializer(new JsonSerializerSettings
             {
-                ContractResolver = new DefaultContractResolver()
+                ContractResolver = new DefaultContractResolver() //使用newtonsoft.json
             }),
             //ExceptionFactory = (response) => throw new UserOperationException($"code:{response.StatusCode}, message:{response.RequestMessage}")
         };
@@ -30,11 +30,19 @@ namespace FastAdminAPI.Network.Config
         /// <returns></returns>
         public static IServiceCollection AddRefitClients(this IServiceCollection services, IConfiguration configuration)
         {
-            // Core
+            //qywechat
             services.AddRefitClient<IQyWechatApi>(REFIT_SETTINGS)
                     .ConfigureHttpClient(c =>
                     {
-                        c.BaseAddress = new Uri(configuration.GetValue<string>("FastAdminAPI.Core.Url")); //本地启动
+                        c.BaseAddress = new Uri(configuration.GetValue<string>("FastAdminAPI.Core.Url")); //appsettings配置
+                        c.Timeout = TimeSpan.FromSeconds(60);
+                    });
+
+            //email
+            services.AddRefitClient<IEmailApi>(REFIT_SETTINGS)
+                    .ConfigureHttpClient(c =>
+                    {
+                        c.BaseAddress = new Uri(configuration.GetValue<string>("FastAdminAPI.Core.Url")); //appsettings配置
                         c.Timeout = TimeSpan.FromSeconds(60);
                     });
 

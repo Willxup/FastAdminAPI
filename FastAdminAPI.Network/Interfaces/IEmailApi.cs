@@ -25,7 +25,7 @@ namespace FastAdminAPI.Network.Interfaces
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [Get("/api/EmailApi/SendEmailByApollo")]
-        Task SendEmailByApollo([Query] string subject, [Query] string body);
+        [Get("/api/EmailApi/SendEmailByDefault")]
+        Task SendEmailByDefault([Query] string subject, [Query] string body);
     }
 }

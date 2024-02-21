@@ -94,7 +94,7 @@ namespace FastAdminAPI.CAP.Extensions
 
                     //发送邮件
                     var emailApi = message.ServiceProvider.GetRequiredService<IEmailApi>();
-                    await emailApi.SendEmailByApollo(title, body);
+                    await emailApi.SendEmailByDefault(title, body);
                 }
                 catch (Exception ex)
                 {

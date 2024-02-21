@@ -21,11 +21,11 @@ namespace FastAdminAPI.Network.QyWechat.Config
         /// <summary>
         /// 获取访问令牌
         /// </summary>
-        public const string GET_ACCESS_TOKEN = $" /cgi-bin/gettoken";
+        public const string GET_ACCESS_TOKEN = $"/cgi-bin/gettoken";
         /// <summary>
         /// 发送应用消息
         /// </summary>
-        public const string SEND_MESSAGE = $" /cgi-bin/message/send";
+        public const string SEND_MESSAGE = $"/cgi-bin/message/send";
         /// <summary>
         /// 获取企业微信UserId
         /// </summary>
