@@ -151,6 +151,41 @@ try
 
     #endregion
 
+    #region 例子：获取IOC容器注入的对象
+    ////1.refit
+    //var email1Api = RestService.For<IEmailApi>("http://localhost:9000", RefitConfigExtension.REFIT_SETTINGS);
+
+    //var result1 = email1Api.SendEmailByDefault("test1", "test refit");
+
+    //result1.Wait();
+
+    //Console.WriteLine(email1Api.GetHashCode());
+
+    ////2.serviceProvider
+    //var email2Api = app.Services.GetService<IEmailApi>();
+
+    //var result2 = email2Api.SendEmailByDefault("test2", "test refit");
+
+    //result2.Wait();
+
+    //Console.WriteLine(email2Api.GetHashCode());
+
+    ////3.autofac
+    //var autofac = app.Services.GetAutofacRoot();
+
+    //var scope = autofac.BeginLifetimeScope();
+
+    //var email3Api = scope.Resolve<IEmailApi>();
+
+    //var result3 = email3Api.SendEmailByDefault("test3", "test refit");
+
+    //result3.Wait();
+
+    //Console.WriteLine(email3Api.GetHashCode());
+
+    //scope.Dispose();
+    #endregion
+
     app.Run();
 
 }
