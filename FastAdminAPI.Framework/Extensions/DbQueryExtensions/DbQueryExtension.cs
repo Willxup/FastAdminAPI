@@ -53,25 +53,31 @@ namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
             {
                 foreach (var prop in props)
                 {
+                    //校验是否为忽略字段
                     if (prop.GetCustomAttributes(typeof(DbIgnoreFieldAttribute), true).Length > 0)
                     {
                         continue;
                     }
+                    //校验是否标记查询
                     if (prop.GetCustomAttributes(typeof(DbQueryFieldAttribute), true).Length == 0)
                     {
                         continue;
                     }
+                    //校验是否多次标记
                     if (prop.GetCustomAttributes(typeof(DbQueryOperatorAttribute), true).Length == 0)
                     {
                         continue;
                     }
 
+                    //获取属性值
                     var value = prop.GetValue(search);
 
+                    //null校验
                     if (value is null)
                     {
                         continue;
                     }
+                    //空字符串校验
                     if (value is string stringValue && string.IsNullOrWhiteSpace(stringValue))
                     {
                         continue;
@@ -79,15 +85,18 @@ namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
 
                     ConditionalModel condition = new();
 
-                    bool isDateQuery = false; //是否为日期查询，用于string类型
+                    //是否为日期查询，用于string类型
+                    bool isDateQuery = false; 
                     string timeSuffix = "";
 
+                    //表别名
                     if (prop.IsDefined(typeof(DbTableAliasAttribute), true))
                     {
                         var attr = prop.GetCustomAttributes(typeof(DbTableAliasAttribute), true)[0] as DbTableAliasAttribute;
                         condition.FieldName += attr.GetTableAlias() + ".";
                     }
 
+                    //表字段名
                     if (prop.IsDefined(typeof(DbQueryFieldAttribute), true))
                     {
                         var attr = prop.GetCustomAttributes(typeof(DbQueryFieldAttribute), true)[0] as DbQueryFieldAttribute;
@@ -108,14 +117,17 @@ namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
                         }
                     }
 
+                    //操作符
                     if (prop.IsDefined(typeof(DbQueryOperatorAttribute), true))
                     {
                         var attr = prop.GetCustomAttributes(typeof(DbQueryOperatorAttribute), true)[0] as DbQueryOperatorAttribute;
                         condition.ConditionalType = attr.GetDbOperator();
                     }
 
+                    //字段类型
                     Type propType = prop.PropertyType;
 
+                    //字符串
                     if (propType == typeof(string))
                     {
                         condition.CSharpTypeName = typeof(string)?.Name;
@@ -127,26 +139,31 @@ namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
                             condition.FieldValue += $" {timeSuffix}";
                         }
                     }
+                    //时间
                     else if (propType == typeof(DateTime) || propType == typeof(DateTime?))
                     {
                         condition.CSharpTypeName = typeof(DateTime)?.Name;
                         condition.FieldValue = ((DateTime)value).ToFormattedString();
                     }
+                    //基础类型
                     else if (propType.IsPrimitive)
                     {
                         condition.CSharpTypeName = propType.Name;
                         condition.FieldValue = value + "";
                     }
+                    //数组
                     else if (value is Array array)
                     {
                         condition.CSharpTypeName = propType.GetElementType()?.Name; //获取泛型类型
                         condition.FieldValue = string.Join(",", GetArrayElements(array));
                     }
+                    //集合
                     else if (value is IEnumerable enumerable)
                     {
                         condition.CSharpTypeName = propType.GetGenericArguments()?[0]?.Name; //获取泛型类型
                         condition.FieldValue = string.Join(",", GetListElements(enumerable));
                     }
+                    //其他类型
                     else
                     {
                         condition.CSharpTypeName = propType.Name;
@@ -175,20 +192,25 @@ namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
             {
                 foreach (var prop in props)
                 {
+                    //校验是否为忽略字段
                     if (prop.GetCustomAttributes(typeof(DbIgnoreFieldAttribute), true).Length > 0)
                     {
                         continue;
                     }
+                    //校验是否标记查询
                     if (prop.GetCustomAttributes(typeof(DbQueryAttribute), true).Length == 0)
                     {
                         continue;
                     }
+                    //校验是否多次标记
                     if (prop.GetCustomAttributes(typeof(DbQueryAttribute), true).Length > 1)
                     {
                         throw new UserOperationException("[DbQueryFieldAttribute]和[DbSubQueryAttribute]不能同时使用!");
                     }
 
                     string sql = string.Empty;
+                    
+                    //表别名
                     if (prop.IsDefined(typeof(DbTableAliasAttribute), true))
                     {
                         var attr = prop.GetCustomAttributes(typeof(DbTableAliasAttribute), true)[0] as DbTableAliasAttribute;
@@ -200,21 +222,42 @@ namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
                         sql += "`" + attr.GetTableAlias() + "`" + ".";
                     }
 
+                    //表字段名
                     if (prop.IsDefined(typeof(DbQueryFieldAttribute), true))
                     {
                         var attr = prop.GetCustomAttributes(typeof(DbQueryFieldAttribute), true)[0] as DbQueryFieldAttribute;
-                        sql += "`" + attr.GetFieldName() + "`";
+
+                        string fieldName = attr.GetFieldName();
+
+                        if (fieldName.ToUpper().Contains("SELECT") || fieldName.ToUpper().Contains("FROM") || fieldName.ToUpper().Contains("WHERE"))
+                        {
+                            throw new UserOperationException("请使用[DbSubQueryAttribute]子查询!");
+                        }
+
+                        //如果为布尔值，转换为布尔值
+                        if (attr.IsBoolValue() && attr.GetTrueValue() != null)
+                        {
+                            sql = "IF(" + sql + "`" + fieldName + "`" + $" = {attr.GetTrueValue()}, " + "TRUE, FALSE)";
+                        }
+                        else
+                        {
+                            sql += "`" + fieldName + "`";
+                        }
                     }
 
+                    //子查询
                     if (prop.IsDefined(typeof(DbSubQueryAttribute), true))
                     {
                         var attr = prop.GetCustomAttributes(typeof(DbSubQueryAttribute), true)[0] as DbSubQueryAttribute;
+
                         sql += "(" + attr.GetSubQuery() + ")";
                     }
 
+                    //表字段或子查询 别名
                     if (!string.IsNullOrEmpty(sql))
                     {
                         sql += " AS " + prop.Name + ", ";
+
                         select.Append(sql);
                     }
                 }
@@ -269,9 +312,9 @@ namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
         public static ISugarQueryable<T> OrderBy<T, TSearch>(this ISugarQueryable<T> queryable, TSearch search)
             where TSearch : DbQueryPagingModel
         {
+            //指定排序
             if (search.SortFields?.Count > 0)
             {
-                var query = queryable;
                 foreach (var item in search.SortFields)
                 {
                     if (!string.IsNullOrEmpty(item.Key) && !string.IsNullOrEmpty(item.Value))
@@ -279,24 +322,26 @@ namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
                         if (DbCommonUtils.IsDbSortWay(item.Value))
                             throw new UserOperationException("排序方式错误!");
 
-                        query = query.OrderBy($"{item.Key} {item.Value}");
+                        queryable = queryable.OrderBy($"{item.Key} {item.Value}");
                     }
                 }
-                return query;
             }
+            //默认排序(特性指定)
             else
             {
                 object[] sort = search.GetType().GetCustomAttributes(typeof(DbDefaultOrderByAttribute), true);
+                
                 if (sort?.Length > 0)
                 {
-                    var query = queryable;
                     foreach (var item in sort)
                     {
                         var attr = item as DbDefaultOrderByAttribute;
-                        query = query.OrderBy($"{attr.GetOrderField()} {attr.GetSortWay()}");
+
+                        queryable = queryable.OrderBy($"{attr.GetOrderField()} {attr.GetSortWay()}");
                     }
                 }
             }
+
             return queryable;
         }
         #endregion

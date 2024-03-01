@@ -8,6 +8,9 @@ namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
     [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
     public class DbSubQueryAttribute : DbQueryAttribute
     {
+        /// <summary>
+        /// 子查询
+        /// </summary>
         private readonly string _subQuery;
 
         /// <summary>
@@ -19,6 +22,10 @@ namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
             _subQuery = subQuery;
         }
 
+        /// <summary>
+        /// 获取子查询
+        /// </summary>
+        /// <returns></returns>
         public string GetSubQuery()
         {
             return _subQuery;

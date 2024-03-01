@@ -8,7 +8,13 @@ namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class DbDefaultOrderByAttribute : Attribute
     {
+        /// <summary>
+        /// 排序字段
+        /// </summary>
         private readonly string _orderField;
+        /// <summary>
+        /// 排序规则
+        /// </summary>
         private readonly DbSortWay _sortWay;
 
         /// <summary>
@@ -22,11 +28,18 @@ namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
             _sortWay = sortWay;
         }
 
-
+        /// <summary>
+        /// 获取排序字段
+        /// </summary>
+        /// <returns></returns>
         public string GetOrderField()
         {
             return _orderField;
         }
+        /// <summary>
+        /// 获取排序规则
+        /// </summary>
+        /// <returns></returns>
         public DbSortWay GetSortWay()
         {
             return _sortWay;
