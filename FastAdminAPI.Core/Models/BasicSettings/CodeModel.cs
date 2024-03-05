@@ -1,15 +1,16 @@
 ﻿using FastAdminAPI.Common.Enums;
-using FastAdminAPI.Framework.Extensions;
-using FastAdminAPI.Framework.Extensions.DbOperationExtensions;
-using FastAdminAPI.Framework.Extensions.DbQueryExtensions;
+using FastAdminAPI.Framework.Extensions.Models;
+using Newtonsoft.Json;
+using SqlSugar.Attributes.Extension.Common;
+using SqlSugar.Attributes.Extension.Extensions.Attributes.Operation;
+using SqlSugar.Attributes.Extension.Extensions.Attributes.Query;
 using System;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
 
 namespace FastAdminAPI.Core.Models.BasicSettings
 {
     #region 查询
-    public class CodePageSearch : DbQueryPagingModel
+    public class CodePageSearch : DbQueryBaseModel
     {
         /// <summary>
         /// 分组代号

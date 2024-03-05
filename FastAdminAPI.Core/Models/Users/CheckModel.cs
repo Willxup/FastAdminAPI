@@ -1,7 +1,8 @@
 ﻿using FastAdminAPI.Common.Attributes.CheckValidators;
 using FastAdminAPI.Common.Enums;
-using FastAdminAPI.Framework.Extensions;
-using FastAdminAPI.Framework.Extensions.DbQueryExtensions;
+using FastAdminAPI.Framework.Extensions.Models;
+using SqlSugar.Attributes.Extension.Common;
+using SqlSugar.Attributes.Extension.Extensions.Attributes.Query;
 using System;
 using System.Collections.Generic;
 
@@ -11,7 +12,7 @@ namespace FastAdminAPI.Core.Models.Users
 
     #region 查询类
     [DbDefaultOrderBy("S12_CreateTime", DbSortWay.DESC)]
-    public class CheckPageSearch : DbQueryPagingModel
+    public class CheckPageSearch : DbQueryBaseModel
     {
         /// <summary>
         /// 申请大类 0项目管理 1代理管理 2线索 3客户
@@ -122,7 +123,7 @@ namespace FastAdminAPI.Core.Models.Users
 
     #region 审批记录
     [DbDefaultOrderBy("S13.S13_ApprovalTime", DbSortWay.DESC)]
-    public class CheckRecordPageSearch : DbQueryPagingModel
+    public class CheckRecordPageSearch : DbQueryBaseModel
     {
         /// <summary>
         /// 申请大类 0项目管理 1代理管理 2线索 3客户

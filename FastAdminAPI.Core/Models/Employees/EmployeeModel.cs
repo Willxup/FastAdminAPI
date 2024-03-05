@@ -1,11 +1,12 @@
 ﻿using FastAdminAPI.Common.Enums;
-using FastAdminAPI.Framework.Extensions.DbOperationExtensions;
-using FastAdminAPI.Framework.Extensions.DbQueryExtensions;
+using SqlSugar.Attributes.Extension.Extensions;
+using FastAdminAPI.Framework.Extensions.Models;
+using Newtonsoft.Json;
+using SqlSugar.Attributes.Extension.Extensions.Attributes.Operation;
+using SqlSugar.Attributes.Extension.Extensions.Attributes.Query;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
-using FastAdminAPI.Framework.Extensions;
 
 namespace FastAdminAPI.Core.Models.Employee
 {
@@ -14,7 +15,7 @@ namespace FastAdminAPI.Core.Models.Employee
     #region 查询
 
     #region 列表
-    public class EmployeePageSearch : DbQueryPagingModel
+    public class EmployeePageSearch : DbQueryBaseModel
     {
         /// <summary>
         /// 姓名

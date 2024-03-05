@@ -2,9 +2,9 @@
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.SystemUtilities;
-using FastAdminAPI.Framework.Extensions.DbOperationExtensions;
-using FastAdminAPI.Framework.Extensions.DbQueryExtensions;
+using FastAdminAPI.Framework.Extensions.Models;
 using SqlSugar;
+using SqlSugar.Attributes.Extension.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +29,7 @@ namespace FastAdminAPI.Framework.Extensions
         /// <param name="result">查询结果</param>
         /// <returns></returns>
         public static async Task<List<TResult>> ToListAsync<T, TSearch, TResult>(this ISugarQueryable<T> queryable, TSearch search, TResult result)
-            where TSearch : DbQueryPagingModel
+            where TSearch : DbQueryBaseModel
         {
             return await queryable.Where(search).Select(result).OrderBy(search).ToListAsync();
         }
@@ -80,7 +80,7 @@ namespace FastAdminAPI.Framework.Extensions
         /// <param name="result">查询结果</param>
         /// <returns></returns>
         public static async Task<ResponseModel> ToListResultAsync<T, TSearch, TResult>(this ISugarQueryable<T> queryable, TSearch search, TResult result)
-            where TSearch : DbQueryPagingModel
+            where TSearch : DbQueryBaseModel
         {
             try
             {
@@ -198,7 +198,7 @@ namespace FastAdminAPI.Framework.Extensions
         /// <param name="errorMessage">错误信息</param>
         /// <returns></returns>
         public static async Task<ResponseModel> InsertResultAsync<TDto, TEntity>(this SqlSugarScope db, TDto dto, string errorMessage = null)
-            where TDto : DbOperationBaseModel
+            where TDto : DbOperationBaseModel, new()
             where TEntity : class, new()
         {
             return await db.Insertable<TDto, TEntity>(dto).ExecuteAsync(errorMessage);
@@ -290,7 +290,7 @@ namespace FastAdminAPI.Framework.Extensions
         /// <param name="errorMessage">错误信息</param>
         /// <returns></returns>
         public static async Task<ResponseModel> UpdateResultAsync<TDto, TEntity>(this SqlSugarScope db, TDto dto, bool isCheckAffectedRows = true, string errorMessage = null)
-            where TDto : DbOperationBaseModel
+            where TDto : DbOperationBaseModel, new()
             where TEntity : class, new()
         {
             return await db.Updateable<TDto, TEntity>(dto).ExecuteAsync(isCheckAffectedRows, errorMessage);
@@ -333,7 +333,7 @@ namespace FastAdminAPI.Framework.Extensions
         /// <param name="errorMessage">错误信息</param>
         /// <returns></returns>
         public static async Task<ResponseModel> SoftDeleteAsync<TDto, TEntity>(this SqlSugarScope db, TDto dto, bool isCheckAffectedRows = true, string errorMessage = null)
-            where TDto : DbOperationBaseModel
+            where TDto : DbOperationBaseModel, new()
             where TEntity : class, new()
         {
             return await db.Updateable<TDto, TEntity>(dto).ExecuteAsync(isCheckAffectedRows, errorMessage);

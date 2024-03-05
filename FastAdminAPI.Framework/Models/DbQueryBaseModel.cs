@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
+﻿namespace FastAdminAPI.Framework.Extensions.Models
 {
-    public class DbQueryPagingModel
+    public class DbQueryBaseModel
     {
         /// <summary>
         /// 第几页（从1开始）
@@ -12,10 +10,6 @@ namespace FastAdminAPI.Framework.Extensions.DbQueryExtensions
         /// 返回的每页行数
         /// </summary>
         public int? Size { get; set; } = null;
-        /// <summary>
-        /// 排序 {排序字段:排序方式}
-        /// </summary>
-        public Dictionary<string, string> SortFields { get; set; } = null;
         /// <summary>
         /// 偏移
         /// </summary>

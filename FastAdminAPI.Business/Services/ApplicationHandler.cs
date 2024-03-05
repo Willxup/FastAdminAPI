@@ -15,6 +15,7 @@ using FastAdminAPI.Network.QyWechat.Model;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using SqlSugar;
+using SqlSugar.Attributes.Extension.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,15 +1,15 @@
 ﻿using FastAdminAPI.Common.Enums;
-using FastAdminAPI.Framework.Extensions.DbOperationExtensions;
-using FastAdminAPI.Framework.Extensions.DbQueryExtensions;
+using FastAdminAPI.Framework.Extensions.Models;
+using Newtonsoft.Json;
+using SqlSugar.Attributes.Extension.Extensions.Attributes.Operation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
 
 namespace FastAdminAPI.Core.Models.BasicSettings
 {
     #region 查询
-    public class CheckProcessPageSearch : DbQueryPagingModel
+    public class CheckProcessPageSearch : DbQueryBaseModel
     {
         /// <summary>
         /// 审批类型 关联S99_Code表

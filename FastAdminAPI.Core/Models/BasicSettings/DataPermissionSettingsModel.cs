@@ -1,14 +1,17 @@
-﻿using FastAdminAPI.Framework.Extensions;
-using FastAdminAPI.Framework.Extensions.DbQueryExtensions;
+﻿
+using FastAdminAPI.Framework.Extensions.Models;
+using Newtonsoft.Json;
+using SqlSugar.Attributes.Extension.Common;
+using SqlSugar.Attributes.Extension.Extensions;
+using SqlSugar.Attributes.Extension.Extensions.Attributes.Query;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
 
 namespace FastAdminAPI.Core.Models.BasicSettings
 {
     #region 查询
     [DbDefaultOrderBy("S10_CreateTime", DbSortWay.DESC)]
-    public class DataPermissionSettingsPageSearch : DbQueryPagingModel { }
+    public class DataPermissionSettingsPageSearch : DbQueryBaseModel { }
     public class DataPermissionSettingsPageResult
     {
         /// <summary>

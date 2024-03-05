@@ -1,9 +1,10 @@
 ﻿using FastAdminAPI.Common.Enums;
 using FastAdminAPI.Common.JsonTree;
-using FastAdminAPI.Framework.Extensions.DbOperationExtensions;
+using FastAdminAPI.Framework.Extensions.Models;
+using Newtonsoft.Json;
+using SqlSugar.Attributes.Extension.Extensions.Attributes.Operation;
 using System;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
 
 namespace FastAdminAPI.Core.Models.Posts
 {

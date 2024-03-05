@@ -1,12 +1,14 @@
 ﻿using FastAdminAPI.Common.Enums;
-using FastAdminAPI.Framework.Extensions;
-using FastAdminAPI.Framework.Extensions.DbOperationExtensions;
-using FastAdminAPI.Framework.Extensions.DbQueryExtensions;
+using SqlSugar.Attributes.Extension.Extensions;
+using SqlSugar.Attributes.Extension.Extensions.Attributes.Operation;
+using SqlSugar.Attributes.Extension.Extensions.Attributes.Query;
 using Mapster;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
+using SqlSugar.Attributes.Extension.Common;
+using FastAdminAPI.Framework.Extensions.Models;
 
 namespace FastAdminAPI.Core.Models.Test
 {
@@ -29,7 +31,7 @@ namespace FastAdminAPI.Core.Models.Test
 
     [DbDefaultOrderBy("a.S99_CreateTime", DbSortWay.DESC)]
     [DbDefaultOrderBy("b.S99_CodeId", DbSortWay.ASC)]
-    public class CodePageSearch : DbQueryPagingModel
+    public class CodePageSearch : DbQueryBaseModel
     {
         /// <summary>
         /// 分组代号

@@ -184,13 +184,15 @@ Extensions/      ORM扩展
 #### 查询
 ```C#
 //自动包装映射
-await _dbContext.Queryable<Table_Name>().ToAutoBoxResultAsync(search, new Result());
+await _dbContext.Queryable<Table_Name>().ToListResultAsync(search, new Result());
 
 //自动包装映射，指定表别名
-await _dbContext.Queryable<Table_Name>("t").ToAutoBoxResultAsync(search, new Result());
+await _dbContext.Queryable<Table_Name>("t").ToListResultAsync(search, new Result());
 ```
 
 ```C#
+[DbDefaultOrderBy("t_Name", DbSortWay.DESC)]
+//[DbDefaultOrderBy("t.t_Name", DbSortWay.DESC)]
 public class Search
 {
 	//[DbTableAlias("t")] //表别名，多表关联使用，单表需要查询时指定表别名
@@ -211,8 +213,8 @@ public class Result
 	[DbQueryField("t_Name")] //字段名
 	public string Name { get; set; }
     //子查询，如果指定了表别名，可以使用表别名，否则直接写表名
-	//[DbSubQuery("(SELECT name FROM Table_Name2 WHERE t.t_Id = Id ")]
-    [DbSubQuery("(SELECT name FROM Table_Name2 WHERE Table_Name.t_Id = Id ")]
+	//[DbSubQuery("(SELECT name FROM Table_Name2 WHERE t.t_Id = Id)")]
+    [DbSubQuery("(SELECT name FROM Table_Name2 WHERE Table_Name.t_Id = Id)")]
     public string OtherName { get; set; }
 }
 ```
@@ -227,7 +229,8 @@ t_Id as Id,
 t_Name as Name, 
 (SELECT name FROM Table_Name2 WHERE Table_Name.t_Id = Id) AS OtherName
 FROM Table_Name
-WHERE t_Name LIKE '%@Name%' AND t_CodeId IN (@CodeIds);
+WHERE t_Name LIKE '%@Name%' AND t_CodeId IN (@CodeIds)
+ORDER BY t_Name DESC;
 ```
 
 - 指定表别名查询
@@ -238,7 +241,8 @@ t.t_Id as Id,
 t.t_Name as Name,
 (SELECT name FROM Table_Name2 WHERE t.t_Id = Id) AS OtherName
 FROM Table_Name t
-WHERE t.t_Name LIKE '%@Name%' AND t.t_CodeId IN (@CodeIds);
+WHERE t.t_Name LIKE '%@Name%' AND t.t_CodeId IN (@CodeIds)
+ORDER BY t.t_Name DESC;
 ```
 
 
