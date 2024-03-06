@@ -81,7 +81,6 @@ BASE/                 返回统一参数，通用参数等
 Converters/           对象转换
 Cryptions/            加解密
 Datetime/             时间帮助类
-Email/                发送邮件Model类
 Enums/                通用枚举
 Extensions/           通用配置
 Filters/              全局过滤
@@ -170,7 +169,7 @@ app.UseJwtTokenAuth();
 
 ## FastAdminAPI.Framework
 
-ORM框架，基于[DotNetNext/SqlSugar开源项目](https://github.com/DotNetNext/SqlSugar)进行开发。`sqlsugar`的用法直接看官方文档即可。
+ORM框架，基于[DotNetNext/SqlSugar开源项目](https://github.com/DotNetNext/SqlSugar)进行开发，`sqlsugar`的用法直接看官方文档即可。另外引入了[SqlSugar.Attributes](https://github.com/Willxup/SqlSugar.Attributes)类库，只需要配置DTO模型，即可自动拼接SQL并映射查询条件及结果，非常方便。下面的扩展也是基于这个类库做的进一步封装。
 
 ### 结构
 ```bash
@@ -193,7 +192,7 @@ await _dbContext.Queryable<Table_Name>("t").ToListResultAsync(search, new Result
 ```C#
 [DbDefaultOrderBy("t_Name", DbSortWay.DESC)]
 //[DbDefaultOrderBy("t.t_Name", DbSortWay.DESC)]
-public class Search
+public class Search : DbQueryBaseModel
 {
 	//[DbTableAlias("t")] //表别名，多表关联使用，单表需要查询时指定表别名
 	[DbQueryField("t_Name")] //字段名
@@ -266,7 +265,7 @@ await _dbContext.InsertResultAsync<AddModel, Table_Name>(model)
 ```
 
 ```C#
-public class AddModel
+public class AddModel : DbOperationBaseModel
 {
 	[DbOperationField("t_Name")]
 	public string Name { get; set; }
@@ -288,7 +287,7 @@ await _dbContext.UpdateResultAsync<EditModel, Table_Name>(model);
 ```
 
 ```C#
-public class EditModel
+public class EditModel : DbOperationBaseModel
 {
 	[DbOperationField("t_Id", true)] //true代表更新条件
 	public long? Id { get; set; }
@@ -314,7 +313,7 @@ await _dbContext.SoftDeleteAsync<DelModel, Table_Name>(model);
 ```
 
 ```C#
-public class DelModel
+public class DelModel : DbOperationBaseModel
 {
 	[DbOperationField("t_Id", true)] //true代表更新条件
 	public long? Id { get; set; }
