@@ -1,4 +1,4 @@
-﻿using FastAdminAPI.Common.Email;
+﻿using FastAdminAPI.Network.Models.Email;
 using Refit;
 using System.Threading.Tasks;
 

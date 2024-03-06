@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace FastAdminAPI.Common.Email
+namespace FastAdminAPI.Network.Models.Email
 {
     #region 内部使用
     public enum EmailTextFormat

@@ -1,6 +1,6 @@
-﻿using FastAdminAPI.Common.Email;
-using FastAdminAPI.Core.Controllers.BASE;
+﻿using FastAdminAPI.Core.Controllers.BASE;
 using FastAdminAPI.Email.Extensions;
+using FastAdminAPI.Network.Models.Email;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;

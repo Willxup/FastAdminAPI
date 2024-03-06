@@ -223,14 +223,14 @@
             构造
             </summary>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.EmailApiController.SendSmtpEmail(FastAdminAPI.Common.Email.SendSmtpEmailModel)">
+        <member name="M:FastAdminAPI.Core.Controllers.EmailApiController.SendSmtpEmail(FastAdminAPI.Network.Models.Email.SendSmtpEmailModel)">
             <summary>
             发送Smtp邮件
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.EmailApiController.SendMultipleSmtpEmail(FastAdminAPI.Common.Email.SendMultipleSmtpEmailModel)">
+        <member name="M:FastAdminAPI.Core.Controllers.EmailApiController.SendMultipleSmtpEmail(FastAdminAPI.Network.Models.Email.SendMultipleSmtpEmailModel)">
             <summary>
             发送smtp邮件(支持多个收件人及抄送人)
             </summary>
@@ -609,7 +609,7 @@
             <param name="code"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.QyWechatApiController.SendTextMessage(FastAdminAPI.Network.QyWechat.Model.MessageSendModel,System.Int64,System.String)">
+        <member name="M:FastAdminAPI.Core.Controllers.QyWechatApiController.SendTextMessage(FastAdminAPI.Network.Models.QyWechat.MessageSendModel,System.Int64,System.String)">
             <summary>
             发送企业微信文本消息
             </summary>
@@ -618,7 +618,7 @@
             <param name="task"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.QyWechatApiController.SendCardMessage(FastAdminAPI.Network.QyWechat.Model.CardMsgSendModel,System.Int64,System.String)">
+        <member name="M:FastAdminAPI.Core.Controllers.QyWechatApiController.SendCardMessage(FastAdminAPI.Network.Models.QyWechat.CardMsgSendModel,System.Int64,System.String)">
             <summary>
             发送企业微信卡片消息
             </summary>
@@ -1250,7 +1250,7 @@
             <param name="code"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IQyWechatApiService.SendTextMessage(FastAdminAPI.Network.QyWechat.Model.MessageSendModel,System.Int64,System.String)">
+        <member name="M:FastAdminAPI.Core.IServices.IQyWechatApiService.SendTextMessage(FastAdminAPI.Network.Models.QyWechat.MessageSendModel,System.Int64,System.String)">
             <summary>
             发送企业微信文本消息
             </summary>
@@ -1259,7 +1259,7 @@
             <param name="task"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IQyWechatApiService.SendCardMessage(FastAdminAPI.Network.QyWechat.Model.CardMsgSendModel,System.Int64,System.String)">
+        <member name="M:FastAdminAPI.Core.IServices.IQyWechatApiService.SendCardMessage(FastAdminAPI.Network.Models.QyWechat.CardMsgSendModel,System.Int64,System.String)">
             <summary>
             发送企业微信卡片消息
             </summary>
@@ -3540,7 +3540,7 @@
             <param name="code"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.QyWechatApiService.SendTextMessage(FastAdminAPI.Network.QyWechat.Model.MessageSendModel,System.Int64,System.String)">
+        <member name="M:FastAdminAPI.Core.Services.QyWechatApiService.SendTextMessage(FastAdminAPI.Network.Models.QyWechat.MessageSendModel,System.Int64,System.String)">
             <summary>
             发送企业微信文本消息
             </summary>
@@ -3549,7 +3549,7 @@
             <param name="task"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.QyWechatApiService.SendCardMessage(FastAdminAPI.Network.QyWechat.Model.CardMsgSendModel,System.Int64,System.String)">
+        <member name="M:FastAdminAPI.Core.Services.QyWechatApiService.SendCardMessage(FastAdminAPI.Network.Models.QyWechat.CardMsgSendModel,System.Int64,System.String)">
             <summary>
             发送企业微信卡片消息
             </summary>

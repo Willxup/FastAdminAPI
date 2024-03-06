@@ -11,7 +11,7 @@ using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Framework.Entities;
 using FastAdminAPI.Framework.Extensions;
 using FastAdminAPI.Network.Interfaces;
-using FastAdminAPI.Network.QyWechat.Model;
+using FastAdminAPI.Network.Models.QyWechat;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using SqlSugar;

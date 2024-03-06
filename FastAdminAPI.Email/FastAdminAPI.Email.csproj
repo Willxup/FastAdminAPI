@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FastAdminAPI.Common\FastAdminAPI.Common.csproj" />
+    <ProjectReference Include="..\FastAdminAPI.Network\FastAdminAPI.Network.csproj" />
   </ItemGroup>
 
 </Project>

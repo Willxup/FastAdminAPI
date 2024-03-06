@@ -1,4 +1,5 @@
-﻿using FastAdminAPI.Network.QyWechat.Config;
+﻿using FastAdminAPI.Network.Models.QyWechat;
+using FastAdminAPI.Network.QyWechat.Config;
 using FastAdminAPI.Network.QyWechat.Model;
 using Microsoft.AspNetCore.Mvc;
 using Refit;

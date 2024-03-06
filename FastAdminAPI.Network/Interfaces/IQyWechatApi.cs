@@ -1,5 +1,5 @@
 ﻿using FastAdminAPI.Common.BASE;
-using FastAdminAPI.Network.QyWechat.Model;
+using FastAdminAPI.Network.Models.QyWechat;
 using Refit;
 using System.Threading.Tasks;
 

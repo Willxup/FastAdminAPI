@@ -1,7 +1,7 @@
 ﻿using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Core.Controllers.BASE;
 using FastAdminAPI.Core.IServices;
-using FastAdminAPI.Network.QyWechat.Model;
+using FastAdminAPI.Network.Models.QyWechat;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

@@ -2,8 +2,8 @@
 using FastAdminAPI.CAP.Subscribes;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Network.Interfaces;
+using FastAdminAPI.Network.Models.QyWechat;
 using FastAdminAPI.Network.QyWechat.Common;
-using FastAdminAPI.Network.QyWechat.Model;
 using FastAdminAPI.Tasks.Config;
 using Microsoft.Extensions.Configuration;
 using SqlSugar;

@@ -1,5 +1,5 @@
-﻿using FastAdminAPI.Common.Email;
-using FastAdminAPI.Common.Logs;
+﻿using FastAdminAPI.Common.Logs;
+using FastAdminAPI.Network.Models.Email;
 using MailKit.Net.Smtp;
 using MimeKit;
 using MimeKit.Text;
