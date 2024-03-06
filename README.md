@@ -53,17 +53,16 @@ FastAdminAPI.sln         解决方案
 
 # 🌏 项目内容
 
-- [FastAdminAPI.Core](#FastAdminAPI.Core)
-- [FastAdminAPI.Common](#FastAdminAPI.Common)
-- [FastAdminAPI.Framework](#FastAdminAPI.Framework)
-
-- [FastAdminAPI.Business](#FastAdminAPI.Business)
-- [FastAdminAPI.CAP](#FastAdminAPI.CAP)
-- [FastAdminAPI.Email](#FastAdminAPI.Email)
-- [FastAdminAPI.NPOI](#FastAdminAPI.NPOI)
-- [FastAdminAPI.Network](#FastAdminAPI.Network)
-- [FastAdminAPI.EventBus](#FastAdminAPI.EventBus)
-- [FastAdminAPI.Tasks](#FastAdminAPI.Tasks)
+- [FastAdminAPI.Core](#FastAdminAPICore)
+- [FastAdminAPI.Common](#FastAdminAPICommon)
+- [FastAdminAPI.Framework](#FastAdminAPIFramework)
+- [FastAdminAPI.Business](#FastAdminAPIBusiness)
+- [FastAdminAPI.CAP](#FastAdminAPICAP)
+- [FastAdminAPI.Email](#FastAdminAPIEmail)
+- [FastAdminAPI.NPOI](#FastAdminAPINPOI)
+- [FastAdminAPI.Network](#FastAdminAPINetwork)
+- [FastAdminAPI.EventBus](#FastAdminAPIEventBus)
+- [FastAdminAPI.Tasks](#FastAdminAPITasks)
 
 
 
