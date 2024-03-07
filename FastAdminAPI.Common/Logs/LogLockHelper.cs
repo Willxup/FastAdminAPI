@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
-using FastAdminAPI.Common.Converters;
 
 namespace FastAdminAPI.Common.Logs
 {
@@ -13,11 +10,26 @@ namespace FastAdminAPI.Common.Logs
     /// </summary>
     public static class LogLockHelper
     {
+        /// <summary>
+        /// 读写锁
+        /// </summary>
         private static readonly ReaderWriterLockSlim _lock = new();
+
+        /// <summary>
+        /// 写入次数
+        /// </summary>
         private static int _writedCount = 0;
+        /// <summary>
+        /// 失败次数
+        /// </summary>
         private static int _failedCount = 0;
 
-        public static void OutSql2Log(string filename, string[] dataParas)
+        /// <summary>
+        /// 写入日志
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="dataParas"></param>
+        public static void WriteLog(string fileName, params string[] dataParas)
         {
             try
             {
@@ -32,11 +44,11 @@ namespace FastAdminAPI.Common.Logs
                 {
                     Directory.CreateDirectory(path);
                 }
-                if (filename == "RequestResponseLog")
+                if (fileName == "RequestResponseLog")
                 {
-                    filename = DateTime.Now.ToString("yyyyMMdd") + filename;
+                    fileName = DateTime.Now.ToString("yyyyMMdd") + fileName;
                 }
-                var name = filename + ".log";
+                var name = fileName + ".log";
 
                 string logFilePath = Path.Combine(path + name);
 
@@ -48,6 +60,7 @@ namespace FastAdminAPI.Common.Logs
                     );
 
                 File.AppendAllText(logFilePath, logContent);
+
                 _writedCount++;
             }
             catch (Exception e)
@@ -60,26 +73,32 @@ namespace FastAdminAPI.Common.Logs
                 //退出写入模式，释放资源占用
                 //注意：一次请求对应一次释放
                 //若释放次数大于请求次数将会触发异常[写入锁定未经保持即被释放]
-                //若请求处理完成后未释放将会触发异常[此模式不下允许以递归方式获取写入锁定]
+                //若请求处理完成后未释放将会触发异常[此模式下不允许以递归方式获取写入锁定]
                 _lock.ExitWriteLock();
             }
         }
 
-        public static string ReadLog(string Path, Encoding encode)
+        /// <summary>
+        /// 读取日志
+        /// </summary>
+        /// <param name="path">日志路径</param>
+        /// <param name="encode">编码(默认UTF8)</param>
+        /// <returns></returns>
+        public static string ReadLog(string path, Encoding encode = null)
         {
-            string s = "";
+            string log = "";
             try
             {
                 _lock.EnterReadLock();
 
-                if (!File.Exists(Path))
+                if (!File.Exists(path))
                 {
-                    s = null;
+                    log = null;
                 }
                 else
                 {
-                    StreamReader f2 = new(Path, encode);
-                    s = f2.ReadToEnd();
+                    StreamReader f2 = new(path, encode ?? Encoding.UTF8);
+                    log = f2.ReadToEnd();
                     f2.Close();
                     f2.Dispose();
                 }
@@ -92,114 +111,24 @@ namespace FastAdminAPI.Common.Logs
             {
                 _lock.ExitReadLock();
             }
-            return s;
+            return log;
         }
 
-
-        public static List<LogInfo> GetLogData()
-        {
-            List<LogInfo> aopLogs = new();
-            List<LogInfo> excLogs = new();
-            List<LogInfo> sqlLogs = new();
-            List<LogInfo> reqresLogs = new();
-            try
-            {
-                aopLogs = ReadLog(Path.Combine(Directory.GetCurrentDirectory(), "/logs", "/AOPLog.log"), Encoding.UTF8)
-                .Split("--------------------------------")
-                .Where(d => !string.IsNullOrEmpty(d) && d != "\n" && d != "\r\n")
-                .Select(d => new LogInfo
-                {
-                    Datetime = d.Split("|")[0].ToDate(),
-                    Content = d.Split("|")[1]?.Replace("\r\n", "<br>"),
-                    LogColor = "AOP",
-                }).ToList();
-            }
-            catch (Exception)
-            {
-            }
-
-            try
-            {
-                excLogs = ReadLog(Path.Combine(Directory.GetCurrentDirectory(), "logs", $"GlobalExcepLogs_{DateTime.Now:yyyMMdd}.log"), Encoding.UTF8)?
-                      .Split("--------------------------------")
-                      .Where(d => !string.IsNullOrEmpty(d) && d != "\n" && d != "\r\n")
-                      .Select(d => new LogInfo
-                      {
-                          Datetime = (d.Split("|")[0]).Split(',')[0].ToDate(),
-                          Content = d.Split("|")[1]?.Replace("\r\n", "<br>"),
-                          LogColor = "EXC",
-                          Import = 9,
-                      }).ToList();
-            }
-            catch (Exception)
-            {
-            }
-
-            try
-            {
-                sqlLogs = ReadLog(Path.Combine(Directory.GetCurrentDirectory(), "logs", "SqlLog.log"), Encoding.UTF8)
-                      .Split("--------------------------------")
-                      .Where(d => !string.IsNullOrEmpty(d) && d != "\n" && d != "\r\n")
-                      .Select(d => new LogInfo
-                      {
-                          Datetime = d.Split("|")[0].ToDate(),
-                          Content = d.Split("|")[1]?.Replace("\r\n", "<br>"),
-                          LogColor = "SQL",
-                      }).ToList();
-            }
-            catch (Exception)
-            {
-            }
-
-            try
-            {
-                reqresLogs = ReadLog(Path.Combine(Directory.GetCurrentDirectory(), "logs", "RequestResponseLog.log"), Encoding.UTF8)
-                      .Split("--------------------------------")
-                      .Where(d => !string.IsNullOrEmpty(d) && d != "\n" && d != "\r\n")
-                      .Select(d => new LogInfo
-                      {
-                          Datetime = d.Split("|")[0].ToDate(),
-                          Content = d.Split("|")[1]?.Replace("\r\n", "<br>"),
-                          LogColor = "ReqRes",
-                      }).ToList();
-            }
-            catch (Exception)
-            {
-            }
-
-            if (excLogs != null)
-            {
-                aopLogs.AddRange(excLogs);
-            }
-            if (sqlLogs != null)
-            {
-                aopLogs.AddRange(sqlLogs);
-            }
-            if (reqresLogs != null)
-            {
-                aopLogs.AddRange(reqresLogs);
-            }
-            aopLogs = aopLogs.OrderByDescending(d => d.Import).ThenByDescending(d => d.Datetime).Take(100).ToList();
-
-            return aopLogs;
-        }
-
+        /// <summary>
+        /// 获取写入次数
+        /// </summary>
+        /// <returns></returns>
         public static int GetWritedCount()
         {
             return _writedCount;
         }
+        /// <summary>
+        /// 获取失败次数
+        /// </summary>
+        /// <returns></returns>
         public static int GetFailedCount()
         {
             return _failedCount;
         }
-    }
-
-    public class LogInfo
-    {
-        public DateTime Datetime { get; set; }
-        public string Content { get; set; }
-        public string IP { get; set; }
-        public string LogColor { get; set; }
-        public int Import { get; set; } = 0;
     }
 }

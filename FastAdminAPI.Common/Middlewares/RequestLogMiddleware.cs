@@ -148,7 +148,7 @@ namespace FastAdminAPI.Common.Middlewares
                     //debug模式时，不需要写入日志，直接展示在控制台
 #if !DEBUG
                     //写入日志
-                    LogLockHelper.OutSql2Log("RequestResponseLog", new string[] { "Request Data:", content });
+                    LogLockHelper.WriteLog("RequestResponseLog", "Request Data:", content);
 #else
                     //写入控制台
                     ConsoleLog("Request Data", content);
@@ -196,7 +196,7 @@ namespace FastAdminAPI.Common.Middlewares
                     //debug模式时，不需要写入日志，直接展示在控制台
 #if !DEBUG
                     //写入日志
-                    LogLockHelper.OutSql2Log("RequestResponseLog", new string[] { "Response Data:", content });
+                    LogLockHelper.WriteLog("RequestResponseLog", "Response Data:", content);
 #else
                     //写入控制台
                     ConsoleLog("Response Data", content);

@@ -5,13 +5,26 @@ namespace FastAdminAPI.Common.Datetime
     public static class DateTimeHelper
     {
         #region DateTime转换为时间戳
-        public enum TimeStampType { TotalSeconds = 1, TotalMilliseconds = 2 }
+        /// <summary>
+        /// 时间戳类型
+        /// </summary>
+        public enum TimeStampType 
+        {
+            /// <summary>
+            /// 秒
+            /// </summary>
+            Seconds = 1,
+            /// <summary>
+            /// 毫秒
+            /// </summary>
+            Milliseconds = 2 
+        }
         /// <summary>  
         /// DateTime时间格式转换为时间戳 
         /// </summary>  
         /// <param name="time"> DateTime时间格式</param>  
         /// <returns>Unix时间戳格式(默认毫秒)</returns>  
-        public static string ConvertDateToTimeStamp(DateTime time, TimeStampType timeStampType = TimeStampType.TotalMilliseconds)
+        public static string ConvertDateToTimeStamp(DateTime time, TimeStampType timeStampType = TimeStampType.Milliseconds)
         {
             //DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
             //DateTime startTime = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
@@ -20,10 +33,10 @@ namespace FastAdminAPI.Common.Datetime
             double timeStamp = 0;
             switch (timeStampType)
             {
-                case TimeStampType.TotalSeconds:
+                case TimeStampType.Seconds:
                     timeStamp = timeSpan.TotalSeconds;
                     break;
-                case TimeStampType.TotalMilliseconds:
+                case TimeStampType.Milliseconds:
                     timeStamp = timeSpan.TotalMilliseconds;
                     break;
             }
@@ -44,7 +57,7 @@ namespace FastAdminAPI.Common.Datetime
         /// <param name="timestamp">时间戳</param>
         /// <param name="timeStampType">时间戳类型(默认毫秒)</param>
         /// <returns></returns>
-        public static DateTime? ConvertTimeStampToDate(string timestamp, TimeStampType timeStampType = TimeStampType.TotalMilliseconds)
+        public static DateTime? ConvertTimeStampToDate(string timestamp, TimeStampType timeStampType = TimeStampType.Milliseconds)
         {
             DateTime startTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
             DateTime? time = null;
@@ -56,10 +69,10 @@ namespace FastAdminAPI.Common.Datetime
                 {
                     switch (timeStampType)
                     {
-                        case TimeStampType.TotalSeconds:
+                        case TimeStampType.Seconds:
                             time = startTime.AddSeconds(stamp).ToLocalTime();
                             break;
-                        case TimeStampType.TotalMilliseconds:
+                        case TimeStampType.Milliseconds:
                             time = startTime.AddMilliseconds(stamp).ToLocalTime();
                             break;
                     }

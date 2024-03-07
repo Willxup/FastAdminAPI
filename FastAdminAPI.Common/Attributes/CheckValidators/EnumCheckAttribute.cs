@@ -9,23 +9,36 @@ namespace FastAdminAPI.Common.Attributes.CheckValidators
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
     public class EnumCheckAttribute : RequiredAttribute
     {
+        /// <summary>
+        /// 枚举类型
+        /// </summary>
         private readonly Type _enumType;
-        private readonly bool _IsAllowEmpty;
+        /// <summary>
+        /// 是否允许为空
+        /// </summary>
+        private readonly bool _isAllowEmpty;
+
         /// <summary>
         /// 构造
         /// </summary>
         /// <param name="enumType">枚举类</param>
-        /// <param name="IsAllowEmpty">是否允许为空 默认否</param>
-        public EnumCheckAttribute(Type enumType, bool IsAllowEmpty = false)
+        /// <param name="isAllowEmpty">是否允许为空 默认否</param>
+        public EnumCheckAttribute(Type enumType, bool isAllowEmpty = false)
         {
             _enumType = enumType;
-            _IsAllowEmpty = IsAllowEmpty;
+            _isAllowEmpty = isAllowEmpty;
         }
+
+        /// <summary>
+        /// 校验
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public override bool IsValid(object value)
         {
             if (value is null)
             {
-                return _IsAllowEmpty;
+                return _isAllowEmpty;
             }
             if (!_enumType.IsEnum)
             {
