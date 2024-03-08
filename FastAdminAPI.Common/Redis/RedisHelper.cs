@@ -37,27 +37,30 @@ namespace FastAdminAPI.Common.Redis
         /// <summary>
         /// 构造
         /// </summary>
-        /// <param name="Configuration"></param>
-        /// <param name="dbNum"></param>
-        public RedisHelper(IConfiguration Configuration, int? dbNum = null) : this(dbNum, null, Configuration) { }
+        /// <param name="configuration"></param>
+        public RedisHelper(IConfiguration configuration) : this(configuration, null, null) { }
 
         /// <summary>
         /// 构造
         /// </summary>
-        /// <param name="dbNum"></param>
-        /// <param name="readWriteHosts"></param>
-        /// <param name="Configuration"></param>
-        public RedisHelper(int? dbNum, string readWriteHosts, IConfiguration Configuration)
+        /// <param name="configuration">配置</param>
+        /// <param name="dbNum">数据库编号</param>
+        public RedisHelper(IConfiguration configuration, int dbNum) : this(configuration, null, dbNum) { }
+
+        /// <summary>
+        /// 构造
+        /// </summary>
+        /// <param name="configuration">配置</param>
+        /// <param name="connectString">连接字符串</param>
+        /// <param name="dbNum">数据库编号</param>
+        public RedisHelper(IConfiguration configuration, string connectString, int? dbNum)
         {
-            _conn =
-                string.IsNullOrWhiteSpace(readWriteHosts) ?
-                RedisConnectionHelper.Instance(Configuration) :
-                RedisConnectionHelper.GetConnectionMultiplexer(Configuration, readWriteHosts);
+            _configuration = configuration;
 
-            _configuration = Configuration;
+            _conn = RedisConnector.GetInstance(configuration, connectString);
 
-            DATABASE_NUM = dbNum ?? Configuration.GetValue<int>("Redis.DbNum");
-            CUSTOMER_PREFIX_KEY = Configuration.GetValue<string>("Redis.PrefixKey");
+            DATABASE_NUM = dbNum ?? configuration.GetValue<int>("Redis.DbNum");
+            CUSTOMER_PREFIX_KEY = configuration.GetValue<string>("Redis.PrefixKey");
         }
 
         #region 内部方法

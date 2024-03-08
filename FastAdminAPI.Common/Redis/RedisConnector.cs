@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using FastAdminAPI.Common.Logs;
+using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
 using System;
 using System.Collections.Concurrent;
@@ -6,36 +7,47 @@ using System.Collections.Concurrent;
 namespace FastAdminAPI.Common.Redis
 {
     /// <summary>
-    /// 对象管理
+    /// Redis连接
     /// </summary>
-    public static class RedisConnectionHelper
+    public static class RedisConnector
     {
-        private static readonly object Locker = new();
+        /// <summary>
+        /// 对象锁
+        /// </summary>
+        private static readonly object _lock = new();
+        /// <summary>
+        /// 连接实例
+        /// </summary>
         private static ConnectionMultiplexer _instance = null;
-        private static readonly ConcurrentDictionary<string, ConnectionMultiplexer> ConnectionCache = new();
+        /// <summary>
+        /// 连接缓存
+        /// </summary>
+        private static readonly ConcurrentDictionary<string, ConnectionMultiplexer> _connects = new();
 
         /// <summary>
-        /// 单例获取
+        /// 获取实例
         /// </summary>
-        public static ConnectionMultiplexer Instance(IConfiguration Configuration)
+        /// <param name="Configuration">配置</param>
+        /// <param name="connectString">连接字符串</param>
+        /// <returns></returns>
+        public static ConnectionMultiplexer GetInstance(IConfiguration Configuration, string connectString = "")
         {
-           
             try
             {
                 if (_instance == null)
                 {
-                    lock (Locker)
+                    lock (_lock)
                     {
                         if (_instance == null || !_instance.IsConnected)
                         {
-                            _instance = GetManager(Configuration);
+                            _instance = GetConnect(Configuration, connectString);
                         }
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                _instance = GetManager(Configuration);
+                NLogHelper.Error($"Redis获取连接失败!{ex.Message}", ex);
             }
                 
             return _instance;
@@ -43,25 +55,35 @@ namespace FastAdminAPI.Common.Redis
         }
 
         /// <summary>
-        /// 缓存获取
+        /// 获取Redis连接缓存
         /// </summary>
-        /// <param name="connectionString"></param>
+        /// <param name="Configuration">配置</param>
+        /// <param name="connectString">连接字符串</param>
         /// <returns></returns>
-        public static ConnectionMultiplexer GetConnectionMultiplexer(IConfiguration Configuration,string connectionString)
+        private static ConnectionMultiplexer GetConnect(IConfiguration Configuration,string connectString = "")
         {
-            if (!ConnectionCache.ContainsKey(connectionString))
+            if (!_connects.ContainsKey(connectString))
             {
-                ConnectionCache[connectionString] = GetManager(Configuration,connectionString);
+                _connects[connectString] = Connect(Configuration,connectString);
             }
-            return ConnectionCache[connectionString];
+            return _connects[connectString];
         }
 
-        private static ConnectionMultiplexer GetManager(IConfiguration Configuration,string connectionString = "")
+        /// <summary>
+        /// 获取Redis连接
+        /// </summary>
+        /// <param name="Configuration">配置</param>
+        /// <param name="connectString">连接字符串</param>
+        /// <returns></returns>
+        private static ConnectionMultiplexer Connect(IConfiguration Configuration,string connectString = "")
         {
-            connectionString = string.IsNullOrEmpty(connectionString) ? Configuration.GetValue<string>("Redis.ConnectionString") : connectionString;
-            var connect = ConnectionMultiplexer.Connect(connectionString);
+            //连接字符串
+            connectString = string.IsNullOrEmpty(connectString) ? Configuration.GetValue<string>("Redis.ConnectionString") : connectString;
+            
+            //连接Redis
+            var connect = ConnectionMultiplexer.Connect(connectString);
 
-            //注册如下事件
+            //注册事件
             connect.ConnectionFailed += MuxerConnectionFailed;
             connect.ConnectionRestored += MuxerConnectionRestored;
             connect.ErrorMessage += MuxerErrorMessage;
@@ -92,6 +114,7 @@ namespace FastAdminAPI.Common.Redis
         private static void MuxerErrorMessage(object sender, RedisErrorEventArgs e)
         {
             Console.WriteLine("ErrorMessage: " + e.Message);
+            NLogHelper.Error($"Redis Error：{e.Message}");
         }
 
         /// <summary>
@@ -105,7 +128,7 @@ namespace FastAdminAPI.Common.Redis
         }
 
         /// <summary>
-        /// 连接失败 ， 如果重新连接成功你将不会收到这个通知
+        /// 连接失败, 如果重新连接成功你将不会收到这个通知
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -132,6 +155,7 @@ namespace FastAdminAPI.Common.Redis
         private static void MuxerInternalError(object sender, InternalErrorEventArgs e)
         {
             Console.WriteLine("InternalError:Message" + e.Exception.Message);
+            NLogHelper.Error($"Redis InternalError：{e.Exception.Message}");
         }
 
         #endregion 事件

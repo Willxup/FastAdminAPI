@@ -18,7 +18,7 @@ namespace FastAdminAPI.Common.Extensions
         /// </summary>
         /// <param name="services"></param>
         /// <param name="serviceName">服务名称</param>
-        /// <param name="basePath">程序根目录</param>
+        /// <param name="basePath">文档位置</param>
         /// <returns></returns>
         public static IServiceCollection AddSwagger(this IServiceCollection services, string serviceName, string basePath)
         {
@@ -39,35 +39,35 @@ namespace FastAdminAPI.Common.Extensions
                 });
                 //解决相同类名会报错的问题
                 c.CustomSchemaIds(type => type.FullName);
+
                 //配置的xml文件名
                 var xmlPath = Path.Combine(basePath, $"{serviceName}.xml");
                 c.IncludeXmlComments(xmlPath, true);
 
-                #region Token绑定到ConfigureServices
+                #region Token绑定
                 //添加header验证信息
                 //c.OperationFilter<SwaggerHeader>();
 
-                // 发行人
-                var IssuerName = Define.ISSUER;
+                //发行人
+                var issuerName = Define.ISSUER;
                 var security = new OpenApiSecurityRequirement()
                 {
                     {
                         new OpenApiSecurityScheme{
                             Reference = new OpenApiReference {
                                         Type = ReferenceType.SecurityScheme,
-                                        Id = IssuerName},
-                            //Name = IssuerName
+                                        Id = issuerName},
+                            //Name = issuerName
                         }, Array.Empty<string>()
                     }
                 };
                 c.AddSecurityRequirement(security);
 
-                //方案名称“Mammoth”可自定义，上下一致即可
-                c.AddSecurityDefinition(IssuerName, new OpenApiSecurityScheme
+                c.AddSecurityDefinition(issuerName, new OpenApiSecurityScheme
                 {
                     Description = "请在下框中输入Bearer {token}",
-                    Name = "Authorization",//jwt默认的参数名称
-                    In = ParameterLocation.Header,//jwt默认存放Authorization信息的位置(请求头中)
+                    Name = "Authorization", //jwt默认的参数名称
+                    In = ParameterLocation.Header, //jwt默认存放Authorization信息的位置(请求头中)
                     Type = SecuritySchemeType.ApiKey,
                     BearerFormat = "JWT",
                     Scheme = "Bearer"
@@ -75,7 +75,7 @@ namespace FastAdminAPI.Common.Extensions
                 #endregion
             });
 
-            services.AddSwaggerGenNewtonsoftSupport(); //swagger使用newtonsoft.json
+            services.AddSwaggerGenNewtonsoftSupport(); //使swagger支持newtonsoft.json
 
             return services;
         }
