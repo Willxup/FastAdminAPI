@@ -62,11 +62,19 @@ namespace FastAdminAPI.Common.Redis
         /// <returns></returns>
         private static ConnectionMultiplexer GetConnect(IConfiguration Configuration,string connectString = "")
         {
-            if (!_connects.ContainsKey(connectString))
+            string key = connectString;
+
+            //如果连接字符串为空，写入默认key
+            if (string.IsNullOrWhiteSpace(key))
             {
-                _connects[connectString] = Connect(Configuration,connectString);
+                key = "default_connect";
             }
-            return _connects[connectString];
+
+            if (!_connects.ContainsKey(key))
+            {
+                _connects[key] = Connect(Configuration,connectString);
+            }
+            return _connects[key];
         }
 
         /// <summary>
