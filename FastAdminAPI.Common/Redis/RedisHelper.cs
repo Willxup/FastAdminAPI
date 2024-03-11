@@ -45,7 +45,7 @@ namespace FastAdminAPI.Common.Redis
         /// </summary>
         /// <param name="configuration">配置</param>
         /// <param name="dbNum">数据库编号</param>
-        public RedisHelper(IConfiguration configuration, int dbNum) : this(configuration, null, dbNum) { }
+        public RedisHelper(IConfiguration configuration, int dbNum = 0) : this(configuration, null, dbNum) { }
 
         /// <summary>
         /// 构造
