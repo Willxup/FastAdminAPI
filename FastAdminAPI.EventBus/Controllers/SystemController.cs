@@ -27,8 +27,9 @@ namespace FastAdminAPI.EventBus.Controllers
         /// <summary>
         /// 发送信息
         /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>        
+        /// <param name="msg">消息</param>
+        /// <returns></returns>
+        [NonAction]
         [CapSubscribe(SystemSubscriber.NOTIFY_MESSAGE)]
         public async Task SendMessage(string msg)
         {
