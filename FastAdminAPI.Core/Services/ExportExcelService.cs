@@ -43,6 +43,7 @@ namespace FastAdminAPI.Core.Services
             #region 设置标题单元格样式
             //设置标题字体大小
             var titleFontStyle = NPOIExcelHelper.GetFontStyle(workbook, "Arial", 10, true);
+
             //设置标题样式
             var titleStyle = NPOIExcelHelper.GetTitleCellStyle(workbook, titleFontStyle);
             var titleStyleWithColor = NPOIExcelHelper.GetTitleCellStyle(workbook, titleFontStyle, new XSSFColor(new byte[] { 255, 192, 0 }));
@@ -55,6 +56,7 @@ namespace FastAdminAPI.Core.Services
             {
                 { "测试名称1", 1 },{ "测试名称2", 0 },{ "测试名称3", 1 },{ "测试名称4", 1 },{ "测试名称5", 1 },{ "测试名称6", 0 }
             };
+
             //设置标题
             NPOIExcelHelper.SetTitleRow(sheet, NPOIExcelHelper.GetExcelTemplateTitleRow(cellInfoDic, cellStyleList), NPOIExcelHelper.GetDefaultStyle(workbook));
             #endregion
@@ -65,6 +67,7 @@ namespace FastAdminAPI.Core.Services
                 .Where(code => code.S99_IsValid == (byte)BaseEnums.IsValid.Valid)
                 .Select(code => code.S99_Name)
                 .ToListAsync();
+
             NPOIExcelHelper.SetMoreDropDownList(sheet, codeList, 0, "测试下拉数据源");
 
             //设置下拉数据(数据大小小于255长度)

@@ -9,7 +9,7 @@ namespace FastAdminAPI.NPOI.Extensions
     public static class NPOIExcelHelper
     {
         /// <summary>
-        /// 获取默认格式
+        /// 获取默认样式
         /// </summary>
         /// <param name="workbook"></param>
         /// <returns></returns>
