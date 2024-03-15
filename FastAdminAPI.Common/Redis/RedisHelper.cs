@@ -70,7 +70,7 @@ namespace FastAdminAPI.Common.Redis
             return prefixKey + oldKey;
         }
         /// <summary>
-        /// Do
+        /// Do 有返回
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="func"></param>
@@ -81,7 +81,7 @@ namespace FastAdminAPI.Common.Redis
             return func(database);
         }
         /// <summary>
-        /// Do
+        /// Do 无返回
         /// </summary>
         /// <param name="func"></param>
         private void Do(Action<IDatabase> func)
@@ -91,6 +91,25 @@ namespace FastAdminAPI.Common.Redis
         }
 
         #region 类型转换
+        /// <summary>
+        /// List<string>转Redis键数组
+        /// </summary>
+        /// <param name="redisKeys"></param>
+        /// <returns></returns>
+
+        private static RedisKey[] ConvertRedisKeys(List<string> redisKeys)
+        {
+            return redisKeys.Select(redisKey => (RedisKey)redisKey).ToArray();
+        }
+        /// <summary>
+        /// List<string>转Redis值数组
+        /// </summary>
+        /// <param name="redisValues"></param>
+        /// <returns></returns>
+        private static RedisValue[] ConvertRedisValues(List<string> redisValues)
+        {
+            return redisValues.Select(redisValue => (RedisValue)redisValue).ToArray();
+        }
         /// <summary>
         /// 对象转Json
         /// </summary>
@@ -123,21 +142,16 @@ namespace FastAdminAPI.Common.Redis
             return JsonConvert.DeserializeObject<T>(value);
         }
         /// <summary>
-        /// SortedSet转List
+        /// SortedSet转字典
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        private static List<ZSetModel> ConvetList(SortedSetEntry[] values)
+        private static Dictionary<string, double> ConvertSortedSetToDic(SortedSetEntry[] values)
         {
-            List<ZSetModel> result = new();
+            Dictionary<string, double> result = new();
             foreach (var item in values)
             {
-                var model = new ZSetModel()
-                {
-                    Key = item.Element.ToString(),
-                    Score = item.Score
-                };
-                result.Add(model);
+                result.Add(item.Element.ToString(), item.Score);
             }
             return result;
         }
@@ -147,7 +161,7 @@ namespace FastAdminAPI.Common.Redis
         /// <typeparam name="T"></typeparam>
         /// <param name="values"></param>
         /// <returns></returns>
-        private static List<T> ConvetList<T>(RedisValue[] values)
+        private static List<T> ConvetListToValue<T>(RedisValue[] values)
         {
             List<T> result = new();
             foreach (var item in values)
@@ -162,7 +176,7 @@ namespace FastAdminAPI.Common.Redis
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        private static List<string> ConvetList(RedisValue[] values)
+        private static List<string> ConvetListToValue(RedisValue[] values)
         {
             List<string> result = new();
             foreach (var item in values)
@@ -172,32 +186,211 @@ namespace FastAdminAPI.Common.Redis
             }
             return result;
         }
-        /// <summary>
-        /// List<string>转Redis键数组
-        /// </summary>
-        /// <param name="redisKeys"></param>
-        /// <returns></returns>
-
-        private static RedisKey[] ConvertRedisKeys(List<string> redisKeys)
-        {
-            return redisKeys.Select(redisKey => (RedisKey)redisKey).ToArray();
-        }
-        /// <summary>
-        /// List<string>转Redis值数组
-        /// </summary>
-        /// <param name="redisValues"></param>
-        /// <returns></returns>
-        private static RedisValue[] ConvertRedisValues(List<string> redisValues)
-        {
-            return redisValues.Select(redisValue => (RedisValue)redisValue).ToArray();
-        }
         #endregion
 
         #endregion
+
+        #region key
+        /// <summary>
+        /// 判断key是否存在
+        /// </summary>
+        /// <param name="key">redis key</param>
+        /// <returns></returns>
+        public bool KeyExists(string key)
+        {
+            key = AddPrefixKey(key);
+            return Do(db => db.KeyExists(key));
+        }
+        /// <summary>
+        /// 判断key是否存在
+        /// </summary>
+        /// <param name="key">redis key</param>
+        /// <returns></returns>
+        public async Task<bool> KeyExistsAsync(string key)
+        {
+            key = AddPrefixKey(key);
+            return await Do(db => db.KeyExistsAsync(key));
+        }
+
+        /// <summary>
+        /// 重新命名key
+        /// </summary>
+        /// <param name="key">就的redis key</param>
+        /// <param name="newKey">新的redis key</param>
+        /// <returns></returns>
+        public bool KeyRename(string key, string newKey)
+        {
+            key = AddPrefixKey(key);
+            return Do(db => db.KeyRename(key, AddPrefixKey(newKey)));
+        }
+        /// <summary>
+        /// 重新命名key
+        /// </summary>
+        /// <param name="key">就的redis key</param>
+        /// <param name="newKey">新的redis key</param>
+        /// <returns></returns>
+        public async Task<bool> KeyRenameAsync(string key, string newKey)
+        {
+            key = AddPrefixKey(key);
+            return await Do(db => db.KeyRenameAsync(key, AddPrefixKey(newKey)));
+        }
+
+        /// <summary>
+        /// 设置Key的时间
+        /// </summary>
+        /// <param name="key">redis key</param>
+        /// <param name="expiry"></param>
+        /// <returns></returns>
+        public bool KeySetExpire(string key, TimeSpan? expiry = default)
+        {
+            key = AddPrefixKey(key);
+            return Do(db => db.KeyExpire(key, expiry));
+        }
+        /// <summary>
+        /// 设置Key的时间
+        /// </summary>
+        /// <param name="key">redis key</param>
+        /// <param name="expiry"></param>
+        /// <returns></returns>
+        public async Task<bool> KeySetExpireAsync(string key, TimeSpan? expiry = default)
+        {
+            key = AddPrefixKey(key);
+            return await Do(db => db.KeyExpireAsync(key, expiry));
+        }
+
+        /// <summary>
+        /// 获取rediskey的存活时间
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public double? KeyTimeToLive(string key)
+        {
+            key = AddPrefixKey(key);
+            return Do(redis => redis.KeyTimeToLive(key))?.TotalSeconds;
+        }
+        /// <summary>
+        /// 获取rediskey的存活时间
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public async Task<double?> KeyTimeToLiveAsync(string key)
+        {
+            key = AddPrefixKey(key);
+            var ttl = await Do(redis => redis.KeyTimeToLiveAsync(key));
+
+            return ttl?.TotalSeconds;
+        }
+
+        /// <summary>
+        /// 删除单个key
+        /// </summary>
+        /// <param name="key">redis key</param>
+        /// <returns>是否删除成功</returns>
+        public bool KeyDelete(string key)
+        {
+            key = AddPrefixKey(key);
+            return Do(db => db.KeyDelete(key));
+        }
+        /// <summary>
+        /// 删除单个key
+        /// </summary>
+        /// <param name="key">redis key</param>
+        /// <returns>是否删除成功</returns>
+        public async Task<bool> KeyDeleteAsync(string key)
+        {
+            key = AddPrefixKey(key);
+            return await Do(db => db.KeyDeleteAsync(key));
+        }
+
+        /// <summary>
+        /// 删除多个key
+        /// </summary>
+        /// <param name="keys">rediskey</param>
+        /// <returns>成功删除的个数</returns>
+        public long KeyDelete(List<string> keys)
+        {
+            List<string> newKeys = keys.Select(c => AddPrefixKey(c)).ToList();
+            return Do(db => db.KeyDelete(ConvertRedisKeys(newKeys)));
+        }
+        /// <summary>
+        /// 删除多个key
+        /// </summary>
+        /// <param name="keys">rediskey</param>
+        /// <returns>成功删除的个数</returns>
+        public async Task<long> KeyDeleteAsync(List<string> keys)
+        {
+            List<string> newKeys = keys.Select(c => AddPrefixKey(c)).ToList();
+            return await Do(db => db.KeyDeleteAsync(ConvertRedisKeys(newKeys)));
+        }
+        #endregion key
 
         #region String
+        /// <summary>
+        /// 获取单个key的值
+        /// </summary>
+        /// <param name="key">Redis Key</param>
+        /// <returns></returns>
+        public string StringGet(string key)
+        {
+            key = AddPrefixKey(key);
+            return Do(db => db.StringGet(key));
+        }
+        /// <summary>
+        /// 获取单个key的值
+        /// </summary>
+        /// <param name="key">Redis Key</param>
+        /// <returns></returns>
+        public async Task<string> StringGetAsync(string key)
+        {
+            key = AddPrefixKey(key);
+            return await Do(db => db.StringGetAsync(key));
+        }
 
-        #region 同步
+        /// <summary>
+        /// 获取一个key的对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public T StringGet<T>(string key)
+        {
+            key = AddPrefixKey(key);
+            return Do(db => ConvertObj<T>(db.StringGet(key)));
+        }
+        /// <summary>
+        /// 获取一个key的对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public async Task<T> StringGetAsync<T>(string key)
+        {
+            key = AddPrefixKey(key);
+            string result = await Do(db => db.StringGetAsync(key));
+            return ConvertObj<T>(result);
+        }
+
+        /// <summary>
+        /// 获取多个Key
+        /// </summary>
+        /// <param name="listKey">Redis Key集合</param>
+        /// <returns></returns>
+        public T[] StringGet<T>(List<string> listKey)
+        {
+            List<string> newKeys = listKey.Select(AddPrefixKey).ToList();
+            return Do(db => db.StringGet(ConvertRedisKeys(newKeys))).Select(c => ConvertObj<T>(c)).ToArray();
+        }
+        /// <summary>
+        /// 获取多个Key
+        /// </summary>
+        /// <param name="listKey">Redis Key集合</param>
+        /// <returns></returns>
+        public async Task<T[]> StringGetAsync<T>(List<string> listKey)
+        {
+            List<string> newKeys = listKey.Select(AddPrefixKey).ToList();
+            var result = await Do(db => db.StringGetAsync(ConvertRedisKeys(newKeys)));
+            return result.Select(c => ConvertObj<T>(c)).ToArray();
+        }
 
         /// <summary>
         /// 保存单个key value
@@ -211,17 +404,17 @@ namespace FastAdminAPI.Common.Redis
             key = AddPrefixKey(key);
             return Do(db => db.StringSet(key, value, expiry, when));
         }
-
         /// <summary>
-        /// 保存多个key value
+        /// 保存单个key value
         /// </summary>
-        /// <param name="keyValues">键值对</param>
+        /// <param name="key">Redis Key</param>
+        /// <param name="value">保存的值</param>
+        /// <param name="expiry">过期时间</param>
         /// <returns></returns>
-        public bool StringSet(List<KeyValuePair<RedisKey, RedisValue>> keyValues)
+        public async Task<bool> StringSetAsync(string key, string value, TimeSpan? expiry = default, When when = When.Always)
         {
-            List<KeyValuePair<RedisKey, RedisValue>> newkeyValues =
-                keyValues.Select(p => new KeyValuePair<RedisKey, RedisValue>(AddPrefixKey(p.Key), p.Value)).ToList();
-            return Do(db => db.StringSet(newkeyValues.ToArray()));
+            key = AddPrefixKey(key);
+            return await Do(db => db.StringSetAsync(key, value, expiry, when));
         }
 
         /// <summary>
@@ -238,94 +431,6 @@ namespace FastAdminAPI.Common.Redis
             string json = ConvertJson(obj);
             return Do(db => db.StringSet(key, json, expiry));
         }
-
-        /// <summary>
-        /// 获取单个key的值
-        /// </summary>
-        /// <param name="key">Redis Key</param>
-        /// <returns></returns>
-        public string StringGet(string key)
-        {
-            key = AddPrefixKey(key);
-            return Do(db => db.StringGet(key));
-        }
-
-        /// <summary>
-        /// 获取多个Key
-        /// </summary>
-        /// <param name="listKey">Redis Key集合</param>
-        /// <returns></returns>
-        public RedisValue[] StringGet(List<string> listKey)
-        {
-            List<string> newKeys = listKey.Select(AddPrefixKey).ToList();
-            return Do(db => db.StringGet(ConvertRedisKeys(newKeys)));
-        }
-
-        /// <summary>
-        /// 获取一个key的对象
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public T StringGet<T>(string key)
-        {
-            key = AddPrefixKey(key);
-            return Do(db => ConvertObj<T>(db.StringGet(key)));
-        }
-
-        /// <summary>
-        /// 为数字增长val
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="val">可以为负</param>
-        /// <returns>增长后的值</returns>
-        public double StringIncrement(string key, double val = 1)
-        {
-            key = AddPrefixKey(key);
-            return Do(db => db.StringIncrement(key, val));
-        }
-
-        /// <summary>
-        /// 为数字减少val
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="val">可以为负</param>
-        /// <returns>减少后的值</returns>
-        public double StringDecrement(string key, double val = 1)
-        {
-            key = AddPrefixKey(key);
-            return Do(db => db.StringDecrement(key, val));
-        }
-
-        #endregion 同步方法
-
-        #region 异步
-
-        /// <summary>
-        /// 保存单个key value
-        /// </summary>
-        /// <param name="key">Redis Key</param>
-        /// <param name="value">保存的值</param>
-        /// <param name="expiry">过期时间</param>
-        /// <returns></returns>
-        public async Task<bool> StringSetAsync(string key, string value, TimeSpan? expiry = default, When when = When.Always)
-        {
-            key = AddPrefixKey(key);
-            return await Do(db => db.StringSetAsync(key, value, expiry, when));
-        }
-
-        /// <summary>
-        /// 保存多个key value
-        /// </summary>
-        /// <param name="keyValues">键值对</param>
-        /// <returns></returns>
-        public async Task<bool> StringSetAsync(List<KeyValuePair<RedisKey, RedisValue>> keyValues)
-        {
-            List<KeyValuePair<RedisKey, RedisValue>> newkeyValues =
-                keyValues.Select(p => new KeyValuePair<RedisKey, RedisValue>(AddPrefixKey(p.Key), p.Value)).ToList();
-            return await Do(db => db.StringSetAsync(newkeyValues.ToArray()));
-        }
-
         /// <summary>
         /// 保存一个对象
         /// </summary>
@@ -342,40 +447,64 @@ namespace FastAdminAPI.Common.Redis
         }
 
         /// <summary>
-        /// 获取单个key的值
-        /// </summary>
-        /// <param name="key">Redis Key</param>
-        /// <returns></returns>
-        public async Task<string> StringGetAsync(string key)
-        {
-            key = AddPrefixKey(key);
-            return await Do(db => db.StringGetAsync(key));
-        }
-
-        /// <summary>
-        /// 获取多个Key
-        /// </summary>
-        /// <param name="listKey">Redis Key集合</param>
-        /// <returns></returns>
-        public async Task<RedisValue[]> StringGetAsync(List<string> listKey)
-        {
-            List<string> newKeys = listKey.Select(AddPrefixKey).ToList();
-            return await Do(db => db.StringGetAsync(ConvertRedisKeys(newKeys)));
-        }
-
-        /// <summary>
-        /// 获取一个key的对象
+        /// 保存多个相同结构key value
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
+        /// <param name="keyValues"></param>
         /// <returns></returns>
-        public async Task<T> StringGetAsync<T>(string key)
+        public bool StringSet<T>(Dictionary<string, T> keyValues)
         {
-            key = AddPrefixKey(key);
-            string result = await Do(db => db.StringGetAsync(key));
-            return ConvertObj<T>(result);
+            List<KeyValuePair<RedisKey, RedisValue>> newKeyValues =
+                keyValues.Select(c => new KeyValuePair<RedisKey, RedisValue>(AddPrefixKey(c.Key), ConvertJson(c.Value))).ToList();
+            return Do(db => db.StringSet(newKeyValues.ToArray()));
+        }
+        /// <summary>
+        /// 保存多个相同结构key value
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="keyValues"></param>
+        /// <returns></returns>
+        public async Task<bool> StringSetAsync<T>(Dictionary<string, T> keyValues)
+        {
+            List<KeyValuePair<RedisKey, RedisValue>> newKeyValues =
+                keyValues.Select(c => new KeyValuePair<RedisKey, RedisValue>(AddPrefixKey(c.Key), ConvertJson(c.Value))).ToList();
+            return await Do(db => db.StringSetAsync(newKeyValues.ToArray()));
         }
 
+        /// <summary>
+        /// 保存多个key value
+        /// </summary>
+        /// <param name="keyValues">键值对</param>
+        /// <returns></returns>
+        public bool StringSet(List<KeyValuePair<RedisKey, RedisValue>> keyValues)
+        {
+            List<KeyValuePair<RedisKey, RedisValue>> newKeyValues =
+                keyValues.Select(p => new KeyValuePair<RedisKey, RedisValue>(AddPrefixKey(p.Key), p.Value)).ToList();
+            return Do(db => db.StringSet(newKeyValues.ToArray()));
+        }
+        /// <summary>
+        /// 保存多个key value
+        /// </summary>
+        /// <param name="keyValues">键值对</param>
+        /// <returns></returns>
+        public async Task<bool> StringSetAsync(List<KeyValuePair<RedisKey, RedisValue>> keyValues)
+        {
+            List<KeyValuePair<RedisKey, RedisValue>> newkeyValues =
+                keyValues.Select(p => new KeyValuePair<RedisKey, RedisValue>(AddPrefixKey(p.Key), p.Value)).ToList();
+            return await Do(db => db.StringSetAsync(newkeyValues.ToArray()));
+        }
+
+        /// <summary>
+        /// 为数字增长val
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="val">可以为负</param>
+        /// <returns>增长后的值</returns>
+        public double StringIncrement(string key, double val = 1)
+        {
+            key = AddPrefixKey(key);
+            return Do(db => db.StringIncrement(key, val));
+        }
         /// <summary>
         /// 为数字增长val
         /// </summary>
@@ -394,30 +523,170 @@ namespace FastAdminAPI.Common.Redis
         /// <param name="key"></param>
         /// <param name="val">可以为负</param>
         /// <returns>减少后的值</returns>
+        public double StringDecrement(string key, double val = 1)
+        {
+            key = AddPrefixKey(key);
+            return Do(db => db.StringDecrement(key, val));
+        }
+        /// <summary>
+        /// 为数字减少val
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="val">可以为负</param>
+        /// <returns>减少后的值</returns>
         public async Task<double> StringDecrementAsync(string key, double val = 1)
         {
             key = AddPrefixKey(key);
             return await Do(db => db.StringDecrementAsync(key, val));
         }
-
-        #endregion 异步方法
-
         #endregion String
 
         #region Hash
-
-        #region 同步方法
-
         /// <summary>
         /// 判断某个数据是否已经被缓存
         /// </summary>
         /// <param name="key"></param>
         /// <param name="dataKey"></param>
         /// <returns></returns>
-        public bool HashExists(string key, string dataKey)
+        public bool HashExist(string key, string dataKey)
         {
             key = AddPrefixKey(key);
             return Do(db => db.HashExists(key, dataKey));
+        }
+        /// <summary>
+        /// 判断某个数据是否已经被缓存
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="dataKey"></param>
+        /// <returns></returns>
+        public async Task<bool> HashExistAsync(string key, string dataKey)
+        {
+            key = AddPrefixKey(key);
+            return await Do(db => db.HashExistsAsync(key, dataKey));
+        }
+
+        /// <summary>
+        /// 从hash表获取数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="dataKey"></param>
+        /// <returns></returns>
+        public T HashGet<T>(string key, string dataKey)
+        {
+            key = AddPrefixKey(key);
+            var result = Do(db => db.HashGet(key, dataKey));
+            return ConvertObj<T>(result);
+        }
+        /// <summary>
+        /// 从hash表获取数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="dataKey"></param>
+        /// <returns></returns>
+        public async Task<T> HashGetAsync<T>(string key, string dataKey)
+        {
+            key = AddPrefixKey(key);
+            string value = await Do(db => db.HashGetAsync(key, dataKey));
+            return ConvertObj<T>(value);
+        }
+
+        /// <summary>
+        /// 从hash表获取多个数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="dataKeyList"></param>
+        /// <returns></returns>
+        public List<T> HashGet<T>(string key, List<string> dataKeyList)
+        {
+            key = AddPrefixKey(key);
+            var result = Do(db => db.HashGet(key, ConvertRedisValues(dataKeyList)));
+            return ConvetListToValue<T>(result);
+
+        }
+        /// <summary>
+        /// 从hash表获取多个数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="dataKeyList"></param>
+        /// <returns></returns>
+        public async Task<List<T>> HashGetAsync<T>(string key, List<string> dataKeyList)
+        {
+            key = AddPrefixKey(key);
+            var result = await Do(db => db.HashGetAsync(key, ConvertRedisValues(dataKeyList)));
+            return ConvetListToValue<T>(result);
+        }
+
+        /// <summary>
+        /// 获取hashkey所有Redis key
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public List<T> HashGetKeys<T>(string key)
+        {
+            key = AddPrefixKey(key);
+            return Do(db =>
+            {
+                RedisValue[] values = db.HashKeys(key);
+                return ConvetListToValue<T>(values);
+            });
+        }
+        /// <summary>
+        /// 获取hashkey所有Redis key
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public async Task<List<T>> HashGetKeysAsync<T>(string key)
+        {
+            key = AddPrefixKey(key);
+            RedisValue[] values = await Do(db => db.HashKeysAsync(key));
+            return ConvetListToValue<T>(values);
+        }
+
+        /// <summary>
+        /// 获取HashKey中所有元素
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public Dictionary<string, T> HashGetAll<T>(string key)
+        {
+            Dictionary<string, T> keyValuePairs = new();
+
+            key = AddPrefixKey(key);
+
+            HashEntry[] dic = Do(db => db.HashGetAll(key));
+            foreach (var item in dic)
+            {
+                keyValuePairs.Add(item.Name, ConvertObj<T>(item.Value));
+            }
+
+            return keyValuePairs;
+        }
+        /// <summary>
+        /// 获取HashKey中所有元素
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public async Task<Dictionary<string, T>> HashGetAllAsync<T>(string key)
+        {
+            Dictionary<string, T> keyValuePairs = new();
+
+            key = AddPrefixKey(key);
+
+            HashEntry[] dic = await Do(db => db.HashGetAllAsync(key));
+            foreach (var item in dic)
+            {
+                keyValuePairs.Add(item.Name, ConvertObj<T>(item.Value));
+            }
+
+            return keyValuePairs;
         }
 
         /// <summary>
@@ -438,139 +707,6 @@ namespace FastAdminAPI.Common.Redis
             });
         }
         /// <summary>
-        /// 存储多个数据到hash表
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="dic"></param>
-        public void HashSet<T>(string key, Dictionary<string, T> dic)
-        {
-            key = AddPrefixKey(key);
-            Do(db =>
-            {
-                List<HashEntry> list = new();
-                foreach (var item in dic)
-                    list.Add(new HashEntry(item.Key, ConvertJson(item.Value)));
-                db.HashSet(key, list.ToArray());
-            });
-        }
-
-        /// <summary>
-        /// 移除hash中的某值
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="dataKey"></param>
-        /// <returns></returns>
-        public bool HashDelete(string key, string dataKey)
-        {
-            key = AddPrefixKey(key);
-            return Do(db => db.HashDelete(key, dataKey));
-        }
-
-        /// <summary>
-        /// 移除hash中的多个值
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="dataKeys"></param>
-        /// <returns></returns>
-        public long HashDelete(string key, List<RedisValue> dataKeys)
-        {
-            key = AddPrefixKey(key);
-            //List<RedisValue> dataKeys1 = new List<RedisValue>() {"1","2"};
-            return Do(db => db.HashDelete(key, dataKeys.ToArray()));
-        }
-
-        /// <summary>
-        /// 从hash表获取数据
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="dataKey"></param>
-        /// <returns></returns>
-        public T HashGet<T>(string key, string dataKey)
-        {
-            key = AddPrefixKey(key);
-            return Do(db =>
-            {
-                string value = db.HashGet(key, dataKey);
-                return ConvertObj<T>(value);
-            });
-        }
-        /// <summary>
-        /// 从hash表获取多个数据
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="dataKeyList"></param>
-        /// <returns></returns>
-        public List<T> HashGet<T>(string key, List<string> dataKeyList)
-        {
-            key = AddPrefixKey(key);
-            return Do(db =>
-            {
-                return ConvetList<T>(db.HashGet(key, ConvertRedisValues(dataKeyList)));
-            });
-        }
-
-        /// <summary>
-        /// 为数字增长val
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="dataKey"></param>
-        /// <param name="val">可以为负</param>
-        /// <returns>增长后的值</returns>
-        public double HashIncrement(string key, string dataKey, double val = 1)
-        {
-            key = AddPrefixKey(key);
-            return Do(db => db.HashIncrement(key, dataKey, val));
-        }
-
-        /// <summary>
-        /// 为数字减少val
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="dataKey"></param>
-        /// <param name="val">可以为负</param>
-        /// <returns>减少后的值</returns>
-        public double HashDecrement(string key, string dataKey, double val = 1)
-        {
-            key = AddPrefixKey(key);
-            return Do(db => db.HashDecrement(key, dataKey, val));
-        }
-
-        /// <summary>
-        /// 获取hashkey所有Redis key
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public List<T> HashKeys<T>(string key)
-        {
-            key = AddPrefixKey(key);
-            return Do(db =>
-            {
-                RedisValue[] values = db.HashKeys(key);
-                return ConvetList<T>(values);
-            });
-        }
-
-        #endregion 同步方法
-
-        #region 异步方法
-
-        /// <summary>
-        /// 判断某个数据是否已经被缓存
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="dataKey"></param>
-        /// <returns></returns>
-        public async Task<bool> HashExistsAsync(string key, string dataKey)
-        {
-            key = AddPrefixKey(key);
-            return await Do(db => db.HashExistsAsync(key, dataKey));
-        }
-
-        /// <summary>
         /// 存储数据到hash表
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -585,6 +721,24 @@ namespace FastAdminAPI.Common.Redis
             {
                 string json = ConvertJson(t);
                 return db.HashSetAsync(key, dataKey, json);
+            });
+        }
+
+        /// <summary>
+        /// 存储多个数据到hash表
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="dic"></param>
+        public void HashSet<T>(string key, Dictionary<string, T> dic)
+        {
+            key = AddPrefixKey(key);
+            Do(db =>
+            {
+                List<HashEntry> list = new();
+                foreach (var item in dic)
+                    list.Add(new HashEntry(item.Key, ConvertJson(item.Value)));
+                db.HashSet(key, list.ToArray());
             });
         }
         /// <summary>
@@ -611,6 +765,17 @@ namespace FastAdminAPI.Common.Redis
         /// <param name="key"></param>
         /// <param name="dataKey"></param>
         /// <returns></returns>
+        public bool HashDelete(string key, string dataKey)
+        {
+            key = AddPrefixKey(key);
+            return Do(db => db.HashDelete(key, dataKey));
+        }
+        /// <summary>
+        /// 移除hash中的某值
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="dataKey"></param>
+        /// <returns></returns>
         public async Task<bool> HashDeleteAsync(string key, string dataKey)
         {
             key = AddPrefixKey(key);
@@ -623,43 +788,37 @@ namespace FastAdminAPI.Common.Redis
         /// <param name="key"></param>
         /// <param name="dataKeys"></param>
         /// <returns></returns>
-        public async Task<long> HashDeleteAsync(string key, List<RedisValue> dataKeys)
+        public long HashDelete(string key, List<string> dataKeys)
         {
             key = AddPrefixKey(key);
             //List<RedisValue> dataKeys1 = new List<RedisValue>() {"1","2"};
-            return await Do(db => db.HashDeleteAsync(key, dataKeys.ToArray()));
+            return Do(db => db.HashDelete(key, ConvertRedisValues(dataKeys)));
+        }
+        /// <summary>
+        /// 移除hash中的多个值
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="dataKeys"></param>
+        /// <returns></returns>
+        public async Task<long> HashDeleteAsync(string key, List<string> dataKeys)
+        {
+            key = AddPrefixKey(key);
+            //List<RedisValue> dataKeys1 = new List<RedisValue>() {"1","2"};
+            return await Do(db => db.HashDeleteAsync(key, ConvertRedisValues(dataKeys)));
         }
 
         /// <summary>
-        /// 从hash表获取数据
+        /// 为数字增长val
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
         /// <param name="dataKey"></param>
-        /// <returns></returns>
-        public async Task<T> HashGetAsync<T>(string key, string dataKey)
+        /// <param name="val">可以为负</param>
+        /// <returns>增长后的值</returns>
+        public double HashIncrement(string key, string dataKey, double val = 1)
         {
             key = AddPrefixKey(key);
-            string value = await Do(db => db.HashGetAsync(key, dataKey));
-            return ConvertObj<T>(value);
+            return Do(db => db.HashIncrement(key, dataKey, val));
         }
-        /// <summary>
-        /// 从hash表获取多个数据
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="dataKeyList"></param>
-        /// <returns></returns>
-        public async Task<List<T>> HashGetAsync<T>(string key, List<string> dataKeyList)
-        {
-            key = AddPrefixKey(key);
-            var redisValues = await Do(db =>
-            {
-                return db.HashGetAsync(key, ConvertRedisValues(dataKeyList));
-            });
-            return ConvetList<T>(redisValues);
-        }
-
         /// <summary>
         /// 为数字增长val
         /// </summary>
@@ -680,32 +839,172 @@ namespace FastAdminAPI.Common.Redis
         /// <param name="dataKey"></param>
         /// <param name="val">可以为负</param>
         /// <returns>减少后的值</returns>
+        public double HashDecrement(string key, string dataKey, double val = 1)
+        {
+            key = AddPrefixKey(key);
+            return Do(db => db.HashDecrement(key, dataKey, val));
+        }
+        /// <summary>
+        /// 为数字减少val
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="dataKey"></param>
+        /// <param name="val">可以为负</param>
+        /// <returns>减少后的值</returns>
         public async Task<double> HashDecrementAsync(string key, string dataKey, double val = 1)
         {
             key = AddPrefixKey(key);
             return await Do(db => db.HashDecrementAsync(key, dataKey, val));
         }
+        #endregion Hash
+
+        #region List
+        /// <summary>
+        /// 获取指定key的List
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public List<T> ListGet<T>(string key)
+        {
+            key = AddPrefixKey(key);
+            return Do(redis =>
+            {
+                var values = redis.ListRange(key);
+                return ConvetListToValue<T>(values);
+            });
+        }
+        /// <summary>
+        /// 获取指定key的List
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public async Task<List<T>> ListGetAsync<T>(string key)
+        {
+            key = AddPrefixKey(key);
+            var values = await Do(redis => redis.ListRangeAsync(key));
+            return ConvetListToValue<T>(values);
+        }
 
         /// <summary>
-        /// 获取hashkey所有Redis key
+        /// 获取集合的长度
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public long ListLength(string key)
+        {
+            key = AddPrefixKey(key);
+            return Do(redis => redis.ListLength(key));
+        }
+        /// <summary>
+        /// 获取集合的长度
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public async Task<long> ListLengthAsync(string key)
+        {
+            key = AddPrefixKey(key);
+            return await Do(redis => redis.ListLengthAsync(key));
+        }
+
+        /// <summary>
+        /// 列表 头部 插入数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void ListPushLeft<T>(string key, T value)
+        {
+            key = AddPrefixKey(key);
+            Do(db => db.ListLeftPush(key, ConvertJson(value)));
+        }
+        /// <summary>
+        /// 列表 头部 插入数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public async Task<long> ListPushLeftAsync<T>(string key, T value)
+        {
+            key = AddPrefixKey(key);
+            return await Do(db => db.ListLeftPushAsync(key, ConvertJson(value)));
+        }
+
+        /// <summary>
+        /// 列表 尾部 插入数据
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void ListPushRight<T>(string key, T value)
+        {
+            key = AddPrefixKey(key);
+            Do(db => db.ListRightPush(key, ConvertJson(value)));
+        }
+        /// <summary>
+        /// 列表 尾部 插入数据
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public async Task<long> ListPushRightAsync<T>(string key, T value)
+        {
+            key = AddPrefixKey(key);
+            return await Do(db => db.ListRightPushAsync(key, ConvertJson(value)));
+        }
+
+        /// <summary>
+        /// 列表 头部 移除数据
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
         /// <returns></returns>
-        public async Task<List<T>> HashKeysAsync<T>(string key)
+        public T ListPopLeft<T>(string key)
         {
             key = AddPrefixKey(key);
-            RedisValue[] values = await Do(db => db.HashKeysAsync(key));
-            return ConvetList<T>(values);
+            return Do(db =>
+            {
+                var value = db.ListLeftPop(key);
+                return ConvertObj<T>(value);
+            });
+        }
+        /// <summary>
+        /// 列表 头部 移除数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public async Task<T> ListPopLeftAsync<T>(string key)
+        {
+            key = AddPrefixKey(key);
+            var value = await Do(db => db.ListLeftPopAsync(key));
+            return ConvertObj<T>(value);
         }
 
-        #endregion 异步方法
-
-        #endregion Hash
-
-        #region List
-
-        #region 同步方法
+        /// <summary>
+        /// 列表 尾部 移除数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public T ListPopRight<T>(string key)
+        {
+            key = AddPrefixKey(key);
+            return Do(db =>
+            {
+                var value = db.ListRightPop(key);
+                return ConvertObj<T>(value);
+            });
+        }
+        /// <summary>
+        /// 列表 尾部 移除数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public async Task<T> ListPopRightAsync<T>(string key)
+        {
+            key = AddPrefixKey(key);
+            var value = await Do(db => db.ListRightPopAsync(key));
+            return ConvertObj<T>(value);
+        }
 
         /// <summary>
         /// 移除指定ListId的内部List的值
@@ -717,92 +1016,6 @@ namespace FastAdminAPI.Common.Redis
             key = AddPrefixKey(key);
             Do(db => db.ListRemove(key, ConvertJson(value)));
         }
-
-        /// <summary>
-        /// 获取指定key的List
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public List<T> ListRange<T>(string key)
-        {
-            key = AddPrefixKey(key);
-            return Do(redis =>
-            {
-                var values = redis.ListRange(key);
-                return ConvetList<T>(values);
-            });
-        }
-
-        /// <summary>
-        /// 入队
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        public void ListRightPush<T>(string key, T value)
-        {
-            key = AddPrefixKey(key);
-            Do(db => db.ListRightPush(key, ConvertJson(value)));
-        }
-
-        /// <summary>
-        /// 出队
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public T ListRightPop<T>(string key)
-        {
-            key = AddPrefixKey(key);
-            return Do(db =>
-            {
-                var value = db.ListRightPop(key);
-                return ConvertObj<T>(value);
-            });
-        }
-
-        /// <summary>
-        /// 入栈
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        public void ListLeftPush<T>(string key, T value)
-        {
-            key = AddPrefixKey(key);
-            Do(db => db.ListLeftPush(key, ConvertJson(value)));
-        }
-
-        /// <summary>
-        /// 出栈
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public T ListLeftPop<T>(string key)
-        {
-            key = AddPrefixKey(key);
-            return Do(db =>
-            {
-                var value = db.ListLeftPop(key);
-                return ConvertObj<T>(value);
-            });
-        }
-
-        /// <summary>
-        /// 获取集合中的数量
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public long ListLength(string key)
-        {
-            key = AddPrefixKey(key);
-            return Do(redis => redis.ListLength(key));
-        }
-
-        #endregion 同步方法
-
-        #region 异步方法
-
         /// <summary>
         /// 移除指定ListId的内部List的值
         /// </summary>
@@ -813,95 +1026,20 @@ namespace FastAdminAPI.Common.Redis
             key = AddPrefixKey(key);
             return await Do(db => db.ListRemoveAsync(key, ConvertJson(value)));
         }
-
-        /// <summary>
-        /// 获取指定key的List
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public async Task<List<T>> ListRangeAsync<T>(string key)
-        {
-            key = AddPrefixKey(key);
-            var values = await Do(redis => redis.ListRangeAsync(key));
-            return ConvetList<T>(values);
-        }
-
-        /// <summary>
-        /// 入队
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        public async Task<long> ListRightPushAsync<T>(string key, T value)
-        {
-            key = AddPrefixKey(key);
-            return await Do(db => db.ListRightPushAsync(key, ConvertJson(value)));
-        }
-
-        /// <summary>
-        /// 出队
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public async Task<T> ListRightPopAsync<T>(string key)
-        {
-            key = AddPrefixKey(key);
-            var value = await Do(db => db.ListRightPopAsync(key));
-            return ConvertObj<T>(value);
-        }
-
-        /// <summary>
-        /// 入栈
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        public async Task<long> ListLeftPushAsync<T>(string key, T value)
-        {
-            key = AddPrefixKey(key);
-            return await Do(db => db.ListLeftPushAsync(key, ConvertJson(value)));
-        }
-
-        /// <summary>
-        /// 出栈
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public async Task<T> ListLeftPopAsync<T>(string key)
-        {
-            key = AddPrefixKey(key);
-            var value = await Do(db => db.ListLeftPopAsync(key));
-            return ConvertObj<T>(value);
-        }
-
-        /// <summary>
-        /// 获取集合中的数量
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public async Task<long> ListLengthAsync(string key)
-        {
-            key = AddPrefixKey(key);
-            return await Do(redis => redis.ListLengthAsync(key));
-        }
-
-        #endregion 异步方法
-
         #endregion List
 
-        #region SortedSet 有序集合
-
-        #region 同步方法
+        #region SortedSet
         /// <summary>
-        /// 获取成员分数
+        /// 集合中是否存在该值
         /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public double? GetSortedSetScore<T>(string key, T value)
+        /// <returns></returns>
+        public bool SortedSetExist<T>(string key, T value)
         {
             key = AddPrefixKey(key);
-            return Do(redis => redis.SortedSetScore(key, ConvertJson(value)));
+            return Do(redis => redis.SetContains(key, ConvertJson(value)));
         }
         /// <summary>
         /// 集合中是否存在该值
@@ -910,60 +1048,10 @@ namespace FastAdminAPI.Common.Redis
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool SortedSetContains<T>(string key, T value)
+        public async Task<bool> SortedSetExistAsync<T>(string key, T value)
         {
             key = AddPrefixKey(key);
-            return Do(redis => redis.SetContains(key, ConvertJson(value)));
-        }
-        /// <summary>
-        /// 添加
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <param name="score"></param>
-        public bool SortedSetAdd<T>(string key, T value, double score)
-        {
-            key = AddPrefixKey(key);
-            return Do(redis => redis.SortedSetAdd(key, ConvertJson<T>(value), score));
-        }
-        /// <summary>
-        /// 给指定成员增加相应的分数
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <param name="score"></param>
-        /// <returns></returns>
-        public double SortedSetIncrement<T>(string key, T value, double score)
-        {
-            key = AddPrefixKey(key);
-            return Do(redis => redis.SortedSetIncrement(key, ConvertJson<T>(value), score));
-        }
-
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        public bool SortedSetRemove<T>(string key, T value)
-        {
-            key = AddPrefixKey(key);
-            return Do(redis => redis.SortedSetRemove(key, ConvertJson(value)));
-        }
-
-        /// <summary>
-        /// 获取全部
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public List<string> SortedSetRangeByRank(string key, Order order = Order.Ascending)
-        {
-            key = AddPrefixKey(key);
-            return Do(redis =>
-            {
-                var values = redis.SortedSetRangeByRank(key, order: order);
-                return ConvetList(values);
-            });
+            return await Do(redis => redis.SetContainsAsync(key, ConvertJson(value)));
         }
 
         /// <summary>
@@ -976,10 +1064,27 @@ namespace FastAdminAPI.Common.Redis
             key = AddPrefixKey(key);
             return Do(redis => redis.SortedSetLength(key));
         }
+        /// <summary>
+        /// 获取集合中的数量
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public async Task<long> SortedSetLengthAsync(string key)
+        {
+            key = AddPrefixKey(key);
+            return await Do(redis => redis.SortedSetLengthAsync(key));
+        }
 
-        #endregion 同步方法
-
-        #region 异步方法
+        /// <summary>
+        /// 获取成员分数
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public double? SortedSetGetScore<T>(string key, T value)
+        {
+            key = AddPrefixKey(key);
+            return Do(redis => redis.SortedSetScore(key, ConvertJson(value)));
+        }
         /// <summary>
         /// 获取成员分数
         /// </summary>
@@ -987,22 +1092,108 @@ namespace FastAdminAPI.Common.Redis
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public async Task<double?> GetSortedSetScoreAsync<T>(string key, T value)
+        public async Task<double?> SortedSetGetScoreAsync<T>(string key, T value)
         {
             key = AddPrefixKey(key);
             return await Do(redis => redis.SortedSetScoreAsync(key, ConvertJson(value)));
         }
+
         /// <summary>
-        /// 集合中是否存在该值
+        /// 获取全部
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
-        /// <param name="value"></param>
         /// <returns></returns>
-        public async Task<bool> SortedSetContainsAsync<T>(string key, T value)
+        public List<string> SortedSetGetRange(string key, Order order = Order.Ascending)
         {
             key = AddPrefixKey(key);
-            return await Do(redis => redis.SetContainsAsync(key, ConvertJson(value)));
+            return Do(redis =>
+            {
+                var values = redis.SortedSetRangeByRank(key, order: order);
+                return ConvetListToValue(values);
+            });
+        }
+        /// <summary>
+        /// 获取全部
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public async Task<List<string>> SortedSetGetRangeAsync(string key, Order order = Order.Ascending)
+        {
+            key = AddPrefixKey(key);
+            var values = await Do(redis => redis.SortedSetRangeByRankAsync(key, order: order));
+            return ConvetListToValue(values);
+        }
+
+        /// <summary>
+        /// 通过指定范围(索引)获取全部（包含权重）
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        public Dictionary<string, double> SortedSetRangeByRankWithScores(string key, long start = 0, long stop = -1, Order order = Order.Ascending)
+        {
+            key = AddPrefixKey(key);
+            var values = Do(redis => redis.SortedSetRangeByRankWithScores(key, start, stop, order: order));
+            return ConvertSortedSetToDic(values);
+        }
+        /// <summary>
+        /// 通过指定范围(索引)获取全部（包含权重）
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        public async Task<Dictionary<string, double>> SortedSetRangeByRankWithScoresAsync(string key, long start = 0, long stop = -1, Order order = Order.Ascending)
+        {
+            key = AddPrefixKey(key);
+            var values = await Do(redis => redis.SortedSetRangeByRankWithScoresAsync(key, start, stop, order: order));
+            return ConvertSortedSetToDic(values);
+        }
+
+        /// <summary>
+        /// 通过指定范围(分数)获取全部（包含权重）
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        public Dictionary<string, double> SortedSetRangeByScoreWithScores(string key, long start = 0, long stop = -1, Order order = Order.Ascending)
+        {
+            key = AddPrefixKey(key);
+            var values = Do(redis => redis.SortedSetRangeByScoreWithScores(key, start, stop, order: order));
+            return ConvertSortedSetToDic(values);
+        }
+        /// <summary>
+        /// 通过指定范围(分数)获取全部（包含权重）
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <param name="order"></param>
+        /// <param name="skip"></param>
+        /// <param name="take"></param>
+        /// <returns></returns>
+        public async Task<Dictionary<string, double>> SortedSetRangeByScoreWithScoresAsync(string key, double start = double.NegativeInfinity, double stop = double.PositiveInfinity, Order order = Order.Ascending, long skip = 0, long take = -1)
+        {
+            key = AddPrefixKey(key);
+            var values = await Do(redis => redis.SortedSetRangeByScoreWithScoresAsync(key, start, stop, order: order, skip: skip, take: take));
+            return ConvertSortedSetToDic(values);
+        }
+
+        /// <summary>
+        /// 添加
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="score"></param>
+        public bool SortedSetAdd<T>(string key, T value, double score)
+        {
+            key = AddPrefixKey(key);
+            return Do(redis => redis.SortedSetAdd(key, ConvertJson<T>(value), score));
         }
         /// <summary>
         /// 添加
@@ -1014,6 +1205,41 @@ namespace FastAdminAPI.Common.Redis
         {
             key = AddPrefixKey(key);
             return await Do(redis => redis.SortedSetAddAsync(key, ConvertJson<T>(value), score));
+        }
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public bool SortedSetRemove<T>(string key, T value)
+        {
+            key = AddPrefixKey(key);
+            return Do(redis => redis.SortedSetRemove(key, ConvertJson(value)));
+        }
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public async Task<bool> SortedSetRemoveAsync<T>(string key, T value)
+        {
+            key = AddPrefixKey(key);
+            return await Do(redis => redis.SortedSetRemoveAsync(key, ConvertJson(value)));
+        }
+
+        /// <summary>
+        /// 给指定成员增加相应的分数
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="score"></param>
+        /// <returns></returns>
+        public double SortedSetIncrement<T>(string key, T value, double score)
+        {
+            key = AddPrefixKey(key);
+            return Do(redis => redis.SortedSetIncrement(key, ConvertJson<T>(value), score));
         }
         /// <summary>
         /// 给指定成员增加相应的分数
@@ -1028,216 +1254,9 @@ namespace FastAdminAPI.Common.Redis
             key = AddPrefixKey(key);
             return Do(redis => redis.SortedSetIncrementAsync(key, ConvertJson<T>(value), score));
         }
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        public async Task<bool> SortedSetRemoveAsync<T>(string key, T value)
-        {
-            key = AddPrefixKey(key);
-            return await Do(redis => redis.SortedSetRemoveAsync(key, ConvertJson(value)));
-        }
-
-        /// <summary>
-        /// 获取全部
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public async Task<List<string>> SortedSetRangeByRankAsync(string key, Order order = Order.Ascending)
-        {
-            key = AddPrefixKey(key);
-            var values = await Do(redis => redis.SortedSetRangeByRankAsync(key, order: order));
-            return ConvetList(values);
-        }
-        /// <summary>
-        /// 通过指定范围获取全部（包含权重）
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="order"></param>
-        /// <returns></returns>
-        public async Task<List<ZSetModel>> SortedSetRangeByRankWithScoresAsync(string key, long start = 0, long stop = -1, Order order = Order.Ascending)
-        {
-            key = AddPrefixKey(key);
-            var values = await Do(redis => redis.SortedSetRangeByRankWithScoresAsync(key, start, stop, order: order));
-            return ConvetList(values);
-        }
-        /// <summary>
-        /// 通过指定分数获取全部（包含权重）
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="start"></param>
-        /// <param name="stop"></param>
-        /// <param name="order"></param>
-        /// <param name="skip"></param>
-        /// <param name="take"></param>
-        /// <returns></returns>
-        public async Task<List<ZSetModel>> SortedSetRangeByScoreWithScoresAsync(string key, double start = double.NegativeInfinity, double stop = double.PositiveInfinity, Order order = Order.Ascending, long skip = 0, long take = -1)
-        {
-            key = AddPrefixKey(key);
-            var values = await Do(redis => redis.SortedSetRangeByScoreWithScoresAsync(key, start, stop, order: order, skip: skip, take: take));
-            return ConvetList(values);
-        }
-
-        /// <summary>
-        /// 获取集合中的数量
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public async Task<long> SortedSetLengthAsync(string key)
-        {
-            key = AddPrefixKey(key);
-            return await Do(redis => redis.SortedSetLengthAsync(key));
-        }
-
-        #endregion 异步方法
-
-        #endregion SortedSet 有序集合
-
-        #region key
-
-        #region 同步
-        /// <summary>
-        /// 删除单个key
-        /// </summary>
-        /// <param name="key">redis key</param>
-        /// <returns>是否删除成功</returns>
-        public bool KeyDelete(string key)
-        {
-            key = AddPrefixKey(key);
-            return Do(db => db.KeyDelete(key));
-        }
-
-        /// <summary>
-        /// 删除多个key
-        /// </summary>
-        /// <param name="keys">rediskey</param>
-        /// <returns>成功删除的个数</returns>
-        public long KeyDelete(List<string> keys)
-        {
-            List<string> newKeys = keys.Select(c => AddPrefixKey(c)).ToList();
-            return Do(db => db.KeyDelete(ConvertRedisKeys(newKeys)));
-        }
-
-        /// <summary>
-        /// 判断key是否存储
-        /// </summary>
-        /// <param name="key">redis key</param>
-        /// <returns></returns>
-        public bool KeyExists(string key)
-        {
-            key = AddPrefixKey(key);
-            return Do(db => db.KeyExists(key));
-        }
-
-        /// <summary>
-        /// 重新命名key
-        /// </summary>
-        /// <param name="key">就的redis key</param>
-        /// <param name="newKey">新的redis key</param>
-        /// <returns></returns>
-        public bool KeyRename(string key, string newKey)
-        {
-            key = AddPrefixKey(key);
-            return Do(db => db.KeyRename(key, newKey));
-        }
-
-        /// <summary>
-        /// 设置Key的时间
-        /// </summary>
-        /// <param name="key">redis key</param>
-        /// <param name="expiry"></param>
-        /// <returns></returns>
-        public bool KeyExpire(string key, TimeSpan? expiry = default)
-        {
-            key = AddPrefixKey(key);
-            return Do(db => db.KeyExpire(key, expiry));
-        }
-        /// <summary>
-        /// 获取rediskey的存活时间
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public TimeSpan? KeyTimeToLive(string key)
-        {
-            key = AddPrefixKey(key);
-            return Do(redis => redis.KeyTimeToLive(key));
-        }
-        #endregion
-
-        #region 异步
-        /// <summary>
-        /// 删除单个key
-        /// </summary>
-        /// <param name="key">redis key</param>
-        /// <returns>是否删除成功</returns>
-        public async Task<bool> KeyDeleteAsync(string key)
-        {
-            key = AddPrefixKey(key);
-            return await Do(db => db.KeyDeleteAsync(key));
-        }
-
-        /// <summary>
-        /// 删除多个key
-        /// </summary>
-        /// <param name="keys">rediskey</param>
-        /// <returns>成功删除的个数</returns>
-        public async Task<long> KeyDeleteAsync(List<string> keys)
-        {
-            List<string> newKeys = keys.Select(c => AddPrefixKey(c)).ToList();
-            return await Do(db => db.KeyDeleteAsync(ConvertRedisKeys(newKeys)));
-        }
-
-        /// <summary>
-        /// 判断key是否存储
-        /// </summary>
-        /// <param name="key">redis key</param>
-        /// <returns></returns>
-        public async Task<bool> KeyExistsAsync(string key)
-        {
-            key = AddPrefixKey(key);
-            return await Do(db => db.KeyExistsAsync(key));
-        }
-
-        /// <summary>
-        /// 重新命名key
-        /// </summary>
-        /// <param name="key">就的redis key</param>
-        /// <param name="newKey">新的redis key</param>
-        /// <returns></returns>
-        public async Task<bool> KeyRenameAsync(string key, string newKey)
-        {
-            key = AddPrefixKey(key);
-            return await Do(db => db.KeyRenameAsync(key, newKey));
-        }
-
-        /// <summary>
-        /// 设置Key的时间
-        /// </summary>
-        /// <param name="key">redis key</param>
-        /// <param name="expiry"></param>
-        /// <returns></returns>
-        public async Task<bool> KeyExpireAsync(string key, TimeSpan? expiry = default)
-        {
-            key = AddPrefixKey(key);
-            return await Do(db => db.KeyExpireAsync(key, expiry));
-        }
-        /// <summary>
-        /// 获取rediskey的存活时间
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public async Task<TimeSpan?> KeyTimeToLiveAsync(string key)
-        {
-            key = AddPrefixKey(key);
-            return await Do(redis => redis.KeyTimeToLiveAsync(key));
-        }
-        #endregion
-
-        #endregion key
+        #endregion SortedSet
 
         #region 发布订阅
-
         /// <summary>
         /// Redis发布订阅  订阅
         /// </summary>
@@ -1365,7 +1384,6 @@ namespace FastAdminAPI.Common.Redis
             ISubscriber sub = _conn.GetSubscriber();
             sub.UnsubscribeAll();
         }
-
         #endregion 发布订阅
 
         #region lock
@@ -1382,17 +1400,6 @@ namespace FastAdminAPI.Common.Redis
             return GetDatabase().LockTake(lockName, token, TimeSpan.FromSeconds(expiry));
         }
         /// <summary>
-        /// 释放Redis锁
-        /// </summary>
-        /// <param name="lockName">锁名</param>
-        /// <param name="token">令牌</param>
-        /// <returns></returns>
-        public bool ReleaseLock(string lockName, string token)
-        {
-            lockName = AddPrefixKey(lockName);
-            return GetDatabase().LockRelease(lockName, token);
-        }
-        /// <summary>
         /// 获取Redis锁
         /// </summary>
         /// <param name="lockName">锁名</param>
@@ -1403,6 +1410,18 @@ namespace FastAdminAPI.Common.Redis
         {
             lockName = AddPrefixKey(lockName);
             return await GetDatabase().LockTakeAsync(lockName, token, TimeSpan.FromSeconds(expiry));
+        }
+
+        /// <summary>
+        /// 释放Redis锁
+        /// </summary>
+        /// <param name="lockName">锁名</param>
+        /// <param name="token">令牌</param>
+        /// <returns></returns>
+        public bool ReleaseLock(string lockName, string token)
+        {
+            lockName = AddPrefixKey(lockName);
+            return GetDatabase().LockRelease(lockName, token);
         }
         /// <summary>
         /// 释放Redis锁
@@ -1415,6 +1434,7 @@ namespace FastAdminAPI.Common.Redis
             lockName = AddPrefixKey(lockName);
             return await GetDatabase().LockReleaseAsync(lockName, token);
         }
+
         /// <summary>
         /// 使用Redis分布式锁执行某些操作
         /// </summary>
@@ -1483,7 +1503,6 @@ namespace FastAdminAPI.Common.Redis
             }
             return result;
         }
-
         /// <summary>
         /// 使用Redis分布式锁执行某些异步操作
         /// </summary>

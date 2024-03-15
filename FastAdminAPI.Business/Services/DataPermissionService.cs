@@ -119,7 +119,7 @@ namespace FastAdminAPI.Business.Services
             string hashKey = "EmployeeId_" + _employeeId.ToString();
 
             //从缓存中获取数据权限
-            if (await _redis.HashExistsAsync(DATA_PERMISSION_KEY, hashKey))
+            if (await _redis.HashExistAsync(DATA_PERMISSION_KEY, hashKey))
             {
                 return await _redis.HashGetAsync<List<long>>(DATA_PERMISSION_KEY, hashKey);
             }
@@ -259,10 +259,10 @@ namespace FastAdminAPI.Business.Services
         /// <returns></returns>
         public async Task ReleaseDataPermissions()
         {
-            var hashKeys = await _redis.HashKeysAsync<string>(DATA_PERMISSION_KEY);
+            var hashKeys = await _redis.HashGetKeysAsync<string>(DATA_PERMISSION_KEY);
             if (hashKeys?.Count > 0)
             {
-                await _redis.HashDeleteAsync(DATA_PERMISSION_KEY, hashKeys.Select(c => (RedisValue)c).ToList());
+                await _redis.HashDeleteAsync(DATA_PERMISSION_KEY, hashKeys);
             }
         }
 
@@ -280,7 +280,7 @@ namespace FastAdminAPI.Business.Services
             string hashKey = "EmployeeId_" + employeeId.ToString();
 
             //判断是否存在该缓存
-            if (await _redis.HashExistsAsync(DATA_PERMISSION_KEY, hashKey))
+            if (await _redis.HashExistAsync(DATA_PERMISSION_KEY, hashKey))
                 return await _redis.HashDeleteAsync(DATA_PERMISSION_KEY, hashKey);
             else
                 return true;

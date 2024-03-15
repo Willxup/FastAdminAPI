@@ -21,7 +21,7 @@ namespace FastAdminAPI.Common.Attributes.CheckValidators
         /// <summary>
         /// 构造
         /// </summary>
-        /// <param name="maxLength">最大长度</param>
+        /// <param name="maxLength">最大长度(包含小数点)</param>
         /// <param name="decimalPlaces">小数点后位数(默认2)</param>
         public MaxNumberLengthAttribute(int maxLength, int decimalPlaces = 2) : base(maxLength)
         {

@@ -164,12 +164,12 @@ namespace FastAdminAPI.Common.Middlewares
             }
 
             //获取登录许可的有效时间
-            double expires = (await _redis.KeyTimeToLiveAsync(permitKey))?.TotalSeconds ?? 0;
+            double expires = (await _redis.KeyTimeToLiveAsync(permitKey)) ?? 0;
 
             //如果 [登录许可有效期] 与 [登录有效期] 之间的差 小于等于 [登录许可差异]， 更新登录许可的有效期
             if ((LOGIN_PERMIT_EXPIRES - expires) >= LOGIN_PERMIT_EXPIRES_DIFF)
             {
-                await _redis.KeyExpireAsync(permitKey, TimeSpan.FromSeconds(LOGIN_PERMIT_EXPIRES));
+                await _redis.KeySetExpireAsync(permitKey, TimeSpan.FromSeconds(LOGIN_PERMIT_EXPIRES));
             }
 
             await _next(httpContext);
