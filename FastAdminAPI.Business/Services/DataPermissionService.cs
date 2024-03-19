@@ -165,16 +165,29 @@ namespace FastAdminAPI.Business.Services
                     .ToListAsync();
 
                 //获取员工的岗位信息
-                var employeePostIds = await _dbContext.Queryable<S08_EmployeePost>()
+                var employeePosts = await _dbContext.Queryable<S08_EmployeePost>()
                     .Where(S08 => S08.S07_EmployeeId == _employeeId && S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid)
-                    .Select(S08 => S08.S06_PostId).ToListAsync();
-                if (employeePostIds == null || employeePostIds.Count <= 0)
+                    .Select(S08 => new { S08.S06_PostId, S08.S05_DepartId }).ToListAsync();
+                if (employeePosts == null || employeePosts.Count <= 0)
                 {
                     throw new UserOperationException("获取员工信息失败!");
                 }
 
+                //对员工部门进行循环查找下级部门
+                foreach (var item in employeePosts.Select(c => c.S05_DepartId).Distinct())
+                {
+                    //创建部门树
+                    var departTree = JsonTree.CreateCustomTrees(departs.Where(d => d.Id == item).ToList(), departs.Where(p => p.ParentId != null).ToList());
+                    //将树转为列表 
+                    var departIds = JsonTreeToList(departTree).Select(d => d.Id).ToList();
+                    //去除当前员工的部门，防止同级员工数据交错
+                    departIds.Remove(item);
+                    //添加部门下的岗位
+                    postIds.AddRange(posts.Where(p => departIds.Contains(Convert.ToInt64(p.Data))).Select(p => p.Id).ToList());
+                }
+
                 //对员工岗位进行循环查找下级岗位
-                foreach (var item in employeePostIds.Distinct().ToList())
+                foreach (var item in employeePosts.Select(c => c.S06_PostId).Distinct())
                 {
                     //创建岗位树，根为当前员工的岗位
                     var postTree = JsonTree.CreateCustomTrees(posts.Where(p => p.Id == item).ToList(), posts.Where(p => p.ParentId != null).ToList());
@@ -183,7 +196,6 @@ namespace FastAdminAPI.Business.Services
                     //去除当前用户的岗位，防止同级用户数据交错
                     postIds.Remove(item);
                 }
-
 
                 //获取数据权限设置
                 var dataPermissionSettings = await _dbContext.Queryable<S10_DataPermission>()
