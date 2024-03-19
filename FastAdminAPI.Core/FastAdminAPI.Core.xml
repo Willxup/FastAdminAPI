@@ -206,7 +206,7 @@
             <param name="departId">部门Id</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.DepartmentController.GetDepartmentPostStaffing(System.String)">
+        <member name="M:FastAdminAPI.Core.Controllers.DepartmentController.GetDepartMaxEmployeeNums(System.String)">
             <summary>
             获取部门岗位编制
             </summary>
@@ -1004,7 +1004,7 @@
             <param name="departId">部门Id</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IDepartmentService.GetDepartmentPostStaffing(System.String)">
+        <member name="M:FastAdminAPI.Core.IServices.IDepartmentService.GetDepartMaxEmployeeNums(System.String)">
             <summary>
             获取部门岗位编制
             </summary>
@@ -1478,9 +1478,9 @@
             是否序列化（默认是）
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageSearch.CheckProcessTypes">
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageSearch.ApplicationType">
             <summary>
-            审批类型 关联S99_Code表
+            申请类型 关联S99_Code表
             </summary>
         </member>
         <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageSearch.ApproveTypes">
@@ -1493,14 +1493,14 @@
             审批流程Id
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageResult.CheckProcessType">
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageResult.ApplicationType">
             <summary>
-            审批类型 关联S99_Code表
+            申请类型 关联S99_Code表
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageResult.CheckProcessTypeName">
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageResult.ApplicationTypeName">
             <summary>
-            审批类型名称
+            申请类型名称
             </summary>
         </member>
         <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageResult.Applicants">
@@ -1548,9 +1548,14 @@
             审批类型 0直接上级 1指定人员 2自选 3上级+指定人员 4上级+指定人员+金额
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.CheckProcessType">
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.ApplicationType">
             <summary>
             申请类型 关联S99_Code表
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.ApproveType">
+            <summary>
+            审批类型 0直接上级 1指定人员 2自选 3上级+指定人员 4上级+指定人员+金额
             </summary>
         </member>
         <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.ApplicantList">
@@ -1565,12 +1570,12 @@
         </member>
         <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.ApproverList">
             <summary>
-            审核人 
+            审批人 
             </summary>
         </member>
         <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.Approvers">
             <summary>
-            审核人 
+            审批人 
             </summary>
         </member>
         <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.CarbonCopieList">
@@ -1596,11 +1601,6 @@
         <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.Remark">
             <summary>
             备注
-            </summary>
-        </member>
-        <member name="P:FastAdminAPI.Core.Models.BasicSettings.CheckProcessBaseModel.ApproveType">
-            <summary>
-            审批类型 0直接上级 1指定人员 2自选 3上级+指定人员 4上级+指定人员+金额
             </summary>
         </member>
         <member name="P:FastAdminAPI.Core.Models.BasicSettings.EditCheckProcessModel.CheckProcessId">
@@ -1878,17 +1878,17 @@
             部门Id
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentPostStaffingModel.DepartmentSum">
+        <member name="P:FastAdminAPI.Core.Models.Departments.DepartMaxEmployeeNumsModel.DepartNums">
             <summary>
             下级部门数
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentPostStaffingModel.PostSum">
+        <member name="P:FastAdminAPI.Core.Models.Departments.DepartMaxEmployeeNumsModel.PostSum">
             <summary>
             下级岗位数
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentPostStaffingModel.Staffing">
+        <member name="P:FastAdminAPI.Core.Models.Departments.DepartMaxEmployeeNumsModel.MaxEmployeeNums">
             <summary>
             编制 (当前编制/总编制)
             </summary>
@@ -2483,7 +2483,7 @@
             岗位名称
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Posts.PostBaseModel.Staffing">
+        <member name="P:FastAdminAPI.Core.Models.Posts.PostBaseModel.MaxEmployeeNums">
             <summary>
             岗位编制
             </summary>
@@ -3203,7 +3203,7 @@
             <param name="departId">部门Id</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.DepartmentService.GetDepartmentPostStaffing(System.String)">
+        <member name="M:FastAdminAPI.Core.Services.DepartmentService.GetDepartMaxEmployeeNums(System.String)">
             <summary>
             获取部门岗位编制
             </summary>

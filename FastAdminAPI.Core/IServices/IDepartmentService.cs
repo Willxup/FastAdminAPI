@@ -38,6 +38,6 @@ namespace FastAdminAPI.Core.IServices
         /// </summary>
         /// <param name="cornerMark">角标</param>
         /// <returns></returns>
-        Task<ResponseModel> GetDepartmentPostStaffing(string cornerMark);
+        Task<ResponseModel> GetDepartMaxEmployeeNums(string cornerMark);
     }
 }

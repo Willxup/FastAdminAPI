@@ -52,8 +52,8 @@ namespace FastAdminAPI.Core.Models.Posts
         /// <summary>
         /// 岗位编制
         /// </summary>
-        [DbOperationField("S06_Staffing", false, true)]
-        public long? Staffing { get; set; }
+        [DbOperationField("S06_MaxEmployeeNums", false, true)]
+        public long? MaxEmployeeNums { get; set; }
         /// <summary>
         /// 岗位职责
         /// </summary>

@@ -119,12 +119,12 @@ namespace FastAdminAPI.Core.Models.Departments
     #endregion
 
     #region 部门编制
-    public class DepartmentPostStaffingModel
+    public class DepartMaxEmployeeNumsModel
     {
         /// <summary>
         /// 下级部门数
         /// </summary>
-        public long? DepartmentSum { get; set; } = 0;
+        public long? DepartNums { get; set; } = 0;
         /// <summary>
         /// 下级岗位数
         /// </summary>
@@ -132,7 +132,7 @@ namespace FastAdminAPI.Core.Models.Departments
         /// <summary>
         /// 编制 (当前编制/总编制)
         /// </summary>
-        public string Staffing { get; set; } = $"0/0";
+        public string MaxEmployeeNums { get; set; } = $"0/0";
     }
     #endregion
 }

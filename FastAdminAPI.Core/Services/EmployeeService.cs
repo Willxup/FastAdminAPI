@@ -672,7 +672,7 @@ namespace FastAdminAPI.Core.Services
                              .Select(S07 => S07.S01_UserId)
                              .FirstAsync();
 
-                //无效员工账号
+                //禁用员工账号
                 if (userId != null && result?.Code == ResponseCode.Success)
                 {
 
@@ -688,20 +688,20 @@ namespace FastAdminAPI.Core.Services
                         .ExecuteAsync();
                 }
 
-                //无效员工岗位
-                if (result?.Code == ResponseCode.Success)
-                {
-                    result = await _dbContext.Updateable<S08_EmployeePost>()
-                           .SetColumns(S08 => new S08_EmployeePost
-                           {
-                               S08_IsValid = (byte)BaseEnums.IsValid.InValid,
-                               S08_DeleteId = _employeeId,
-                               S08_DeleteBy = _employeeName,
-                               S08_DeleteTime = SqlFunc.GetDate()
-                           })
-                           .Where(S08 => S08.S07_EmployeeId == employeeId)
-                           .ExecuteAsync();
-                }
+                ////无效员工岗位
+                //if (result?.Code == ResponseCode.Success)
+                //{
+                //    result = await _dbContext.Updateable<S08_EmployeePost>()
+                //           .SetColumns(S08 => new S08_EmployeePost
+                //           {
+                //               S08_IsValid = (byte)BaseEnums.IsValid.InValid,
+                //               S08_DeleteId = _employeeId,
+                //               S08_DeleteBy = _employeeName,
+                //               S08_DeleteTime = SqlFunc.GetDate()
+                //           })
+                //           .Where(S08 => S08.S07_EmployeeId == employeeId)
+                //           .ExecuteAsync();
+                //}
 
                 //清除数据权限
                 if (result?.Code == ResponseCode.Success)
@@ -730,6 +730,7 @@ namespace FastAdminAPI.Core.Services
                             })
                             .Where(S07 => S07.S07_EmployeeId == employeeId)
                             .ExecuteAsync();
+
                 //查询该员工是否存在用户账号，存在则进行无效
                 var userId = await _dbContext.Queryable<S07_Employee>()
                              .Where(S07 => S07.S07_EmployeeId == employeeId)

@@ -219,32 +219,7 @@ namespace FastAdminAPI.Business.Services
                 superior ??= await GetDepartSuperiorRecursive(departList, postList, parentDepartId, originDepartId);
 
             }
-            //如果递归中的当前部门(非员工原始部门)没有父级部门，说明已递归至顶级集团
-            else
-            {
-                //todo 启用分管配置功能，匹配员工原始部门
-                //var mgrId = await _dbContext.Queryable<S32_BranchedPassageDepartment>()
-                //    .Where(S32 => S32.S05_DepartId == originDepartId && S32.S32_IsValid == (byte)Enums.IsValid.Valid)
-                //    .Select(S32 => S32.S31_BranchedPassageSetUpId).FirstAsync();
-                //if (mgrId > 0)
-                //{
-                //    var mgrPostId = await _dbContext.Queryable<S31_BranchedPassageSetUp>()
-                //        .Where(S31 => S31.S31_BranchedPassageSetUpId == mgrId && S31.S31_IsValid == (byte)Enums.IsValid.Valid)
-                //        .Select(S31 => S31.S06_PostId).FirstAsync();
-                //    if (mgrPostId > 0)
-                //    {
-                //        superior = await _dbContext.Queryable<S07_Staff>()
-                //        .Where(S07 => S07.S06_PostId == mgrPostId && S07.S07_IsValid == 0)
-                //        .OrderBy(S07 => S07.S07_CreateTime, OrderByType.Desc)
-                //        .Select(S07 => new ApproverInfoModel
-                //        {
-                //            EmployeeId = S07.S07_Id,
-                //            EmployeeName = S07.S07_Name,
-                //            QyUserId = S07.S07_QyUserId
-                //        }).FirstAsync();
-                //    }
-                //}
-            }
+
             return superior;
         }
         #endregion
@@ -303,8 +278,8 @@ namespace FastAdminAPI.Business.Services
                                   S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid)
                     .Select(S07 => new
                     {
-                        StaffId = S07.S07_EmployeeId,
-                        StaffName = S07.S07_Name,
+                        EmployeeId = S07.S07_EmployeeId,
+                        EmployeeName = S07.S07_Name,
                         QyUserId = S07.S07_QyUserId
                     })
                     .ToListAsync();
@@ -314,14 +289,14 @@ namespace FastAdminAPI.Business.Services
                 List<ApproverInfoModel> approverList = new();
                 approverIds.ForEach(item =>
                 {
-                    var approver = approvers?.Where(c => c.StaffId == item).FirstOrDefault();
+                    var approver = approvers?.Where(c => c.EmployeeId == item).FirstOrDefault();
                     //判断审批人是否存在，不存在使用默认审批人
                     if (approver != null)
                     {
                         approverList.Add(new ApproverInfoModel
                         {
-                            EmployeeId = approver.StaffId,
-                            EmployeeName = approver.StaffName,
+                            EmployeeId = approver.EmployeeId,
+                            EmployeeName = approver.EmployeeName,
                             QyUserId = approver.QyUserId,
                             Priority = ++priority
                         });
@@ -365,8 +340,8 @@ namespace FastAdminAPI.Business.Services
                                   S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid)
                     .Select(S07 => new
                     {
-                        StaffId = S07.S07_EmployeeId,
-                        StaffName = S07.S07_Name,
+                        EmployeeId = S07.S07_EmployeeId,
+                        EmployeeName = S07.S07_Name,
                         QyUserId = S07.S07_QyUserId
                     })
                     .ToListAsync();
@@ -376,14 +351,14 @@ namespace FastAdminAPI.Business.Services
                 List<ApproverInfoModel> approverList = new();
                 approverIds.ForEach(item =>
                 {
-                    var approver = approvers?.Where(c => c.StaffId == item).FirstOrDefault();
+                    var approver = approvers?.Where(c => c.EmployeeId == item).FirstOrDefault();
                     //判断审批人是否存在，不存在使用默认审批人
                     if (approver != null)
                     {
                         approverList.Add(new ApproverInfoModel
                         {
-                            EmployeeId = approver.StaffId,
-                            EmployeeName = approver.StaffName,
+                            EmployeeId = approver.EmployeeId,
+                            EmployeeName = approver.EmployeeName,
                             QyUserId = approver.QyUserId,
                             Priority = ++priority
                         });

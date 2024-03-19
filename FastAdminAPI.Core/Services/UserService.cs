@@ -288,9 +288,9 @@ namespace FastAdminAPI.Core.Services
         public async Task<ResponseModel> CancelApplication(long checkId)
         {
             var isExist = await _dbContext.Queryable<S12_Check>()
-                .Where(S12 => S12.S12_CheckId == checkId &&
-                              S12.S12_IsValid == (byte)BaseEnums.IsValid.Valid &&
-                              S12.S12_IsFinishCheck == (byte)BaseEnums.IsFinish.Unfinish)
+                .Where(S12 => S12.S12_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                              S12.S12_IsFinishCheck == (byte)BaseEnums.IsFinish.Unfinish && 
+                              S12.S12_CheckId == checkId)
                 .AnyAsync();
             if (!isExist)
                 throw new UserOperationException("找不到该申请或该申请已完成审批!");

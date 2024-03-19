@@ -40,8 +40,8 @@ namespace FastAdminAPI.Core.Services
         {
             //用户角色Ids
             var roleIds = await _dbContext.Queryable<S09_UserPermission>()
-                .Where(S09 => S09.S01_UserId == _userId &&
-                              S09.S09_PermissionType == (byte)BusinessEnums.PermissionType.Role)
+                .Where(S09 => S09.S09_PermissionType == (byte)BusinessEnums.PermissionType.Role && 
+                              S09.S01_UserId == _userId)
                 .Select(S09 => S09.S09_CommonId)
                 .ToListAsync();
             if(roleIds?.Count > 0)

@@ -74,10 +74,10 @@ namespace FastAdminAPI.Core.Controllers
         /// <param name="cornerMark">角标</param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(DepartmentPostStaffingModel), 200)]
-        public async Task<ResponseModel> GetDepartmentPostStaffing([FromQuery][Required(ErrorMessage = "角标不能为空!")] string cornerMark)
+        [ProducesResponseType(typeof(DepartMaxEmployeeNumsModel), 200)]
+        public async Task<ResponseModel> GetDepartMaxEmployeeNums([FromQuery][Required(ErrorMessage = "角标不能为空!")] string cornerMark)
         {
-            return await _departmentSercvice.GetDepartmentPostStaffing(cornerMark);
+            return await _departmentSercvice.GetDepartMaxEmployeeNums(cornerMark);
         }
     }
 }

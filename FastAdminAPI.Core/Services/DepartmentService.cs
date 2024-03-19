@@ -164,9 +164,10 @@ namespace FastAdminAPI.Core.Services
         /// </summary>
         /// <param name="cornerMark">角标</param>
         /// <returns></returns>
-        public async Task<ResponseModel> GetDepartmentPostStaffing(string cornerMark)
+        public async Task<ResponseModel> GetDepartMaxEmployeeNums(string cornerMark)
         {
             ResponseModel response = ResponseModel.Success();
+
             //查询部门角标获取该部门下全部下级部门
             var departIds = await _dbContext.Queryable<S05_Department>()
                 .Where(S05 => S05.S05_IsValid == (byte)BaseEnums.IsValid.Valid &&
@@ -185,6 +186,7 @@ namespace FastAdminAPI.Core.Services
                         S06.S06_MaxEmployeeNums
                     })
                     .ToListAsync();
+
                 //查询员工岗位信息
                 var employeePostList = await _dbContext.Queryable<S08_EmployeePost>()
                     .Where(S08 => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid &&
@@ -196,13 +198,13 @@ namespace FastAdminAPI.Core.Services
                     })
                     .ToListAsync();
 
-                DepartmentPostStaffingModel staffingModel = new()
+                DepartMaxEmployeeNumsModel maxEmployeeNums = new()
                 {
-                    DepartmentSum = departIds?.Count - 1,
+                    DepartNums = departIds?.Count - 1,
                     PostSum = postList?.Count,
-                    Staffing = $"{employeePostList?.Count}/{postList.Sum(c => c.S06_MaxEmployeeNums)}"
+                    MaxEmployeeNums = $"{employeePostList?.Count}/{postList.Sum(c => c.S06_MaxEmployeeNums)}"
                 };
-                response.Data = staffingModel;
+                response.Data = maxEmployeeNums;
                 return response;
             }
             return response;

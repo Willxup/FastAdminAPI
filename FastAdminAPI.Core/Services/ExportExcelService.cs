@@ -94,7 +94,7 @@ namespace FastAdminAPI.Core.Services
             }
             catch (Exception ex)
             {
-                NLogHelper.Error($"院校专业模板-导出数据失败!{ex.Message}", ex);
+                NLogHelper.Error($"导出EXCEL模板-导出数据失败!{ex.Message}", ex);
                 throw new UserOperationException($"导出数据失败!");
             }
         }

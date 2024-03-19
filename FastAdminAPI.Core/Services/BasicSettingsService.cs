@@ -287,14 +287,16 @@ namespace FastAdminAPI.Core.Services
         public async Task<ResponseModel> GetCheckProcessList(CheckProcessPageSearch pageSearch)
         {
             var result = await _dbContext.Queryable<S11_CheckProcess>()
-                .WhereIF(pageSearch.CheckProcessTypes?.Count > 0, S11 => pageSearch.CheckProcessTypes.Contains((long)S11.S99_ApplicationType))
-                .WhereIF(pageSearch.ApproveTypes?.Count > 0, S11 => pageSearch.ApproveTypes.Contains(S11.S11_ApproveType))
                 .Where(S11 => S11.S11_IsValid == (byte)BaseEnums.IsValid.Valid)
+                //查询申请类型
+                .WhereIF(pageSearch.ApplicationType?.Count > 0, S11 => pageSearch.ApplicationType.Contains((long)S11.S99_ApplicationType))
+                //查询审批类型
+                .WhereIF(pageSearch.ApproveTypes?.Count > 0, S11 => pageSearch.ApproveTypes.Contains(S11.S11_ApproveType))
                 .Select(S11 => new CheckProcessPageResult
                 {
                     CheckProcessId = S11.S11_CheckProcessId,
-                    CheckProcessType = S11.S99_ApplicationType,
-                    CheckProcessTypeName = SqlFunc.Subqueryable<S99_Code>()
+                    ApplicationType = S11.S99_ApplicationType,
+                    ApplicationTypeName = SqlFunc.Subqueryable<S99_Code>()
                                            .Where(S99 => S99.S99_IsValid == (byte)BaseEnums.IsValid.Valid &&
                                                          S99.S99_CodeId == S11.S99_ApplicationType)
                                            .Select(S99 => S99.S99_Name),
@@ -311,16 +313,20 @@ namespace FastAdminAPI.Core.Services
                 var list = result.ToConvertData<List<CheckProcessPageResult>>();
                 if (list?.Count > 0)
                 {
-                    var staffList = await _dbContext.Queryable<S07_Employee>()
+                    //获取所有在职员工信息
+                    var employees = await _dbContext.Queryable<S07_Employee>()
+                        .Where(S07 => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid && 
+                                      S07.S07_Status != (byte)BusinessEnums.EmployeeStatus.Dimission)
                     .Select(S07 => new { S07.S07_EmployeeId, S07.S07_Name })
                     .ToListAsync();
+
                     foreach (var item in list)
                     {
                         //申请人
                         if (!string.IsNullOrEmpty(item.Applicants))
                         {
                             var applicantIds = item.Applicants.Split(",").ToList();
-                            item.ApplicantName = string.Join(",", staffList.Where(S07 => applicantIds.Contains(S07.S07_EmployeeId.ToString()))
+                            item.ApplicantName = string.Join(",", employees.Where(S07 => applicantIds.Contains(S07.S07_EmployeeId.ToString()))
                                                                            .Select(S07 => S07.S07_Name).ToList());
                         }
                         //审核人
@@ -329,15 +335,16 @@ namespace FastAdminAPI.Core.Services
                             var ApproverIds = item.Approvers.Split(",").ToList();
                             if (ApproverIds?.Count > 0)
                             {
-                                List<string> staffNameList = new();
+                                List<string> employeeNameList = new();
                                 foreach (var item1 in ApproverIds)
                                 {
-                                    staffNameList.Add(staffList.Where(S07 => S07.S07_EmployeeId == Convert.ToInt64(item1)).Select(S07 => S07.S07_Name).FirstOrDefault());
+                                    employeeNameList.Add(employees.Where(S07 => S07.S07_EmployeeId == Convert.ToInt64(item1)).Select(S07 => S07.S07_Name).FirstOrDefault());
                                 }
-                                item.ApproverName = string.Join(",", staffNameList);
+                                item.ApproverName = string.Join(",", employeeNameList);
                             }
                         }
-                        else//审核人为空时，当前申请审批类型是为"直接上级"
+                        //审核人为空时，当前申请审批类型是为"直接上级"
+                        else
                         {
                             if (item.ApproveType == (byte)ApplicationEnums.ApproveType.Superior)
                                 item.ApproverName = "上级";
@@ -346,7 +353,7 @@ namespace FastAdminAPI.Core.Services
                         if (!string.IsNullOrEmpty(item.CarbonCopies))
                         {
                             var CarbonCopieIds = item.CarbonCopies.Split(",").ToList();
-                            item.CarbonCopieName = string.Join(",", staffList.Where(S07 => CarbonCopieIds.Contains(S07.S07_EmployeeId.ToString()))
+                            item.CarbonCopieName = string.Join(",", employees.Where(S07 => CarbonCopieIds.Contains(S07.S07_EmployeeId.ToString()))
                                                                              .Select(S07 => S07.S07_Name).ToList());
                         }
                     };
@@ -362,45 +369,55 @@ namespace FastAdminAPI.Core.Services
         /// <returns></returns>
         public async Task<ResponseModel> AddCheckProcess(AddCheckProcessModel model)
         {
-            var applicantList = await _dbContext.Queryable<S11_CheckProcess>()
-                .Where(S11 => S11.S99_ApplicationType == model.CheckProcessType && S11.S11_IsValid == (byte)BaseEnums.IsValid.Valid)
+            //获取指定申请类型的所有申请人
+            var applicants = await _dbContext.Queryable<S11_CheckProcess>()
+                .Where(S11 => S11.S11_IsValid == (byte)BaseEnums.IsValid.Valid && S11.S99_ApplicationType == model.ApplicationType)
                 .Select(S11 => S11.S07_Applicants).ToListAsync();
-            if (applicantList?.Count > 0)
+
+            if (applicants?.Count > 0)
             {
-                int nullCount = 0;
-                List<string> applicant = new();
-                foreach (var item in applicantList)
+                //统计是否有相同的通用审批(无申请人)
+                int commonCheckNums = 0;
+
+                //获取所有申请人
+                List<string> applicantIds = new();
+
+                foreach (var item in applicants)
                 {
                     if (!string.IsNullOrEmpty(item))
                     {
-                        applicant.AddRange(item.Split(",").ToList());
+                        applicantIds.AddRange(item.Split(",").ToList());
                     }
                     else
                     {
-                        nullCount++;
+                        commonCheckNums++;
                     }
                 }
+
                 if (model.ApplicantList?.Count > 0)
                 {
-                    applicant.AddRange(model.ApplicantList);
-                    if (applicant.GroupBy(i => i).Any(g => g.Count() > 1))
+                    applicantIds.AddRange(model.ApplicantList);
+
+                    //判断申请人是否已经存在
+                    if (applicantIds.GroupBy(i => i).Any(g => g.Count() > 1))
                     {
                         throw new UserOperationException("已存在相同类型相同申请人的审批流程!");
                     }
                 }
                 else
                 {
-                    if (nullCount > 0)
-                    {
-                        throw new UserOperationException("已存在相同类型相同申请人的审批流程!");
-                    }
+                    //判断通用审批(无申请人)是否存在
+                    if (commonCheckNums > 0)
+                        throw new UserOperationException("已存在相同类型的通用审批流程!");
                 }
             }
 
+            //上级
             if (model.ApproveType == (byte)ApplicationEnums.ApproveType.Superior)
             {
                 model.Approvers = null;
             }
+            //指定人员
             else if (model.ApproveType == (byte)ApplicationEnums.ApproveType.Designee)
             {
                 if (model.ApproverList?.Count > 0)
@@ -413,10 +430,12 @@ namespace FastAdminAPI.Core.Services
                 else
                     throw new UserOperationException("请选择审批人!");
             }
+            //自定义
             else if (model.ApproveType == (byte)ApplicationEnums.ApproveType.Customize)
             {
                 model.Approvers = null;
             }
+            //上级+指定人员
             else if (model.ApproveType == (byte)ApplicationEnums.ApproveType.SuperiorAndDesignee)
             {
                 if (model.ApproverList?.Count > 0)
@@ -430,21 +449,15 @@ namespace FastAdminAPI.Core.Services
                     throw new UserOperationException("请选择审批人!");
             }
 
+            //申请人
             if (model.ApplicantList?.Count > 0)
             {
                 model.Applicants = string.Join(",", model.ApplicantList);
             }
-            if (model.ApproverList?.Count <= 0)
-            {
-                model.Approvers = null;
-            }
+            //抄送人
             if (model.CarbonCopieList?.Count > 0)
             {
                 model.CarbonCopies = string.Join(",", model.CarbonCopieList);
-            }
-            else
-            {
-                model.CarbonCopies = null;
             }
 
             model.OperationId = _employeeId;
@@ -460,47 +473,55 @@ namespace FastAdminAPI.Core.Services
         public async Task<ResponseModel> EditCheckProcess(EditCheckProcessModel model)
         {
             //查询当前被修改审批流程之外的审批流程
-            var applicantList = await _dbContext.Queryable<S11_CheckProcess>()
-                .Where(S11 => S11.S99_ApplicationType == model.CheckProcessType &&
-                              S11.S11_CheckProcessId != model.CheckProcessId &&
-                              S11.S11_IsValid == (byte)BaseEnums.IsValid.Valid)
+            var applicants = await _dbContext.Queryable<S11_CheckProcess>()
+                .Where(S11 => S11.S11_IsValid == (byte)BaseEnums.IsValid.Valid && 
+                              S11.S99_ApplicationType == model.ApplicationType &&
+                              S11.S11_CheckProcessId != model.CheckProcessId)
                 .Select(S11 => S11.S07_Applicants).ToListAsync();
-            if (applicantList?.Count > 0)
+
+            if (applicants?.Count > 0)
             {
-                int nullCount = 0;
-                List<string> applicant = new();
-                foreach (var item in applicantList)
+                //统计是否有相同的通用审批(无申请人)
+                int commonCheckNums = 0;
+
+                //获取所有申请人
+                List<string> applicantIds = new();
+                foreach (var item in applicants)
                 {
                     if (!string.IsNullOrEmpty(item))
                     {
-                        applicant.AddRange(item.Split(",").ToList());
+                        applicantIds.AddRange(item.Split(",").ToList());
                     }
                     else
                     {
-                        nullCount++;
+                        commonCheckNums++;
                     }
                 }
+
                 if (model.ApplicantList?.Count > 0)
                 {
-                    applicant.AddRange(model.ApplicantList);
-                    if (applicant.GroupBy(i => i).Any(g => g.Count() > 1))
+                    applicantIds.AddRange(model.ApplicantList);
+
+                    //判断申请人是否已经存在
+                    if (applicantIds.GroupBy(i => i).Any(g => g.Count() > 1))
                     {
                         throw new UserOperationException("已存在相同类型相同申请人的审批流程!");
                     }
                 }
                 else
                 {
-                    if (nullCount > 0)
-                    {
-                        throw new UserOperationException("已存在相同类型相同申请人的审批流程!");
-                    }
+                    //判断通用审批(无申请人)是否存在
+                    if (commonCheckNums > 0)
+                        throw new UserOperationException("已存在相同类型的通用审批流程!");
                 }
             }
 
+            //上级
             if (model.ApproveType == (byte)ApplicationEnums.ApproveType.Superior)
             {
                 model.Approvers = null;
             }
+            //指定人员
             else if (model.ApproveType == (byte)ApplicationEnums.ApproveType.Designee)
             {
                 if (model.ApproverList?.Count > 0)
@@ -513,10 +534,12 @@ namespace FastAdminAPI.Core.Services
                 else
                     throw new UserOperationException("请选择审批人!");
             }
+            //自定义
             else if (model.ApproveType == (byte)ApplicationEnums.ApproveType.Customize)
             {
                 model.Approvers = null;
             }
+            //上级+指定人员
             else if (model.ApproveType == (byte)ApplicationEnums.ApproveType.SuperiorAndDesignee)
             {
                 if (model.ApproverList?.Count > 0)
@@ -530,21 +553,15 @@ namespace FastAdminAPI.Core.Services
                     throw new UserOperationException("请选择审批人!");
             }
 
+            //申请人
             if (model.ApplicantList?.Count > 0)
             {
                 model.Applicants = string.Join(",", model.ApplicantList);
             }
-            if (model.ApproverList?.Count <= 0)
-            {
-                model.Approvers = null;
-            }
+            //抄送人
             if (model.CarbonCopieList?.Count > 0)
             {
                 model.CarbonCopies = string.Join(",", model.CarbonCopieList);
-            }
-            else
-            {
-                model.CarbonCopies = null;
             }
 
             model.OperationId = _employeeId;
