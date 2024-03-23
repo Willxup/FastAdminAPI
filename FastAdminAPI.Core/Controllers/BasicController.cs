@@ -12,18 +12,18 @@ namespace FastAdminAPI.Core.Controllers
     /// <summary>
     /// 基础设置
     /// </summary>
-    public class BasicSettingsController : BaseController
+    public class BasicController : BaseController
     {
         /// <summary>
         /// 基础设置Service
         /// </summary>
-        private readonly IBasicSettingsService _basicSettingsService;
+        private readonly IBasicService _basicSettingsService;
 
         /// <summary>
         /// 构造
         /// </summary>
         /// <param name="basicSettingsService"></param>
-        public BasicSettingsController(IBasicSettingsService basicSettingsService)
+        public BasicController(IBasicService basicSettingsService)
         {
             _basicSettingsService = basicSettingsService;
         }

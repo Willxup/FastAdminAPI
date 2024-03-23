@@ -9,7 +9,7 @@ namespace FastAdminAPI.Core.IServices
     /// <summary>
     /// 基础设置
     /// </summary>
-    public interface IBasicSettingsService
+    public interface IBasicService
     {
         #region 字典
         /// <summary>

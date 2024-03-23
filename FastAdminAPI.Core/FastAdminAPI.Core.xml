@@ -56,106 +56,106 @@
             </summary>
             <param name="model"></param>
         </member>
-        <member name="T:FastAdminAPI.Core.Controllers.BasicSettingsController">
+        <member name="T:FastAdminAPI.Core.Controllers.BasicController">
             <summary>
             基础设置
             </summary>
         </member>
-        <member name="F:FastAdminAPI.Core.Controllers.BasicSettingsController._basicSettingsService">
+        <member name="F:FastAdminAPI.Core.Controllers.BasicController._basicSettingsService">
             <summary>
             基础设置Service
             </summary>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.#ctor(FastAdminAPI.Core.IServices.IBasicSettingsService)">
+        <member name="M:FastAdminAPI.Core.Controllers.BasicController.#ctor(FastAdminAPI.Core.IServices.IBasicService)">
             <summary>
             构造
             </summary>
             <param name="basicSettingsService"></param>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.GetCodeList(FastAdminAPI.Core.Models.BasicSettings.CodePageSearch)">
+        <member name="M:FastAdminAPI.Core.Controllers.BasicController.GetCodeList(FastAdminAPI.Core.Models.BasicSettings.CodePageSearch)">
             <summary>
             获取字典列表
             </summary>
             <param name="pageSearch"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.GetGroupCodeList">
+        <member name="M:FastAdminAPI.Core.Controllers.BasicController.GetGroupCodeList">
             <summary>
             获取字典分组列表
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.AddCode(FastAdminAPI.Core.Models.BasicSettings.AddCodeModel)">
+        <member name="M:FastAdminAPI.Core.Controllers.BasicController.AddCode(FastAdminAPI.Core.Models.BasicSettings.AddCodeModel)">
             <summary>
             新增字典
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.EditCode(FastAdminAPI.Core.Models.BasicSettings.EditCodeModel)">
+        <member name="M:FastAdminAPI.Core.Controllers.BasicController.EditCode(FastAdminAPI.Core.Models.BasicSettings.EditCodeModel)">
             <summary>
             编辑字典
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.DelCode(System.Nullable{System.Int64})">
+        <member name="M:FastAdminAPI.Core.Controllers.BasicController.DelCode(System.Nullable{System.Int64})">
             <summary>
             删除字典
             </summary>
             <param name="codeId">字典Id</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.GetDataPermissionSettingList(FastAdminAPI.Core.Models.BasicSettings.DataPermissionSettingsPageSearch)">
+        <member name="M:FastAdminAPI.Core.Controllers.BasicController.GetDataPermissionSettingList(FastAdminAPI.Core.Models.BasicSettings.DataPermissionSettingsPageSearch)">
             <summary>
             获取数据权限设置列表
             </summary>
             <param name="pageSearch"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.AddDataPermissionSetting(FastAdminAPI.Core.Models.BasicSettings.AddDataPermissionSettingModel)">
+        <member name="M:FastAdminAPI.Core.Controllers.BasicController.AddDataPermissionSetting(FastAdminAPI.Core.Models.BasicSettings.AddDataPermissionSettingModel)">
             <summary>
             新增数据权限设置
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.EditDataPermissionSetting(FastAdminAPI.Core.Models.BasicSettings.EditDataPermissionSettingModel)">
+        <member name="M:FastAdminAPI.Core.Controllers.BasicController.EditDataPermissionSetting(FastAdminAPI.Core.Models.BasicSettings.EditDataPermissionSettingModel)">
             <summary>
             编辑数据权限设置
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.DelDataPermissionSetting(System.Nullable{System.Int64})">
+        <member name="M:FastAdminAPI.Core.Controllers.BasicController.DelDataPermissionSetting(System.Nullable{System.Int64})">
             <summary>
             删除数据权限设置
             </summary>
             <param name="dataPermissionId">数据权限设置Id</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.GetCheckProcessList(FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageSearch)">
+        <member name="M:FastAdminAPI.Core.Controllers.BasicController.GetCheckProcessList(FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageSearch)">
             <summary>
             获取审批流程列表
             </summary>
             <param name="pageSearch"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.AddCheckProcess(FastAdminAPI.Core.Models.BasicSettings.AddCheckProcessModel)">
+        <member name="M:FastAdminAPI.Core.Controllers.BasicController.AddCheckProcess(FastAdminAPI.Core.Models.BasicSettings.AddCheckProcessModel)">
             <summary>
             新增审批流程
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.EditCheckProcess(FastAdminAPI.Core.Models.BasicSettings.EditCheckProcessModel)">
+        <member name="M:FastAdminAPI.Core.Controllers.BasicController.EditCheckProcess(FastAdminAPI.Core.Models.BasicSettings.EditCheckProcessModel)">
             <summary>
             编辑审批流程
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.BasicSettingsController.DelCheckProcess(System.Nullable{System.Int64})">
+        <member name="M:FastAdminAPI.Core.Controllers.BasicController.DelCheckProcess(System.Nullable{System.Int64})">
             <summary>
             删除审批流程
             </summary>
@@ -874,53 +874,53 @@
             </summary>
             <param name="model"></param>
         </member>
-        <member name="T:FastAdminAPI.Core.IServices.IBasicSettingsService">
+        <member name="T:FastAdminAPI.Core.IServices.IBasicService">
             <summary>
             基础设置
             </summary>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.GetCodeList(FastAdminAPI.Core.Models.BasicSettings.CodePageSearch)">
+        <member name="M:FastAdminAPI.Core.IServices.IBasicService.GetCodeList(FastAdminAPI.Core.Models.BasicSettings.CodePageSearch)">
             <summary>
             获取字典列表
             </summary>
             <param name="pageSearch"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.GetGroupCodeList">
+        <member name="M:FastAdminAPI.Core.IServices.IBasicService.GetGroupCodeList">
             <summary>
             获取字典分组列表
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.AddCode(FastAdminAPI.Core.Models.BasicSettings.AddCodeModel)">
+        <member name="M:FastAdminAPI.Core.IServices.IBasicService.AddCode(FastAdminAPI.Core.Models.BasicSettings.AddCodeModel)">
             <summary>
             新增字典
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.EditCode(FastAdminAPI.Core.Models.BasicSettings.EditCodeModel)">
+        <member name="M:FastAdminAPI.Core.IServices.IBasicService.EditCode(FastAdminAPI.Core.Models.BasicSettings.EditCodeModel)">
             <summary>
             编辑字典
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.DelCode(System.Int64)">
+        <member name="M:FastAdminAPI.Core.IServices.IBasicService.DelCode(System.Int64)">
             <summary>
             删除字典
             </summary>
             <param name="codeId">字典Id</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.GetDataPermissionSettingList(FastAdminAPI.Core.Models.BasicSettings.DataPermissionSettingsPageSearch)">
+        <member name="M:FastAdminAPI.Core.IServices.IBasicService.GetDataPermissionSettingList(FastAdminAPI.Core.Models.BasicSettings.DataPermissionSettingsPageSearch)">
             <summary>
             获取数据权限设置列表
             </summary>
             <param name="pageSearch"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.AddDataPermissionSetting(FastAdminAPI.Core.Models.BasicSettings.AddDataPermissionSettingModel)">
+        <member name="M:FastAdminAPI.Core.IServices.IBasicService.AddDataPermissionSetting(FastAdminAPI.Core.Models.BasicSettings.AddDataPermissionSettingModel)">
             <summary>
             新增数据权限设置
             </summary>
@@ -928,7 +928,7 @@
             <returns></returns>
             <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.EditDataPermissionSetting(FastAdminAPI.Core.Models.BasicSettings.EditDataPermissionSettingModel)">
+        <member name="M:FastAdminAPI.Core.IServices.IBasicService.EditDataPermissionSetting(FastAdminAPI.Core.Models.BasicSettings.EditDataPermissionSettingModel)">
             <summary>
             编辑数据权限设置
             </summary>
@@ -936,35 +936,35 @@
             <returns></returns>
             <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.DelDataPermissionSetting(System.Int64)">
+        <member name="M:FastAdminAPI.Core.IServices.IBasicService.DelDataPermissionSetting(System.Int64)">
             <summary>
             删除数据权限设置
             </summary>
             <param name="dataPermissionId"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.GetCheckProcessList(FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageSearch)">
+        <member name="M:FastAdminAPI.Core.IServices.IBasicService.GetCheckProcessList(FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageSearch)">
             <summary>
             获取审批流程列表
             </summary>
             <param name="pageSearch"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.AddCheckProcess(FastAdminAPI.Core.Models.BasicSettings.AddCheckProcessModel)">
+        <member name="M:FastAdminAPI.Core.IServices.IBasicService.AddCheckProcess(FastAdminAPI.Core.Models.BasicSettings.AddCheckProcessModel)">
             <summary>
             新增审批流程
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.EditCheckProcess(FastAdminAPI.Core.Models.BasicSettings.EditCheckProcessModel)">
+        <member name="M:FastAdminAPI.Core.IServices.IBasicService.EditCheckProcess(FastAdminAPI.Core.Models.BasicSettings.EditCheckProcessModel)">
             <summary>
             编辑审批流程
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IBasicSettingsService.DelCheckProcess(System.Int64)">
+        <member name="M:FastAdminAPI.Core.IServices.IBasicService.DelCheckProcess(System.Int64)">
             <summary>
             删除审批流程
             </summary>
@@ -3045,17 +3045,17 @@
             </summary>
             <param name="model"></param>
         </member>
-        <member name="T:FastAdminAPI.Core.Services.BasicSettingsService">
+        <member name="T:FastAdminAPI.Core.Services.BasicService">
             <summary>
             基础设置
             </summary>
         </member>
-        <member name="F:FastAdminAPI.Core.Services.BasicSettingsService._dataPermission">
+        <member name="F:FastAdminAPI.Core.Services.BasicService._dataPermission">
             <summary>
             数据权限Service
             </summary>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,FastAdminAPI.Business.IServices.IDataPermissionService)">
+        <member name="M:FastAdminAPI.Core.Services.BasicService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,FastAdminAPI.Business.IServices.IDataPermissionService)">
             <summary>
             构造
             </summary>
@@ -3063,27 +3063,27 @@
             <param name="httpContext"></param>
             <param name="dataPermission"></param>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.GetCodeList(FastAdminAPI.Core.Models.BasicSettings.CodePageSearch)">
+        <member name="M:FastAdminAPI.Core.Services.BasicService.GetCodeList(FastAdminAPI.Core.Models.BasicSettings.CodePageSearch)">
             <summary>
             获取字典列表
             </summary>
             <param name="pageSearch"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.GetGroupCodeList">
+        <member name="M:FastAdminAPI.Core.Services.BasicService.GetGroupCodeList">
             <summary>
             获取字典分组列表
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.AddCode(FastAdminAPI.Core.Models.BasicSettings.AddCodeModel)">
+        <member name="M:FastAdminAPI.Core.Services.BasicService.AddCode(FastAdminAPI.Core.Models.BasicSettings.AddCodeModel)">
             <summary>
             新增字典
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.EditCode(FastAdminAPI.Core.Models.BasicSettings.EditCodeModel)">
+        <member name="M:FastAdminAPI.Core.Services.BasicService.EditCode(FastAdminAPI.Core.Models.BasicSettings.EditCodeModel)">
             <summary>
             编辑字典
             </summary>
@@ -3091,7 +3091,7 @@
             <returns></returns>
             <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.DelCode(System.Int64)">
+        <member name="M:FastAdminAPI.Core.Services.BasicService.DelCode(System.Int64)">
             <summary>
             删除字典
             </summary>
@@ -3099,14 +3099,14 @@
             <returns></returns>
             <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.GetDataPermissionSettingList(FastAdminAPI.Core.Models.BasicSettings.DataPermissionSettingsPageSearch)">
+        <member name="M:FastAdminAPI.Core.Services.BasicService.GetDataPermissionSettingList(FastAdminAPI.Core.Models.BasicSettings.DataPermissionSettingsPageSearch)">
             <summary>
             获取数据权限设置列表
             </summary>
             <param name="pageSearch"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.AddDataPermissionSetting(FastAdminAPI.Core.Models.BasicSettings.AddDataPermissionSettingModel)">
+        <member name="M:FastAdminAPI.Core.Services.BasicService.AddDataPermissionSetting(FastAdminAPI.Core.Models.BasicSettings.AddDataPermissionSettingModel)">
             <summary>
             新增数据权限设置
             </summary>
@@ -3114,7 +3114,7 @@
             <returns></returns>
             <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.EditDataPermissionSetting(FastAdminAPI.Core.Models.BasicSettings.EditDataPermissionSettingModel)">
+        <member name="M:FastAdminAPI.Core.Services.BasicService.EditDataPermissionSetting(FastAdminAPI.Core.Models.BasicSettings.EditDataPermissionSettingModel)">
             <summary>
             编辑数据权限设置
             </summary>
@@ -3122,35 +3122,35 @@
             <returns></returns>
             <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.DelDataPermissionSetting(System.Int64)">
+        <member name="M:FastAdminAPI.Core.Services.BasicService.DelDataPermissionSetting(System.Int64)">
             <summary>
             删除数据权限设置
             </summary>
             <param name="dataPermissionId"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.GetCheckProcessList(FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageSearch)">
+        <member name="M:FastAdminAPI.Core.Services.BasicService.GetCheckProcessList(FastAdminAPI.Core.Models.BasicSettings.CheckProcessPageSearch)">
             <summary>
             获取审批流程列表
             </summary>
             <param name="pageSearch"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.AddCheckProcess(FastAdminAPI.Core.Models.BasicSettings.AddCheckProcessModel)">
+        <member name="M:FastAdminAPI.Core.Services.BasicService.AddCheckProcess(FastAdminAPI.Core.Models.BasicSettings.AddCheckProcessModel)">
             <summary>
             新增审批流程
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.EditCheckProcess(FastAdminAPI.Core.Models.BasicSettings.EditCheckProcessModel)">
+        <member name="M:FastAdminAPI.Core.Services.BasicService.EditCheckProcess(FastAdminAPI.Core.Models.BasicSettings.EditCheckProcessModel)">
             <summary>
             编辑审批流程
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.BasicSettingsService.DelCheckProcess(System.Int64)">
+        <member name="M:FastAdminAPI.Core.Services.BasicService.DelCheckProcess(System.Int64)">
             <summary>
             删除审批流程
             </summary>

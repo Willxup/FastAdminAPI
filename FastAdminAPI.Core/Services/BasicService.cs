@@ -20,7 +20,7 @@ namespace FastAdminAPI.Core.Services
     /// <summary>
     /// 基础设置
     /// </summary>
-    public class BasicSettingsService : BaseService, IBasicSettingsService
+    public class BasicService : BaseService, IBasicService
     {
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace FastAdminAPI.Core.Services
         /// <param name="dbContext"></param>
         /// <param name="httpContext"></param>
         /// <param name="dataPermission"></param>
-        public BasicSettingsService(ISqlSugarClient dbContext, IHttpContextAccessor httpContext,
+        public BasicService(ISqlSugarClient dbContext, IHttpContextAccessor httpContext,
             IDataPermissionService dataPermission) : base(dbContext, httpContext)
         {
             _dataPermission = dataPermission;
@@ -88,7 +88,9 @@ namespace FastAdminAPI.Core.Services
         public async Task<ResponseModel> EditCode(EditCodeModel model)
         {
             bool isSysFlag = await _dbContext.Queryable<S99_Code>()
-                .Where(S99 => S99.S99_IsValid == (byte)BaseEnums.IsValid.Valid && S99.S99_CodeId == model.CodeId && S99.S99_SysFlag == (byte)BaseEnums.SystemFlag.System)
+                .Where(S99 => S99.S99_IsValid == (byte)BaseEnums.IsValid.Valid && 
+                              S99.S99_SysFlag == (byte)BaseEnums.SystemFlag.System && 
+                              S99.S99_CodeId == model.CodeId)
                 .AnyAsync();
             if (isSysFlag)
                 throw new UserOperationException("系统字典无法进行编辑!");
@@ -107,7 +109,9 @@ namespace FastAdminAPI.Core.Services
         public async Task<ResponseModel> DelCode(long codeId)
         {
             bool isSysFlag = await _dbContext.Queryable<S99_Code>()
-                .Where(S99 => S99.S99_IsValid == (byte)BaseEnums.IsValid.Valid && S99.S99_CodeId == codeId && S99.S99_SysFlag == (byte)BaseEnums.SystemFlag.System)
+                .Where(S99 => S99.S99_IsValid == (byte)BaseEnums.IsValid.Valid && 
+                              S99.S99_SysFlag == (byte)BaseEnums.SystemFlag.System && 
+                              S99.S99_CodeId == codeId)
                 .AnyAsync();
             if (isSysFlag)
                 throw new UserOperationException("系统字典无法进行删除!");
@@ -332,13 +336,13 @@ namespace FastAdminAPI.Core.Services
                         //审核人
                         if (!string.IsNullOrEmpty(item.Approvers))
                         {
-                            var ApproverIds = item.Approvers.Split(",").ToList();
-                            if (ApproverIds?.Count > 0)
+                            var approverIds = item.Approvers.Split(",").ToList();
+                            if (approverIds?.Count > 0)
                             {
                                 List<string> employeeNameList = new();
-                                foreach (var item1 in ApproverIds)
+                                foreach (var approverId in approverIds)
                                 {
-                                    employeeNameList.Add(employees.Where(S07 => S07.S07_EmployeeId == Convert.ToInt64(item1)).Select(S07 => S07.S07_Name).FirstOrDefault());
+                                    employeeNameList.Add(employees.Where(S07 => S07.S07_EmployeeId == Convert.ToInt64(approverId)).Select(S07 => S07.S07_Name).FirstOrDefault());
                                 }
                                 item.ApproverName = string.Join(",", employeeNameList);
                             }
