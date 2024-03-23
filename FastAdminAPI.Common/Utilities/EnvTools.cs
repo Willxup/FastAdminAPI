@@ -1,8 +1,8 @@
 using System;
 
-namespace FastAdminAPI.Common.SystemUtilities
+namespace FastAdminAPI.Common.Utilities
 {
-    public static class EnvironmentHelper
+    public static class EnvTools
     {
         /// <summary>
         /// 环境变量

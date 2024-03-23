@@ -1,7 +1,7 @@
 ﻿using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Logs;
-using FastAdminAPI.Common.SystemUtilities;
+using FastAdminAPI.Common.Utilities;
 using FastAdminAPI.Framework.Extensions.Models;
 using SqlSugar;
 using SqlSugar.Attributes.Extension.Extensions;
@@ -459,7 +459,7 @@ namespace FastAdminAPI.Framework.Extensions
                 }
                 else
                 {
-                    if (EnvironmentHelper.IsProduction)
+                    if (EnvTools.IsProduction)
                     {
                         result.Message = "操作失败!";
                         NLogHelper.Error($"执行事务出错，{ex.Message}", ex);

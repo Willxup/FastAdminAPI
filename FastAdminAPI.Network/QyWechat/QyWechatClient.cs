@@ -1,7 +1,7 @@
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Redis;
-using FastAdminAPI.Common.SystemUtilities;
+using FastAdminAPI.Common.Utilities;
 using FastAdminAPI.Network.Config;
 using FastAdminAPI.Network.QyWechat.Common;
 using FastAdminAPI.Network.QyWechat.Config;
@@ -39,7 +39,7 @@ namespace FastAdminAPI.Network.QyWechat
         /// <exception cref="Exception"></exception>
         public QyWechatClient(IRedisHelper redis)
         {
-            if (EnvironmentHelper.IsDevelop)
+            if (EnvTools.IsDevelop)
                 _qyWechatConfig = new DevQyWechatConfiguration();
             else
                 throw new Exception("当前环境暂不支持企业微信!");

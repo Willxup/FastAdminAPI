@@ -83,7 +83,7 @@ namespace FastAdminAPI.Common.Middlewares
                 return;
             }
             //白名单
-            if (WHITE_LIST.Contains(httpContext.Request.Path.Value.ToLower()))
+            if (WHITE_LIST?.Contains(httpContext.Request.Path.Value.ToLower()) ?? false)
             {
                 await _next(httpContext);
                 return;

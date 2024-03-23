@@ -3,7 +3,7 @@ using FastAdminAPI.Common.Authentications;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Redis;
-using FastAdminAPI.Common.SystemUtilities;
+using FastAdminAPI.Common.Utilities;
 using FastAdminAPI.Core.Controllers.BASE;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Models.Login;
@@ -82,7 +82,7 @@ namespace FastAdminAPI.Core.Controllers
         {
             bool isPermit = false;
             //验证密码登录时域名限制
-            if (EnvironmentHelper.IsProduction)
+            if (EnvTools.IsProduction)
             {
                 //如果IP不为空并且在白名单中
                 if (!string.IsNullOrEmpty(ip) && (LOGIN_PERMIT_IP_WHITE_LIST?.Contains(ip) ?? false))

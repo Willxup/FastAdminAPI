@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Globalization;
 
 namespace FastAdminAPI.Common.Datetime
 {
     public static class DateTimeHelper
     {
-        #region DateTime转换为时间戳
+        #region DateTime和时间戳互转
         /// <summary>
         /// 时间戳类型
         /// </summary>
@@ -59,12 +60,11 @@ namespace FastAdminAPI.Common.Datetime
         /// <returns></returns>
         public static DateTime? ConvertTimeStampToDate(string timestamp, TimeStampType timeStampType = TimeStampType.Milliseconds)
         {
-            DateTime startTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            DateTime startTime = new(1970, 1, 1, 0, 0, 0, 0);
             DateTime? time = null;
-            double stamp = -1;
             try
             {
-                stamp = Convert.ToDouble(timestamp);
+                double stamp = Convert.ToDouble(timestamp);
                 if (stamp >= 0)
                 {
                     switch (timeStampType)
@@ -86,6 +86,7 @@ namespace FastAdminAPI.Common.Datetime
         }
         #endregion
 
+        #region 剩余时间
         /// <summary>
         /// 获取当天剩余时间(秒)
         /// </summary>
@@ -93,6 +94,34 @@ namespace FastAdminAPI.Common.Datetime
         public static double GetRemainingTimeOfDay()
         {
             return (24 * 60 * 60) - DateTime.Now.TimeOfDay.TotalSeconds;
+        } 
+        #endregion
+    }
+    public static class DateTimeConvertExtension
+    {
+        /// <summary>
+        /// 可空时间类型格式化为字符串
+        /// </summary>
+        /// <param name="datetime">时间</param>
+        /// <param name="format"></param>
+        /// <returns></returns>
+        public static string ToFormattedString(this DateTime? datetime, string format = "yyyy-MM-dd HH:mm:ss", DateTime? defaultValue = null)
+        {
+            if (datetime != null)
+            {
+                return ((DateTime)datetime).ToFormattedString(format);
+            }
+            return defaultValue != null ? ((DateTime)defaultValue).ToFormattedString(format) : DateTime.MinValue.ToFormattedString(format);
+        }
+        /// <summary>
+        /// 时间类型格式化为字符串
+        /// </summary>
+        /// <param name="datetime"></param>
+        /// <param name="format"></param>
+        /// <returns></returns>
+        public static string ToFormattedString(this DateTime datetime, string format = "yyyy-MM-dd HH:mm:ss")
+        {
+            return datetime.ToString(format, DateTimeFormatInfo.InvariantInfo);
         }
     }
 }

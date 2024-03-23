@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace FastAdminAPI.Common.Network
+namespace FastAdminAPI.Network.Utilities
 {
     /// <summary>
     /// HttpClient帮助类

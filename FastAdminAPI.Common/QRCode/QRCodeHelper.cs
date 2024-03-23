@@ -12,8 +12,7 @@ namespace FastAdminAPI.Common.QRCode
         /// <returns></returns>
         public static byte[] GetQRCode(string content, int pixel)
         {
-            QRCodeGenerator qrGenerator = new();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(content, QRCodeGenerator.ECCLevel.M);
+            QRCodeData qrCodeData = QRCodeGenerator.GenerateQrCode(content, QRCodeGenerator.ECCLevel.M);
             PngByteQRCode qRCode = new(qrCodeData);
             return qRCode.GetGraphic(pixel);
         }

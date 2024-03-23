@@ -2,9 +2,8 @@ using FastAdminAPI.CAP.Extensions;
 using FastAdminAPI.Common.Attributes.CheckValidators;
 using FastAdminAPI.Common.Filters;
 using FastAdminAPI.Common.Logs;
-using FastAdminAPI.Common.Network;
 using FastAdminAPI.Common.Redis;
-using FastAdminAPI.Common.SystemUtilities;
+using FastAdminAPI.Common.Utilities;
 using FastAdminAPI.Framework.Extensions;
 using FastAdminAPI.Network.Config;
 using FastAdminAPI.Tasks.Config;
@@ -45,7 +44,7 @@ try
         //…Ë÷√appsetting.json
         config.SetBasePath(Directory.GetCurrentDirectory())
                   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                  .AddJsonFile($"appsettings.{EnvironmentHelper.GetEnv()}.json", optional: true, reloadOnChange: true)
+                  .AddJsonFile($"appsettings.{EnvTools.GetEnv()}.json", optional: true, reloadOnChange: true)
                   .AddEnvironmentVariables();
     });
     #endregion
@@ -80,8 +79,7 @@ try
     builder.Services.AddSingleton<IRedisHelper, RedisHelper>();
 
     // HttpClient & Helper & Refit
-    builder.Services.AddHttpClient();
-    builder.Services.AddSingleton<HttpClientHelper>();
+    builder.Services.AddHttpClientConfig();
     builder.Services.AddRefitClients(configuration);
     #endregion
 

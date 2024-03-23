@@ -1,6 +1,5 @@
-﻿using FastAdminAPI.Common.Attributes;
-using FastAdminAPI.Common.Converters;
-using FastAdminAPI.Common.SystemUtilities;
+﻿using FastAdminAPI.Common.Datetime;
+using FastAdminAPI.Common.Utilities;
 using SqlSugar;
 using System;
 using System.Linq;
@@ -40,7 +39,7 @@ namespace FastAdminAPI.Framework.Extensions
             {
                 SqlFuncServices = DbExtension.CustomSqlFunc()
             };
-            if (EnvironmentHelper.IsDevelop)
+            if (EnvTools.IsDevelop)
             {
                 db.Aop.OnLogExecuting = (sql, parameters) =>
                 {

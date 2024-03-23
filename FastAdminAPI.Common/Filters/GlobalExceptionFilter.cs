@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Logs;
-using FastAdminAPI.Common.SystemUtilities;
+using FastAdminAPI.Common.Utilities;
 
 namespace FastAdminAPI.Common.Filters
 {
@@ -37,7 +37,7 @@ namespace FastAdminAPI.Common.Filters
             }
             else
             {
-                if (!EnvironmentHelper.IsProduction)
+                if (!EnvTools.IsProduction)
                 {
                     //堆栈信息
                     responseModel.Data = context.Exception.StackTrace.TrimStart();

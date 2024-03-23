@@ -1,6 +1,6 @@
 ﻿namespace FastAdminAPI.Common.Utilities
 {
-    public static class PhoneHelper
+    public static class SimpleTools
     {
         /// <summary>
         /// 手机号过滤

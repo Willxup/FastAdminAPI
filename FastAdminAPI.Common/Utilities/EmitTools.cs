@@ -2,9 +2,9 @@
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace FastAdminAPI.Common.Reflections
+namespace FastAdminAPI.Common.Utilities
 {
-    public static class EmitHelper
+    public static class EmitTools
     {
         /// <summary>
         /// 为对象的属性设置值
@@ -23,7 +23,7 @@ namespace FastAdminAPI.Common.Reflections
 
             //获取属性SET方法
             MethodInfo callMethod = type.GetMethod("set_" + propertyName, BindingFlags.Instance | BindingFlags.IgnoreCase | BindingFlags.Public);
-            
+
             //获取方法的参数
             ParameterInfo parameterInfo = callMethod.GetParameters()[0];
 
