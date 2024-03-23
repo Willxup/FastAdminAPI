@@ -19,7 +19,7 @@ namespace FastAdminAPI.Core.Services
     /// <summary>
     /// 部门设置
     /// </summary>
-    public class DepartmentService : BaseService, IDepartmentService
+    public class DepartService : BaseService, IDepartService
     {
         /// <summary>
         /// 数据权限Service
@@ -32,7 +32,7 @@ namespace FastAdminAPI.Core.Services
         /// <param name="dbContext"></param>
         /// <param name="httpContext"></param>
         /// <param name="dataPermissionService"></param>
-        public DepartmentService(ISqlSugarClient dbContext, IHttpContextAccessor httpContext,
+        public DepartService(ISqlSugarClient dbContext, IHttpContextAccessor httpContext,
             IDataPermissionService dataPermissionService) : base(dbContext, httpContext)
         {
             _dataPermissionService = dataPermissionService;

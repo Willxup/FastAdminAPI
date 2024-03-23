@@ -162,51 +162,51 @@
             <param name="checkProcessId">审批流程Id</param>
             <returns></returns>
         </member>
-        <member name="T:FastAdminAPI.Core.Controllers.DepartmentController">
+        <member name="T:FastAdminAPI.Core.Controllers.DepartController">
             <summary>
             部门设置
             </summary>
         </member>
-        <member name="F:FastAdminAPI.Core.Controllers.DepartmentController._departmentSercvice">
+        <member name="F:FastAdminAPI.Core.Controllers.DepartController._departmentSercvice">
             <summary>
             部门Service
             </summary>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.DepartmentController.#ctor(FastAdminAPI.Core.IServices.IDepartmentService)">
+        <member name="M:FastAdminAPI.Core.Controllers.DepartController.#ctor(FastAdminAPI.Core.IServices.IDepartService)">
             <summary>
             构造
             </summary>
             <param name="departmentSercvice"></param>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.DepartmentController.GetDepartmentTree(System.String)">
+        <member name="M:FastAdminAPI.Core.Controllers.DepartController.GetDepartmentTree(System.String)">
             <summary>
             获取部门树
             </summary>
             <param name="departName">部门名称</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.DepartmentController.AddDepartment(FastAdminAPI.Core.Models.Departments.AddDepartmentModel)">
+        <member name="M:FastAdminAPI.Core.Controllers.DepartController.AddDepartment(FastAdminAPI.Core.Models.Departments.AddDepartmentModel)">
             <summary>
             新增部门
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.DepartmentController.EditDepartment(FastAdminAPI.Core.Models.Departments.EditDepartmentModel)">
+        <member name="M:FastAdminAPI.Core.Controllers.DepartController.EditDepartment(FastAdminAPI.Core.Models.Departments.EditDepartmentModel)">
             <summary>
             编辑部门
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.DepartmentController.DelDepartment(System.Nullable{System.Int64})">
+        <member name="M:FastAdminAPI.Core.Controllers.DepartController.DelDepartment(System.Nullable{System.Int64})">
             <summary>
             删除部门
             </summary>
             <param name="departId">部门Id</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.DepartmentController.GetDepartMaxEmployeeNums(System.String)">
+        <member name="M:FastAdminAPI.Core.Controllers.DepartController.GetDepartMaxEmployeeNums(System.String)">
             <summary>
             获取部门岗位编制
             </summary>
@@ -971,40 +971,40 @@
             <param name="checkProcessId">审批流程Id</param>
             <returns></returns>
         </member>
-        <member name="T:FastAdminAPI.Core.IServices.IDepartmentService">
+        <member name="T:FastAdminAPI.Core.IServices.IDepartService">
             <summary>
             部门设置
             </summary>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IDepartmentService.GetDepartmentTree(System.String)">
+        <member name="M:FastAdminAPI.Core.IServices.IDepartService.GetDepartmentTree(System.String)">
             <summary>
             获取部门树
             </summary>
             <param name="departName">部门名称</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IDepartmentService.AddDepartment(FastAdminAPI.Core.Models.Departments.AddDepartmentModel)">
+        <member name="M:FastAdminAPI.Core.IServices.IDepartService.AddDepartment(FastAdminAPI.Core.Models.Departments.AddDepartmentModel)">
             <summary>
             新增部门
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IDepartmentService.EditDepartment(FastAdminAPI.Core.Models.Departments.EditDepartmentModel)">
+        <member name="M:FastAdminAPI.Core.IServices.IDepartService.EditDepartment(FastAdminAPI.Core.Models.Departments.EditDepartmentModel)">
             <summary>
             编辑部门
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IDepartmentService.DelDepartment(System.Int64)">
+        <member name="M:FastAdminAPI.Core.IServices.IDepartService.DelDepartment(System.Int64)">
             <summary>
             删除部门
             </summary>
             <param name="departId">部门Id</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IDepartmentService.GetDepartMaxEmployeeNums(System.String)">
+        <member name="M:FastAdminAPI.Core.IServices.IDepartService.GetDepartMaxEmployeeNums(System.String)">
             <summary>
             获取部门岗位编制
             </summary>
@@ -3157,17 +3157,17 @@
             <param name="checkProcessId">审批流程Id</param>
             <returns></returns>
         </member>
-        <member name="T:FastAdminAPI.Core.Services.DepartmentService">
+        <member name="T:FastAdminAPI.Core.Services.DepartService">
             <summary>
             部门设置
             </summary>
         </member>
-        <member name="F:FastAdminAPI.Core.Services.DepartmentService._dataPermissionService">
+        <member name="F:FastAdminAPI.Core.Services.DepartService._dataPermissionService">
             <summary>
             数据权限Service
             </summary>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.DepartmentService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,FastAdminAPI.Business.IServices.IDataPermissionService)">
+        <member name="M:FastAdminAPI.Core.Services.DepartService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,FastAdminAPI.Business.IServices.IDataPermissionService)">
             <summary>
             构造
             </summary>
@@ -3175,35 +3175,35 @@
             <param name="httpContext"></param>
             <param name="dataPermissionService"></param>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.DepartmentService.GetDepartmentTree(System.String)">
+        <member name="M:FastAdminAPI.Core.Services.DepartService.GetDepartmentTree(System.String)">
             <summary>
             获取部门树
             </summary>
             <param name="departName">部门名称</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.DepartmentService.AddDepartment(FastAdminAPI.Core.Models.Departments.AddDepartmentModel)">
+        <member name="M:FastAdminAPI.Core.Services.DepartService.AddDepartment(FastAdminAPI.Core.Models.Departments.AddDepartmentModel)">
             <summary>
             新增部门
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.DepartmentService.EditDepartment(FastAdminAPI.Core.Models.Departments.EditDepartmentModel)">
+        <member name="M:FastAdminAPI.Core.Services.DepartService.EditDepartment(FastAdminAPI.Core.Models.Departments.EditDepartmentModel)">
             <summary>
             编辑部门
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.DepartmentService.DelDepartment(System.Int64)">
+        <member name="M:FastAdminAPI.Core.Services.DepartService.DelDepartment(System.Int64)">
             <summary>
             删除部门
             </summary>
             <param name="departId">部门Id</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.DepartmentService.GetDepartMaxEmployeeNums(System.String)">
+        <member name="M:FastAdminAPI.Core.Services.DepartService.GetDepartMaxEmployeeNums(System.String)">
             <summary>
             获取部门岗位编制
             </summary>

@@ -7,7 +7,7 @@ namespace FastAdminAPI.Core.IServices
     /// <summary>
     /// 部门设置
     /// </summary>
-    public interface IDepartmentService
+    public interface IDepartService
     {
         /// <summary>
         /// 获取部门树

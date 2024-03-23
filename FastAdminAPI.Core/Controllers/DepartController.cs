@@ -11,18 +11,18 @@ namespace FastAdminAPI.Core.Controllers
     /// <summary>
     /// 部门设置
     /// </summary>
-    public class DepartmentController : BaseController
+    public class DepartController : BaseController
     {
         /// <summary>
         /// 部门Service
         /// </summary>
-        private readonly IDepartmentService _departmentSercvice;
+        private readonly IDepartService _departmentSercvice;
 
         /// <summary>
         /// 构造
         /// </summary>
         /// <param name="departmentSercvice"></param>
-        public DepartmentController(IDepartmentService departmentSercvice)
+        public DepartController(IDepartService departmentSercvice)
         {
             _departmentSercvice = departmentSercvice;
         }
