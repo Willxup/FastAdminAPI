@@ -185,7 +185,7 @@ namespace FastAdminAPI.Core.Services
 
             //校验员工岗位
             bool isExistEmployeePost = await _dbContext.Queryable<S08_EmployeePost>()
-                .Where(S08 => S08.S06_PostId == postId && S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid)
+                .Where(S08 => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid && S08.S06_PostId == postId)
                 .AnyAsync();
             if (isExistEmployeePost)
                 throw new UserOperationException("该岗位已存在员工，请移除员工后删除!");

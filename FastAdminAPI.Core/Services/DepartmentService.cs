@@ -65,8 +65,8 @@ namespace FastAdminAPI.Core.Services
                                    .LeftJoin<S06_Post>((S07, S08, S06) => S08.S06_PostId == S06.S06_PostId)
                                    .Where((S07, S08, S06) => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid &&
                                                              S07.S07_Status != (byte)BusinessEnums.EmployeeStatus.Dimission &&
-                                                             S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True &&
                                                              S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                                             S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True &&
                                                              S08.S05_DepartId == S05.S05_DepartId &&
                                                              S06.S06_ParentPostId == null &&
                                                              S06.S06_IsValid == (byte)BaseEnums.IsValid.Valid)
@@ -137,7 +137,7 @@ namespace FastAdminAPI.Core.Services
 
             //校验岗位
             bool isExist = await _dbContext.Queryable<S06_Post>()
-                .Where(S06 => S06.S05_DepartId == departId && S06.S06_IsValid == (byte)BaseEnums.IsValid.Valid)
+                .Where(S06 => S06.S06_IsValid == (byte)BaseEnums.IsValid.Valid && S06.S05_DepartId == departId)
                 .AnyAsync();
             if (isExist)
                 throw new UserOperationException("该部门已存在岗位，请移除岗位后删除!");

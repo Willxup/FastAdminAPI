@@ -166,7 +166,7 @@ namespace FastAdminAPI.Business.Services
 
                 //获取员工的岗位信息
                 var employeePosts = await _dbContext.Queryable<S08_EmployeePost>()
-                    .Where(S08 => S08.S07_EmployeeId == _employeeId && S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid)
+                    .Where(S08 => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid && S08.S07_EmployeeId == _employeeId)
                     .Select(S08 => new { S08.S06_PostId, S08.S05_DepartId }).ToListAsync();
                 if (employeePosts == null || employeePosts.Count <= 0)
                 {
@@ -232,7 +232,7 @@ namespace FastAdminAPI.Business.Services
                 {
                     //获取所有岗位下的员工Id
                     var dataPermission = await _dbContext.Queryable<S08_EmployeePost>()
-                        .Where(S08 => postIds.Contains(S08.S06_PostId) && S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid)
+                        .Where(S08 => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid && postIds.Contains(S08.S06_PostId))
                         .Select(S08 => S08.S07_EmployeeId).ToListAsync();
 
                     //去重

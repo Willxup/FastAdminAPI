@@ -242,9 +242,9 @@ namespace FastAdminAPI.Core.Services
             }
 
             var result = await _dbContext.Queryable<S07_Employee>()
-                .LeftJoin<S08_EmployeePost>((S07, S08) => S07.S07_EmployeeId == S08.S07_EmployeeId &&
+                .LeftJoin<S08_EmployeePost>((S07, S08) => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid &&
                                                          S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True && //查询主岗位
-                                                         S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid)
+                                                         S07.S07_EmployeeId == S08.S07_EmployeeId)
                 .Where((S07, S08) => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid)
                 .WhereIF(departIds?.Count > 0, (S07, S08) => departIds.Contains(S08.S05_DepartId))
                 .ToListResultAsync(pageSearch, new EmployeePageResult());
@@ -318,8 +318,9 @@ namespace FastAdminAPI.Core.Services
             {
                 //查询部门岗位
                 var employeePostList = await _dbContext.Queryable<S08_EmployeePost>()
-                                       .Where(S08 => S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True && //查询主岗位
-                                                     S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid)
+                                       .Where(S08 => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid && 
+                                                     S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True) //查询主岗位
+
                                        .Select(S08 => new
                                        {
                                            EmployeeId = S08.S07_EmployeeId,
