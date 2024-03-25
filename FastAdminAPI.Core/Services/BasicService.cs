@@ -187,15 +187,13 @@ namespace FastAdminAPI.Core.Services
                 if (isExist)
                     throw new UserOperationException("当前员工已设置过数据权限!");
 
-                S10_DataPermission entity = new()
-                {
-                    S07_EmployeeId = (long)model.EmployeeId,
-                    S05_DepartIds = string.Join(",", model.DepartIdList),
-                    S10_CreateId = _employeeId,
-                    S10_CreateBy = _employeeName,
-                    S10_CreateTime = _dbContext.GetDate()
-                };
-                var result = await _dbContext.Insertable(entity).ExecuteAsync();
+                model.OperationId = _employeeId;
+                model.OperationName = _employeeName;
+                model.OperationTime = _dbContext.GetDate();
+
+                //新增数据权限
+                var result = await _dbContext.InsertResultAsync<AddDataPermissionSettingModel, S10_DataPermission>(model);
+
                 if (result?.Code == ResponseCode.Success)
                 {
                     //释放数据权限
@@ -227,24 +225,20 @@ namespace FastAdminAPI.Core.Services
                     })
                     .FirstAsync() ?? throw new UserOperationException("找不到该数据权限设置!");
 
-                //先释放之前员工数据权限
-                await _dataPermission.ReleaseDataPermission(dataPermission.EmployeeId);
+                model.OperationId = _employeeId;
+                model.OperationName = _employeeName;
+                model.OperationTime = _dbContext.GetDate();
 
                 //更新数据权限
-                var result = await _dbContext.Updateable<S10_DataPermission>()
-                    .SetColumns(S10 => S10.S07_EmployeeId == model.EmployeeId)
-                    .SetColumns(S10 => S10.S05_DepartIds == string.Join(",", model.DepartIdList))
-                    .SetColumns(S10 => S10.S10_ModifyId == _employeeId)
-                    .SetColumns(S10 => S10.S10_ModifyBy == _employeeName)
-                    .SetColumns(S10 => S10.S10_ModifyTime == SqlFunc.GetDate())
-                    .Where(S10 => S10.S10_DataPermissionId == model.DataPermissionId)
-                    .ExecuteAsync();
+                var result = await _dbContext.UpdateResultAsync<EditDataPermissionSettingModel, S10_DataPermission>(model);
+
                 if (result?.Code == ResponseCode.Success)
                 {
                     //释放员工数据权限
                     await _dataPermission.ReleaseDataPermission((long)model.EmployeeId);
                     await _dataPermission.ReleaseDataPermission(dataPermission.EmployeeId);
                 }
+
                 return result;
             }
             else

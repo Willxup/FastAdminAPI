@@ -1,9 +1,10 @@
-﻿
-using FastAdminAPI.Framework.Extensions.Models;
+﻿using FastAdminAPI.Framework.Extensions.Models;
 using Newtonsoft.Json;
 using SqlSugar.Attributes.Extension.Common;
 using SqlSugar.Attributes.Extension.Extensions;
+using SqlSugar.Attributes.Extension.Extensions.Attributes.Operation;
 using SqlSugar.Attributes.Extension.Extensions.Attributes.Query;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -60,34 +61,54 @@ namespace FastAdminAPI.Core.Models.BasicSettings
     #endregion
 
     #region 操作
-    public class AddDataPermissionSettingModel
+    public class DataPermissionSettingBaseModel : DbOperationBaseModel
     {
         /// <summary>
         /// 员工Id
         /// </summary>
         [Required(ErrorMessage = "员工Id不能为空!")]
+        [DbOperationField("S07_EmployeeId")]
         public long? EmployeeId { get; set; }
+
         /// <summary>
         /// 部门Id集合
         /// </summary>
+        [DbIgnoreField]
         public List<long> DepartIdList { get; set; }
+        [JsonIgnore]
+        [DbOperationField("S05_DepartIds")]
+        public string Departs { get; set; }
     }
-    public class EditDataPermissionSettingModel
+    public class AddDataPermissionSettingModel : DataPermissionSettingBaseModel
+    {
+        [JsonIgnore]
+        [DbOperationField("S10_CreateId")]
+        public long OperationId { get; set; }
+        [JsonIgnore]
+        [DbOperationField("S10_CreateBy")]
+        public string OperationName { get; set; }
+        [JsonIgnore]
+        [DbOperationField("S10_CreateTime")]
+        public DateTime OperationTime { get; set; }
+    }
+    public class EditDataPermissionSettingModel : DataPermissionSettingBaseModel
     {
         /// <summary>
         /// 数据权限设置Id
         /// </summary>
         [Required(ErrorMessage = "数据权限设置Id不能为空!")]
+        [DbOperationField("S10_DataPermissionId", true)]
         public long? DataPermissionId { get; set; }
-        /// <summary>
-        /// 员工Id
-        /// </summary>
-        [Required(ErrorMessage = "员工Id不能为空!")]
-        public long? EmployeeId { get; set; }
-        /// <summary>
-        /// 部门Id集合
-        /// </summary>
-        public List<long> DepartIdList { get; set; }
+
+        [JsonIgnore]
+        [DbOperationField("S10_ModifyId")]
+        public long OperationId { get; set; }
+        [JsonIgnore]
+        [DbOperationField("S10_ModifyBy")]
+        public string OperationName { get; set; }
+        [JsonIgnore]
+        [DbOperationField("S10_ModifyTime")]
+        public DateTime OperationTime { get; set; }
     }
     #endregion
 }

@@ -185,14 +185,14 @@
             <param name="departName">部门名称</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.DepartController.AddDepartment(FastAdminAPI.Core.Models.Departments.AddDepartmentModel)">
+        <member name="M:FastAdminAPI.Core.Controllers.DepartController.AddDepartment(FastAdminAPI.Core.Models.Depart.AddDepartModel)">
             <summary>
             新增部门
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.DepartController.EditDepartment(FastAdminAPI.Core.Models.Departments.EditDepartmentModel)">
+        <member name="M:FastAdminAPI.Core.Controllers.DepartController.EditDepartment(FastAdminAPI.Core.Models.Depart.EditDepartModel)">
             <summary>
             编辑部门
             </summary>
@@ -983,14 +983,14 @@
             <param name="departName">部门名称</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IDepartService.AddDepartment(FastAdminAPI.Core.Models.Departments.AddDepartmentModel)">
+        <member name="M:FastAdminAPI.Core.IServices.IDepartService.AddDepartment(FastAdminAPI.Core.Models.Depart.AddDepartModel)">
             <summary>
             新增部门
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IDepartService.EditDepartment(FastAdminAPI.Core.Models.Departments.EditDepartmentModel)">
+        <member name="M:FastAdminAPI.Core.IServices.IDepartService.EditDepartment(FastAdminAPI.Core.Models.Depart.EditDepartModel)">
             <summary>
             编辑部门
             </summary>
@@ -1788,12 +1788,12 @@
             权限：部门集合名称
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.BasicSettings.AddDataPermissionSettingModel.EmployeeId">
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.DataPermissionSettingBaseModel.EmployeeId">
             <summary>
             员工Id
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.BasicSettings.AddDataPermissionSettingModel.DepartIdList">
+        <member name="P:FastAdminAPI.Core.Models.BasicSettings.DataPermissionSettingBaseModel.DepartIdList">
             <summary>
             部门Id集合
             </summary>
@@ -1803,92 +1803,87 @@
             数据权限设置Id
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.BasicSettings.EditDataPermissionSettingModel.EmployeeId">
-            <summary>
-            员工Id
-            </summary>
-        </member>
-        <member name="P:FastAdminAPI.Core.Models.BasicSettings.EditDataPermissionSettingModel.DepartIdList">
-            <summary>
-            部门Id集合
-            </summary>
-        </member>
-        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentInfoModel.Property">
+        <member name="P:FastAdminAPI.Core.Models.Depart.DepartInfoModel.Property">
             <summary>
             部门属性 S99_Code
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentInfoModel.PropertyName">
+        <member name="P:FastAdminAPI.Core.Models.Depart.DepartInfoModel.PropertyName">
             <summary>
             部门属性名称
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentInfoModel.Label">
+        <member name="P:FastAdminAPI.Core.Models.Depart.DepartInfoModel.Label">
             <summary>
             部门标签 -1无 0线索 1客户 2代理，多个以,号分隔
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentInfoModel.ParentName">
+        <member name="P:FastAdminAPI.Core.Models.Depart.DepartInfoModel.ParentName">
             <summary>
             上级部门名称
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentInfoModel.CornerMark">
+        <member name="P:FastAdminAPI.Core.Models.Depart.DepartInfoModel.CornerMark">
             <summary>
             角标 每一级4位数字
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentInfoModel.DirectordName">
+        <member name="P:FastAdminAPI.Core.Models.Depart.DepartInfoModel.DirectordName">
             <summary>
             部门负责人
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentBaseModel.Property">
+        <member name="P:FastAdminAPI.Core.Models.Depart.DepartBaseModel.Property">
             <summary>
             部门属性 S99_Code
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentBaseModel.DepartLabelList">
+        <member name="P:FastAdminAPI.Core.Models.Depart.DepartBaseModel.DepartLabelList">
             <summary>
             部门标签 -1无 0线索 1客户 2代理，多个以,号分隔
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentBaseModel.Priority">
+        <member name="P:FastAdminAPI.Core.Models.Depart.DepartBaseModel.Label">
+            <summary>
+            标签
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Depart.DepartBaseModel.Priority">
             <summary>
             优先级
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Departments.DepartmentBaseModel.DepartName">
+        <member name="P:FastAdminAPI.Core.Models.Depart.DepartBaseModel.DepartName">
             <summary>
             部门名称
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Departments.AddDepartmentModel.ParentDepartId">
+        <member name="P:FastAdminAPI.Core.Models.Depart.AddDepartModel.ParentDepartId">
             <summary>
             父级部门Id
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Departments.AddDepartmentModel.CornerMark">
+        <member name="P:FastAdminAPI.Core.Models.Depart.AddDepartModel.CornerMark">
             <summary>
             角标 每一级4位数字
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Departments.EditDepartmentModel.DepartId">
+        <member name="P:FastAdminAPI.Core.Models.Depart.EditDepartModel.DepartId">
             <summary>
             部门Id
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Departments.DepartMaxEmployeeNumsModel.DepartNums">
+        <member name="P:FastAdminAPI.Core.Models.Depart.DepartMaxEmployeeNumsModel.DepartNums">
             <summary>
             下级部门数
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Departments.DepartMaxEmployeeNumsModel.PostSum">
+        <member name="P:FastAdminAPI.Core.Models.Depart.DepartMaxEmployeeNumsModel.PostSum">
             <summary>
             下级岗位数
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Departments.DepartMaxEmployeeNumsModel.MaxEmployeeNums">
+        <member name="P:FastAdminAPI.Core.Models.Depart.DepartMaxEmployeeNumsModel.MaxEmployeeNums">
             <summary>
             编制 (当前编制/总编制)
             </summary>
@@ -3182,14 +3177,14 @@
             <param name="departName">部门名称</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.DepartService.AddDepartment(FastAdminAPI.Core.Models.Departments.AddDepartmentModel)">
+        <member name="M:FastAdminAPI.Core.Services.DepartService.AddDepartment(FastAdminAPI.Core.Models.Depart.AddDepartModel)">
             <summary>
             新增部门
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.DepartService.EditDepartment(FastAdminAPI.Core.Models.Departments.EditDepartmentModel)">
+        <member name="M:FastAdminAPI.Core.Services.DepartService.EditDepartment(FastAdminAPI.Core.Models.Depart.EditDepartModel)">
             <summary>
             编辑部门
             </summary>

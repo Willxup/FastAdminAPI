@@ -5,7 +5,7 @@ using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Enums;
 using FastAdminAPI.Common.JsonTree;
 using FastAdminAPI.Core.IServices;
-using FastAdminAPI.Core.Models.Departments;
+using FastAdminAPI.Core.Models.Depart;
 using FastAdminAPI.Core.Services.BASE;
 using FastAdminAPI.Framework.Entities;
 using FastAdminAPI.Framework.Extensions;
@@ -47,7 +47,7 @@ namespace FastAdminAPI.Core.Services
         {
             return SortedJsonTree.CreateJsonTrees(await _dbContext.Queryable<S05_Department>()
                .Where(S05 => S05.S05_IsValid == (byte)BaseEnums.IsValid.Valid)
-               .Select(S05 => new DepartmentInfoModel
+               .Select(S05 => new DepartInfoModel
                {
                    Id = S05.S05_DepartId,
                    Name = S05.S05_DepartName,
@@ -78,7 +78,7 @@ namespace FastAdminAPI.Core.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<ResponseModel> AddDepartment(AddDepartmentModel model)
+        public async Task<ResponseModel> AddDepartment(AddDepartModel model)
         {
             if (model.DepartLabelList?.Count < 0)
                 throw new UserOperationException("部门标签不能为空!");
@@ -92,7 +92,7 @@ namespace FastAdminAPI.Core.Services
             model.OperationTime = _dbContext.GetDate();
             model.CornerMark = await CornerMarkHelper.GetCornerMark(_dbContext, "S05_Department", "S05_DepartId",
                 "S05_CornerMark", "S05_ParentDepartId", model.ParentDepartId.ToString());
-            var result = await _dbContext.InsertResultAsync<AddDepartmentModel, S05_Department>(model);
+            var result = await _dbContext.InsertResultAsync<AddDepartModel, S05_Department>(model);
             if (result?.Code == ResponseCode.Success)
             {
                 //释放数据权限
@@ -105,7 +105,7 @@ namespace FastAdminAPI.Core.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<ResponseModel> EditDepartment(EditDepartmentModel model)
+        public async Task<ResponseModel> EditDepartment(EditDepartModel model)
         {
             if(model.DepartLabelList?.Count > 0)
                 model.Label = string.Join(",", model.DepartLabelList);
@@ -113,7 +113,7 @@ namespace FastAdminAPI.Core.Services
             model.OperationId = _employeeId;
             model.OperationName = _employeeName;
             model.OperationTime = _dbContext.GetDate();
-            var result = await _dbContext.UpdateResultAsync<EditDepartmentModel, S05_Department>(model);
+            var result = await _dbContext.UpdateResultAsync<EditDepartModel, S05_Department>(model);
             if (result?.Code == ResponseCode.Success)
             {
                 //释放数据权限

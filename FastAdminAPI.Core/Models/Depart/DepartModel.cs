@@ -2,17 +2,18 @@
 using FastAdminAPI.Common.JsonTree;
 using FastAdminAPI.Framework.Extensions.Models;
 using Newtonsoft.Json;
+using SqlSugar.Attributes.Extension.Extensions;
 using SqlSugar.Attributes.Extension.Extensions.Attributes.Operation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace FastAdminAPI.Core.Models.Departments
+namespace FastAdminAPI.Core.Models.Depart
 {
     #region 部门
 
     #region 查询
-    public class DepartmentInfoModel : SortedJsonTree
+    public class DepartInfoModel : SortedJsonTree
     {
         /// <summary>
         /// 部门属性 S99_Code
@@ -42,7 +43,7 @@ namespace FastAdminAPI.Core.Models.Departments
     #endregion
 
     #region 操作
-    public class DepartmentBaseModel : DbOperationBaseModel
+    public class DepartBaseModel : DbOperationBaseModel
     {
         /// <summary>
         /// 部门属性 S99_Code
@@ -50,13 +51,19 @@ namespace FastAdminAPI.Core.Models.Departments
         [Required(ErrorMessage = "部门属性不能为空!")]
         [DbOperationField("S05_Property")]
         public long? Property { get; set; }
+
         /// <summary>
         /// 部门标签 -1无 0线索 1客户 2代理，多个以,号分隔
         /// </summary>
+        [DbIgnoreField]
         public List<long> DepartLabelList { get; set; }
+        /// <summary>
+        /// 标签
+        /// </summary>
         [JsonIgnore]
         [DbOperationField("S05_Label")]
         public string Label { get; set; }
+
         /// <summary>
         /// 优先级
         /// </summary>
@@ -70,7 +77,7 @@ namespace FastAdminAPI.Core.Models.Departments
         [DbOperationField("S05_DepartName")]
         public string DepartName { get; set; }
     }
-    public class AddDepartmentModel : DepartmentBaseModel
+    public class AddDepartModel : DepartBaseModel
     {
         /// <summary>
         /// 父级部门Id
@@ -96,7 +103,7 @@ namespace FastAdminAPI.Core.Models.Departments
         [DbOperationField("S05_CreateTime")]
         public DateTime OperationTime { get; set; }
     }
-    public class EditDepartmentModel : DepartmentBaseModel
+    public class EditDepartModel : DepartBaseModel
     {
         /// <summary>
         /// 部门Id

@@ -1,7 +1,7 @@
 ﻿using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Core.Controllers.BASE;
 using FastAdminAPI.Core.IServices;
-using FastAdminAPI.Core.Models.Departments;
+using FastAdminAPI.Core.Models.Depart;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -33,7 +33,7 @@ namespace FastAdminAPI.Core.Controllers
         /// <param name="departName">部门名称</param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(DepartmentInfoModel), 200)]
+        [ProducesResponseType(typeof(DepartInfoModel), 200)]
         public async Task<ResponseModel> GetDepartmentTree([FromQuery] string departName = null)
         {
             return Success(await _departmentSercvice.GetDepartmentTree(departName));
@@ -44,7 +44,7 @@ namespace FastAdminAPI.Core.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ResponseModel> AddDepartment([FromBody] AddDepartmentModel model)
+        public async Task<ResponseModel> AddDepartment([FromBody] AddDepartModel model)
         {
             return await _departmentSercvice.AddDepartment(model);
         }
@@ -54,7 +54,7 @@ namespace FastAdminAPI.Core.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<ResponseModel> EditDepartment([FromBody] EditDepartmentModel model)
+        public async Task<ResponseModel> EditDepartment([FromBody] EditDepartModel model)
         {
             return await _departmentSercvice.EditDepartment(model);
         }

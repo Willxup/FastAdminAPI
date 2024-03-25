@@ -1,5 +1,5 @@
 ﻿using FastAdminAPI.Common.BASE;
-using FastAdminAPI.Core.Models.Departments;
+using FastAdminAPI.Core.Models.Depart;
 using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.IServices
@@ -20,13 +20,13 @@ namespace FastAdminAPI.Core.IServices
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task<ResponseModel> AddDepartment(AddDepartmentModel model);
+        Task<ResponseModel> AddDepartment(AddDepartModel model);
         /// <summary>
         /// 编辑部门
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task<ResponseModel> EditDepartment(EditDepartmentModel model);
+        Task<ResponseModel> EditDepartment(EditDepartModel model);
         /// <summary>
         /// 删除部门
         /// </summary>
