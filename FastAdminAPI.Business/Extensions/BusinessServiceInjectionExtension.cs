@@ -1,6 +1,6 @@
-﻿using FastAdminAPI.Business.IServices;
+﻿using FastAdminAPI.Business.Interfaces;
 using FastAdminAPI.Business.PrivateFunc.Applications;
-using FastAdminAPI.Business.Services;
+using FastAdminAPI.Business.Implements;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FastAdminAPI.Business.Extensions

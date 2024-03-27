@@ -7,7 +7,7 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications
     /// <summary>
     /// 申请处理器
     /// </summary>
-    public interface IApplicationProcessor
+    internal interface IApplicationProcessor
     {
         /// <summary>
         /// 完成申请

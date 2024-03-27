@@ -3050,7 +3050,7 @@
             数据权限Service
             </summary>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.BasicService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,FastAdminAPI.Business.IServices.IDataPermissionService)">
+        <member name="M:FastAdminAPI.Core.Services.BasicService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,FastAdminAPI.Business.Interfaces.IDataPermissionService)">
             <summary>
             构造
             </summary>
@@ -3162,7 +3162,7 @@
             数据权限Service
             </summary>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.DepartService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,FastAdminAPI.Business.IServices.IDataPermissionService)">
+        <member name="M:FastAdminAPI.Core.Services.DepartService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,FastAdminAPI.Business.Interfaces.IDataPermissionService)">
             <summary>
             构造
             </summary>
@@ -3215,7 +3215,7 @@
             数据权限Service
             </summary>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.EmployeeService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,FastAdminAPI.Business.IServices.IDataPermissionService)">
+        <member name="M:FastAdminAPI.Core.Services.EmployeeService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,FastAdminAPI.Business.Interfaces.IDataPermissionService)">
             <summary>
             构造
             </summary>
@@ -3461,7 +3461,7 @@
             数据权限Service
             </summary>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.PostService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,FastAdminAPI.Business.IServices.IDataPermissionService)">
+        <member name="M:FastAdminAPI.Core.Services.PostService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,FastAdminAPI.Business.Interfaces.IDataPermissionService)">
             <summary>
             构造
             </summary>
@@ -3678,7 +3678,7 @@
             区域服务
             </summary>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.TokenPassService.#ctor(SqlSugar.ISqlSugarClient,FastAdminAPI.Business.IServices.IRegionService)">
+        <member name="M:FastAdminAPI.Core.Services.TokenPassService.#ctor(SqlSugar.ISqlSugarClient,FastAdminAPI.Business.Interfaces.IRegionService)">
             <summary>
             构造
             </summary>
@@ -3732,7 +3732,7 @@
             Redis锁前缀
             </summary>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.UserService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,FastAdminAPI.Business.IServices.IApplicationHandler,FastAdminAPI.Common.Redis.IRedisHelper)">
+        <member name="M:FastAdminAPI.Core.Services.UserService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,FastAdminAPI.Business.Interfaces.IApplicationHandler,FastAdminAPI.Common.Redis.IRedisHelper)">
             <summary>
             构造
             </summary>

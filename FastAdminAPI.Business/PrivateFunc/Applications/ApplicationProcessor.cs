@@ -15,7 +15,7 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications
     /// <summary>
     /// 申请处理器
     /// </summary>
-    public class ApplicationProcessor : IApplicationProcessor
+    internal class ApplicationProcessor : IApplicationProcessor
     {
         /// <summary>
         /// SugarScope

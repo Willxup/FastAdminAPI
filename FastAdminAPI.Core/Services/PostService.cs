@@ -1,5 +1,5 @@
-﻿using FastAdminAPI.Business.Common;
-using FastAdminAPI.Business.IServices;
+﻿using FastAdminAPI.Business.Interfaces;
+using FastAdminAPI.Business.Statics;
 using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Enums;
@@ -141,7 +141,7 @@ namespace FastAdminAPI.Core.Services
             model.OperationId = _employeeId;
             model.OperationName = _employeeName;
             model.OperationTime = _dbContext.GetDate();
-            model.CornerMark = await CornerMarkHelper.GetCornerMark(_dbContext, "S06_Post", "S06_PostId",
+            model.CornerMark = await CornerMarkGenerator.GetCornerMark(_dbContext, "S06_Post", "S06_PostId",
                 "S06_CornerMark", "S06_ParentPostId", model.ParentPostId.ToString());
             var result = await _dbContext.InsertResultAsync<AddPostModel, S06_Post>(model);
             if (result?.Code == ResponseCode.Success)

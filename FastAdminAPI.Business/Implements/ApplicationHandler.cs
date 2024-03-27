@@ -1,5 +1,5 @@
 ﻿using DotNetCore.CAP;
-using FastAdminAPI.Business.IServices;
+using FastAdminAPI.Business.Interfaces;
 using FastAdminAPI.Business.PrivateFunc.Applications;
 using FastAdminAPI.Business.PrivateFunc.Applications.Models;
 using FastAdminAPI.CAP.Subscribes;
@@ -21,12 +21,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FastAdminAPI.Business.Services
+namespace FastAdminAPI.Business.Implements
 {
     /// <summary>
     /// 申请处理者
     /// </summary>
-    public class ApplicationHandler : IApplicationHandler
+    internal class ApplicationHandler : IApplicationHandler
     {
         /// <summary>
         /// 默认审批人

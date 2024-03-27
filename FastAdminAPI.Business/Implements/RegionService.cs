@@ -1,4 +1,4 @@
-﻿using FastAdminAPI.Business.IServices;
+﻿using FastAdminAPI.Business.Interfaces;
 using FastAdminAPI.Business.Models.Region;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Framework.Entities;
@@ -7,12 +7,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FastAdminAPI.Business.Services
+namespace FastAdminAPI.Business.Implements
 {
     /// <summary>
     /// 区域服务
     /// </summary>
-    public class RegionService : IRegionService
+    internal class RegionService : IRegionService
     {
         /// <summary>
         /// SugarScope

@@ -2,7 +2,7 @@
 using FastAdminAPI.Common.BASE;
 using System.Threading.Tasks;
 
-namespace FastAdminAPI.Business.IServices
+namespace FastAdminAPI.Business.Interfaces
 {
     /// <summary>
     /// 申请处理者

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace FastAdminAPI.Business.IServices
+namespace FastAdminAPI.Business.Interfaces
 {
     /// <summary>
     /// 区域服务

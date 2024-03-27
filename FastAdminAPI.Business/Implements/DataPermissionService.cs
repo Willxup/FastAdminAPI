@@ -1,4 +1,4 @@
-﻿using FastAdminAPI.Business.IServices;
+﻿using FastAdminAPI.Business.Interfaces;
 using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.Converters;
 using FastAdminAPI.Common.Enums;
@@ -8,18 +8,17 @@ using FastAdminAPI.Framework.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using SqlSugar;
-using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FastAdminAPI.Business.Services
+namespace FastAdminAPI.Business.Implements
 {
     /// <summary>
     /// 数据权限
     /// </summary>
-    public class DataPermissionService : IDataPermissionService
+    internal class DataPermissionService : IDataPermissionService
     {
         /// <summary>
         /// 用户Id

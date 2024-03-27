@@ -4,9 +4,9 @@ using SqlSugar;
 using System;
 using System.Threading.Tasks;
 
-namespace FastAdminAPI.Business.Common
+namespace FastAdminAPI.Business.Statics
 {
-    public static class CornerMarkHelper
+    public static class CornerMarkGenerator
     {
         /// <summary>
         /// 角标补零为4位数字字符串

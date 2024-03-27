@@ -1,4 +1,4 @@
-﻿using FastAdminAPI.Business.IServices;
+﻿using FastAdminAPI.Business.Interfaces;
 using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Enums;

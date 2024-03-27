@@ -1,4 +1,4 @@
-﻿using FastAdminAPI.Business.IServices;
+﻿using FastAdminAPI.Business.Interfaces;
 using FastAdminAPI.Business.Models.Region;
 using FastAdminAPI.Common.Enums;
 using FastAdminAPI.Common.JsonTree;
