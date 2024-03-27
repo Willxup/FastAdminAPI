@@ -1,6 +1,6 @@
 using NPOI.SS.UserModel;
 
-namespace FastAdminAPI.NPOI.Extensions
+namespace FastAdminAPI.NPOI.Models
 {
     public class NPOIExcelTitleCellModel
     {

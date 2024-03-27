@@ -4,7 +4,7 @@ using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Services.BASE;
 using FastAdminAPI.Framework.Entities;
-using FastAdminAPI.NPOI.Extensions;
+using FastAdminAPI.NPOI.Utilities;
 using Microsoft.AspNetCore.Http;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -42,11 +42,11 @@ namespace FastAdminAPI.Core.Services
 
             #region 设置标题单元格样式
             //设置标题字体大小
-            var titleFontStyle = NPOIExcelHelper.GetFontStyle(workbook, "Arial", 10, true);
+            var titleFontStyle = NPOIExcelTool.GetFontStyle(workbook, "Arial", 10, true);
 
             //设置标题样式
-            var titleStyle = NPOIExcelHelper.GetTitleCellStyle(workbook, titleFontStyle);
-            var titleStyleWithColor = NPOIExcelHelper.GetTitleCellStyle(workbook, titleFontStyle, new XSSFColor(new byte[] { 255, 192, 0 }));
+            var titleStyle = NPOIExcelTool.GetTitleCellStyle(workbook, titleFontStyle);
+            var titleStyleWithColor = NPOIExcelTool.GetTitleCellStyle(workbook, titleFontStyle, new XSSFColor(new byte[] { 255, 192, 0 }));
             #endregion
 
             #region 设置标题
@@ -58,7 +58,7 @@ namespace FastAdminAPI.Core.Services
             };
 
             //设置标题
-            NPOIExcelHelper.SetTitleRow(sheet, NPOIExcelHelper.GetExcelTemplateTitleRow(cellInfoDic, cellStyleList), NPOIExcelHelper.GetDefaultStyle(workbook));
+            NPOIExcelTool.SetTitleRow(sheet, NPOIExcelTool.GetExcelTemplateTitleRow(cellInfoDic, cellStyleList), NPOIExcelTool.GetDefaultStyle(workbook));
             #endregion
 
             #region 设置下拉数据源
@@ -68,12 +68,12 @@ namespace FastAdminAPI.Core.Services
                 .Select(code => code.S99_Name)
                 .ToListAsync();
 
-            NPOIExcelHelper.SetMoreDropDownList(sheet, codeList, 0, "测试下拉数据源");
+            NPOIExcelTool.SetMoreDropDownList(sheet, codeList, 0, "测试下拉数据源");
 
             //设置下拉数据(数据大小小于255长度)
             List<string> enrollTypeList = new()
             { "测试1", "测试2", "测试3" };
-            NPOIExcelHelper.SetLessDropDownList(sheet, enrollTypeList.ToArray(), 4);
+            NPOIExcelTool.SetLessDropDownList(sheet, enrollTypeList.ToArray(), 4);
             #endregion
 
             try
