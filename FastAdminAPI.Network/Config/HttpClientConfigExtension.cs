@@ -13,7 +13,7 @@ namespace FastAdminAPI.Network.Config
         public static IServiceCollection AddHttpClientConfig(this IServiceCollection services)
         {
             services.AddHttpClient();
-            services.AddSingleton<HttpClientHelper>();
+            services.AddSingleton<HttpClientTool>();
 
             return services;
         }

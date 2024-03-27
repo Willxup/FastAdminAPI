@@ -39,7 +39,7 @@ namespace FastAdminAPI.Network.QyWechat
         /// <exception cref="Exception"></exception>
         public QyWechatClient(IRedisHelper redis)
         {
-            if (EnvTools.IsDevelop)
+            if (EnvTool.IsDevelop)
                 _qyWechatConfig = new DevQyWechatConfiguration();
             else
                 throw new Exception("当前环境暂不支持企业微信!");

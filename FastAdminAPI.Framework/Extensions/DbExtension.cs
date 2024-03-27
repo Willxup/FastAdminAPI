@@ -1,5 +1,6 @@
 ﻿using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
+using FastAdminAPI.Common.Datetime;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Utilities;
 using FastAdminAPI.Framework.Extensions.Models;
@@ -13,8 +14,141 @@ using System.Threading.Tasks;
 
 namespace FastAdminAPI.Framework.Extensions
 {
+    /// <summary>
+    /// 扩展
+    /// </summary>
     public static class DbExtension
     {
+        #region 配置
+        /// <summary>
+        /// 统一配置sqlsugar
+        /// </summary>
+        /// <param name="connectionString">连接字符串</param>
+        /// <returns></returns>
+        public static SqlSugarScope ConfigSqlSugar(string connectionString)
+        {
+            StaticConfig.EnableAllWhereIF = true;
+            return new SqlSugarScope(new ConnectionConfig
+            {
+                ConnectionString = connectionString,
+                DbType = DbType.MySql,
+                IsAutoCloseConnection = true, //自动释放
+                LanguageType = LanguageType.English
+            }, ConfigSqlSugarSetting);
+        }
+        /// <summary>
+        /// 配置sqlsugar设置
+        /// </summary>
+        /// <param name="db"></param>
+        public static void ConfigSqlSugarSetting(SqlSugarClient db)
+        {
+            db.CurrentConnectionConfig.InitKeyType = InitKeyType.Attribute;
+            db.CurrentConnectionConfig.MoreSettings = new ConnMoreSettings() { IsAutoRemoveDataCache = true };
+            db.CurrentConnectionConfig.ConfigureExternalServices = new ConfigureExternalServices()
+            {
+                SqlFuncServices = DbExtension.CustomSqlFunc()
+            };
+            if (EnvTool.IsDevelop)
+            {
+                db.Aop.OnLogExecuting = (sql, parameters) =>
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write(DateTime.Now.ToFormattedString());
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("【SQL】：");
+                    Console.ResetColor();
+                    Console.WriteLine(sql);
+                    if (parameters != null && parameters?.Length > 0)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write(DateTime.Now.ToFormattedString());
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("【Paramters】：");
+                        Console.ResetColor();
+                        Console.WriteLine(string.Join(",", parameters?.Select(it => "【" + it.ParameterName + "=" + it.Value + "】")));
+                    }
+                };
+            }
+        }
+
+        #region 自定义扩展
+        /// <summary>
+        /// SqlSugar自定义扩展
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static List<SqlFuncExternal> CustomSqlFunc()
+        {
+            List<SqlFuncExternal> resultList = new()
+            {
+                //GROUP_CONCAT
+                //用法：.Select(a => DbExtension.GroupConcat(a.Name, ","))
+                new SqlFuncExternal
+                {
+                    UniqueMethodName = "GroupConcat",
+                    MethodValue = (expInfo, dbType, expContext) =>
+                    {
+                        if (dbType == DbType.MySql)
+                        {
+                            return $@"GROUP_CONCAT( {expInfo.Args[0].MemberName} SEPARATOR '{expInfo.Args[1].MemberValue}' ) ";
+                        }
+                        else
+                        {
+                            throw new NotSupportedException("Not Support this database");
+                        }
+                    }
+                },
+                //FIND_IN_SET
+                //用法：.Where(a => DbExtension.FindInSet("1", a.Name))
+                new SqlFuncExternal
+                {
+                    UniqueMethodName = "FindInSet",
+                    MethodValue = (expInfo, dbType, expContext) =>
+                    {
+                        if(dbType == DbType.MySql)
+                        {
+                            return $"FIND_IN_SET('{expInfo.Args[0].MemberValue}', {expInfo.Args[1].MemberName} ) > 0";
+                        }
+                        else
+                        {
+                             throw new NotSupportedException("Not Support this database");
+                        }
+                    }
+                }
+            };
+
+            return resultList;
+        }
+        /// <summary>
+        /// GROUP_CONCAT
+        /// 用法：.Select(a => DbExtension.GroupConcat(a.Name, ","))
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="column">字段</param>
+        /// <param name="separator">分隔符</param>
+        /// <returns></returns>
+        /// <exception cref="NotSupportedException"></exception>
+        public static string GroupConcat<T>(T column, string separator)
+        {
+            throw new NotSupportedException("Can only be used in expressions");
+        }
+        /// <summary>
+        /// FIND_IN_SET
+        /// 用法：.Where(a => DbExtension.FindInSe("1", a.Name))
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="column"></param>
+        /// <param name="separator"></param>
+        /// <returns></returns>
+        /// <exception cref="NotSupportedException"></exception>
+        public static bool FindInSet<T>(T column, string separator)
+        {
+            throw new NotSupportedException("Can only be used in expressions");
+        } 
+        #endregion
+
+        #endregion
+
         #region 通用方法
 
         #region 列表查询
@@ -459,7 +593,7 @@ namespace FastAdminAPI.Framework.Extensions
                 }
                 else
                 {
-                    if (EnvTools.IsProduction)
+                    if (EnvTool.IsProduction)
                     {
                         result.Message = "操作失败!";
                         NLogHelper.Error($"执行事务出错，{ex.Message}", ex);
@@ -513,80 +647,5 @@ namespace FastAdminAPI.Framework.Extensions
 
         #endregion
 
-        #region 扩展
-        /// <summary>
-        /// SqlSugar自定义扩展
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public static List<SqlFuncExternal> CustomSqlFunc()
-        {
-            List<SqlFuncExternal> resultList = new()
-            {
-                //GROUP_CONCAT
-                //用法：.Select(a => DbExtension.GroupConcat(a.Name, ","))
-                new SqlFuncExternal
-                {
-                    UniqueMethodName = "GroupConcat",
-                    MethodValue = (expInfo, dbType, expContext) =>
-                    {
-                        if (dbType == DbType.MySql)
-                        {
-                            return $@"GROUP_CONCAT( {expInfo.Args[0].MemberName} SEPARATOR '{expInfo.Args[1].MemberValue}' ) ";
-                        }
-                        else
-                        {
-                            throw new NotSupportedException("Not Support this database");
-                        }
-                    }
-                },
-                //FIND_IN_SET
-                //用法：.Where(a => DbExtension.FindInSet("1", a.Name))
-                new SqlFuncExternal
-                {
-                    UniqueMethodName = "FindInSet",
-                    MethodValue = (expInfo, dbType, expContext) =>
-                    {
-                        if(dbType == DbType.MySql)
-                        {
-                            return $"FIND_IN_SET('{expInfo.Args[0].MemberValue}', {expInfo.Args[1].MemberName} ) > 0";
-                        }
-                        else
-                        {
-                             throw new NotSupportedException("Not Support this database");
-                        }
-                    }
-                }
-            };
-
-            return resultList;
-        }
-        /// <summary>
-        /// GROUP_CONCAT
-        /// 用法：.Select(a => DbExtension.GroupConcat(a.Name, ","))
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="column">字段</param>
-        /// <param name="separator">分隔符</param>
-        /// <returns></returns>
-        /// <exception cref="NotSupportedException"></exception>
-        public static string GroupConcat<T>(T column, string separator)
-        {
-            throw new NotSupportedException("Can only be used in expressions");
-        }
-        /// <summary>
-        /// FIND_IN_SET
-        /// 用法：.Where(a => DbExtension.FindInSe("1", a.Name))
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="column"></param>
-        /// <param name="separator"></param>
-        /// <returns></returns>
-        /// <exception cref="NotSupportedException"></exception>
-        public static bool FindInSet<T>(T column, string separator)
-        {
-            throw new NotSupportedException("Can only be used in expressions");
-        }
-        #endregion
     }
 }

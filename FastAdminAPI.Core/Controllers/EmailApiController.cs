@@ -25,7 +25,7 @@ namespace FastAdminAPI.Core.Controllers
         [HttpPost]
         public async Task SendSmtpEmail([FromBody] SendSmtpEmailModel model)
         {
-            await EmailSender.SendSmtpEmailAsync(model);
+            await EmailTool.SendSmtpEmailAsync(model);
         }
         /// <summary>
         /// 发送smtp邮件(支持多个收件人及抄送人)
@@ -35,7 +35,7 @@ namespace FastAdminAPI.Core.Controllers
         [HttpPost]
         public async Task SendMultipleSmtpEmail([FromBody] SendMultipleSmtpEmailModel model)
         {
-            await EmailSender.SendMultipleSmtpEmailAsync(model);
+            await EmailTool.SendMultipleSmtpEmailAsync(model);
         }
         /// <summary>
         /// 默认配置发送邮件
@@ -47,7 +47,7 @@ namespace FastAdminAPI.Core.Controllers
         public async Task SendEmailByDefault([FromQuery][Required(ErrorMessage = "邮件主题不能为空!")] string subject, 
             [FromQuery][Required(ErrorMessage = "邮件内容不能为空!")] string body)
         {
-            await EmailSender.SendEmailByDefaultAsync(subject, body);
+            await EmailTool.SendEmailByDefaultAsync(subject, body);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace FastAdminAPI.Common.Filters
             }
             else
             {
-                if (!EnvTools.IsProduction)
+                if (!EnvTool.IsProduction)
                 {
                     //堆栈信息
                     responseModel.Data = context.Exception.StackTrace.TrimStart();

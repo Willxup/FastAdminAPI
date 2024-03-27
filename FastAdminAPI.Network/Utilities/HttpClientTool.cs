@@ -12,14 +12,14 @@ namespace FastAdminAPI.Network.Utilities
     /// HttpClient帮助类
     /// 需要依赖注入
     /// </summary>
-    public class HttpClientHelper
+    public class HttpClientTool
     {
         /// <summary>
         /// HttpClient工厂
         /// </summary>
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public HttpClientHelper(IHttpClientFactory httpClientFactory)
+        public HttpClientTool(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }

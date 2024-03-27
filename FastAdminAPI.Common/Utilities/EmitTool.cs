@@ -4,7 +4,7 @@ using System.Reflection.Emit;
 
 namespace FastAdminAPI.Common.Utilities
 {
-    public static class EmitTools
+    public static class EmitTool
     {
         /// <summary>
         /// 为对象的属性设置值

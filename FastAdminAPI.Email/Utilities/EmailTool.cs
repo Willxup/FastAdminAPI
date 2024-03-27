@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FastAdminAPI.Email.Extensions
 {
-    public static class EmailSender
+    public static class EmailTool
     {
         /// <summary>
         /// SMTP服务器

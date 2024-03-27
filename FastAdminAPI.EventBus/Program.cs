@@ -41,7 +41,7 @@ try
         //…Ë÷√appsetting.json
         config.SetBasePath(Directory.GetCurrentDirectory())
                   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                  .AddJsonFile($"appsettings.{EnvTools.GetEnv()}.json", optional: true, reloadOnChange: true)
+                  .AddJsonFile($"appsettings.{EnvTool.GetEnv()}.json", optional: true, reloadOnChange: true)
                   .AddEnvironmentVariables();
     });
     #endregion
@@ -90,7 +90,7 @@ try
     #region SqlSugar
     builder.Services.AddSingleton<ISqlSugarClient>(sugar =>
     {
-        return DbCommonUtils.ConfigSqlSugar(configuration.GetValue<string>("Database.ConnectionString"));
+        return DbExtension.ConfigSqlSugar(configuration.GetValue<string>("Database.ConnectionString"));
     });
     #endregion
 

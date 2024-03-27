@@ -2,7 +2,7 @@ using System;
 
 namespace FastAdminAPI.Common.Utilities
 {
-    public static class EnvTools
+    public static class EnvTool
     {
         /// <summary>
         /// 环境变量
