@@ -1,5 +1,5 @@
 ﻿using FastAdminAPI.Business.Interfaces;
-using FastAdminAPI.Business.Statics;
+using FastAdminAPI.Business.Utilities;
 using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Enums;

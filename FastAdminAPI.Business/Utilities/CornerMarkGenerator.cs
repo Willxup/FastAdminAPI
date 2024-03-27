@@ -4,7 +4,7 @@ using SqlSugar;
 using System;
 using System.Threading.Tasks;
 
-namespace FastAdminAPI.Business.Statics
+namespace FastAdminAPI.Business.Utilities
 {
     public static class CornerMarkGenerator
     {
