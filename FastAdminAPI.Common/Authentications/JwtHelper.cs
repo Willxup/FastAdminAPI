@@ -64,7 +64,7 @@ namespace FastAdminAPI.Common.Authentications
             }
             catch (Exception ex)
             {
-                NLogHelper.Error($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} 生成Token失败，{ex.Message}", ex);
+                NLogHelper.Error($"生成Token失败，{ex.Message}", ex);
                 throw new UserOperationException("生成Token失败!");
             }
         }
@@ -107,7 +107,7 @@ namespace FastAdminAPI.Common.Authentications
             }
             catch (Exception ex)
             {
-                NLogHelper.Error($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} 解析Token失败，{ex.Message}", ex);
+                NLogHelper.Error($"解析Token失败，{ex.Message}", ex);
                 throw new UserOperationException("解析Token失败!");
             }
 
@@ -138,7 +138,7 @@ namespace FastAdminAPI.Common.Authentications
             }
             catch (Exception ex)
             {
-                NLogHelper.Error($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} 校验JWTToken失败，{ex.Message}", ex);
+                NLogHelper.Error($"校验JWTToken失败，{ex.Message}", ex);
                 return false;
             }
         }

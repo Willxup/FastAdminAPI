@@ -166,7 +166,7 @@ namespace FastAdminAPI.Network.Utilities
             }
             catch (Exception ex)
             {
-                NLogHelper.Error($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - HTTP请求失败，HTTP-Get:{url} Error:{ex.Message}", ex);
+                NLogHelper.Error($"HTTP请求失败，HTTP-Get:{url} Error:{ex.Message}", ex);
                 throw new Exception(ex.Message);
             }
         }
@@ -197,7 +197,7 @@ namespace FastAdminAPI.Network.Utilities
             }
             catch (Exception ex)
             {
-                NLogHelper.Error($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - HTTP请求失败，HTTP-Post:{url} Error:{ex.Message}", ex);
+                NLogHelper.Error($"HTTP请求失败，HTTP-Post:{url} Error:{ex.Message}", ex);
                 throw new Exception(ex.Message);
             }
         }
@@ -228,7 +228,7 @@ namespace FastAdminAPI.Network.Utilities
             }
             catch (Exception ex)
             {
-                NLogHelper.Error($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - HTTP请求失败，HTTP-Put:{url} Error:{ex.Message}", ex);
+                NLogHelper.Error($"HTTP请求失败，HTTP-Put:{url} Error:{ex.Message}", ex);
                 throw new Exception(ex.Message);
             }
         }
@@ -259,7 +259,7 @@ namespace FastAdminAPI.Network.Utilities
             }
             catch (Exception ex)
             {
-                NLogHelper.Error($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - HTTP请求失败，HTTP-Patch:{url} Error:{ex.Message}", ex);
+                NLogHelper.Error($"HTTP请求失败，HTTP-Patch:{url} Error:{ex.Message}", ex);
                 throw new Exception(ex.Message);
             }
         }
@@ -288,7 +288,7 @@ namespace FastAdminAPI.Network.Utilities
             }
             catch (Exception ex)
             {
-                NLogHelper.Error($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - HTTP请求失败，HTTP-Delete:{url} Error:{ex.Message}", ex);
+                NLogHelper.Error($"HTTP请求失败，HTTP-Delete:{url} Error:{ex.Message}", ex);
                 throw new Exception(ex.Message);
             }
         }
@@ -320,7 +320,7 @@ namespace FastAdminAPI.Network.Utilities
             }
             catch (Exception ex)
             {
-                NLogHelper.Error($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - HTTP请求失败，HTTP-Execute:{url} Error:{ex.Message}", ex);
+                NLogHelper.Error($"HTTP请求失败，HTTP-Execute:{url} Error:{ex.Message}", ex);
                 throw new Exception(ex.Message);
             }
 

@@ -1494,7 +1494,7 @@ namespace FastAdminAPI.Common.Redis
                 {
                     result.IsSuccess = false;
                     result.ErrorMessage = $"Redis分布式锁执行失败，原因:{ex.Message}";
-                    NLogHelper.Error($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - Redis分布式锁执行失败，原因:{ex.Message}", ex);
+                    NLogHelper.Error($"Redis分布式锁执行失败，原因:{ex.Message}", ex);
                 }
             }
             finally
@@ -1555,7 +1555,7 @@ namespace FastAdminAPI.Common.Redis
                 catch (Exception ex)
                 {
                     result.ErrorMessage = $"Redis分布式锁执行失败，原因:{ex.Message}";
-                    NLogHelper.Error($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - Redis分布式锁执行失败，原因:{ex.Message}", ex);
+                    NLogHelper.Error($"Redis分布式锁执行失败，原因:{ex.Message}", ex);
                 }
             }
             finally

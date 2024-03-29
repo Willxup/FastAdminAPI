@@ -15,12 +15,12 @@ namespace FastAdminAPI.Business.Utilities
         /// <returns></returns>
         public static string PaddingCornerMark(int num) => num.ToString("D4");
         /// <summary>
-        /// 按旧角标获取新角标
+        /// 按以存在的角标获取新角标
         /// </summary>
         /// <param name="oldCornerMark"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static string GetNewCornerMarkByOld(string oldCornerMark)
+        public static string GetNewCornerMarkByExist(string oldCornerMark)
         {
             string prefix = "";
             string suffix = oldCornerMark;
@@ -72,7 +72,7 @@ namespace FastAdminAPI.Business.Utilities
                 //如果角标不为空，说明已有角标，进行累加
                 if (!string.IsNullOrEmpty(cornerMark))
                 {
-                    return GetNewCornerMarkByOld(cornerMark);
+                    return GetNewCornerMarkByExist(cornerMark);
                 }
                 //角标为空，说明是第一个角标 (需要判断是否有父级)
                 else

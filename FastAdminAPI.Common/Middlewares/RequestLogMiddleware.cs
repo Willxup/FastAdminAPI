@@ -228,7 +228,7 @@ namespace FastAdminAPI.Common.Middlewares
                 }
                 catch (Exception ex)
                 {
-                    NLogHelper.Error($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - 解析token失败，token:【{token}】", ex);
+                    NLogHelper.Error($"解析token失败，token:【{token}】", ex);
                 }
             }
             return operatorName;
