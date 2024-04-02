@@ -3,6 +3,7 @@ using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.Converters;
 using FastAdminAPI.Common.Enums;
 using FastAdminAPI.Common.JsonTree;
+using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Framework.Entities;
 using Microsoft.AspNetCore.Http;
@@ -273,13 +274,9 @@ namespace FastAdminAPI.Business.Implements
         /// 释放数据权限
         /// </summary>
         /// <returns></returns>
-        public async Task ReleaseDataPermissions()
+        public async Task<bool> ReleaseDataPermissions()
         {
-            var hashKeys = await _redis.HashGetKeysAsync<string>(DATA_PERMISSION_KEY);
-            if (hashKeys?.Count > 0)
-            {
-                await _redis.HashDeleteAsync(DATA_PERMISSION_KEY, hashKeys);
-            }
+            return await _redis.KeyDeleteAsync(DATA_PERMISSION_KEY);
         }
 
         /// <summary>

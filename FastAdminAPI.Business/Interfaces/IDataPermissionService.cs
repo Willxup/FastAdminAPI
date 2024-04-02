@@ -18,7 +18,7 @@ namespace FastAdminAPI.Business.Interfaces
         /// 释放数据权限
         /// </summary>
         /// <returns></returns>
-        Task ReleaseDataPermissions();
+        Task<bool> ReleaseDataPermissions();
 
         /// <summary>
         /// 释放数据权限
