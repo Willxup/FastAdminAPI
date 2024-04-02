@@ -250,7 +250,7 @@ namespace FastAdminAPI.Business.Implements
                 }
                 else
                 {
-                    throw new UserOperationException("数据权限出错，请稍后再试!");
+                    throw new UserOperationException("数据权限缓存出错，请稍后再试!");
                 }
             }
             catch (UserOperationException)
@@ -259,7 +259,8 @@ namespace FastAdminAPI.Business.Implements
             }
             catch (Exception ex)
             {
-                throw new UserOperationException($"申请线索转客户出错，{ex.Message}");
+                NLogHelper.Error($"获取员工【{_employeeId}-{_employeeName}】数据权限失败! {ex.Message}", ex);
+                throw new UserOperationException($"获取数据权限失败，请稍后再试!");
             }
             finally
             {
