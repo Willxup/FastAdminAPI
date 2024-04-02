@@ -231,8 +231,12 @@ namespace FastAdminAPI.Business.Implements
                 {
                     //获取所有岗位下的员工Id
                     var dataPermission = await _dbContext.Queryable<S08_EmployeePost>()
-                        .Where(S08 => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid && postIds.Contains(S08.S06_PostId))
-                        .Select(S08 => S08.S07_EmployeeId).ToListAsync();
+                        .InnerJoin<S07_Employee>((S08, S07) => S08.S07_EmployeeId == S07.S07_EmployeeId)
+                        .Where((S08, S07) => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid && 
+                                             postIds.Contains(S08.S06_PostId) && 
+                                             S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid && 
+                                             S07.S07_Status != (byte)BusinessEnums.EmployeeStatus.Dimission)
+                        .Select((S08, S07) => S08.S07_EmployeeId).ToListAsync();
 
                     //去重
                     dataPermit.AddRange(dataPermission.Distinct().ToList());
