@@ -100,7 +100,7 @@ namespace FastAdminAPI.Business.Implements
         private async Task<ApproverInfoModel> GetSuperiorByPost(long? postId)
         {
             ApproverInfoModel superior = null;
-            if (postId != null)
+            if (postId != null && postId > 0)
             {
                 //获取当前岗位的上级岗位
                 var parentPost = await _dbContext.Queryable<S06_Post>()
@@ -139,7 +139,9 @@ namespace FastAdminAPI.Business.Implements
         private async Task<ApproverInfoModel> GetSuperiorByDepart(long operationId, string operationName, long operationDepartId)
         {
             ApproverInfoModel superior = null;
-            if (operationDepartId == 1) //如果当前部门为顶级部门，且前一步按岗位递归寻找上级未找到上级，说明该用户为最高上级
+
+            //如果当前部门为顶级部门，且前一步按岗位递归寻找上级未找到上级，说明该用户为最高上级
+            if (operationDepartId == 1) 
             {
                 superior = new ApproverInfoModel
                 {
@@ -170,9 +172,11 @@ namespace FastAdminAPI.Business.Implements
                         S05_DepartId = S06.S05_DepartId
                     })
                     .ToListAsync();
+
                 //进行递归寻找上级部门领导
                 superior = await GetDepartSuperiorRecursive(departList, postList, operationDepartId, operationDepartId);
             }
+
             return superior;
         }
         /// <summary>
@@ -187,6 +191,7 @@ namespace FastAdminAPI.Business.Implements
         {
             //上级
             ApproverInfoModel superior = null;
+
             //查询递归中当前部门(非员工原始部门)的父级部门Id
             var parentDepartId = departList.Where(S05 => S05.S05_DepartId == departId)
                 .Select(S05 => S05.S05_ParentDepartId).FirstOrDefault();
@@ -244,6 +249,7 @@ namespace FastAdminAPI.Business.Implements
 
             //递归按岗位寻找上级
             superior = await GetSuperiorByPost(mainPost.PostId);
+
             //递归按部门寻找最高上级
             superior ??= await GetSuperiorByDepart(operationId, operationName, mainPost.DepartId);
 
@@ -283,13 +289,20 @@ namespace FastAdminAPI.Business.Implements
                         QyUserId = S07.S07_QyUserId
                     })
                     .ToListAsync();
-                //默认审批人
+
+                //获取默认审批人
                 var defaultApprover = await GetDefaultApprover();
+
+                //优先级
                 int priority = 0;
+
+                //审批人列表
                 List<ApproverInfoModel> approverList = new();
+
                 approverIds.ForEach(item =>
                 {
                     var approver = approvers?.Where(c => c.EmployeeId == item).FirstOrDefault();
+                    
                     //判断审批人是否存在，不存在使用默认审批人
                     if (approver != null)
                     {
@@ -311,7 +324,9 @@ namespace FastAdminAPI.Business.Implements
                             Priority = ++priority
                         });
                     }
+
                 });
+
                 if (approverList?.Count > 0)
                     return approverList;
                 else
@@ -319,7 +334,6 @@ namespace FastAdminAPI.Business.Implements
             }
             else
                 throw new UserOperationException("获取审批人失败[2]!");
-
         }
         #endregion
 
@@ -345,13 +359,20 @@ namespace FastAdminAPI.Business.Implements
                         QyUserId = S07.S07_QyUserId
                     })
                     .ToListAsync();
+
                 //默认审批人
                 var defaultApprover = await GetDefaultApprover();
+
+                //优先级
                 int priority = 0;
+
+                //审批人列表
                 List<ApproverInfoModel> approverList = new();
+
                 approverIds.ForEach(item =>
                 {
                     var approver = approvers?.Where(c => c.EmployeeId == item).FirstOrDefault();
+
                     //判断审批人是否存在，不存在使用默认审批人
                     if (approver != null)
                     {
@@ -373,7 +394,9 @@ namespace FastAdminAPI.Business.Implements
                             Priority = ++priority
                         });
                     }
+
                 });
+
                 if (approverList?.Count > 0)
                     return approverList;
                 else
@@ -411,6 +434,7 @@ namespace FastAdminAPI.Business.Implements
         {
             List<CarbonCopiesInfoModel> carbonCopiesList = null;
             List<long> carbonCopiesIds = null;
+
             if (process != null)
             {
                 carbonCopiesIds = process.S07_CarbonCopies?.Split(",").Select(x => Convert.ToInt64(x)).ToList();
@@ -419,6 +443,7 @@ namespace FastAdminAPI.Business.Implements
             {
                 carbonCopiesIds = extenalCarbonCopiesIds;
             }
+
             if (carbonCopiesIds?.Count > 0)
             {
                 //查询设置的审批人
@@ -432,10 +457,13 @@ namespace FastAdminAPI.Business.Implements
                         QyUserId = S07.S07_QyUserId
                     })
                     .ToListAsync();
+
                 carbonCopiesList = new List<CarbonCopiesInfoModel>();
+
                 carbonCopiesIds.ForEach(item =>
                 {
                     var ccReceiver = ccReceivers?.Where(c => c.EmployeeId == item).FirstOrDefault();
+                    
                     if (ccReceiver != null)
                     {
                         carbonCopiesList.Add(new CarbonCopiesInfoModel
@@ -472,8 +500,10 @@ namespace FastAdminAPI.Business.Implements
                               Z04.S99_ApplicationType == checkProcessType)
                 //.Where(Z04 => DbExtension.FindInSetWhere(employeeId.ToString(), Z04.S07_Applicants))
                 .ToListAsync();
-            if (processList?.Count > 0) //循环查看是否有当前申请人
+
+            if (processList?.Count > 0) 
             {
+                //循环查看是否有当前申请人
                 foreach (var item in processList)
                 {
                     if (!string.IsNullOrEmpty(item.S07_Applicants))
@@ -499,10 +529,11 @@ namespace FastAdminAPI.Business.Implements
                 if (process == null)
                     throw new UserOperationException("请先设置审批流程!");
             }
+
             //审批流程存入redis中
             await _redis.StringSetAsync(key, process, TimeSpan.FromSeconds(30));
-            return await _redis.StringGetAsync<S11_CheckProcess>(key);
 
+            return await _redis.StringGetAsync<S11_CheckProcess>(key);
         }
         /// <summary>
         /// 获取审批人员
@@ -515,6 +546,7 @@ namespace FastAdminAPI.Business.Implements
         {
             //创建redis键
             string key = $"{APPROVERS_DATA_REDIS_KEY}_{process.S99_ApplicationType}_{model.OperationId}";
+
             //从缓存中获取
             if (await _redis.KeyExistsAsync(key))
                 return await _redis.StringGetAsync<ApprovalDataByRedisModel>(key);
@@ -604,6 +636,7 @@ namespace FastAdminAPI.Business.Implements
 
             //审批人存入redis中
             await _redis.StringSetAsync(key, approversData, TimeSpan.FromSeconds(30));
+
             return await _redis.StringGetAsync<ApprovalDataByRedisModel>(key);
         }
         #endregion
@@ -721,8 +754,12 @@ namespace FastAdminAPI.Business.Implements
         /// <returns></returns>
         private async Task<ResponseModel> Next(ProcessingApplicationModel model, List<ApproverInfoModel> approvers, bool isSendApprovalNotice)
         {
+            //当前审批人
             var current = approvers.Where(c => c.EmployeeId == model.Check.S07_ApproverId && !c.IsFinishApproved).FirstOrDefault();
+
+            //下一个审批人
             var next = approvers.Where(c => c.Priority == current.Priority + 1 && !c.IsFinishApproved).FirstOrDefault();
+
             if (next != null)
             {
                 //公有数据
@@ -762,7 +799,6 @@ namespace FastAdminAPI.Business.Implements
             }
             else
                 throw new UserOperationException("获取下一审批人失败!");
-
         }
         /// <summary>
         /// 通过申请
@@ -774,9 +810,12 @@ namespace FastAdminAPI.Business.Implements
         /// <returns></returns>
         private async Task<ResponseModel> AcceptApplication(ProcessingApplicationModel model, List<ApproverInfoModel> approvers, bool isSendApprovalCCNotice, List<CarbonCopiesInfoModel> ccReceivers = null)
         {
+            //当前审批人
             var current = approvers.Where(c => c.EmployeeId == model.Check.S07_ApproverId && !c.IsFinishApproved).FirstOrDefault();
+
             //当前审批完成
             current.IsFinishApproved = true;
+
             //重新打包成json
             string approversStr = JsonConvert.SerializeObject(approvers);
 
@@ -822,6 +861,7 @@ namespace FastAdminAPI.Business.Implements
                 }
 
             }
+
             return result;
         }
         /// <summary>
@@ -834,7 +874,9 @@ namespace FastAdminAPI.Business.Implements
         /// <returns></returns>
         private async Task<ResponseModel> RejectApplication(ProcessingApplicationModel model, List<ApproverInfoModel> approvers, bool isSendApprovalCCNotice, List<CarbonCopiesInfoModel> ccReceivers = null)
         {
+            //当前审批人
             var current = approvers.Where(c => c.EmployeeId == model.Check.S07_ApproverId && !c.IsFinishApproved).FirstOrDefault();
+
             current.IsFinishApproved = true;
             string approversStr = JsonConvert.SerializeObject(approvers);
 
@@ -862,7 +904,6 @@ namespace FastAdminAPI.Business.Implements
                 //处理申请
                 result = await _processor.RejectApplication(model.Check.S12_ApplicationCategory, model.Check.S99_ApplicationType, data);
 
-
                 //为抄送人发送消息通知
                 if (result?.Code == ResponseCode.Success && isSendApprovalCCNotice && ccReceivers?.Count > 0)
                 {
@@ -878,8 +919,8 @@ namespace FastAdminAPI.Business.Implements
                     //发送系统消息通知
                     //await SystemMultipleMessageNotification(model.Check.S12_CheckId, ccReceivers.Select(a => (long)a.EmployeeId).ToList(), commonData?.QyWechatNotifyDescription);
                 }
-
             }
+
             return result;
         }
         #endregion
@@ -906,7 +947,9 @@ namespace FastAdminAPI.Business.Implements
                 S13_CreateBy = model.OperationName,
                 S13_CreateTime = _dbContext.GetDate()
             };
+
             var result = await _dbContext.Insertable(record).ExecuteAsync();
+
             if (result?.Code == ResponseCode.Success)
             {
                 //审批人
@@ -948,9 +991,9 @@ namespace FastAdminAPI.Business.Implements
                 else
                     result = await RejectApplication(model, approvers, isSendApprovalCCNotice, ccReceivers);
             }
+
             return result;
         }
-
         #endregion
 
         #region 申请且通过
@@ -983,8 +1026,10 @@ namespace FastAdminAPI.Business.Implements
                 //打包公有数据
                 S12_CommonDataContent = model.CommonDataContent == null ? null : JsonConvert.SerializeObject(model.CommonDataContent)
             };
+
             //插入数据库
             var result = await _dbContext.Insertable(check).ExecuteAsync();
+
             if (result?.Code == ResponseCode.Success)
             {
                 var checkId = Convert.ToInt64(result.Data);
@@ -1001,7 +1046,9 @@ namespace FastAdminAPI.Business.Implements
                     S13_CreateBy = model.OperationName,
                     S13_CreateTime = _dbContext.GetDate()
                 };
+
                 result = await _dbContext.Insertable(record).ExecuteAsync();
+
                 if (result?.Code == ResponseCode.Success)
                 {
                     //打包完成申请所需数据
@@ -1017,6 +1064,7 @@ namespace FastAdminAPI.Business.Implements
                     result = await _processor.CompleteApplication((byte)model.ApplicationCategory, (long)model.ApplicationType, data);
                 }
             }
+
             return result;
         }
         #endregion
