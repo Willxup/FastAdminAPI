@@ -148,8 +148,8 @@ namespace FastAdminAPI.Core.Models.BasicSettings
     public class AddCheckProcessModel : CheckProcessBaseModel
     {
         [JsonIgnore]
-        [DbOperationField("S11_IsValid")]
-        public byte IsValid { get; private set; } = (byte)BaseEnums.IsValid.Valid;
+        [DbOperationField("S11_IsDelete")]
+        public byte IsDelete { get; private set; } = (byte)BaseEnums.TrueOrFalse.False;
         [JsonIgnore]
         [DbOperationField("S11_CreateId")]
         public long? OperationId { get; set; }

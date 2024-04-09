@@ -7,6 +7,7 @@ using SqlSugar.Attributes.Extension.Extensions.Attributes.Query;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using SqlSugar.Attributes.Extension.Common;
 
 namespace FastAdminAPI.Core.Models.Employee
 {
@@ -22,24 +23,28 @@ namespace FastAdminAPI.Core.Models.Employee
         /// </summary>
         [DbTableAlias("S07")]
         [DbQueryField("S07_Name")]
+        [DbQueryOperator(DbOperator.Like)]
         public string Name { get; set; }
         /// <summary>
         /// 手机
         /// </summary>
         [DbTableAlias("S07")]
         [DbQueryField("S07_Phone")]
+        [DbQueryOperator(DbOperator.Like)]
         public string Phone { get; set; }
         /// <summary>
         /// 状态 0正式 1实习 2离职
         /// </summary>
         [DbTableAlias("S07")]
         [DbQueryField("S07_Status")]
+        [DbQueryOperator(DbOperator.In)]
         public List<byte> Status { get; set; }
         /// <summary>
         /// 用户Id
         /// </summary>
         [DbTableAlias("S07")]
         [DbQueryField("S01_UserId")]
+        [DbQueryOperator(DbOperator.In)]
         public List<long> UserIds { get; set; }
         /// <summary>
         /// 部门角标
@@ -463,9 +468,10 @@ namespace FastAdminAPI.Core.Models.Employee
         [JsonIgnore]
         [DbOperationField("S08_IsMainPost")]
         public byte IsMainPost { get; set; } = (byte)BaseEnums.TrueOrFalse.False;
+
         [JsonIgnore]
-        [DbOperationField("S08_IsValid")]
-        public byte IsValid { get; private set; } = (byte)BaseEnums.IsValid.Valid;
+        [DbOperationField("S08_IsDelete")]
+        public byte IsDelete { get; private set; } = (byte)BaseEnums.TrueOrFalse.False;
         [JsonIgnore]
         [DbOperationField("S08_CreateId")]
         public long OperationId { get; set; }

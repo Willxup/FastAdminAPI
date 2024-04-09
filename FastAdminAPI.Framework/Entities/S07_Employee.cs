@@ -14,7 +14,7 @@ namespace FastAdminAPI.Framework.Entities
     {
         public S07_Employee()
         {
-            this.S07_IsValid = Convert.ToByte("0");
+            this.S07_IsDelete = Convert.ToByte("0");
 
         }
         /// <summary>
@@ -131,12 +131,12 @@ namespace FastAdminAPI.Framework.Entities
 
         public DateTime? S07_TerminationDate { get; set; }
         /// <summary>
-        /// Desc:是否有效 0有效 1无效
+        /// Desc:是否删除 0否 1是
         /// Default:0
         /// Nullable:False
         /// </summary>
 
-        public byte S07_IsValid { get; set; }
+        public byte S07_IsDelete { get; set; }
         /// <summary>
         /// Desc:创建者Id
         /// Default:

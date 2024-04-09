@@ -42,7 +42,7 @@ namespace FastAdminAPI.Core.Services
         public async Task<List<CodeModel>> GetCodeList(string code)
         {
             return await _dbContext.Queryable<S99_Code>()
-                .Where(S99 => S99.S99_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                .Where(S99 => S99.S99_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                               S99.S99_GroupCode == code &&
                               S99.S99_ParentCodeId == null) //一级
                 .OrderBy(S99 => S99.S99_SeqNo)
@@ -64,7 +64,7 @@ namespace FastAdminAPI.Core.Services
             if (codeList?.Count > 0)
             {
                 var list = await _dbContext.Queryable<S99_Code>()
-                .Where(S99 => S99.S99_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                .Where(S99 => S99.S99_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                               codeList.Contains(S99.S99_GroupCode) &&
                               S99.S99_ParentCodeId == null)
                 .Select(S99 => new
@@ -99,7 +99,7 @@ namespace FastAdminAPI.Core.Services
         public async Task<string> GetCodeTree(string code)
         {
             return SortedJsonTree.CreateJsonTrees(await _dbContext.Queryable<S99_Code>()
-                .Where(S99 => S99.S99_IsValid == (byte)BaseEnums.IsValid.Valid && S99.S99_GroupCode == code)
+                .Where(S99 => S99.S99_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S99.S99_GroupCode == code)
                 .Select(S99 => new SortedJsonTree
                 {
                     Id = S99.S99_CodeId,

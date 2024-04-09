@@ -14,7 +14,7 @@ namespace FastAdminAPI.Framework.Entities
     {
         public S06_Post()
         {
-            this.S06_IsValid = Convert.ToByte("0");
+            this.S06_IsDelete = Convert.ToByte("0");
 
         }
         /// <summary>
@@ -75,12 +75,12 @@ namespace FastAdminAPI.Framework.Entities
 
         public string S06_AbilityDemand { get; set; }
         /// <summary>
-        /// Desc:是否有效 0有效 1无效
+        /// Desc:是否删除 0否 1是
         /// Default:0
         /// Nullable:False
         /// </summary>
 
-        public byte S06_IsValid { get; set; }
+        public byte S06_IsDelete { get; set; }
         /// <summary>
         /// Desc:创建者Id
         /// Default:

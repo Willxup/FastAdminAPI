@@ -114,7 +114,7 @@ namespace FastAdminAPI.Core.Services
             if (modules?.Count > 0)
             {
                 return await _dbContext.Queryable<S02_Module>()
-                .Where(S02 => S02.S02_IsValid == (byte)BaseEnums.IsValid.Valid && modules.Contains(S02.S02_ModuleId))
+                .Where(S02 => S02.S02_IsDelete == (byte)BaseEnums.TrueOrFalse.False && modules.Contains(S02.S02_ModuleId))
                 .Select(S02 => new ModuleInfoModel
                 {
                     Id = S02.S02_ModuleId,
@@ -144,7 +144,7 @@ namespace FastAdminAPI.Core.Services
             if (modules?.Count > 0)
             {
                 var result = await _dbContext.Queryable<S02_Module>()
-                .Where(S02 => S02.S02_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                .Where(S02 => S02.S02_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                               modules.Contains(S02.S02_ModuleId) &&
                               S02.S02_Kind == (byte)BusinessEnums.ModuleKind.Menu)
                 .Select(S02 => new ModuleInfoModel
@@ -176,7 +176,7 @@ namespace FastAdminAPI.Core.Services
         public async Task<ResponseModel> GetCheckList(CheckPageSearch pageSearch)
         {
             return await _dbContext.Queryable<S12_Check>()
-                .Where(S12 => S12.S12_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                .Where(S12 => S12.S12_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                               S12.S12_IsFinishCheck == (byte)BaseEnums.IsFinish.Unfinish &&
                               S12.S07_ApproverId == _employeeId)
                 .ToListResultAsync(pageSearch, new CheckPageResult());
@@ -192,7 +192,7 @@ namespace FastAdminAPI.Core.Services
             if (model?.CheckIds?.Count > 0)
             {
                 var checks = await _dbContext.Queryable<S12_Check>()
-                    .Where(S12 => S12.S12_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                    .Where(S12 => S12.S12_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                   S12.S12_IsFinishCheck == (byte)BaseEnums.IsFinish.Unfinish)
                     .ToListAsync();
                 if (checks?.Count > 0)
@@ -288,7 +288,7 @@ namespace FastAdminAPI.Core.Services
         public async Task<ResponseModel> CancelApplication(long checkId)
         {
             var isExist = await _dbContext.Queryable<S12_Check>()
-                .Where(S12 => S12.S12_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                .Where(S12 => S12.S12_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                               S12.S12_IsFinishCheck == (byte)BaseEnums.IsFinish.Unfinish && 
                               S12.S12_CheckId == checkId)
                 .AnyAsync();
@@ -296,7 +296,7 @@ namespace FastAdminAPI.Core.Services
                 throw new UserOperationException("找不到该申请或该申请已完成审批!");
 
             return await _dbContext.Updateable<S12_Check>()
-                .SetColumns(S12 => S12.S12_IsValid == (byte)BaseEnums.IsValid.InValid)
+                .SetColumns(S12 => S12.S12_IsDelete == (byte)BaseEnums.TrueOrFalse.True)
                 .SetColumns(S12 => S12.S12_DeleteId == _employeeId)
                 .SetColumns(S12 => S12.S12_DeleteBy == _employeeName + " [撤销操作]")
                 .SetColumns(S12 => S12.S12_DeleteTime == SqlFunc.GetDate())
@@ -312,7 +312,7 @@ namespace FastAdminAPI.Core.Services
         {
             return await _dbContext.Queryable<S13_CheckRecords>()
                 .InnerJoin<S12_Check>((S13, S12) => S13.S12_CheckId == S12.S12_CheckId)
-                .Where((S13, S12) => S12.S12_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                .Where((S13, S12) => S12.S12_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                      S13.S07_ApproverId == _employeeId)
                 .ToListResultAsync(pageSearch, new CheckRecordPageResult());
         }
@@ -326,7 +326,7 @@ namespace FastAdminAPI.Core.Services
             try
             {
                 var check = await _dbContext.Queryable<S12_Check>()
-                    .Where(S12 => S12.S12_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                    .Where(S12 => S12.S12_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                   S12.S12_CheckId == checkId)
                     .FirstAsync() ?? throw new UserOperationException("找不到该申请审批记录!");
 

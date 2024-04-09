@@ -110,11 +110,11 @@ namespace FastAdminAPI.Core.Models.BasicSettings
         [DbOperationField("S99_SysFlag")]
         public byte? SysFlag { get; private set; } = (byte)BaseEnums.SystemFlag.User;
         /// <summary>
-        /// 是否有效 0有效 1无效
+        /// 是否删除 0否 1是
         /// </summary>
         [JsonIgnore]
-        [DbOperationField("S99_IsValid")]
-        public byte? IsValid { get; private set; } = (byte)BaseEnums.IsValid.Valid;
+        [DbOperationField("S99_IsDelete")]
+        public byte? IsDelete { get; private set; } = (byte)BaseEnums.TrueOrFalse.False;
         /// <summary>
         /// 操作者Id
         /// </summary>

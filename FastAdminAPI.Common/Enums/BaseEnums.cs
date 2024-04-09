@@ -5,22 +5,6 @@ namespace FastAdminAPI.Common.Enums
     public class BaseEnums
     {
         /// <summary>
-        /// 是否有效 0有效 1无效
-        /// </summary>
-        public enum IsValid 
-        {
-            /// <summary>
-            /// 有效
-            /// </summary>
-            [Description("有效")]
-            Valid,
-            /// <summary>
-            /// 无效
-            /// </summary>
-            [Description("无效")]
-            InValid 
-        }
-        /// <summary>
         /// TrueOrFalse 0否 1是
         /// </summary>
         public enum TrueOrFalse

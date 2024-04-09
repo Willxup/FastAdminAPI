@@ -15,7 +15,7 @@ namespace FastAdminAPI.Framework.Entities
         public S08_EmployeePost()
         {
             this.S08_IsMainPost = Convert.ToByte("0");
-            this.S08_IsValid = Convert.ToByte("0");
+            this.S08_IsDelete = Convert.ToByte("0");
 
         }
         /// <summary>
@@ -55,12 +55,12 @@ namespace FastAdminAPI.Framework.Entities
 
         public long S05_DepartId { get; set; }
         /// <summary>
-        /// Desc:是否有效 0有效 1无效
+        /// Desc:是否删除 0否 1是
         /// Default:0
         /// Nullable:False
         /// </summary>
 
-        public byte S08_IsValid { get; set; }
+        public byte S08_IsDelete { get; set; }
         /// <summary>
         /// Desc:创建者Id
         /// Default:

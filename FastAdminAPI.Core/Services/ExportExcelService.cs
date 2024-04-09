@@ -64,7 +64,7 @@ namespace FastAdminAPI.Core.Services
             #region 设置下拉数据源
             //设置下拉数据源(数据大小大于255长度)
             List<string> codeList = await _dbContext.Queryable<S99_Code>()
-                .Where(code => code.S99_IsValid == (byte)BaseEnums.IsValid.Valid)
+                .Where(code => code.S99_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                 .Select(code => code.S99_Name)
                 .ToListAsync();
 

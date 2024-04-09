@@ -1,7 +1,9 @@
 ﻿using DotNetCore.CAP;
 using FastAdminAPI.Business.PrivateFunc.Applications.Models;
 using FastAdminAPI.CAP.Subscribes;
+using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
+using FastAdminAPI.Common.Enums;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Network.Interfaces;
 using FastAdminAPI.Network.Models.QyWechat;
@@ -34,7 +36,38 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications.Business
         /// <param name="applicationType"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        internal override async Task<ResponseModel> CompleteApplication(long applicationType, CompleteApplicationModel data)
+        internal override async Task<ResponseModel> AcceptApplication(long applicationType, CompleteApplicationModel data)
+        {
+            return applicationType switch
+            {
+                //调课申请
+                (long)ApplicationEnums.ApplicationType.Test => await AcceptTestApplication(data),
+                _ => throw new UserOperationException("申请类型错误!")
+            };
+        }
+        /// <summary>
+        /// 拒绝申请
+        /// </summary>
+        /// <param name="applicationType"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        internal override async Task<ResponseModel> RejectApplication(long applicationType, CompleteApplicationModel data)
+        {
+            return applicationType switch
+            {
+                //调课申请
+                (long)ApplicationEnums.ApplicationType.Test => await RejectTestApplication(data),
+                _ => throw new UserOperationException("申请类型错误!")
+            };
+        }
+
+        #region 实现
+        /// <summary>
+        /// 通过Test申请
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        private async Task<ResponseModel> AcceptTestApplication(CompleteApplicationModel data)
         {
             // 测试事件总线
             await _capPublisher.PublishAsync(SystemSubscriber.NOTIFY_MESSAGE, $"测试事件总线!");
@@ -55,14 +88,14 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications.Business
             return ResponseModel.Success();
         }
         /// <summary>
-        /// 拒绝申请
+        /// 拒绝Test申请
         /// </summary>
-        /// <param name="applicationType"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        internal override async Task<ResponseModel> RejectApplication(long applicationType, CompleteApplicationModel data)
+        private async Task<ResponseModel> RejectTestApplication(CompleteApplicationModel data)
         {
             return await Task.FromResult(ResponseModel.Success());
         }
+        #endregion
     }
 }

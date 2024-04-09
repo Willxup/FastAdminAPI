@@ -14,7 +14,7 @@ namespace FastAdminAPI.Framework.Entities
     {
         public S05_Department()
         {
-            this.S05_IsValid = Convert.ToByte("0");
+            this.S05_IsDelete = Convert.ToByte("0");
 
         }
         /// <summary>
@@ -68,12 +68,12 @@ namespace FastAdminAPI.Framework.Entities
 
         public int? S05_Priority { get; set; }
         /// <summary>
-        /// Desc:是否有效 0有效 1无效
+        /// Desc:是否删除 0否 1是
         /// Default:0
         /// Nullable:False
         /// </summary>
 
-        public byte S05_IsValid { get; set; }
+        public byte S05_IsDelete { get; set; }
         /// <summary>
         /// Desc:创建者Id
         /// Default:

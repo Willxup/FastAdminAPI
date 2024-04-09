@@ -26,7 +26,7 @@ CREATE TABLE `S01_User`  (
   `S01_Account` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户账号',
   `S01_Password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户密码',
   `S01_AccountStatus` tinyint NOT NULL DEFAULT 0 COMMENT '账号状态 0启用 1禁用',
-  `S01_IsValid` tinyint NOT NULL DEFAULT 0 COMMENT '是否有效 0有效 1无效',
+  `S01_IsDelete` tinyint NOT NULL DEFAULT 0 COMMENT '是否删除 0否 1是',
   `S01_CreateId` bigint NOT NULL COMMENT '创建者Id',
   `S01_CreateBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '创建者名称',
   `S01_CreateTime` datetime NOT NULL COMMENT '创建日期',
@@ -37,7 +37,7 @@ CREATE TABLE `S01_User`  (
   `S01_DeleteBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '删除者名称',
   `S01_DeleteTime` datetime NULL DEFAULT NULL COMMENT '删除日期',
   PRIMARY KEY (`S01_UserId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for S02_Module
@@ -54,7 +54,7 @@ CREATE TABLE `S02_Module`  (
   `S02_Logo` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '图标',
   `S02_BackInterface` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '后端接口 调用的接口，多个以|号分隔',
   `S02_CornerMark` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '角标 每一级4位数字',
-  `S02_IsValid` tinyint NOT NULL DEFAULT 0 COMMENT '是否有效 0有效 1无效',
+  `S02_IsDelete` tinyint NOT NULL DEFAULT 0 COMMENT '是否删除 0否 1是',
   `S02_CreateId` bigint NOT NULL COMMENT '创建者Id',
   `S02_CreateBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '创建者名称',
   `S02_CreateTime` datetime NOT NULL COMMENT '创建日期',
@@ -65,7 +65,7 @@ CREATE TABLE `S02_Module`  (
   `S02_DeleteBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '删除者名称',
   `S02_DeleteTime` datetime NULL DEFAULT NULL COMMENT '删除日期',
   PRIMARY KEY (`S02_ModuleId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 440 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '模块' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '模块' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for S03_Role
@@ -76,7 +76,7 @@ CREATE TABLE `S03_Role`  (
   `S03_ParentRoleId` bigint NULL DEFAULT NULL COMMENT '父角色Id',
   `S03_RoleName` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '名称',
   `S03_CornerMark` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '角标 每一级4位数字',
-  `S03_IsValid` tinyint NOT NULL DEFAULT 0 COMMENT '是否有效 0有效 1无效',
+  `S03_IsDelete` tinyint NOT NULL DEFAULT 0 COMMENT '是否删除 0否 1是',
   `S03_CreateId` bigint NOT NULL COMMENT '创建者Id',
   `S03_CreateBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '创建者名称',
   `S03_CreateTime` datetime NOT NULL COMMENT '创建日期',
@@ -87,7 +87,7 @@ CREATE TABLE `S03_Role`  (
   `S03_DeleteBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '删除者名称',
   `S03_DeleteTime` datetime NULL DEFAULT NULL COMMENT '删除日期',
   PRIMARY KEY (`S03_RoleId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '角色' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '角色' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for S04_RolePermission
@@ -105,7 +105,7 @@ CREATE TABLE `S04_RolePermission`  (
   `S04_ModifyBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '更新者名称',
   `S04_ModifyTime` datetime NULL DEFAULT NULL COMMENT '更新日期',
   PRIMARY KEY (`S04_RolePermissionId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 37642 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '角色权限' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '角色权限' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for S05_Department
@@ -119,7 +119,7 @@ CREATE TABLE `S05_Department`  (
   `S05_Property` bigint NULL DEFAULT NULL COMMENT '部门属性 S99_Code',
   `S05_Label` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '部门标签 -1无 0线索 1客户 2代理，多个以,号分隔',
   `S05_Priority` int NULL DEFAULT NULL COMMENT '优先级',
-  `S05_IsValid` tinyint NOT NULL DEFAULT 0 COMMENT '是否有效 0有效 1无效',
+  `S05_IsDelete` tinyint NOT NULL DEFAULT 0 COMMENT '是否删除 0否 1是',
   `S05_CreateId` bigint NOT NULL COMMENT '创建者Id',
   `S05_CreateBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '创建者名称',
   `S05_CreateTime` datetime NOT NULL COMMENT '创建日期',
@@ -130,7 +130,7 @@ CREATE TABLE `S05_Department`  (
   `S05_DeleteBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '删除者名称',
   `S05_DeleteTime` datetime NULL DEFAULT NULL COMMENT '删除日期',
   PRIMARY KEY (`S05_DepartId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '部门' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '部门' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for S06_Post
@@ -142,10 +142,10 @@ CREATE TABLE `S06_Post`  (
   `S06_ParentPostId` bigint NULL DEFAULT NULL COMMENT '上级岗位Id',
   `S05_DepartId` bigint NOT NULL COMMENT '部门Id',
   `S06_CornerMark` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '角标 每一级4位数字',
-  `S06_MaxEmployeeNums` int NOT NULL DEFAULT NULL COMMENT '岗位编制',
+  `S06_MaxEmployeeNums` int NOT NULL DEFAULT 0 NULL COMMENT '岗位编制',
   `S06_Responsibility` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '岗位职责',
   `S06_AbilityDemand` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '能力需求',
-  `S06_IsValid` tinyint NOT NULL DEFAULT 0 COMMENT '是否有效 0有效 1无效',
+  `S06_IsDelete` tinyint NOT NULL DEFAULT 0 COMMENT '是否删除 0否 1是',
   `S06_CreateId` bigint NOT NULL COMMENT '创建者Id',
   `S06_CreateBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '创建者名称',
   `S06_CreateTime` datetime NOT NULL COMMENT '创建日期',
@@ -156,7 +156,7 @@ CREATE TABLE `S06_Post`  (
   `S06_DeleteBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '删除者名称',
   `S06_DeleteTime` datetime NULL DEFAULT NULL COMMENT '删除日期',
   PRIMARY KEY (`S06_PostId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 42 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '岗位' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '岗位' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for S07_Employee
@@ -179,7 +179,7 @@ CREATE TABLE `S07_Employee`  (
   `S07_TrialPeriodDate` datetime NULL DEFAULT NULL COMMENT '试用期日期',
   `S07_ConfirmationDate` datetime NULL DEFAULT NULL COMMENT '转正日期',
   `S07_TerminationDate` datetime NULL DEFAULT NULL COMMENT '离职日期',
-  `S07_IsValid` tinyint NOT NULL DEFAULT 0 COMMENT '是否有效 0有效 1无效',
+  `S07_IsDelete` tinyint NOT NULL DEFAULT 0 COMMENT '是否删除 0否 1是',
   `S07_CreateId` bigint NOT NULL COMMENT '创建者Id',
   `S07_CreateBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '创建者名称',
   `S07_CreateTime` datetime NOT NULL COMMENT '创建日期',
@@ -190,7 +190,7 @@ CREATE TABLE `S07_Employee`  (
   `S07_DeleteBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '删除者名称',
   `S07_DeleteTime` datetime NULL DEFAULT NULL COMMENT '删除日期',
   PRIMARY KEY (`S07_EmployeeId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '员工' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '员工' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for S08_EmployeePost
@@ -202,7 +202,7 @@ CREATE TABLE `S08_EmployeePost`  (
   `S06_PostId` bigint NOT NULL COMMENT '岗位Id',
   `S08_IsMainPost` tinyint NOT NULL DEFAULT 0 COMMENT '是否为主岗位 0否 1是',
   `S05_DepartId` bigint NOT NULL COMMENT '部门Id',
-  `S08_IsValid` tinyint NOT NULL DEFAULT 0 COMMENT '是否有效 0有效 1无效',
+  `S08_IsDelete` tinyint NOT NULL DEFAULT 0 COMMENT '是否删除 0否 1是',
   `S08_CreateId` bigint NOT NULL COMMENT '创建者Id',
   `S08_CreateBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '创建者名称',
   `S08_CreateTime` datetime NOT NULL COMMENT '创建日期',
@@ -213,7 +213,7 @@ CREATE TABLE `S08_EmployeePost`  (
   `S08_DeleteBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '删除者名称',
   `S08_DeleteTime` datetime NULL DEFAULT NULL COMMENT '删除日期',
   PRIMARY KEY (`S08_EmployeePostId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '员工岗位表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '员工岗位表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for S09_UserPermission
@@ -232,7 +232,7 @@ CREATE TABLE `S09_UserPermission`  (
   `S09_ModifyBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '更新者名称',
   `S09_ModifyTime` datetime NULL DEFAULT NULL COMMENT '更新日期',
   PRIMARY KEY (`S09_UserPermissionId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 310 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户权限' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户权限' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for S10_DataPermission
@@ -249,7 +249,7 @@ CREATE TABLE `S10_DataPermission`  (
   `S10_ModifyBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '更新者名称',
   `S10_ModifyTime` datetime NULL DEFAULT NULL COMMENT '更新日期',
   PRIMARY KEY (`S10_DataPermissionId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '数据权限' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '数据权限' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for S11_CheckProcess
@@ -264,7 +264,7 @@ CREATE TABLE `S11_CheckProcess`  (
   `S07_CarbonCopies` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '抄送人 使用,隔开',
   `S11_Amounts` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审批金额上限 使用,隔开',
   `S11_Remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
-  `S11_IsValid` tinyint NOT NULL DEFAULT 0 COMMENT '是否有效 0有效 1无效',
+  `S11_IsDelete` tinyint NOT NULL DEFAULT 0 COMMENT '是否删除 0否 1是',
   `S11_CreateId` bigint NOT NULL COMMENT '创建者Id',
   `S11_CreateBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '创建者名称',
   `S11_CreateTime` datetime NOT NULL COMMENT '创建日期',
@@ -275,7 +275,7 @@ CREATE TABLE `S11_CheckProcess`  (
   `S11_DeleteBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '删除者名称',
   `S11_DeleteTime` datetime NULL DEFAULT NULL COMMENT '删除日期',
   PRIMARY KEY (`S11_CheckProcessId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 48 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '审批流程' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '审批流程' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for S12_Check
@@ -297,7 +297,7 @@ CREATE TABLE `S12_Check`  (
   `S12_ApplicationInfo` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '申请详情',
   `S12_Reason` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '申请理由',
   `S12_Remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
-  `S12_IsValid` tinyint NOT NULL DEFAULT 0 COMMENT '是否有效 0有效 1无效',
+  `S12_IsDelete` tinyint NOT NULL DEFAULT 0 COMMENT '是否删除 0否 1是',
   `S12_CreateId` bigint NOT NULL COMMENT '创建者Id',
   `S12_CreateBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '创建者名称',
   `S12_CreateTime` datetime NOT NULL COMMENT '创建日期',
@@ -308,7 +308,7 @@ CREATE TABLE `S12_Check`  (
   `S12_DeleteBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '删除者名称',
   `S12_DeleteTime` datetime NULL DEFAULT NULL COMMENT '删除日期',
   PRIMARY KEY (`S12_CheckId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 243 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '审批' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '审批' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for S13_CheckRecords
@@ -330,7 +330,7 @@ CREATE TABLE `S13_CheckRecords`  (
   `S13_ModifyBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '更新者名称',
   `S13_ModifyTime` datetime NULL DEFAULT NULL COMMENT '更新日期',
   PRIMARY KEY (`S13_CheckRecordId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 175 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '审批记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '审批记录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for S98_RegionInfo
@@ -346,7 +346,7 @@ CREATE TABLE `S98_RegionInfo`  (
   `S98_REGION_NAME_EN` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '区域英文名称',
   `S98_REGION_SHORTNAME_EN` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '区域英文短名',
   PRIMARY KEY (`S98_REGION_ID`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5001 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for S99_Code
@@ -360,7 +360,7 @@ CREATE TABLE `S99_Code`  (
   `S99_ParentCodeId` bigint NULL DEFAULT NULL COMMENT '父级Id',
   `S99_SeqNo` int NULL DEFAULT NULL COMMENT '序号 组内排序使用',
   `S99_SysFlag` tinyint NOT NULL DEFAULT 0 COMMENT '系统标记 0系统 1用户',
-  `S99_IsValid` tinyint NOT NULL DEFAULT 0 COMMENT '是否有效 0有效 1无效',
+  `S99_IsDelete` tinyint NOT NULL DEFAULT 0 COMMENT '是否删除 0否 1是',
   `S99_CreateId` bigint NOT NULL COMMENT '创建者Id',
   `S99_CreateBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '创建者名称',
   `S99_CreateTime` datetime NOT NULL COMMENT '创建日期',
@@ -371,6 +371,6 @@ CREATE TABLE `S99_Code`  (
   `S99_DeleteBy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '删除者名称',
   `S99_DeleteTime` datetime NULL DEFAULT NULL COMMENT '删除日期',
   PRIMARY KEY (`S99_CodeId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 540 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统字典' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统字典' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -35,11 +35,11 @@ namespace FastAdminAPI.Core.Models.RolePermission
         [DbOperationField("S03_CornerMark")]
         public string CornerMark { get; set; }
         /// <summary>
-        /// 是否有效 0有效 1无效
+        /// 是否删除 0否 1是
         /// </summary>
         [JsonIgnore]
-        [DbOperationField("S03_IsValid")]
-        public byte IsValid { get; private set; } = (byte)BaseEnums.IsValid.Valid;
+        [DbOperationField("S03_IsDelete")]
+        public byte IsDelete { get; private set; } = (byte)BaseEnums.TrueOrFalse.False;
         [JsonIgnore]
         [DbOperationField("S03_CreateId")]
         public long OperationId { get; set; }

@@ -143,7 +143,7 @@ namespace FastAdminAPI.Business.Implements
 
                 //获取全部部门
                 var departs = await _dbContext.Queryable<S05_Department>()
-                    .Where(S05 => S05.S05_IsValid == (byte)BaseEnums.IsValid.Valid)
+                    .Where(S05 => S05.S05_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                     .Select(S05 => new JsonTree
                     {
                         Id = S05.S05_DepartId,
@@ -154,7 +154,7 @@ namespace FastAdminAPI.Business.Implements
 
                 //获取全部岗位
                 var posts = await _dbContext.Queryable<S06_Post>()
-                    .Where(S06 => S06.S06_IsValid == (byte)BaseEnums.IsValid.Valid)
+                    .Where(S06 => S06.S06_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                     .Select(S06 => new JsonTree
                     {
                         Id = S06.S06_PostId,
@@ -166,7 +166,7 @@ namespace FastAdminAPI.Business.Implements
 
                 //获取员工的岗位信息
                 var employeePosts = await _dbContext.Queryable<S08_EmployeePost>()
-                    .Where(S08 => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid && S08.S07_EmployeeId == _employeeId)
+                    .Where(S08 => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S08.S07_EmployeeId == _employeeId)
                     .Select(S08 => new { S08.S06_PostId, S08.S05_DepartId }).ToListAsync();
                 if (employeePosts == null || employeePosts.Count <= 0)
                 {
@@ -233,9 +233,9 @@ namespace FastAdminAPI.Business.Implements
                     //获取所有岗位下的员工Id
                     var dataPermission = await _dbContext.Queryable<S08_EmployeePost>()
                         .InnerJoin<S07_Employee>((S08, S07) => S08.S07_EmployeeId == S07.S07_EmployeeId)
-                        .Where((S08, S07) => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid && 
+                        .Where((S08, S07) => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
                                              postIds.Contains(S08.S06_PostId) && 
-                                             S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid && 
+                                             S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
                                              S07.S07_Status != (byte)BusinessEnums.EmployeeStatus.Dimission)
                         .Select((S08, S07) => S08.S07_EmployeeId).ToListAsync();
 

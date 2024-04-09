@@ -35,7 +35,7 @@ namespace FastAdminAPI.Core.Services
         public async Task<string> GetModuleTree(string moduleName = null)
         {
             return SortedJsonTree.CreateJsonTrees(await _dbContext.Queryable<S02_Module>()
-                .Where(S02 => S02.S02_IsValid == (byte)BaseEnums.IsValid.Valid)
+                .Where(S02 => S02.S02_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                 .Select(S02 => new ModuleInfoModel
                 {
                     Id = S02.S02_ModuleId,
@@ -86,7 +86,7 @@ namespace FastAdminAPI.Core.Services
         {
             //校验
             bool isExistChild = await _dbContext.Queryable<S02_Module>()
-                .Where(S02 => S02.S02_IsValid == (byte)BaseEnums.IsValid.Valid && S02.S02_ParentModuleId == moduleId)
+                .Where(S02 => S02.S02_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S02.S02_ParentModuleId == moduleId)
                 .AnyAsync();
             if (isExistChild)
                 throw new UserOperationException("当前模块下存在子模块，请删除子模块后再进行删除!");
@@ -95,7 +95,7 @@ namespace FastAdminAPI.Core.Services
                 .Where(S02 => S02.S02_ModuleId == moduleId)
                 .SoftDeleteAsync(S02 => new S02_Module
                 {
-                    S02_IsValid = (byte)BaseEnums.IsValid.InValid,
+                    S02_IsDelete = (byte)BaseEnums.TrueOrFalse.True,
                     S02_DeleteId = _employeeId,
                     S02_DeleteBy = _employeeName,
                     S02_DeleteTime = SqlFunc.GetDate()

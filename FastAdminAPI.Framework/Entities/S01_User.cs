@@ -15,7 +15,7 @@ namespace FastAdminAPI.Framework.Entities
         public S01_User()
         {
             this.S01_AccountStatus = Convert.ToByte("0");
-            this.S01_IsValid = Convert.ToByte("0");
+            this.S01_isDelete = Convert.ToByte("0");
 
         }
         /// <summary>
@@ -48,12 +48,12 @@ namespace FastAdminAPI.Framework.Entities
 
         public byte S01_AccountStatus { get; set; }
         /// <summary>
-        /// Desc:是否有效 0有效 1无效
+        /// Desc:是否删除 0否 1是
         /// Default:0
         /// Nullable:False
         /// </summary>
 
-        public byte S01_IsValid { get; set; }
+        public byte S01_isDelete { get; set; }
         /// <summary>
         /// Desc:创建者Id
         /// Default:

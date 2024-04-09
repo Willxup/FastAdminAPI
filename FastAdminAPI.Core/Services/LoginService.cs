@@ -30,7 +30,7 @@ namespace FastAdminAPI.Core.Services
         {
             //获取员工信息
             var employee = await _dbContext.Queryable<S07_Employee>()
-                .Where(S07 => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid && S07.S07_QyUserId == qyUserId)
+                .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S07.S07_QyUserId == qyUserId)
                 .Select(S07 => new UserModel
                 {
                     UserId = S07.S01_UserId,
@@ -42,7 +42,7 @@ namespace FastAdminAPI.Core.Services
 
             //获取用户信息
             var user = await _dbContext.Queryable<S01_User>()
-                .Where(S01 => S01.S01_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                .Where(S01 => S01.S01_isDelete == (byte)BaseEnums.TrueOrFalse.False &&
                               S01.S01_AccountStatus == (byte)BusinessEnums.AccountStatus.Enable &&
                               S01.S01_UserId == employee.UserId)
                 .Select(S01 => new
@@ -70,7 +70,7 @@ namespace FastAdminAPI.Core.Services
 
             //校验用户及获取用户信息
             var user = await _dbContext.Queryable<S01_User>()
-                .Where(S01 => S01.S01_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                .Where(S01 => S01.S01_isDelete == (byte)BaseEnums.TrueOrFalse.False &&
                               S01.S01_AccountStatus == (byte)BusinessEnums.AccountStatus.Enable &&
                               S01.S01_Account == account &&
                               S01.S01_Password == password)
@@ -83,7 +83,7 @@ namespace FastAdminAPI.Core.Services
 
             //获取员工信息
             var employee = await _dbContext.Queryable<S07_Employee>()
-                .Where(S07 => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid && S07.S01_UserId == user.UserId)
+                .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S07.S01_UserId == user.UserId)
                 .Select(S07 => new UserModel
                 {
                     QyUserId = S07.S07_QyUserId,

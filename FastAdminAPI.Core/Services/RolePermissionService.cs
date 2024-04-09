@@ -50,7 +50,7 @@ namespace FastAdminAPI.Core.Services
 
                 //全部角色
                 var roles = await _dbContext.Queryable<S03_Role>()
-                    .Where(S03 => S03.S03_IsValid == (byte)BaseEnums.IsValid.Valid)
+                    .Where(S03 => S03.S03_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                     .Select(S03 => new RoleInfoModel
                     {
                         Id = S03.S03_RoleId,
@@ -108,7 +108,7 @@ namespace FastAdminAPI.Core.Services
         public async Task<ResponseModel> DelRole(long roleId)
         {
             bool isExistChild = await _dbContext.Queryable<S03_Role>()
-                .Where(S03 => S03.S03_IsValid == (byte)BaseEnums.IsValid.Valid && S03.S03_ParentRoleId == roleId)
+                .Where(S03 => S03.S03_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S03.S03_ParentRoleId == roleId)
                 .AnyAsync();
             if (isExistChild)
                 throw new UserOperationException("该角色下有子角色，无法删除!");
@@ -117,7 +117,7 @@ namespace FastAdminAPI.Core.Services
                 .Where(S03 => S03.S03_RoleId == roleId)
                 .SoftDeleteAsync(S03 => new S03_Role
                 {
-                    S03_IsValid = (byte)BaseEnums.IsValid.InValid,
+                    S03_IsDelete = (byte)BaseEnums.TrueOrFalse.True,
                     S03_DeleteId = _employeeId,
                     S03_DeleteBy = _employeeName,
                     S03_DeleteTime = SqlFunc.GetDate()
@@ -133,7 +133,7 @@ namespace FastAdminAPI.Core.Services
         {
             //校验源角色是否可用
             bool isValidRole = await _dbContext.Queryable<S03_Role>()
-                .Where(S03 => S03.S03_IsValid == (byte)BaseEnums.IsValid.Valid && S03.S03_RoleId == model.SourceRoleId)
+                .Where(S03 => S03.S03_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S03.S03_RoleId == model.SourceRoleId)
                 .AnyAsync();
             if (!isValidRole)
                 throw new UserOperationException("找不到源角色，请重试!");
@@ -154,7 +154,7 @@ namespace FastAdminAPI.Core.Services
                         S03_ParentRoleId = model.ParentRoleId,
                         S03_CornerMark = await CornerMarkGenerator.GetCornerMark(_dbContext, "S03_Role", "S03_RoleId",
                             "S03_CornerMark", "S03_ParentRoleId", model.ParentRoleId.ToString()),
-                        S03_IsValid = (byte)BaseEnums.IsValid.Valid,
+                        S03_IsDelete = (byte)BaseEnums.TrueOrFalse.False,
                         S03_CreateId = _employeeId,
                         S03_CreateBy = _employeeName,
                         S03_CreateTime = _dbContext.GetDate()

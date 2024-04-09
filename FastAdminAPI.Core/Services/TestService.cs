@@ -30,7 +30,7 @@ namespace FastAdminAPI.Core.Services
         public async Task<List<CodeMapsterModel>> GetCodeListWithMapster(string code)
         {
             var list = await _dbContext.Queryable<S99_Code>()
-                .Where(c => c.S99_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                .Where(c => c.S99_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                             c.S99_GroupCode == code)
                 .ToListAsync();
 
@@ -97,7 +97,7 @@ namespace FastAdminAPI.Core.Services
                 .Where(c => c.S99_CodeId == codeId)
                 .SoftDeleteAsync(c => new S99_Code 
                 {
-                    S99_IsValid = (byte)BaseEnums.IsValid.InValid,
+                    S99_IsDelete = (byte)BaseEnums.TrueOrFalse.True,
                     S99_DeleteId = -1,
                     S99_DeleteBy = "test",
                     S99_DeleteTime = SqlFunc.GetDate()

@@ -85,9 +85,10 @@ namespace FastAdminAPI.Core.Models.Posts
         [JsonIgnore]
         [DbOperationField("S06_CornerMark")]
         public string CornerMark { get; set; }
+
         [JsonIgnore]
-        [DbOperationField("S06_IsValid")]
-        public byte IsValid { get; private set; } = (byte)BaseEnums.IsValid.Valid;
+        [DbOperationField("S06_IsDelete")]
+        public byte IsDelete { get; private set; } = (byte)BaseEnums.TrueOrFalse.False;
         [JsonIgnore]
         [DbOperationField("S06_CreateId")]
         public long OperationId { get; set; }

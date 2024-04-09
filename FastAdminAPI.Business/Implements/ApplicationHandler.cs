@@ -104,14 +104,14 @@ namespace FastAdminAPI.Business.Implements
             {
                 //获取当前岗位的上级岗位
                 var parentPost = await _dbContext.Queryable<S06_Post>()
-                    .Where(S06 => S06.S06_PostId == postId && S06.S06_IsValid == 0)
+                    .Where(S06 => S06.S06_PostId == postId && S06.S06_IsDelete == 0)
                     .Select(S06 => S06.S06_ParentPostId).FirstAsync();
                 if (parentPost != null)
                 {
                     //获取上级主岗位最后创建的员工
                     superior = await _dbContext.Queryable<S08_EmployeePost>()
                         .LeftJoin<S07_Employee>((S08, S07) => S08.S07_EmployeeId == S07.S07_EmployeeId)
-                        .Where((S08, S07) => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                        .Where((S08, S07) => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                              S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True && 
                                              S08.S06_PostId == parentPost)
                         .OrderBy((S08, S07) => S08.S08_CreateTime, OrderByType.Desc)
@@ -155,7 +155,7 @@ namespace FastAdminAPI.Business.Implements
             {
                 //获取部门列表
                 var departList = await _dbContext.Queryable<S05_Department>()
-                    .Where(S05 => S05.S05_IsValid == 0 && S05.S05_DepartId != 1)
+                    .Where(S05 => S05.S05_IsDelete == 0 && S05.S05_DepartId != 1)
                     .Select(S05 => new S05_Department
                     {
                         S05_DepartId = S05.S05_DepartId,
@@ -164,7 +164,7 @@ namespace FastAdminAPI.Business.Implements
                     .ToListAsync();
                 //获取岗位列表
                 var postList = await _dbContext.Queryable<S06_Post>()
-                    .Where(S06 => S06.S06_IsValid == 0)
+                    .Where(S06 => S06.S06_IsDelete == 0)
                     .Select(S06 => new S06_Post
                     {
                         S06_PostId = S06.S06_PostId,
@@ -207,7 +207,7 @@ namespace FastAdminAPI.Business.Implements
                     //获取上级主岗位最后创建的员工
                     superior = await _dbContext.Queryable<S08_EmployeePost>()
                         .LeftJoin<S07_Employee>((S08, S07) => S08.S07_EmployeeId == S07.S07_EmployeeId)
-                        .Where((S08, S07) => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                        .Where((S08, S07) => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                              S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True && 
                                              S08.S06_PostId == superPostId)
                         .OrderBy((S08, S07) => S08.S08_CreateTime, OrderByType.Desc)
@@ -242,7 +242,7 @@ namespace FastAdminAPI.Business.Implements
 
             //获取当前操作人的主岗位
             var mainPost = await _dbContext.Queryable<S08_EmployeePost>()
-                .Where(S08 => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                .Where(S08 => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                               S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True && 
                               S08.S07_EmployeeId == operationId)
                 .Select(S08 => new { PostId = S08.S06_PostId, DepartId = S08.S05_DepartId }).FirstAsync();
@@ -280,7 +280,7 @@ namespace FastAdminAPI.Business.Implements
             {
                 //查询设置的审批人
                 var approvers = await _dbContext.Queryable<S07_Employee>()
-                    .Where(S07 => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid && 
+                    .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
                                   approverIds.Contains(S07.S07_EmployeeId))
                     .Select(S07 => new
                     {
@@ -350,7 +350,7 @@ namespace FastAdminAPI.Business.Implements
             {
                 //查询自选的审批人
                 var approvers = await _dbContext.Queryable<S07_Employee>()
-                    .Where(S07 => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid && 
+                    .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
                                   approverIds.Contains(S07.S07_EmployeeId))
                     .Select(S07 => new
                     {
@@ -414,7 +414,7 @@ namespace FastAdminAPI.Business.Implements
         private async Task<ApproverInfoModel> GetDefaultApprover()
         {
             var defaultApprover = await _dbContext.Queryable<S07_Employee>()
-                        .Where(S07 => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid && 
+                        .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
                                       S07.S07_EmployeeId == DEFAULT_APPROVER)
                         .Select(S07 => new ApproverInfoModel
                         {
@@ -448,7 +448,7 @@ namespace FastAdminAPI.Business.Implements
             {
                 //查询设置的审批人
                 var ccReceivers = await _dbContext.Queryable<S07_Employee>()
-                    .Where(S07 => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid && 
+                    .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
                                   carbonCopiesIds.Contains(S07.S07_EmployeeId))
                     .Select(S07 => new CarbonCopiesInfoModel
                     {
@@ -496,7 +496,7 @@ namespace FastAdminAPI.Business.Implements
 
             //查询当前审批类型的所有审批流程
             var processList = await _dbContext.Queryable<S11_CheckProcess>()
-                .Where(Z04 => Z04.S11_IsValid == (byte)BaseEnums.IsValid.Valid && 
+                .Where(Z04 => Z04.S11_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
                               Z04.S99_ApplicationType == checkProcessType)
                 //.Where(Z04 => DbExtension.FindInSetWhere(employeeId.ToString(), Z04.S07_Applicants))
                 .ToListAsync();
@@ -522,7 +522,7 @@ namespace FastAdminAPI.Business.Implements
             if (process == null)
             {
                 process = await _dbContext.Queryable<S11_CheckProcess>()
-                    .Where(Z04 => Z04.S11_IsValid == (byte)BaseEnums.IsValid.Valid && 
+                    .Where(Z04 => Z04.S11_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
                                   Z04.S99_ApplicationType == checkProcessType &&
                                   (Z04.S07_Applicants == null || Z04.S07_Applicants == ""))
                     .FirstAsync();
@@ -667,7 +667,7 @@ namespace FastAdminAPI.Business.Implements
             {
                 //校验是否已存在未完成审批的申请
                 bool isExist = await _dbContext.Queryable<S12_Check>()
-                    .Where(S12 => S12.S12_IsValid == (byte)BaseEnums.IsValid.Valid && S12.S12_IsFinishCheck == (byte)BaseEnums.IsFinish.Unfinish &&
+                    .Where(S12 => S12.S12_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S12.S12_IsFinishCheck == (byte)BaseEnums.IsFinish.Unfinish &&
                                   S12.S12_ApplicationCategory == model.ApplicationCategory &&
                                   //S12.S99_ApplicationType == model.ApplicationType &&
                                   S12.S12_ApplicationId == model.ApplicationId)
@@ -691,7 +691,7 @@ namespace FastAdminAPI.Business.Implements
                     S12_ApplicationInfo = model.Description,
                     S12_Reason = model.Reason,
                     S12_IsFinishCheck = (byte)BaseEnums.IsFinish.Unfinish,
-                    S12_IsValid = (byte)BaseEnums.IsValid.Valid,
+                    S12_IsDelete = (byte)BaseEnums.TrueOrFalse.False,
                     S12_CreateId = (long)model.OperationId,
                     S12_CreateBy = model.OperationName,
                     S12_CreateTime = _dbContext.GetDate(),
@@ -842,7 +842,7 @@ namespace FastAdminAPI.Business.Implements
                 };
 
                 //处理申请
-                result = await _processor.CompleteApplication(model.Check.S12_ApplicationCategory, model.Check.S99_ApplicationType, data);
+                result = await _processor.AcceptApplication(model.Check.S12_ApplicationCategory, model.Check.S99_ApplicationType, data);
 
                 //为抄送人发送消息通知
                 if (result?.Code == ResponseCode.Success && isSendApprovalCCNotice && ccReceivers?.Count > 0)
@@ -1019,7 +1019,7 @@ namespace FastAdminAPI.Business.Implements
                 S12_IsFinishCheck = (byte)BaseEnums.IsFinish.Finished,//已完成
                 S12_ApplicationInfo = model.Description,
                 S12_Reason = model.Reason,
-                S12_IsValid = (byte)BaseEnums.IsValid.Valid,
+                S12_IsDelete = (byte)BaseEnums.TrueOrFalse.False,
                 S12_CreateId = (long)model.OperationId,
                 S12_CreateBy = model.OperationName,
                 S12_CreateTime = _dbContext.GetDate(),
@@ -1061,7 +1061,7 @@ namespace FastAdminAPI.Business.Implements
                     };
 
                     //处理申请
-                    result = await _processor.CompleteApplication((byte)model.ApplicationCategory, (long)model.ApplicationType, data);
+                    result = await _processor.AcceptApplication((byte)model.ApplicationCategory, (long)model.ApplicationType, data);
                 }
             }
 

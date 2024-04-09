@@ -86,10 +86,10 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications
         /// <param name="data">完成申请所需数据</param>
         /// <returns></returns>
         /// <exception cref="UserOperationException"></exception>
-        public async Task<ResponseModel> CompleteApplication(byte applicationCategory, long applicationType, CompleteApplicationModel data)
+        public async Task<ResponseModel> AcceptApplication(byte applicationCategory, long applicationType, CompleteApplicationModel data)
         {
 
-            return await GetApplicationProcessor(applicationCategory).CompleteApplication(applicationType, data);
+            return await GetApplicationProcessor(applicationCategory).AcceptApplication(applicationType, data);
         }
         /// <summary>
         /// 拒绝申请

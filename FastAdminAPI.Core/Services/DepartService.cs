@@ -46,7 +46,7 @@ namespace FastAdminAPI.Core.Services
         public async Task<string> GetDepartmentTree(string departName = null)
         {
             return SortedJsonTree.CreateJsonTrees(await _dbContext.Queryable<S05_Department>()
-               .Where(S05 => S05.S05_IsValid == (byte)BaseEnums.IsValid.Valid)
+               .Where(S05 => S05.S05_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                .Select(S05 => new DepartInfoModel
                {
                    Id = S05.S05_DepartId,
@@ -63,13 +63,13 @@ namespace FastAdminAPI.Core.Services
                    DirectordName = SqlFunc.Subqueryable<S07_Employee>()
                                    .LeftJoin<S08_EmployeePost>((S07, S08) => S07.S07_EmployeeId == S08.S07_EmployeeId)
                                    .LeftJoin<S06_Post>((S07, S08, S06) => S08.S06_PostId == S06.S06_PostId)
-                                   .Where((S07, S08, S06) => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                   .Where((S07, S08, S06) => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                                              S07.S07_Status != (byte)BusinessEnums.EmployeeStatus.Dimission &&
-                                                             S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                                             S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                                              S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True &&
                                                              S08.S05_DepartId == S05.S05_DepartId &&
                                                              S06.S06_ParentPostId == null &&
-                                                             S06.S06_IsValid == (byte)BaseEnums.IsValid.Valid)
+                                                             S06.S06_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                                    .Select((S07, S08, S06) => S07.S07_Name)
                }).ToListAsync(), departName);
         }
@@ -130,14 +130,14 @@ namespace FastAdminAPI.Core.Services
         {
             //校验子部门
             bool isExistChild = await _dbContext.Queryable<S05_Department>()
-                .Where(S05 => S05.S05_IsValid == (byte)BaseEnums.IsValid.Valid && S05.S05_ParentDepartId == departId)
+                .Where(S05 => S05.S05_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S05.S05_ParentDepartId == departId)
                 .AnyAsync();
             if (isExistChild)
                 throw new UserOperationException("该部门下存在子部门，无法删除!");
 
             //校验岗位
             bool isExist = await _dbContext.Queryable<S06_Post>()
-                .Where(S06 => S06.S06_IsValid == (byte)BaseEnums.IsValid.Valid && S06.S05_DepartId == departId)
+                .Where(S06 => S06.S06_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S06.S05_DepartId == departId)
                 .AnyAsync();
             if (isExist)
                 throw new UserOperationException("该部门已存在岗位，请移除岗位后删除!");
@@ -146,7 +146,7 @@ namespace FastAdminAPI.Core.Services
                 .Where(S05 => S05.S05_DepartId == departId)
                 .SoftDeleteAsync(S05 => new S05_Department 
                 {
-                    S05_IsValid = (byte)BaseEnums.IsValid.InValid,
+                    S05_IsDelete = (byte)BaseEnums.TrueOrFalse.True,
                     S05_DeleteId = _employeeId,
                     S05_DeleteBy = _employeeName,
                     S05_DeleteTime = SqlFunc.GetDate()
@@ -170,7 +170,7 @@ namespace FastAdminAPI.Core.Services
 
             //查询部门角标获取该部门下全部下级部门
             var departIds = await _dbContext.Queryable<S05_Department>()
-                .Where(S05 => S05.S05_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                .Where(S05 => S05.S05_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                               S05.S05_CornerMark.StartsWith(cornerMark))
                 .Select(S05 => S05.S05_DepartId)
                 .ToListAsync();
@@ -178,7 +178,7 @@ namespace FastAdminAPI.Core.Services
             {
                 //查询岗位信息
                 var postList = await _dbContext.Queryable<S06_Post>()
-                    .Where(S06 => S06.S06_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                    .Where(S06 => S06.S06_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                   departIds.Contains(S06.S05_DepartId))
                     .Select(S06 => new
                     {
@@ -189,7 +189,7 @@ namespace FastAdminAPI.Core.Services
 
                 //查询员工岗位信息
                 var employeePostList = await _dbContext.Queryable<S08_EmployeePost>()
-                    .Where(S08 => S08.S08_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                    .Where(S08 => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                   departIds.Contains(S08.S05_DepartId))
                     .Select(S08 => new
                     {

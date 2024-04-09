@@ -14,7 +14,7 @@ namespace FastAdminAPI.Framework.Entities
     {
         public S03_Role()
         {
-            this.S03_IsValid = Convert.ToByte("0");
+            this.S03_IsDelete = Convert.ToByte("0");
 
         }
         /// <summary>
@@ -47,12 +47,12 @@ namespace FastAdminAPI.Framework.Entities
 
         public string S03_CornerMark { get; set; }
         /// <summary>
-        /// Desc:是否有效 0有效 1无效
+        /// Desc:是否删除 0否 1是
         /// Default:0
         /// Nullable:False
         /// </summary>
 
-        public byte S03_IsValid { get; set; }
+        public byte S03_IsDelete { get; set; }
         /// <summary>
         /// Desc:创建者Id
         /// Default:

@@ -56,7 +56,7 @@ namespace FastAdminAPI.Common.Enums
             Test
         }
         /// <summary>
-        /// 申请类型 S99Code
+        /// 申请类型 S99Code 001
         /// </summary>
         public enum ApplicationType
         {

@@ -49,7 +49,7 @@ namespace FastAdminAPI.Core.Services
         public async Task<ResponseModel> GetCodeList(CodePageSearch pageSearch)
         {
             return await _dbContext.Queryable<S99_Code>()
-                .Where(S99 => S99.S99_IsValid == (byte)BaseEnums.IsValid.Valid)
+                .Where(S99 => S99.S99_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                 .ToListResultAsync(pageSearch, new CodePageResult());
         }
         /// <summary>
@@ -59,7 +59,7 @@ namespace FastAdminAPI.Core.Services
         public async Task<List<GroupCodeModel>> GetGroupCodeList()
         {
             return await _dbContext.Queryable<S99_Code>()
-                .Where(S99 => S99.S99_IsValid == (byte)BaseEnums.IsValid.Valid)
+                .Where(S99 => S99.S99_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                 .GroupBy(S99 => new { S99.S99_GroupCode, S99.S99_GroupName })
                 .Select(S99 => new GroupCodeModel
                 {
@@ -88,7 +88,7 @@ namespace FastAdminAPI.Core.Services
         public async Task<ResponseModel> EditCode(EditCodeModel model)
         {
             bool isSysFlag = await _dbContext.Queryable<S99_Code>()
-                .Where(S99 => S99.S99_IsValid == (byte)BaseEnums.IsValid.Valid && 
+                .Where(S99 => S99.S99_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
                               S99.S99_SysFlag == (byte)BaseEnums.SystemFlag.System && 
                               S99.S99_CodeId == model.CodeId)
                 .AnyAsync();
@@ -109,7 +109,7 @@ namespace FastAdminAPI.Core.Services
         public async Task<ResponseModel> DelCode(long codeId)
         {
             bool isSysFlag = await _dbContext.Queryable<S99_Code>()
-                .Where(S99 => S99.S99_IsValid == (byte)BaseEnums.IsValid.Valid && 
+                .Where(S99 => S99.S99_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
                               S99.S99_SysFlag == (byte)BaseEnums.SystemFlag.System && 
                               S99.S99_CodeId == codeId)
                 .AnyAsync();
@@ -120,7 +120,7 @@ namespace FastAdminAPI.Core.Services
                 .Where(S99 => S99.S99_CodeId == codeId)
                 .SoftDeleteAsync(S99 => new S99_Code
                 {
-                    S99_IsValid = (byte)BaseEnums.IsValid.InValid,
+                    S99_IsDelete = (byte)BaseEnums.TrueOrFalse.True,
                     S99_DeleteId = _employeeId,
                     S99_DeleteBy = _employeeName,
                     S99_DeleteTime = SqlFunc.GetDate()
@@ -146,7 +146,7 @@ namespace FastAdminAPI.Core.Services
                 {
                     //获取全部有效部门
                     var departs = await _dbContext.Queryable<S05_Department>()
-                        .Where(S05 => S05.S05_IsValid == (byte)BaseEnums.IsValid.Valid)
+                        .Where(S05 => S05.S05_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                         .Select(S05 => new { S05.S05_DepartId, S05.S05_DepartName, S05.S05_CornerMark })
                         .ToListAsync();
 
@@ -285,7 +285,7 @@ namespace FastAdminAPI.Core.Services
         public async Task<ResponseModel> GetCheckProcessList(CheckProcessPageSearch pageSearch)
         {
             var result = await _dbContext.Queryable<S11_CheckProcess>()
-                .Where(S11 => S11.S11_IsValid == (byte)BaseEnums.IsValid.Valid)
+                .Where(S11 => S11.S11_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                 //查询申请类型
                 .WhereIF(pageSearch.ApplicationType?.Count > 0, S11 => pageSearch.ApplicationType.Contains((long)S11.S99_ApplicationType))
                 //查询审批类型
@@ -295,7 +295,7 @@ namespace FastAdminAPI.Core.Services
                     CheckProcessId = S11.S11_CheckProcessId,
                     ApplicationType = S11.S99_ApplicationType,
                     ApplicationTypeName = SqlFunc.Subqueryable<S99_Code>()
-                                           .Where(S99 => S99.S99_IsValid == (byte)BaseEnums.IsValid.Valid &&
+                                           .Where(S99 => S99.S99_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                                          S99.S99_CodeId == S11.S99_ApplicationType)
                                            .Select(S99 => S99.S99_Name),
                     Applicants = S11.S07_Applicants,
@@ -313,7 +313,7 @@ namespace FastAdminAPI.Core.Services
                 {
                     //获取所有在职员工信息
                     var employees = await _dbContext.Queryable<S07_Employee>()
-                        .Where(S07 => S07.S07_IsValid == (byte)BaseEnums.IsValid.Valid && 
+                        .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
                                       S07.S07_Status != (byte)BusinessEnums.EmployeeStatus.Dimission)
                     .Select(S07 => new { S07.S07_EmployeeId, S07.S07_Name })
                     .ToListAsync();
@@ -369,7 +369,7 @@ namespace FastAdminAPI.Core.Services
         {
             //获取指定申请类型的所有申请人
             var applicants = await _dbContext.Queryable<S11_CheckProcess>()
-                .Where(S11 => S11.S11_IsValid == (byte)BaseEnums.IsValid.Valid && S11.S99_ApplicationType == model.ApplicationType)
+                .Where(S11 => S11.S11_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S11.S99_ApplicationType == model.ApplicationType)
                 .Select(S11 => S11.S07_Applicants).ToListAsync();
 
             if (applicants?.Count > 0)
@@ -472,7 +472,7 @@ namespace FastAdminAPI.Core.Services
         {
             //查询当前被修改审批流程之外的审批流程
             var applicants = await _dbContext.Queryable<S11_CheckProcess>()
-                .Where(S11 => S11.S11_IsValid == (byte)BaseEnums.IsValid.Valid && 
+                .Where(S11 => S11.S11_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
                               S11.S99_ApplicationType == model.ApplicationType &&
                               S11.S11_CheckProcessId != model.CheckProcessId)
                 .Select(S11 => S11.S07_Applicants).ToListAsync();
@@ -578,7 +578,7 @@ namespace FastAdminAPI.Core.Services
                 .Where(S11 => S11.S11_CheckProcessId == checkProcessId)
                 .SoftDeleteAsync(S11 => new S11_CheckProcess 
                 {
-                    S11_IsValid = (byte)BaseEnums.IsValid.InValid,
+                    S11_IsDelete = (byte)BaseEnums.TrueOrFalse.True,
                     S11_DeleteId = _employeeId,
                     S11_DeleteBy = _employeeName,
                     S11_DeleteTime = SqlFunc.GetDate()

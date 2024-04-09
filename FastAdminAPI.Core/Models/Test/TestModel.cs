@@ -127,11 +127,11 @@ namespace FastAdminAPI.Core.Models.Test
         [DbOperationField("S99_GroupName")]
         public string GroupName { get; set; }
         /// <summary>
-        /// 是否有效 0有效 1无效
+        /// 是否删除 0否 1是
         /// </summary>
         [JsonIgnore]
-        [DbOperationField("S99_IsValid")]
-        public byte IsValid { get; private set; } = (byte)BaseEnums.IsValid.Valid;
+        [DbOperationField("S99_IsDelete")]
+        public byte IsDelete { get; private set; } = (byte)BaseEnums.TrueOrFalse.False;
         /// <summary>
         /// 创建者Id
         /// </summary>
@@ -187,11 +187,11 @@ namespace FastAdminAPI.Core.Models.Test
         [DbOperationField("S99_CodeId", true)]
         public long? CodeId { get; set; }
         /// <summary>
-        /// 是否有效 0有效 1无效
+        /// 是否删除 0否 1是
         /// </summary>
         [JsonIgnore]
-        [DbOperationField("S99_IsValid")]
-        public byte IsValid { get; private set; } = (byte)BaseEnums.IsValid.InValid;
+        [DbOperationField("S99_IsDelete")]
+        public byte IsDelete { get; private set; } = (byte)BaseEnums.TrueOrFalse.True;
         /// <summary>
         /// 更新者Id
         /// </summary>

@@ -54,12 +54,12 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications
             _emailApi = emailApi;
         }
         /// <summary>
-        /// 完成申请
+        /// 通过申请
         /// </summary>
         /// <param name="applicationType">申请类型</param>
         /// <param name="data">完成申请所需数据</param>
         /// <returns></returns>
-        internal abstract Task<ResponseModel> CompleteApplication(long applicationType, CompleteApplicationModel data);
+        internal abstract Task<ResponseModel> AcceptApplication(long applicationType, CompleteApplicationModel data);
         /// <summary>
         /// 拒绝申请
         /// </summary>
