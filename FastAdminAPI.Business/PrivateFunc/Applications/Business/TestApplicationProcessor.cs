@@ -70,7 +70,7 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications.Business
         private async Task<ResponseModel> AcceptTestApplication(CompleteApplicationModel data)
         {
             // 测试事件总线
-            await _capPublisher.PublishAsync(SystemSubscriber.NOTIFY_MESSAGE, $"测试事件总线!");
+            await _capPublisher.PublishAsync(SystemSubscriber.NOTIFY_MESSAGE, $"Test申请已通过!");
 
             //测试企业微信通知
             await _qyWechatApi.SendCardMessage(new CardMsgSendModel
@@ -79,8 +79,8 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications.Business
                 textcard = new Textcard()
                 {
                     btntxt = "详情",
-                    title = "企业微信发送信息测试",
-                    description = "测试",
+                    title = "企业微信发送信息-Test申请已通过",
+                    description = data.DataContent,
                     url = QyWechatNotifyUrls.Get(QyWechatNotifyUrls.NOTIFY_TEST_URL)
                 }
             });
@@ -94,7 +94,23 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications.Business
         /// <returns></returns>
         private async Task<ResponseModel> RejectTestApplication(CompleteApplicationModel data)
         {
-            return await Task.FromResult(ResponseModel.Success());
+            // 测试事件总线
+            await _capPublisher.PublishAsync(SystemSubscriber.NOTIFY_MESSAGE, $"Test申请未通过!");
+
+            //测试企业微信通知
+            await _qyWechatApi.SendCardMessage(new CardMsgSendModel
+            {
+                touser = "test_user",
+                textcard = new Textcard()
+                {
+                    btntxt = "详情",
+                    title = "企业微信发送信息-Test申请未通过",
+                    description = data.DataContent,
+                    url = QyWechatNotifyUrls.Get(QyWechatNotifyUrls.NOTIFY_TEST_URL)
+                }
+            });
+
+            return ResponseModel.Success();
         }
         #endregion
     }
