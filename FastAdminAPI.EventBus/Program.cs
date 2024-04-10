@@ -1,4 +1,4 @@
-using Autofac.Extensions.DependencyInjection;
+ï»¿using Autofac.Extensions.DependencyInjection;
 using FastAdminAPI.CAP.Extensions;
 using FastAdminAPI.Common.Attributes.CheckValidators;
 using FastAdminAPI.Common.Extensions;
@@ -22,9 +22,9 @@ try
 {
     //builder
     WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-    //»ñÈ¡ÅäÖÃ
+    //è·å–é…ç½®
     IConfiguration configuration = builder.Configuration;
-    ////·şÎñÃû³Æ
+    ////æœåŠ¡åç§°
     //string serviceName = "FastAdminAPI.EventBus";
 
     #region Nlog
@@ -33,12 +33,12 @@ try
     builder.Host.UseNLog();
     #endregion
 
-    #region ÔØÈëÅäÖÃÎÄ¼ş
+    #region è½½å…¥é…ç½®æ–‡ä»¶
     builder.Host
     .UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureAppConfiguration((hostingContext, config) =>
     {
-        //ÉèÖÃappsetting.json
+        //è®¾ç½®appsetting.json
         config.SetBasePath(Directory.GetCurrentDirectory())
                   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                   .AddJsonFile($"appsettings.{EnvTool.GetEnv()}.json", optional: true, reloadOnChange: true)
@@ -46,9 +46,9 @@ try
     });
     #endregion
 
-    #region ·şÎñ Services
+    #region æœåŠ¡ Services
 
-    #region ·şÎñ×¢Èë
+    #region æœåŠ¡æ³¨å…¥
     builder.Services.AddOptions();
 
     // Add services to the container.
@@ -59,14 +59,14 @@ try
             c.Filters.Add(typeof(GlobalExceptionsFilter));
         })
         .AddControllersAsServices()
-        .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNamingPolicy = null; })// È¡ÏûÄ¬ÈÏÍÕ·å
+        .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNamingPolicy = null; })// å–æ¶ˆé»˜è®¤é©¼å³°
         .AddNewtonsoftJson(options => //Newtonsoft.Json
         {
             options.SerializerSettings.ContractResolver = new DefaultContractResolver();
             options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss.fff";
         });
 
-    //½¡¿µ¼ì²é
+    //å¥åº·æ£€æŸ¥
     builder.Services.AddHealthChecks();
 
     // HttpContext
@@ -79,11 +79,11 @@ try
     builder.Services.AddHttpClientConfig();
     builder.Services.AddRefitClients(configuration);
 
-    // ·şÎñ²ã×¢Èë
+    // æœåŠ¡å±‚æ³¨å…¥
     builder.Services.AddAllServices();
     #endregion
 
-    #region »º´æ
+    #region ç¼“å­˜
     builder.Services.AddMemoryCache();
     #endregion
 
@@ -106,7 +106,7 @@ try
 
     WebApplication app = builder.Build();
 
-    #region ÅäÖÃ Configure
+    #region é…ç½® Configure
 
     #region Map
     app.MapControllers();
@@ -121,7 +121,7 @@ try
 catch (Exception ex)
 {
 
-    NLogHelper.Error("Æô¶¯ÏîÄ¿Ê§°Ü!", ex);
+    NLogHelper.Error("å¯åŠ¨é¡¹ç›®å¤±è´¥!", ex);
     throw;
 }
 finally

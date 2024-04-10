@@ -1,4 +1,4 @@
-using Autofac.Extensions.DependencyInjection;
+ï»¿using Autofac.Extensions.DependencyInjection;
 using FastAdminAPI.Business.Extensions;
 using FastAdminAPI.CAP.Extensions;
 using FastAdminAPI.Common.Attributes.CheckValidators;
@@ -25,9 +25,9 @@ try
 {
     //builder
     WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-    //»ñÈ¡ÅäÖÃ
+    //è·å–é…ç½®
     IConfiguration configuration = builder.Configuration;
-    //·şÎñÃû³Æ
+    //æœåŠ¡åç§°
     string serviceName = "FastAdminAPI.Core";
 
     #region Nlog
@@ -36,12 +36,12 @@ try
     builder.Host.UseNLog();
     #endregion
 
-    #region ÔØÈëÅäÖÃÎÄ¼ş
+    #region è½½å…¥é…ç½®æ–‡ä»¶
     builder.Host
     .UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureAppConfiguration((hostingContext, config) =>
     {
-        //ÉèÖÃappsetting.json
+        //è®¾ç½®appsetting.json
         config.SetBasePath(Directory.GetCurrentDirectory())
                   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                   .AddJsonFile($"appsettings.{EnvTool.GetEnv()}.json", optional: true, reloadOnChange: true)
@@ -49,9 +49,9 @@ try
     });
     #endregion
 
-    #region ·şÎñ Services
+    #region æœåŠ¡ Services
 
-    #region ·şÎñ×¢Èë
+    #region æœåŠ¡æ³¨å…¥
     builder.Services.AddOptions();
 
     // Add services to the container.
@@ -61,14 +61,14 @@ try
             c.Filters.Add(typeof(GlobalExceptionsFilter));
         })
         .AddControllersAsServices()
-        .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNamingPolicy = null; })// È¡ÏûÄ¬ÈÏÍÕ·å
+        .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNamingPolicy = null; })// å–æ¶ˆé»˜è®¤é©¼å³°
         .AddNewtonsoftJson(options => //Newtonsoft.Json
         { 
             options.SerializerSettings.ContractResolver = new DefaultContractResolver();
             options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss.fff";  
         }); 
 
-    //½¡¿µ¼ì²é
+    //å¥åº·æ£€æŸ¥
     builder.Services.AddHealthChecks();
 
     // HttpContext
@@ -81,39 +81,39 @@ try
     builder.Services.AddHttpClientConfig();
     builder.Services.AddRefitClients(configuration);
 
-    // ·şÎñ²ã×¢Èë
+    // æœåŠ¡å±‚æ³¨å…¥
     builder.Services.AddAllServices();
 
-    //ÒµÎñ·şÎñ²ã
+    //ä¸šåŠ¡æœåŠ¡å±‚
     builder.Services.AddBusinessServices();
     #endregion
 
-    #region SqlSugar ORM¿ò¼Ü
+    #region SqlSugar ORMæ¡†æ¶
     builder.Services.AddSingleton<ISqlSugarClient>(sugar =>
     {
         return DbExtension.ConfigSqlSugar(configuration.GetValue<string>("Database.ConnectionString"));
     });
     #endregion
 
-    #region »º´æ
+    #region ç¼“å­˜
     builder.Services.AddMemoryCache();
     #endregion
 
-    #region  ÏìÓ¦½á¹ûÑ¹Ëõ
+    #region  å“åº”ç»“æœå‹ç¼©
     builder.Services.AddCompressResponse();
     #endregion
 
-    #region Í³Ò»ÈÏÖ¤
+    #region ç»Ÿä¸€è®¤è¯
     builder.Services.AddJwtAuthentication();
     #endregion
 
-    #region swaggerÎÄµµÅäÖÃ
+    #region swaggeræ–‡æ¡£é…ç½®
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwagger(serviceName, AppContext.BaseDirectory);
     #endregion
 
-    #region ÊÂ¼ş×ÜÏß
+    #region äº‹ä»¶æ€»çº¿
     builder.Services.AddEventBus(configuration);
     #endregion
 
@@ -121,25 +121,25 @@ try
 
     WebApplication app = builder.Build();
 
-    #region ÅäÖÃ Configure
+    #region é…ç½® Configure
 
-    #region SwaggerÎÄµµ
+    #region Swaggeræ–‡æ¡£
     // Configure the HTTP request pipeline.
     app.UseSwagger();
     app.UseSwaggerUI(c => { c.Configure(serviceName); });
     #endregion
 
-    #region Ñ¹Ëõ
+    #region å‹ç¼©
     app.UseResponseCompression();
     #endregion
 
-    #region ÇëÇóÏìÓ¦ÈÕÖ¾
+    #region è¯·æ±‚å“åº”æ—¥å¿—
     app.UseRequestResponseLog();
     #endregion
 
-    #region Ğ£Ñé
+    #region æ ¡éªŒ
     app.UseAuthentication();
-    app.UseJwtTokenAuth();//TokenĞ£Ñé
+    app.UseJwtTokenAuth();//Tokenæ ¡éªŒ
     #endregion
 
     #region Map
@@ -149,7 +149,7 @@ try
 
     #endregion
 
-    #region Àı×Ó£º»ñÈ¡IOCÈİÆ÷×¢ÈëµÄ¶ÔÏó
+    #region ä¾‹å­ï¼šè·å–IOCå®¹å™¨æ³¨å…¥çš„å¯¹è±¡
     ////1.refit
     //var email1Api = RestService.For<IEmailApi>("http://localhost:9000", RefitConfigExtension.REFIT_SETTINGS);
 
@@ -190,7 +190,7 @@ try
 catch (Exception ex)
 {
 
-    NLogHelper.Error("Æô¶¯ÏîÄ¿Ê§°Ü!", ex);
+    NLogHelper.Error("å¯åŠ¨é¡¹ç›®å¤±è´¥!", ex);
     throw;
 }
 finally

@@ -1,4 +1,4 @@
-using FastAdminAPI.CAP.Extensions;
+ï»¿using FastAdminAPI.CAP.Extensions;
 using FastAdminAPI.Common.Attributes.CheckValidators;
 using FastAdminAPI.Common.Filters;
 using FastAdminAPI.Common.Logs;
@@ -26,9 +26,9 @@ try
 {
     //builder
     WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-    //»ñÈ¡ÅäÖÃ
+    //è·å–é…ç½®
     IConfiguration configuration = builder.Configuration;
-    //·şÎñÃû³Æ
+    //æœåŠ¡åç§°
     //string serviceName = "FastAdminAPI.Tasks";
 
     #region Nlog
@@ -36,12 +36,12 @@ try
     builder.Host.UseNLog();
     #endregion
 
-    #region ÔØÈëÅäÖÃÎÄ¼ş
+    #region è½½å…¥é…ç½®æ–‡ä»¶
     builder.Host
     //.UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureAppConfiguration((hostingContext, config) =>
     {
-        //ÉèÖÃappsetting.json
+        //è®¾ç½®appsetting.json
         config.SetBasePath(Directory.GetCurrentDirectory())
                   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                   .AddJsonFile($"appsettings.{EnvTool.GetEnv()}.json", optional: true, reloadOnChange: true)
@@ -49,9 +49,9 @@ try
     });
     #endregion
 
-    #region ·şÎñ Services
+    #region æœåŠ¡ Services
 
-    #region ·şÎñ×¢Èë
+    #region æœåŠ¡æ³¨å…¥
     builder.Services.AddOptions();
 
     // Add services to the container.
@@ -62,14 +62,14 @@ try
             c.Filters.Add(typeof(GlobalExceptionsFilter));
         })
         .AddControllersAsServices()
-        .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNamingPolicy = null; })// È¡ÏûÄ¬ÈÏÍÕ·å
+        .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNamingPolicy = null; })// å–æ¶ˆé»˜è®¤é©¼å³°
         .AddNewtonsoftJson(options => //Newtonsoft.Json
         {
             options.SerializerSettings.ContractResolver = new DefaultContractResolver();
             options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss.fff";
         });
 
-    //½¡¿µ¼ì²é
+    //å¥åº·æ£€æŸ¥
     builder.Services.AddHealthChecks();
 
     // HttpContext
@@ -83,14 +83,14 @@ try
     builder.Services.AddRefitClients(configuration);
     #endregion
 
-    #region SqlSugar ORM¿ò¼Ü
+    #region SqlSugar ORMæ¡†æ¶
     builder.Services.AddSingleton<ISqlSugarClient>(sugar =>
     {
         return DbExtension.ConfigSqlSugar(configuration.GetValue<string>("Database.ConnectionString"));
     });
     #endregion
 
-    #region hangfire¶¨Ê±ÈÎÎñ
+    #region hangfireå®šæ—¶ä»»åŠ¡
     // hangfire
     builder.Services.AddHangfire(config =>
     config
@@ -104,19 +104,19 @@ try
                 Prefix = "FastAdminAPI_Hangfire:"
             }).WithJobExpirationTimeout(TimeSpan.FromDays(7))
     );
-    //ÓÃÓÚÆô¶¯hangfire
+    //ç”¨äºå¯åŠ¨hangfire
     builder.Services.AddHangfireServer();
     #endregion
 
-    #region »º´æ
+    #region ç¼“å­˜
     builder.Services.AddMemoryCache();
     #endregion
 
-    #region  ÏìÓ¦½á¹ûÑ¹Ëõ
+    #region  å“åº”ç»“æœå‹ç¼©
     //builder.Services.AddCompressResponse();
     #endregion
 
-    #region ÊÂ¼ş×ÜÏß
+    #region äº‹ä»¶æ€»çº¿
     builder.Services.AddEventBus(configuration);
     #endregion
 
@@ -124,19 +124,19 @@ try
 
     WebApplication app = builder.Build();
 
-    #region ÅäÖÃ Configure
+    #region é…ç½® Configure
 
-    #region hangfire¶¨Ê±ÈÎÎñ
-    //ÆôÓÃHangfire¿ØÖÆÌ¨
+    #region hangfireå®šæ—¶ä»»åŠ¡
+    //å¯ç”¨Hangfireæ§åˆ¶å°
     app.UseHangfireDashboard("/dashboard", new DashboardOptions
     {
-        DashboardTitle = "FastAdminAPI Tasks Dashboard", //Ò³Ãæ±êÌâ
-        AppPath = "/dashboard",//·µ»ØÊ±Ìø×ªµÄµØÖ·
-        DisplayStorageConnectionString = false,//ÊÇ·ñÏÔÊ¾Êı¾İ¿âÁ¬½ÓĞÅÏ¢
-        DefaultRecordsPerPage = 50, //Ä¬ÈÏÃ¿Ò³ÏÔÊ¾Êı¾İÌõÊı
+        DashboardTitle = "FastAdminAPI Tasks Dashboard", //é¡µé¢æ ‡é¢˜
+        AppPath = "/dashboard",//è¿”å›æ—¶è·³è½¬çš„åœ°å€
+        DisplayStorageConnectionString = false,//æ˜¯å¦æ˜¾ç¤ºæ•°æ®åº“è¿æ¥ä¿¡æ¯
+        DefaultRecordsPerPage = 50, //é»˜è®¤æ¯é¡µæ˜¾ç¤ºæ•°æ®æ¡æ•°
         Authorization = new[] { new BasicAuthAuthorizationFilter(new BasicAuthAuthorizationFilterOptions
         {
-            RequireSsl = false, //ÊÇ·ñÆôÓÃsslÑéÖ¤£¬¼´https
+            RequireSsl = false, //æ˜¯å¦å¯ç”¨ssléªŒè¯ï¼Œå³https
             SslRedirect = false,
             LoginCaseSensitive = true,
             Users = new []
@@ -151,7 +151,7 @@ try
     });
     #endregion
 
-    #region ´´½¨¶¨Ê±ÈÎÎñ
+    #region åˆ›å»ºå®šæ—¶ä»»åŠ¡
     TaskCreator.Create(configuration, app.Services);
     #endregion
 
@@ -172,7 +172,7 @@ try
 catch (Exception ex)
 {
 
-    NLogHelper.Error("Æô¶¯ÏîÄ¿Ê§°Ü!", ex);
+    NLogHelper.Error("å¯åŠ¨é¡¹ç›®å¤±è´¥!", ex);
     throw;
 }
 finally
