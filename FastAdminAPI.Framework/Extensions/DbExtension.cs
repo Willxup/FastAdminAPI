@@ -144,7 +144,7 @@ namespace FastAdminAPI.Framework.Extensions
         public static bool FindInSet<T>(T column, string separator)
         {
             throw new NotSupportedException("Can only be used in expressions");
-        } 
+        }
         #endregion
 
         #endregion
@@ -161,11 +161,23 @@ namespace FastAdminAPI.Framework.Extensions
         /// <param name="queryable"></param>
         /// <param name="search">查询条件</param>
         /// <param name="result">查询结果</param>
+        /// <param name="index">页数</param>
+        /// <param name="size">行数</param>
+        /// <param name="totalCount">总条数</param>
+        /// <param name="totalPage">总页数</param>
         /// <returns></returns>
-        public static async Task<List<TResult>> ToListAsync<T, TSearch, TResult>(this ISugarQueryable<T> queryable, TSearch search, TResult result)
+        public static async Task<List<TResult>> ToListAsync<T, TSearch, TResult>(this ISugarQueryable<T> queryable, TSearch search, TResult result, 
+            int? index, int? size, RefAsync<int> totalCount = null, RefAsync<int> totalPage = null)
             where TSearch : DbQueryBaseModel
         {
-            return await queryable.Where(search).Select(result).OrderBy(search).ToListAsync();
+            if (index != null && size != null)
+            {
+                return await queryable.Where(search).Select(result).OrderBy(search).ToPageListAsync((int)index, (int)size, totalCount, totalPage);
+            }
+            else
+            {
+                return await queryable.Where(search).Select(result).OrderBy(search).ToListAsync();
+            }
         }
         /// <summary>
         /// 灵活查询 直接返回通用消息类
