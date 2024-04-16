@@ -313,8 +313,7 @@ namespace FastAdminAPI.Core.Services
                 {
                     //获取所有在职员工信息
                     var employees = await _dbContext.Queryable<S07_Employee>()
-                        .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
-                                      S07.S07_Status != (byte)BusinessEnums.EmployeeStatus.Dimission)
+                        .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                     .Select(S07 => new { S07.S07_EmployeeId, S07.S07_Name })
                     .ToListAsync();
 

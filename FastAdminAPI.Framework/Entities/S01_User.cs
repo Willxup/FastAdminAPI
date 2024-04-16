@@ -15,7 +15,7 @@ namespace FastAdminAPI.Framework.Entities
         public S01_User()
         {
             this.S01_AccountStatus = Convert.ToByte("0");
-            this.S01_isDelete = Convert.ToByte("0");
+            this.S01_IsDelete = Convert.ToByte("0");
 
         }
         /// <summary>
@@ -53,7 +53,7 @@ namespace FastAdminAPI.Framework.Entities
         /// Nullable:False
         /// </summary>
 
-        public byte S01_isDelete { get; set; }
+        public byte S01_IsDelete { get; set; }
         /// <summary>
         /// Desc:创建者Id
         /// Default:

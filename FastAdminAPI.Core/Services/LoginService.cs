@@ -42,7 +42,7 @@ namespace FastAdminAPI.Core.Services
 
             //获取用户信息
             var user = await _dbContext.Queryable<S01_User>()
-                .Where(S01 => S01.S01_isDelete == (byte)BaseEnums.TrueOrFalse.False &&
+                .Where(S01 => S01.S01_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                               S01.S01_AccountStatus == (byte)BusinessEnums.AccountStatus.Enable &&
                               S01.S01_UserId == employee.UserId)
                 .Select(S01 => new
@@ -70,7 +70,7 @@ namespace FastAdminAPI.Core.Services
 
             //校验用户及获取用户信息
             var user = await _dbContext.Queryable<S01_User>()
-                .Where(S01 => S01.S01_isDelete == (byte)BaseEnums.TrueOrFalse.False &&
+                .Where(S01 => S01.S01_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                               S01.S01_AccountStatus == (byte)BusinessEnums.AccountStatus.Enable &&
                               S01.S01_Account == account &&
                               S01.S01_Password == password)

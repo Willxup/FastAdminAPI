@@ -64,7 +64,6 @@ namespace FastAdminAPI.Core.Services
                                    .LeftJoin<S08_EmployeePost>((S07, S08) => S07.S07_EmployeeId == S08.S07_EmployeeId)
                                    .LeftJoin<S06_Post>((S07, S08, S06) => S08.S06_PostId == S06.S06_PostId)
                                    .Where((S07, S08, S06) => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
-                                                             S07.S07_Status != (byte)BusinessEnums.EmployeeStatus.Dimission &&
                                                              S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                                              S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True &&
                                                              S08.S05_DepartId == S05.S05_DepartId &&

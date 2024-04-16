@@ -1900,7 +1900,7 @@
         </member>
         <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageSearch.Status">
             <summary>
-            状态 0正式 1实习 2离职
+            状态 0正式 1实习
             </summary>
         </member>
         <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageSearch.UserIds">
@@ -1911,6 +1911,11 @@
         <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageSearch.CornerMark">
             <summary>
             部门角标
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageSearch.IsAll">
+            <summary>
+            是否查询全部
             </summary>
         </member>
         <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageResult.EmployeeId">
@@ -1970,7 +1975,7 @@
         </member>
         <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageResult.Status">
             <summary>
-            状态 0正式 1实习 2离职
+            状态 0正式 1实习
             </summary>
         </member>
         <member name="P:FastAdminAPI.Core.Models.Employee.EmployeePageResult.Roles">

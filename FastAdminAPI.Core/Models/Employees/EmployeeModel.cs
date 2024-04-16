@@ -33,7 +33,7 @@ namespace FastAdminAPI.Core.Models.Employee
         [DbQueryOperator(DbOperator.Like)]
         public string Phone { get; set; }
         /// <summary>
-        /// 状态 0正式 1实习 2离职
+        /// 状态 0正式 1实习
         /// </summary>
         [DbTableAlias("S07")]
         [DbQueryField("S07_Status")]
@@ -51,6 +51,11 @@ namespace FastAdminAPI.Core.Models.Employee
         /// </summary>
         [DbIgnoreField]
         public string CornerMark { get; set; }
+        /// <summary>
+        /// 是否查询全部
+        /// </summary>
+        [DbIgnoreField]
+        public bool IsAll { get; set; } = false;
     }
     public class EmployeePageResult
     {
@@ -118,7 +123,7 @@ namespace FastAdminAPI.Core.Models.Employee
         [DbQueryField("S07_Kind")]
         public byte? Kind { get; set; }
         /// <summary>
-        /// 状态 0正式 1实习 2离职
+        /// 状态 0正式 1实习
         /// </summary>
         [DbTableAlias("S07")]
         [DbQueryField("S07_Status")]

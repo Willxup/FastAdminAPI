@@ -235,8 +235,7 @@ namespace FastAdminAPI.Business.Implements
                         .InnerJoin<S07_Employee>((S08, S07) => S08.S07_EmployeeId == S07.S07_EmployeeId)
                         .Where((S08, S07) => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
                                              postIds.Contains(S08.S06_PostId) && 
-                                             S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
-                                             S07.S07_Status != (byte)BusinessEnums.EmployeeStatus.Dimission)
+                                             S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                         .Select((S08, S07) => S08.S07_EmployeeId).ToListAsync();
 
                     //去重

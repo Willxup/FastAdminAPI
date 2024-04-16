@@ -59,7 +59,6 @@ namespace FastAdminAPI.Core.Services
                                                      .InnerJoin<S07_Employee>((S08, S07) => S08.S07_EmployeeId == S07.S07_EmployeeId)
                                                      .Where((S08, S07) => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                                                           S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
-                                                                          S07.S07_Status != (byte)BusinessEnums.EmployeeStatus.Dimission &&
                                                                           S08.S06_PostId == S06.S06_PostId)
                                                      .Count(),
                    MaxEmployeeNums = S06.S06_MaxEmployeeNums,
@@ -91,7 +90,6 @@ namespace FastAdminAPI.Core.Services
                                                      .InnerJoin<S07_Employee>((S08, S07) => S08.S07_EmployeeId == S07.S07_EmployeeId)
                                                      .Where((S08, S07) => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                                                           S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
-                                                                          S07.S07_Status != (byte)BusinessEnums.EmployeeStatus.Dimission &&
                                                                           S08.S06_PostId == S06.S06_PostId)
                                                      .Count(),
                        MaxEmployeeNums = S06.S06_MaxEmployeeNums,
@@ -123,7 +121,6 @@ namespace FastAdminAPI.Core.Services
                                                      .InnerJoin<S07_Employee>((S08, S07) => S08.S07_EmployeeId == S07.S07_EmployeeId)
                                                      .Where((S08, S07) => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                                                           S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
-                                                                          S07.S07_Status != (byte)BusinessEnums.EmployeeStatus.Dimission &&
                                                                           S08.S06_PostId == S06.S06_PostId)
                                                      .Count(),
                     MaxEmployeeNums = S06.S06_MaxEmployeeNums,
