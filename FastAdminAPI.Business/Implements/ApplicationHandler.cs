@@ -108,11 +108,10 @@ namespace FastAdminAPI.Business.Implements
                     .Select(S06 => S06.S06_ParentPostId).FirstAsync();
                 if (parentPost != null)
                 {
-                    //获取上级主岗位最后创建的员工
+                    //获取上级岗位最新创建的员工
                     superior = await _dbContext.Queryable<S08_EmployeePost>()
                         .LeftJoin<S07_Employee>((S08, S07) => S08.S07_EmployeeId == S07.S07_EmployeeId)
                         .Where((S08, S07) => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
-                                             S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True && 
                                              S08.S06_PostId == parentPost)
                         .OrderBy((S08, S07) => S08.S08_CreateTime, OrderByType.Desc)
                         .Select((S08, S07) => new ApproverInfoModel
@@ -204,11 +203,10 @@ namespace FastAdminAPI.Business.Implements
                 .Select(S06 => S06.S06_PostId).FirstOrDefault();
                 if (superPostId > 0)
                 {
-                    //获取上级主岗位最后创建的员工
+                    //获取上级岗位最新创建的员工
                     superior = await _dbContext.Queryable<S08_EmployeePost>()
                         .LeftJoin<S07_Employee>((S08, S07) => S08.S07_EmployeeId == S07.S07_EmployeeId)
                         .Where((S08, S07) => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
-                                             S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True && 
                                              S08.S06_PostId == superPostId)
                         .OrderBy((S08, S07) => S08.S08_CreateTime, OrderByType.Desc)
                         .Select((S08, S07) => new ApproverInfoModel
