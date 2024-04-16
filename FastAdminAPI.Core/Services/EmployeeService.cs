@@ -684,6 +684,14 @@ namespace FastAdminAPI.Core.Services
                         })
                         .Where(S01 => S01.S01_UserId == userId)
                         .ExecuteAsync();
+
+                    //删除权限
+                    if (result?.Code == ResponseCode.Success)
+                    {
+                        result = await _dbContext.Deleteable<S09_UserPermission>()
+                            .Where(S09 => S09.S01_UserId == userId)
+                            .ExecuteAsync(false);
+                    }
                 }
 
                 //无效员工岗位
@@ -738,8 +746,6 @@ namespace FastAdminAPI.Core.Services
                 //无效员工账号
                 if (result?.Code == ResponseCode.Success && userId != null)
                 {
-                    
-
                     result = await _dbContext.Updateable<S01_User>()
                                 .SetColumns(S01 => new S01_User
                                 {
@@ -751,6 +757,14 @@ namespace FastAdminAPI.Core.Services
                                 })
                                 .Where(S01 => S01.S01_UserId == userId)
                                 .ExecuteAsync();
+
+                    //删除权限
+                    if (result?.Code == ResponseCode.Success)
+                    {
+                        result = await _dbContext.Deleteable<S09_UserPermission>()
+                            .Where(S09 => S09.S01_UserId == userId)
+                            .ExecuteAsync(false);
+                    }
 
                 }
 
