@@ -24,10 +24,6 @@ namespace FastAdminAPI.Common.Authentications
         /// </summary>
         public string EmployeeName { get; set; }
         /// <summary>
-        /// 岗位Ids
-        /// </summary>
-        public string PostIds { get; set; }
-        /// <summary>
         /// 头像
         /// </summary>
         public string Avatar { get; set; }

@@ -1,4 +1,4 @@
-using FastAdminAPI.Common.Attributes;
+﻿using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Converters;
 using FastAdminAPI.Common.Datetime;
@@ -36,7 +36,6 @@ namespace FastAdminAPI.Common.Authentications
                     new("Account", tokenModel.Account),
                     new("EmployeeId", tokenModel.EmployeeId.ToString()),
                     new("EmployeeName", tokenModel.EmployeeName),
-                    new("PostIds", tokenModel.PostIds ?? string.Empty),
                     new("Avatar", tokenModel.Avatar?? string.Empty),
                     new("Device", tokenModel.Device.ToString()),
 
@@ -86,7 +85,6 @@ namespace FastAdminAPI.Common.Authentications
                 jwtToken.Payload.TryGetValue("Account", out object account);
                 jwtToken.Payload.TryGetValue("EmployeeId", out object employeeId);
                 jwtToken.Payload.TryGetValue("EmployeeName", out object employeeName);
-                jwtToken.Payload.TryGetValue("PostIds", out object postIds);
                 jwtToken.Payload.TryGetValue("Avatar", out object avatar);
 
                 jwtToken.Payload.TryGetValue("Device", out object device);
@@ -97,7 +95,6 @@ namespace FastAdminAPI.Common.Authentications
                     Account = account != null ? account.ToString() : string.Empty,
                     EmployeeId = employeeId != null ? Convert.ToInt64(employeeId) : -1,
                     EmployeeName = employeeName != null ? employeeName.ToString() : string.Empty,
-                    PostIds = postIds != null ? postIds.ToString() : string.Empty,
                     Avatar = avatar != null ? avatar.ToString() : string.Empty,
 
                     Device = device != null ? Convert.ToInt32(device) : -1,

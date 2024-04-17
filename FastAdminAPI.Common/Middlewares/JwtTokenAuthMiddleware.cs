@@ -1,4 +1,4 @@
-using FastAdminAPI.Common.Authentications;
+﻿using FastAdminAPI.Common.Authentications;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Redis;
 using Microsoft.AspNetCore.Http;
@@ -129,7 +129,7 @@ namespace FastAdminAPI.Common.Middlewares
                 return;
             }
 
-            //滑动过期时间下，令牌中的过期时间不能过期大于4小时
+            //滑动过期时间下，令牌中的过期时间不能过期4小时以上
             if (DateTime.Now.Subtract(jwt.Expires).Hours > 4)
             {
                 await FailAuth(httpContext, GetInvalidTokenResponse());
