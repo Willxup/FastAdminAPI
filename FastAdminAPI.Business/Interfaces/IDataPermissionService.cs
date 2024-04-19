@@ -12,19 +12,19 @@ namespace FastAdminAPI.Business.Interfaces
         /// 获取数据权限
         /// </summary>
         /// <returns></returns>
-        Task<List<long>> GetDataPermission();
+        Task<List<long>> Get();
 
         /// <summary>
         /// 释放数据权限
         /// </summary>
         /// <returns></returns>
-        Task<bool> ReleaseDataPermissions();
+        Task<bool> Release();
 
         /// <summary>
         /// 释放数据权限
         /// </summary>
         /// <param name="employeeId"></param>
         /// <returns></returns>
-        Task<bool> ReleaseDataPermission(long employeeId);
+        Task<bool> Release(long employeeId);
     }
 }

@@ -111,7 +111,7 @@ namespace FastAdminAPI.Business.Implements
         /// </summary>
         /// <returns></returns>
         /// <exception cref="UserOperationException"></exception>
-        public async Task<List<long>> GetDataPermission()
+        public async Task<List<long>> Get()
         {
             if (_employeeId <= 0)
                 throw new UserOperationException("无效的员工Id!");
@@ -273,7 +273,7 @@ namespace FastAdminAPI.Business.Implements
         /// 释放数据权限
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> ReleaseDataPermissions()
+        public async Task<bool> Release()
         {
             return await _redis.KeyDeleteAsync(DATA_PERMISSION_KEY);
         }
@@ -284,7 +284,7 @@ namespace FastAdminAPI.Business.Implements
         /// <param name="employeeId"></param>
         /// <returns></returns>
         /// <exception cref="UserOperationException"></exception>
-        public async Task<bool> ReleaseDataPermission(long employeeId)
+        public async Task<bool> Release(long employeeId)
         {
             if (employeeId <= 0)
                 throw new UserOperationException("无效的用户Id!");
