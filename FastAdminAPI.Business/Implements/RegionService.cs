@@ -55,7 +55,7 @@ namespace FastAdminAPI.Business.Implements
         /// </summary>
         /// <param name="RetryTimes">重试次数，默认2次</param>
         /// <returns></returns>
-        public async Task<List<RegionModel>> GetRegionInfo(int RetryTimes = 2)
+        public async Task<List<RegionModel>> Get(int RetryTimes = 2)
         {
             var regionInfo = await _redis.StringGetAsync<List<RegionModel>>("Common:RegionInfo");
             if (regionInfo == null || regionInfo.Count <= 0)
@@ -84,7 +84,7 @@ namespace FastAdminAPI.Business.Implements
         /// <returns></returns>
         public async Task<Dictionary<string, string>> GetFullRegionByCountry(string code)
         {
-            var positionInfo = await GetRegionInfo();
+            var positionInfo = await Get();
             if (positionInfo == null)
             {
                 return null;
@@ -126,7 +126,7 @@ namespace FastAdminAPI.Business.Implements
         /// <returns></returns>
         public async Task<Dictionary<string, string>> GetFullRegion(string provinceCode, string cityCode, string regionCode)
         {
-            var positionInfo = await GetRegionInfo();
+            var positionInfo = await Get();
             var province = positionInfo?.Where(c => c.RegionCode == provinceCode).Select(c => new { c.RegionCode, c.RegionName }).FirstOrDefault();
             var city = positionInfo?.Where(c => c.RegionCode == cityCode).Select(c => new { c.RegionCode, c.RegionName }).FirstOrDefault();
             var region = positionInfo?.Where(c => c.RegionCode == regionCode).Select(c => new { c.RegionCode, c.RegionName }).FirstOrDefault();
@@ -150,7 +150,7 @@ namespace FastAdminAPI.Business.Implements
         public async Task<string> GetRegionName(string regionCode)
         {
             string regionName = string.Empty;
-            var regionInfo = await GetRegionInfo();
+            var regionInfo = await Get();
             if (regionInfo?.Count > 0)
             {
                 regionName = regionInfo.Where(c => c.RegionCode == regionCode).Select(c => c.RegionName).FirstOrDefault();

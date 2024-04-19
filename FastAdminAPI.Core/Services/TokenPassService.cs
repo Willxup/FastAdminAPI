@@ -121,7 +121,7 @@ namespace FastAdminAPI.Core.Services
         {
             RegionStructureModel regionStruc = new();
 
-            var regionList = await _regionService.GetRegionInfo();//从redis取出所有区域信息
+            var regionList = await _regionService.Get();//从redis取出所有区域信息
             if (regionList?.Count <= 0 || regionList == null)
             {
                 return regionStruc;
