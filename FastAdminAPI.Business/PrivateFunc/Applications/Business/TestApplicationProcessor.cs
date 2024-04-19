@@ -36,7 +36,7 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications.Business
         /// <param name="applicationType"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        internal override async Task<ResponseModel> AcceptApplication(long applicationType, CompleteApplicationModel data)
+        internal override async Task<ResponseModel> Accept(long applicationType, CompleteApplicationModel data)
         {
             return applicationType switch
             {
@@ -51,7 +51,7 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications.Business
         /// <param name="applicationType"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        internal override async Task<ResponseModel> RejectApplication(long applicationType, CompleteApplicationModel data)
+        internal override async Task<ResponseModel> Reject(long applicationType, CompleteApplicationModel data)
         {
             return applicationType switch
             {

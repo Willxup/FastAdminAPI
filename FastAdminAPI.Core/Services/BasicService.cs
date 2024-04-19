@@ -197,7 +197,7 @@ namespace FastAdminAPI.Core.Services
                 if (result?.Code == ResponseCode.Success)
                 {
                     //释放数据权限
-                    await _dataPermission.ReleaseDataPermission((long)model.EmployeeId);
+                    await _dataPermission.Release((long)model.EmployeeId);
                 }
                 return result;
             }
@@ -235,8 +235,8 @@ namespace FastAdminAPI.Core.Services
                 if (result?.Code == ResponseCode.Success)
                 {
                     //释放员工数据权限
-                    await _dataPermission.ReleaseDataPermission((long)model.EmployeeId);
-                    await _dataPermission.ReleaseDataPermission(dataPermission.EmployeeId);
+                    await _dataPermission.Release((long)model.EmployeeId);
+                    await _dataPermission.Release(dataPermission.EmployeeId);
                 }
 
                 return result;
@@ -270,7 +270,7 @@ namespace FastAdminAPI.Core.Services
             if (result?.Code == ResponseCode.Success)
             {
                 //释放数据权限
-                await _dataPermission.ReleaseDataPermission(dataPermission.EmployeeId);
+                await _dataPermission.Release(dataPermission.EmployeeId);
             }
             return result;
         }

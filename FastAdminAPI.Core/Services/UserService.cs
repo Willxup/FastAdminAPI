@@ -235,7 +235,7 @@ namespace FastAdminAPI.Core.Services
                             //开启事务进行审批
                             var result = await _dbContext.TransactionAsync(async () =>
                             {
-                                return await _applicationHandler.ProcessingApplication(new ProcessingApplicationModel
+                                return await _applicationHandler.Approve(new ProcessingApplicationModel
                                 {
                                     Check = check,
                                     IsApprove = model.IsApprove,

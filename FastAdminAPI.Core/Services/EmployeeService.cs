@@ -171,7 +171,7 @@ namespace FastAdminAPI.Core.Services
         /// <returns></returns>
         public async Task<List<EmployeeSimpleModel>> GetSubordinateEmployeeList()
         {
-            var dataPermission = await _dataPermission.GetDataPermission();
+            var dataPermission = await _dataPermission.Get();
 
             return await _dbContext.Queryable<S07_Employee>()
                 .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
@@ -496,7 +496,7 @@ namespace FastAdminAPI.Core.Services
                         if (result?.Code == ResponseCode.Success)
                         {
                             //清除数据权限
-                            await _dataPermission.ReleaseDataPermissions();
+                            await _dataPermission.Release();
                         }
                     }
                 }
@@ -712,7 +712,7 @@ namespace FastAdminAPI.Core.Services
                 //清除数据权限
                 if (result?.Code == ResponseCode.Success)
                 {
-                    await _dataPermission.ReleaseDataPermissions();
+                    await _dataPermission.Release();
                 }
                 return result;
             });
@@ -787,7 +787,7 @@ namespace FastAdminAPI.Core.Services
                 //清除数据权限
                 if (result?.Code == ResponseCode.Success)
                 {
-                    await _dataPermission.ReleaseDataPermissions();
+                    await _dataPermission.Release();
                 }
 
                 return result;
@@ -853,7 +853,7 @@ namespace FastAdminAPI.Core.Services
             if (result?.Code == ResponseCode.Success)
             {
                 //释放数据权限
-                await _dataPermission.ReleaseDataPermissions();
+                await _dataPermission.Release();
             }
             return result;
         }
@@ -908,7 +908,7 @@ namespace FastAdminAPI.Core.Services
                 if (result?.Code == ResponseCode.Success)
                 {
                     //释放数据权限
-                    await _dataPermission.ReleaseDataPermissions();
+                    await _dataPermission.Release();
                 }
                 return result;
             });
@@ -948,7 +948,7 @@ namespace FastAdminAPI.Core.Services
             if (result?.Code == ResponseCode.Success)
             {
                 //释放数据权限
-                await _dataPermission.ReleaseDataPermissions();
+                await _dataPermission.Release();
             }
             return result;
         }

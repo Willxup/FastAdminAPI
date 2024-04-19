@@ -59,13 +59,13 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications
         /// <param name="applicationType">申请类型</param>
         /// <param name="data">完成申请所需数据</param>
         /// <returns></returns>
-        internal abstract Task<ResponseModel> AcceptApplication(long applicationType, CompleteApplicationModel data);
+        internal abstract Task<ResponseModel> Accept(long applicationType, CompleteApplicationModel data);
         /// <summary>
         /// 拒绝申请
         /// </summary>
         /// <param name="applicationType">申请类型</param>
         /// <param name="data">完成申请所需数据</param>
         /// <returns></returns>
-        internal abstract Task<ResponseModel> RejectApplication(long applicationType, CompleteApplicationModel data);
+        internal abstract Task<ResponseModel> Reject(long applicationType, CompleteApplicationModel data);
     }
 }

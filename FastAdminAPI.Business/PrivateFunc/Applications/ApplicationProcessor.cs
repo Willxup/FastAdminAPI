@@ -67,7 +67,7 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications
         /// <param name="applicationCategory"></param>
         /// <returns></returns>
         /// <exception cref="UserOperationException"></exception>
-        private AbstractApplicationProcessor GetApplicationProcessor(byte applicationCategory)
+        private AbstractApplicationProcessor GetProcessor(byte applicationCategory)
         {
             return applicationCategory switch
             {
@@ -86,10 +86,10 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications
         /// <param name="data">完成申请所需数据</param>
         /// <returns></returns>
         /// <exception cref="UserOperationException"></exception>
-        public async Task<ResponseModel> AcceptApplication(byte applicationCategory, long applicationType, CompleteApplicationModel data)
+        public async Task<ResponseModel> Accept(byte applicationCategory, long applicationType, CompleteApplicationModel data)
         {
 
-            return await GetApplicationProcessor(applicationCategory).AcceptApplication(applicationType, data);
+            return await GetProcessor(applicationCategory).Accept(applicationType, data);
         }
         /// <summary>
         /// 拒绝申请
@@ -98,9 +98,9 @@ namespace FastAdminAPI.Business.PrivateFunc.Applications
         /// <param name="applicationType">申请类型</param>
         /// <param name="data">完成申请所需数据</param>
         /// <returns></returns>
-        public async Task<ResponseModel> RejectApplication(byte applicationCategory, long applicationType, CompleteApplicationModel data)
+        public async Task<ResponseModel> Reject(byte applicationCategory, long applicationType, CompleteApplicationModel data)
         {
-            return await GetApplicationProcessor(applicationCategory).RejectApplication(applicationType, data);
+            return await GetProcessor(applicationCategory).Reject(applicationType, data);
         }
     }
 }

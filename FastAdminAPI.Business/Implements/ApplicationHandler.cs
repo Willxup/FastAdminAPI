@@ -646,7 +646,7 @@ namespace FastAdminAPI.Business.Implements
         /// <param name="model"></param>
         /// <param name="isSendApprovalNotice">是否开启审批通知(默认是)</param>
         /// <returns></returns>
-        public async Task<ResponseModel> SetApplication(SetApplicationModel model, bool isSendApprovalNotice = true)
+        public async Task<ResponseModel> Apply(SetApplicationModel model, bool isSendApprovalNotice = true)
         {
             #region Redis锁
             //redis锁名 = 前缀_申请类别_业务数据Id
@@ -840,7 +840,7 @@ namespace FastAdminAPI.Business.Implements
                 };
 
                 //处理申请
-                result = await _processor.AcceptApplication(model.Check.S12_ApplicationCategory, model.Check.S99_ApplicationType, data);
+                result = await _processor.Accept(model.Check.S12_ApplicationCategory, model.Check.S99_ApplicationType, data);
 
                 //为抄送人发送消息通知
                 if (result?.Code == ResponseCode.Success && isSendApprovalCCNotice && ccReceivers?.Count > 0)
@@ -900,7 +900,7 @@ namespace FastAdminAPI.Business.Implements
                 };
 
                 //处理申请
-                result = await _processor.RejectApplication(model.Check.S12_ApplicationCategory, model.Check.S99_ApplicationType, data);
+                result = await _processor.Reject(model.Check.S12_ApplicationCategory, model.Check.S99_ApplicationType, data);
 
                 //为抄送人发送消息通知
                 if (result?.Code == ResponseCode.Success && isSendApprovalCCNotice && ccReceivers?.Count > 0)
@@ -931,7 +931,7 @@ namespace FastAdminAPI.Business.Implements
         /// <param name="isSendApporvalNotice">是否开启审批通知(默认是)</param>
         /// <param name="isSendApprovalCCNotice">是否开启审批抄送通知(默认是)</param>
         /// <returns></returns>
-        public async Task<ResponseModel> ProcessingApplication(ProcessingApplicationModel model, bool isSendApporvalNotice = true, bool isSendApprovalCCNotice = true)
+        public async Task<ResponseModel> Approve(ProcessingApplicationModel model, bool isSendApporvalNotice = true, bool isSendApprovalCCNotice = true)
         {
             S13_CheckRecords record = new()
             {
@@ -1000,7 +1000,7 @@ namespace FastAdminAPI.Business.Implements
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<ResponseModel> AcceptApplication(SetApplicationModel model)
+        public async Task<ResponseModel> Accept(SetApplicationModel model)
         {
             //获取审批流程
             S12_Check check = new()
@@ -1059,7 +1059,7 @@ namespace FastAdminAPI.Business.Implements
                     };
 
                     //处理申请
-                    result = await _processor.AcceptApplication((byte)model.ApplicationCategory, (long)model.ApplicationType, data);
+                    result = await _processor.Accept((byte)model.ApplicationCategory, (long)model.ApplicationType, data);
                 }
             }
 
