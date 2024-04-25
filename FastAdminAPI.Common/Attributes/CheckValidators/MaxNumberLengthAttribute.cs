@@ -42,16 +42,20 @@ namespace FastAdminAPI.Common.Attributes.CheckValidators
                 return true;
             }
 
-            // 最终比较字符串的长度
-            string valueStr = "";
-
             try
             {
+                // 最终比较字符串的长度
+                string valueStr;
+
                 // 整型
                 if (value is byte || value is byte? || value is sbyte || value is sbyte? ||
                     value is int || value is int? || value is long || value is long?)
                 {
                     valueStr = Convert.ToInt64(value).ToString();
+
+                    //整型不计算小数点
+                    if (valueStr.Length <= _maxLength)
+                        return true;
                 }
                 // 浮点型
                 else if (value is double || value is double? ||
@@ -71,6 +75,11 @@ namespace FastAdminAPI.Common.Attributes.CheckValidators
                     {
                         valueStr += ".".PadRight(_decimalPlaces + 1, '0'); // 拼接0在后面，+1表示.的长度，PadRight(总长度，拼接的字符)
                     }
+
+                    // 如果值的长度小于等于要求的长度，返回true
+                    // -1表示去除小数点的长度
+                    if ((valueStr.Length - 1) <= _maxLength)
+                        return true;
                 }
             }
             catch (Exception)
@@ -78,11 +87,6 @@ namespace FastAdminAPI.Common.Attributes.CheckValidators
                 ErrorMessage = $"参数类型有误!";
                 return false;
             }
-
-            // 如果值的长度小于等于要求的长度，返回true
-            // -1表示去除小数点的长度
-            if ((valueStr.Length -1) <= _maxLength)
-                return true;
 
             return false;
         }
