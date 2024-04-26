@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace FastAdminAPI.Common.Attributes.CheckValidators
 {
     /// <summary>
-    /// 枚举校验 只支持int类型
+    /// 枚举校验 只支持数字类型
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
     public class EnumCheckAttribute : RequiredAttribute

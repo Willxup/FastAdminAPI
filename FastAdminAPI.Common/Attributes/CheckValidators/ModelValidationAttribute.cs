@@ -1,4 +1,4 @@
-using FastAdminAPI.Common.BASE;
+﻿using FastAdminAPI.Common.BASE;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
@@ -15,9 +15,12 @@ namespace FastAdminAPI.Common.Attributes.CheckValidators
         public override void OnActionExecuting(ActionExecutingContext actionContext)
         {
             var modelState = actionContext.ModelState;
+
             if (!modelState.IsValid)
             {
                 string msg = string.Empty;
+
+                //循环
                 foreach (var key in modelState.Keys)
                 {
                     var state = modelState[key];
@@ -26,12 +29,14 @@ namespace FastAdminAPI.Common.Attributes.CheckValidators
                         msg += state.Errors.First().ErrorMessage; // + "，";
                     }
                 }
+
                 //msg = msg.Remove(msg.Length - 1, 1) + "。";
                 ResponseModel response = new()
                 {
                     Code = ResponseCode.Error,
                     Message = msg
                 };
+
                 actionContext.HttpContext.Response.StatusCode = 200;
                 actionContext.Result = new ObjectResult(response);
             }
