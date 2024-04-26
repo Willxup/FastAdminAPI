@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace FastAdminAPI.Common.Datetime
 {
-    public static class DateTimeHelper
+    public static class DateTool
     {
         #region DateTime和时间戳互转
         /// <summary>
@@ -94,11 +94,10 @@ namespace FastAdminAPI.Common.Datetime
         public static double GetRemainingTimeOfDay()
         {
             return (24 * 60 * 60) - DateTime.Now.TimeOfDay.TotalSeconds;
-        } 
+        }
         #endregion
-    }
-    public static class DateTimeConvertExtension
-    {
+
+        #region 时间格式化
         /// <summary>
         /// 可空时间类型格式化为字符串
         /// </summary>
@@ -123,5 +122,6 @@ namespace FastAdminAPI.Common.Datetime
         {
             return datetime.ToString(format, DateTimeFormatInfo.InvariantInfo);
         }
+        #endregion
     }
 }

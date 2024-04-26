@@ -34,7 +34,7 @@ namespace FastAdminAPI.CommonSerialNumber
             else
             {
                 num = 1;
-                redis.StringSet(key, num, TimeSpan.FromSeconds(DateTimeHelper.GetRemainingTimeOfDay()));
+                redis.StringSet(key, num, TimeSpan.FromSeconds(DateTool.GetRemainingTimeOfDay()));
             }
             long result = num / 10;
             if (result == 0)//个位数

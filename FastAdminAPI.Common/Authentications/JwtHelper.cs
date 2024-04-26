@@ -53,7 +53,7 @@ namespace FastAdminAPI.Common.Authentications
                     audience: Define.AUDIENCE,
                     claims: claims,
                     signingCredentials: creds,
-                    expires: DateTime.Now.AddSeconds(DateTimeHelper.GetRemainingTimeOfDay()) //获取当天剩余的时间，token有效期到今晚24时
+                    expires: DateTime.Now.AddSeconds(DateTool.GetRemainingTimeOfDay()) //获取当天剩余的时间，token有效期到今晚24时
                     );
 
                 var jwtHandler = new JwtSecurityTokenHandler();
