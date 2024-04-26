@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace FastAdminAPI.Common.BASE
 {
@@ -48,20 +47,45 @@ namespace FastAdminAPI.Common.BASE
         /// </summary>
         public DateTime Timestamp { get; set; } = DateTime.Now;
 
+        /// <summary>
+        /// 构造
+        /// </summary>
         public ResponseModel() { }
+
+        /// <summary>
+        /// 构造
+        /// </summary>
+        /// <param name="code">响应码</param>
         public ResponseModel(ResponseCode code)
         {
             Code = code;
         }
 
+        /// <summary>
+        /// 构造
+        /// </summary>
+        /// <param name="data">数据</param>
         public ResponseModel(object data)
         {
             Data = data;
         }
+
+        /// <summary>
+        /// 构造
+        /// </summary>
+        /// <param name="code">响应码</param>
+        /// <param name="msg">消息</param>
         public ResponseModel(ResponseCode code, string msg) : this(code)
         {
             Message = msg;
         }
+
+        /// <summary>
+        /// 构造
+        /// </summary>
+        /// <param name="code">响应码</param>
+        /// <param name="msg">消息</param>
+        /// <param name="data">数据</param>
         public ResponseModel(ResponseCode code, string msg, object data) : this(code, msg)
         {
             Data = data;
@@ -70,28 +94,28 @@ namespace FastAdminAPI.Common.BASE
         /// <summary>
         /// 成功
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="data">数据</param>
         /// <returns></returns>
         public static ResponseModel Success(object data = null) => new(data);
         /// <summary>
         /// 成功(仅消息)
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="message">消息</param>
         /// <returns></returns>
         public static ResponseModel SuccessMessage(string message) => new(ResponseCode.Success, message);
         /// <summary>
         /// 错误
         /// </summary>
-        /// <param name="msg"></param>
-        /// <param name="code"></param>
+        /// <param name="msg">消息</param>
+        /// <param name="code">响应码</param>
         /// <returns></returns>
         public static ResponseModel Error(string msg, ResponseCode code = ResponseCode.Error) => new(code, msg);
         /// <summary>
         /// 警告
         /// </summary>
-        /// <param name="msg"></param>
-        /// <param name="code"></param>
-        /// <param name="data"></param>
+        /// <param name="msg">消息</param>
+        /// <param name="code">响应码</param>
+        /// <param name="data">数据</param>
         /// <returns></returns>
         public static ResponseModel Warn(string msg, ResponseCode code = ResponseCode.Warn, object data = null) => new(code, msg, data);
     }
@@ -118,7 +142,7 @@ namespace FastAdminAPI.Common.BASE
         /// 通用返回信息体转换data数据
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="result"></param>
+        /// <param name="result">返回结果</param>
         /// <returns></returns>
         public static T ToConvertData<T>(this ResponseModel result) where T : class, new()
         {
