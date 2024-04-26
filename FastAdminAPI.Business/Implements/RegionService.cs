@@ -55,7 +55,7 @@ namespace FastAdminAPI.Business.Implements
         /// </summary>
         /// <param name="RetryTimes">重试次数，默认2次</param>
         /// <returns></returns>
-        public async Task<List<RegionModel>> Get(int RetryTimes = 2)
+        public async Task<List<RegionModel>> GetRegion(int RetryTimes = 2)
         {
             var regionInfo = await _redis.StringGetAsync<List<RegionModel>>("Common:RegionInfo");
             if (regionInfo == null || regionInfo.Count <= 0)
@@ -84,37 +84,44 @@ namespace FastAdminAPI.Business.Implements
         /// <returns></returns>
         public async Task<Dictionary<string, string>> GetFullRegionByCountry(string code)
         {
-            var positionInfo = await Get();
+            // 获取区域信息
+            var positionInfo = await GetRegion();
+            
             if (positionInfo == null)
-            {
                 return null;
-            }
+
             Dictionary<string, string> position = new();
-            //区域
+
+            // 获取区域
             var region = positionInfo.Where(r => r.RegionCode == code)
-                                    .Select(c => new { c.RegionCode, c.RegionName, c.ParentId }).FirstOrDefault();
+                                    .Select(c => new { c.RegionCode, c.RegionName, c.ParentId })
+                                    .FirstOrDefault();
             if (region == null)
-            {
                 return null;
-            }
-            //城市
+
+            // 获取城市
             var city = positionInfo.Where(r => r.RegionId == region.ParentId)
-                                 .Select(c => new { c.RegionCode, c.RegionName, c.ParentId }).FirstOrDefault();
+                                 .Select(c => new { c.RegionCode, c.RegionName, c.ParentId })
+                                 .FirstOrDefault();
             if (city == null)
-            {
                 return null;
-            }
-            //省份
+
+            // 获取省份
             var province = positionInfo.Where(c => c.RegionId == city.ParentId)
-                                     .Select(c => new { c.RegionCode, c.RegionName }).FirstOrDefault();
+                                     .Select(c => new { c.RegionCode, c.RegionName })
+                                     .FirstOrDefault();
             if (province == null)
-            {
                 return null;
-            }
-            //按顺序加入字典
+
+            // 省份
             position.Add(province.RegionCode, province.RegionName);
+
+            // 城市
             position.Add(city.RegionCode, city.RegionName);
+
+            // 区域
             position.Add(region.RegionCode, region.RegionName);
+
             return position;
         }
         /// <summary>
@@ -126,10 +133,19 @@ namespace FastAdminAPI.Business.Implements
         /// <returns></returns>
         public async Task<Dictionary<string, string>> GetFullRegion(string provinceCode, string cityCode, string regionCode)
         {
-            var positionInfo = await Get();
+            // 获取区域信息
+            var positionInfo = await GetRegion();
+
+            // 获取省份
             var province = positionInfo?.Where(c => c.RegionCode == provinceCode).Select(c => new { c.RegionCode, c.RegionName }).FirstOrDefault();
+
+            // 获取城市
             var city = positionInfo?.Where(c => c.RegionCode == cityCode).Select(c => new { c.RegionCode, c.RegionName }).FirstOrDefault();
+
+            // 获取区域
             var region = positionInfo?.Where(c => c.RegionCode == regionCode).Select(c => new { c.RegionCode, c.RegionName }).FirstOrDefault();
+
+            // 返回省市区
             if (province != null && city != null && region != null)
             {
                 Dictionary<string, string> position = new()
@@ -140,21 +156,25 @@ namespace FastAdminAPI.Business.Implements
                 };
                 return position;
             }
+
             return null;
         }
         /// <summary>
         /// 获取区域名称
         /// </summary>
-        /// <param name="regionCode"></param>
+        /// <param name="regionCode">区域代码</param>
         /// <returns></returns>
         public async Task<string> GetRegionName(string regionCode)
         {
             string regionName = string.Empty;
-            var regionInfo = await Get();
+
+            var regionInfo = await GetRegion();
+
             if (regionInfo?.Count > 0)
             {
                 regionName = regionInfo.Where(c => c.RegionCode == regionCode).Select(c => c.RegionName).FirstOrDefault();
             }
+
             return regionName;
         }
         #endregion

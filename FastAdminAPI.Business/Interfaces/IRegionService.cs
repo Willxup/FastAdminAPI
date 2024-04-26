@@ -14,7 +14,7 @@ namespace FastAdminAPI.Business.Interfaces
         /// </summary>
         /// <param name="RetryTimes">重试次数，默认2次</param>
         /// <returns></returns>
-        Task<List<RegionModel>> Get(int RetryTimes = 2);
+        Task<List<RegionModel>> GetRegion(int RetryTimes = 2);
 
         /// <summary>
         /// 按区县代号获取完整区域信息
@@ -33,7 +33,7 @@ namespace FastAdminAPI.Business.Interfaces
         /// <summary>
         /// 获取区域名称
         /// </summary>
-        /// <param name="regionCode"></param>
+        /// <param name="regionCode">区域代码</param>
         /// <returns></returns>
         Task<string> GetRegionName(string regionCode);
     }
