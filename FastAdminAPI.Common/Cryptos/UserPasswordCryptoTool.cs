@@ -1,12 +1,12 @@
 ﻿using System;
 using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
-using FastAdminAPI.Common.Cryptions;
+using FastAdminAPI.Common.Cryptos;
 using FastAdminAPI.Common.Logs;
 
 namespace FastAdminAPI.Common.Cryption
 {
-    public static class UserPasswordCryptionHelper
+    public static class UserPasswordCryptoTool
     {
         /// <summary>
         /// 加密用户密码
@@ -17,7 +17,7 @@ namespace FastAdminAPI.Common.Cryption
         {
             try
             {
-                return AESEncryptHelper.RijndaelEncrypt(plaintext, Define.PASSWORD_CRYPTO_KEY);
+                return CryptoTool.RijndaelEncrypt(plaintext, Define.PASSWORD_CRYPTO_KEY);
             }
             catch (Exception ex)
             {
@@ -35,7 +35,7 @@ namespace FastAdminAPI.Common.Cryption
         {
             try
             {
-                return AESEncryptHelper.RijndaelDecrypt(ciphertext, Define.PASSWORD_CRYPTO_KEY);
+                return CryptoTool.RijndaelDecrypt(ciphertext, Define.PASSWORD_CRYPTO_KEY);
             }
             catch (Exception ex)
             {
