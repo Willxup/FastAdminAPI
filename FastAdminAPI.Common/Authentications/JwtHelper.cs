@@ -98,7 +98,7 @@ namespace FastAdminAPI.Common.Authentications
                     Avatar = avatar != null ? avatar.ToString() : string.Empty,
 
                     Device = device != null ? Convert.ToInt32(device) : -1,
-                    Expires = expires.ToDate(),
+                    Expires = Convert.ToDateTime(expires),
                 };
                 return jwt;
             }
