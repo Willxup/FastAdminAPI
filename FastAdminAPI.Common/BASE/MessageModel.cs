@@ -6,7 +6,6 @@
     public class MessageModel
     {
         #region 通用
-
         /// <summary>
         /// 操作成功
         /// </summary>
@@ -23,11 +22,9 @@
         /// 警告
         /// </summary>
         public static readonly string Warn = "警告!";
-
         #endregion
 
         #region 登录
-
         /// <summary>
         /// 用户名或密码错误
         /// </summary>
@@ -56,12 +53,6 @@
         /// 其他设备登录
         /// </summary>
         public static readonly string OtherDeviceLogin = "已在其他设备登录!";
-
         #endregion
-
-        /// <summary>
-        /// 暂时不支持其他类型数据库
-        /// </summary>
-        public static readonly string OtherDbNotSupport = "暂时不支持其他类型数据库!";
     }
 }
