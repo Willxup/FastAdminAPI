@@ -18,14 +18,14 @@ namespace FastAdminAPI.Common.Swagger
         public static void Configure(this SwaggerUIOptions options, string serviceName)
         {
 
-            //根据版本名称正序 遍历展示
+            // 根据版本名称正序 遍历展示
             typeof(ApiVersions).GetEnumNames().OrderBy(e => e).ToList().ForEach(version =>
             {
                 options.SwaggerEndpoint($"/swagger/{version}/swagger.json", $"{serviceName} {version}");
             });
 
             // 将swagger首页,设置成我们自定义的页面:解决方案名+.index.html               
-            // 路径配置，设置为空，表示直接在根域名（localhost:8001）访问该文件,注意localhost:8001/swagger是访问不到的，去launchSettings.json把launchUrl去掉
+            // 路径配置，设置为空，表示直接在根域名（localhost:9000）访问该文件,注意localhost:9000/swagger是访问不到的，去launchSettings.json把launchUrl去掉
             options.RoutePrefix = "";
 
             // Display
