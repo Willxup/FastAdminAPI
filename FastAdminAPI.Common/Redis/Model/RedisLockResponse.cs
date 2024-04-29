@@ -1,6 +1,6 @@
 ﻿namespace FastAdminAPI.Common.Redis.Model
 {
-    public class RedisLockResultModel<T>
+    public class RedisLockResponse<T>
     {
         /// <summary>
         /// 是否成功

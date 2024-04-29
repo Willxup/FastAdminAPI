@@ -1,4 +1,4 @@
-using FastAdminAPI.Common.Redis.Model;
+﻿using FastAdminAPI.Common.Redis.Model;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -749,7 +749,7 @@ namespace FastAdminAPI.Common.Redis
         /// <param name="expiry">锁过期时间，若超出时间自动解锁 单位：sec</param>
         /// <param name="retry">获取锁的重复次数</param>
         /// <param name="tryDelay">获取锁的重试间隔  单位：ms</param>
-        RedisLockResultModel<TResult> Lock<TResult>(string lockName, Func<TResult> func, int expiry = 10, int retry = 3, int tryDelay = 200);
+        RedisLockResponse<TResult> Lock<TResult>(string lockName, Func<TResult> func, int expiry = 10, int retry = 3, int tryDelay = 200);
         /// <summary>
         /// 使用Redis分布式锁执行某些异步操作
         /// </summary>
@@ -758,7 +758,7 @@ namespace FastAdminAPI.Common.Redis
         /// <param name="expiry">锁过期时间，若超出时间自动解锁 单位：sec</param>
         /// <param name="retry">获取锁的重复次数</param>
         /// <param name="tryDelay">获取锁的重试间隔  单位：ms</param>
-        Task<RedisLockResultModel<TResult>> LockAsync<TResult>(string lockName, Func<Task<TResult>> func, int expiry = 10, int retry = 3, int tryDelay = 200);
+        Task<RedisLockResponse<TResult>> LockAsync<TResult>(string lockName, Func<Task<TResult>> func, int expiry = 10, int retry = 3, int tryDelay = 200);
         #endregion
 
         #region 其他

@@ -1,4 +1,4 @@
-using FastAdminAPI.Common.Logs;
+﻿using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Redis.Model;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -1443,7 +1443,7 @@ namespace FastAdminAPI.Common.Redis
         /// <param name="expiry">锁过期时间，若超出时间自动解锁 单位：sec</param>
         /// <param name="retry">获取锁的重复次数</param>
         /// <param name="tryDelay">获取锁的重试间隔  单位：ms</param>
-        public RedisLockResultModel<TResult> Lock<TResult>(string lockName, Func<TResult> func, int expiry = 10, int retry = 3, int tryDelay = 200)
+        public RedisLockResponse<TResult> Lock<TResult>(string lockName, Func<TResult> func, int expiry = 10, int retry = 3, int tryDelay = 200)
         {
             //校验委托是否为异步
             if (func.Method.IsDefined(typeof(AsyncStateMachineAttribute), false))
@@ -1452,7 +1452,7 @@ namespace FastAdminAPI.Common.Redis
             }
 
             //返回结果
-            RedisLockResultModel<TResult> result = new();
+            RedisLockResponse<TResult> result = new();
 
             //锁名+前缀
             lockName = AddPrefixKey(lockName);
@@ -1511,10 +1511,10 @@ namespace FastAdminAPI.Common.Redis
         /// <param name="expiry">锁过期时间，若超出时间自动解锁 单位：sec</param>
         /// <param name="retry">获取锁的重复次数</param>
         /// <param name="tryDelay">获取锁的重试间隔  单位：ms</param>
-        public async Task<RedisLockResultModel<TResult>> LockAsync<TResult>(string lockName, Func<Task<TResult>> func, int expiry = 10, int retry = 3, int tryDelay = 200)
+        public async Task<RedisLockResponse<TResult>> LockAsync<TResult>(string lockName, Func<Task<TResult>> func, int expiry = 10, int retry = 3, int tryDelay = 200)
         {
             //返回结果
-            RedisLockResultModel<TResult> result = new();
+            RedisLockResponse<TResult> result = new();
 
             //锁名+前缀
             lockName = AddPrefixKey(lockName);
