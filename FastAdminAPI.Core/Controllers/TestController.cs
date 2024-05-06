@@ -50,9 +50,9 @@ namespace FastAdminAPI.Core.Controllers
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(List<CodePageResult>), 200)]
-        public async Task<ResponseModel> GetCodeListWithAutoBox([FromBody] CodePageSearch search)
+        public async Task<ResponseModel> GetCodeListWithAttributes([FromBody] CodePageSearch search)
         {
-            return await _testService.GetCodeListWithAutoBox(search);
+            return await _testService.GetCodeListWithAttributes(search);
         }
         /// <summary>
         /// 新增Code

@@ -44,7 +44,7 @@ namespace FastAdminAPI.Core.Services
         /// </summary>
         /// <param name="search"></param>
         /// <returns></returns>
-        public async Task<ResponseModel> GetCodeListWithAutoBox(CodePageSearch search)
+        public async Task<ResponseModel> GetCodeListWithAttributes(CodePageSearch search)
         {
             return await _dbContext.Queryable<S99_Code>()
                 .InnerJoin<S99_Code>((a, b) => a.S99_CodeId == b.S99_CodeId)

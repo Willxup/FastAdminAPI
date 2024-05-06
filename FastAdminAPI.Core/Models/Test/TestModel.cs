@@ -1,14 +1,13 @@
 ﻿using FastAdminAPI.Common.Enums;
-using SqlSugar.Attributes.Extension.Extensions;
+using FastAdminAPI.Framework.Extensions.Models;
+using Mapster;
+using Newtonsoft.Json;
+using SqlSugar.Attributes.Extension.Common;
 using SqlSugar.Attributes.Extension.Extensions.Attributes.Operation;
 using SqlSugar.Attributes.Extension.Extensions.Attributes.Query;
-using Mapster;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
-using SqlSugar.Attributes.Extension.Common;
-using FastAdminAPI.Framework.Extensions.Models;
 
 namespace FastAdminAPI.Core.Models.Test
 {

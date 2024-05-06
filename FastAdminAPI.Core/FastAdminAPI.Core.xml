@@ -715,7 +715,7 @@
             <param name="code"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.TestController.GetCodeListWithAutoBox(FastAdminAPI.Core.Models.Test.CodePageSearch)">
+        <member name="M:FastAdminAPI.Core.Controllers.TestController.GetCodeListWithAttributes(FastAdminAPI.Core.Models.Test.CodePageSearch)">
             <summary>
             获取code列表 AutoBox方式
             </summary>
@@ -1333,7 +1333,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.ITestService.GetCodeListWithAutoBox(FastAdminAPI.Core.Models.Test.CodePageSearch)">
+        <member name="M:FastAdminAPI.Core.IServices.ITestService.GetCodeListWithAttributes(FastAdminAPI.Core.Models.Test.CodePageSearch)">
             <summary>
             获取code列表 Extension方式
             </summary>
@@ -3638,7 +3638,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.TestService.GetCodeListWithAutoBox(FastAdminAPI.Core.Models.Test.CodePageSearch)">
+        <member name="M:FastAdminAPI.Core.Services.TestService.GetCodeListWithAttributes(FastAdminAPI.Core.Models.Test.CodePageSearch)">
             <summary>
             获取code列表 AutoBox方式
             </summary>

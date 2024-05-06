@@ -20,7 +20,7 @@ namespace FastAdminAPI.Core.IServices
         /// </summary>
         /// <param name="search"></param>
         /// <returns></returns>
-        Task<ResponseModel> GetCodeListWithAutoBox(CodePageSearch search);
+        Task<ResponseModel> GetCodeListWithAttributes(CodePageSearch search);
         /// <summary>
         /// 新增Code
         /// </summary>
