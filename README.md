@@ -195,15 +195,7 @@ Extensions/      ORM扩展
 
 本项目类库增加了一些扩展，可以更加快速的进行业务开发。
 ### ORM扩展
-#### 查询
-```C#
-//自动包装映射
-await _dbContext.Queryable<Table_Name>().ToListResultAsync(search, new Result());
-
-//自动包装映射，指定表别名
-await _dbContext.Queryable<Table_Name>("t").ToListResultAsync(search, new Result());
-```
-
+#### 普通查询
 ```C#
 [DbDefaultOrderBy("t_Name", DbSortWay.DESC)]
 //[DbDefaultOrderBy("t.t_Name", DbSortWay.DESC)]
@@ -233,6 +225,20 @@ public class Result
 }
 ```
 
+
+
+- 查询方法
+
+```C#
+//自动包装映射
+await _dbContext.Queryable<Table_Name>().ToListResultAsync(search, new Result());
+
+//自动包装映射，指定表别名
+await _dbContext.Queryable<Table_Name>("t").ToListResultAsync(search, new Result());
+```
+
+
+
 上述生成的`SQL`如下：
 
 - 正常查询
@@ -261,7 +267,68 @@ ORDER BY t.t_Name DESC;
 
 
 
-上面的方法返回结果为 统一返回结果(`ResponseModel`)，如需将结果转换回`List<T>`类型，可以使用下面的方法：
+#### 分组查询
+
+- 创建查询的查询条件类
+
+```c#
+[DbDefaultOrderBy("CountNums", DbSortWay.DESC)]
+public class Search
+{
+    [DbQueryField("t_GroupCode")] //字段名
+	[DbQueryOperator(DbOperator.Like)]  //操作符, Like查询
+	public long GroupCode { get; set; }
+	[DbQueryField("t_GroupName")] //字段名
+	[DbQueryOperator(DbOperator.Like)]  //操作符, Like查询
+	public string GroupName { get; set; }
+}
+```
+
+- 创建查询的结果类
+
+```c#
+[DbHaving("CountNums > 0")]
+public class Result
+{
+	[DbQueryField("t_GroupCode")] //字段名
+	[DbGroupBy("t_GroupCode")] //分组
+	public long GroupCode { get; set; }
+	[DbQueryField("t_GroupName")] //字段名
+    [DbGroupBy("t_GroupName")] //分组
+	public string GroupName { get; set; }
+    [DbSubQuery("Count(t_CodeId)")]
+    public string CountNums { get; set; }
+}
+```
+
+- 查询方法
+
+```c#
+//自动包装映射
+await _dbContext.Queryable<Table_Name>().ToListResultAsync(search, new Result());
+```
+
+
+
+- 查询SQL
+
+```sql
+SELECT 
+t_GroupCode as GroupCode, 
+t_GroupName as t_GroupName, 
+(Count(t_CodeId)) AS CountNums
+FROM Table_Name
+GROUP BY t_GroupCode,t_GroupName
+HAVING CountNums > 0
+WHERE t_GroupCode LIKE '%@Name%' AND t_GroupName LIKE '%@GroupName%'
+ORDER BY CountNums DESC;
+```
+
+
+
+#### 结果转换
+
+以上查询方法返回结果为 统一返回结果(`ResponseModel`)，如需将结果转换回`List<T>`类型，可以使用下面的方法：
 
 ```C#
 var result = await _dbContext.Queryable<Table_Name>().ToAutoBoxResultAsync(search, new Result());
@@ -272,6 +339,8 @@ if (result?.Code == ResponseCode.Success)
 	var list = result.ToConvertData<List<Result>>();
 }
 ```
+
+
 
 #### 新增
 
