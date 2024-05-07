@@ -176,16 +176,25 @@ namespace FastAdminAPI.Framework.Extensions
                 //是否需要返回总页数和总行数
                 if(totalCount != null && totalPage != null)
                 {
-                    return await queryable.Where(search).Select(result).OrderBy(search).ToPageListAsync((int)index, (int)size, totalCount, totalPage);
+                    return await queryable.Where(search).Select(result)
+                        .GroupBy(result).Having(result)
+                        .OrderBy(search)
+                        .ToPageListAsync((int)index, (int)size, totalCount, totalPage);
                 }
                 else
                 {
-                    return await queryable.Where(search).Select(result).OrderBy(search).ToPageListAsync((int)index, (int)size);
+                    return await queryable.Where(search).Select(result)
+                        .GroupBy(result).Having(result)
+                        .OrderBy(search)
+                        .ToPageListAsync((int)index, (int)size);
                 }
             }
             else
             {
-                return await queryable.Where(search).Select(result).OrderBy(search).ToListAsync();
+                return await queryable.Where(search).Select(result)
+                    .GroupBy(result).Having(result)
+                    .OrderBy(search)
+                    .ToListAsync();
             }
         }
         /// <summary>
@@ -239,7 +248,7 @@ namespace FastAdminAPI.Framework.Extensions
         {
             try
             {
-                var query = queryable.Where(search).Select(result).OrderBy(search);
+                var query = queryable.Where(search).Select(result).GroupBy(result).Having(result).OrderBy(search);
 
                 if (search.Index != null && search.Size != null)
                 {
