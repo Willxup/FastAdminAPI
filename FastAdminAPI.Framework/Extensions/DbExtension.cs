@@ -170,31 +170,26 @@ namespace FastAdminAPI.Framework.Extensions
             int? index, int? size, RefAsync<int> totalCount = null, RefAsync<int> totalPage = null)
             where TSearch : DbQueryBaseModel
         {
+            var query = queryable.Where(search).Select(result)
+                        .GroupBy(result).Having(result)
+                        .OrderBy(search);
+
             //是否需要分页
             if (index != null && size != null)
             {
                 //是否需要返回总页数和总行数
                 if(totalCount != null && totalPage != null)
                 {
-                    return await queryable.Where(search).Select(result)
-                        .GroupBy(result).Having(result)
-                        .OrderBy(search)
-                        .ToPageListAsync((int)index, (int)size, totalCount, totalPage);
+                    return await query.ToPageListAsync((int)index, (int)size, totalCount, totalPage);
                 }
                 else
                 {
-                    return await queryable.Where(search).Select(result)
-                        .GroupBy(result).Having(result)
-                        .OrderBy(search)
-                        .ToPageListAsync((int)index, (int)size);
+                    return await query.ToPageListAsync((int)index, (int)size);
                 }
             }
             else
             {
-                return await queryable.Where(search).Select(result)
-                    .GroupBy(result).Having(result)
-                    .OrderBy(search)
-                    .ToListAsync();
+                return await query.ToListAsync();
             }
         }
         /// <summary>
