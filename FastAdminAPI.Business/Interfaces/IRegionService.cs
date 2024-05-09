@@ -14,14 +14,14 @@ namespace FastAdminAPI.Business.Interfaces
         /// </summary>
         /// <param name="RetryTimes">重试次数，默认2次</param>
         /// <returns></returns>
-        Task<List<RegionModel>> GetRegion(int RetryTimes = 2);
+        Task<List<RegionModel>> Get(int RetryTimes = 2);
 
         /// <summary>
         /// 按区县代号获取完整区域信息
         /// </summary>
-        /// <param name="code">地区/县code</param>
+        /// <param name="regionCode">地区/县code</param>
         /// <returns></returns>
-        Task<Dictionary<string, string>> GetFullRegionByCountry(string code);
+        Task<Dictionary<string, string>> GetFullRegion(string regionCode);
         /// <summary>
         /// 获取完整区域信息
         /// </summary>

@@ -36,7 +36,7 @@ namespace FastAdminAPI.Business.Implements
         /// 将区域信息存入redis
         /// </summary>
         /// <returns></returns>
-        private async Task<bool> SetRegionsToRedis()
+        private async Task<bool> Set()
         {
             var regionList = await _dbContext.Queryable<S98_RegionInfo>()
                 .Select(S98 => new RegionModel
@@ -55,7 +55,7 @@ namespace FastAdminAPI.Business.Implements
         /// </summary>
         /// <param name="RetryTimes">重试次数，默认2次</param>
         /// <returns></returns>
-        public async Task<List<RegionModel>> GetRegion(int RetryTimes = 2)
+        public async Task<List<RegionModel>> Get(int RetryTimes = 2)
         {
             var regionInfo = await _redis.StringGetAsync<List<RegionModel>>("Common:RegionInfo");
             if (regionInfo == null || regionInfo.Count <= 0)
@@ -63,7 +63,7 @@ namespace FastAdminAPI.Business.Implements
                 regionInfo = null;//默认值
                 for (int i = 0; i < RetryTimes; i++)
                 {
-                    bool isSuccuss = await SetRegionsToRedis();
+                    bool isSuccuss = await Set();
 
                     if (isSuccuss)
                     {
@@ -80,12 +80,12 @@ namespace FastAdminAPI.Business.Implements
         /// <summary>
         /// 按区县代号获取完整区域信息
         /// </summary>
-        /// <param name="code">地区/县code</param>
+        /// <param name="regionCode">地区/县</param>
         /// <returns></returns>
-        public async Task<Dictionary<string, string>> GetFullRegionByCountry(string code)
+        public async Task<Dictionary<string, string>> GetFullRegion(string regionCode)
         {
             // 获取区域信息
-            var positionInfo = await GetRegion();
+            var positionInfo = await Get();
             
             if (positionInfo == null)
                 return null;
@@ -93,7 +93,7 @@ namespace FastAdminAPI.Business.Implements
             Dictionary<string, string> position = new();
 
             // 获取区域
-            var region = positionInfo.Where(r => r.RegionCode == code)
+            var region = positionInfo.Where(r => r.RegionCode == regionCode)
                                     .Select(c => new { c.RegionCode, c.RegionName, c.ParentId })
                                     .FirstOrDefault();
             if (region == null)
@@ -134,7 +134,7 @@ namespace FastAdminAPI.Business.Implements
         public async Task<Dictionary<string, string>> GetFullRegion(string provinceCode, string cityCode, string regionCode)
         {
             // 获取区域信息
-            var positionInfo = await GetRegion();
+            var positionInfo = await Get();
 
             // 获取省份
             var province = positionInfo?.Where(c => c.RegionCode == provinceCode).Select(c => new { c.RegionCode, c.RegionName }).FirstOrDefault();
@@ -168,7 +168,7 @@ namespace FastAdminAPI.Business.Implements
         {
             string regionName = string.Empty;
 
-            var regionInfo = await GetRegion();
+            var regionInfo = await Get();
 
             if (regionInfo?.Count > 0)
             {
