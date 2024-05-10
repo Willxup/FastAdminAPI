@@ -857,6 +857,29 @@
             <param name="checkId">审批Id</param>
             <returns></returns>
         </member>
+        <member name="T:FastAdminAPI.Core.Controllers.UserPermissionController">
+            <summary>
+            用户功能权限
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.Core.Controllers.UserPermissionController._userPermissionService">
+            <summary>
+            用户权限处理接口
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.UserPermissionController.#ctor(FastAdminAPI.Core.IServices.IUserPermissionService)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="userPermissionService"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Controllers.UserPermissionController.GetUserPermissions(FastAdminAPI.Core.Models.UserPermission.UserPermssionPageSearch)">
+            <summary>
+            获取所有用户功能权限列表
+            【角色权限+用户权限】
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:FastAdminAPI.Core.IServices.BASE.IEntityService.GenerateEntities">
             <summary>
             生成实体类(本地环境使用)
@@ -1398,6 +1421,18 @@
             <summary>
             获取地区信息
             </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.IServices.IUserPermissionService">
+            <summary>
+            用户功能权限
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.IServices.IUserPermissionService.GetUserPermissions(FastAdminAPI.Core.Models.UserPermission.UserPermssionPageSearch)">
+            <summary>
+            获取所有用户功能权限列表
+            </summary>
+            <param name="pageSearch"></param>
             <returns></returns>
         </member>
         <member name="T:FastAdminAPI.Core.IServices.IUserService">
@@ -2723,6 +2758,71 @@
             字典名称
             </summary>
         </member>
+        <member name="T:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageSearch">
+            <summary>
+            查询
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageSearch.ModuleIds">
+            <summary>
+            模块Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageSearch.DepartIds">
+            <summary>
+            部门Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageSearch.EmployeeIds">
+            <summary>
+            员工Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageSearch.Index">
+            <summary>
+            页数
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageSearch.Size">
+            <summary>
+            行数
+            </summary>
+        </member>
+        <member name="T:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageResult">
+            <summary>
+            用户权限返回结果
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageResult.DepartName">
+            <summary>
+            部门名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageResult.PostName">
+            <summary>
+            岗位名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageResult.EmployeeName">
+            <summary>
+            员工姓名
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageResult.Phone">
+            <summary>
+            联系方式
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageResult.ModuleName">
+            <summary>
+            模块名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageResult.ModuleId">
+            <summary>
+            模块id
+            </summary>
+        </member>
         <member name="P:FastAdminAPI.Core.Models.Users.CheckPageSearch.Category">
             <summary>
             申请大类 0项目管理 1代理管理 2线索 3客户
@@ -3715,6 +3815,25 @@
             <summary>
             获取地区信息
             </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.Core.Services.UserPermissionService">
+            <summary>
+            用户功能权限
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.UserPermissionService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            构造
+            </summary>
+            <param name="dbContext"></param>
+            <param name="httpContext"></param>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.UserPermissionService.GetUserPermissions(FastAdminAPI.Core.Models.UserPermission.UserPermssionPageSearch)">
+            <summary>
+            获取所有用户功能权限列表
+            </summary>
+            <param name="pageSearch"></param>
             <returns></returns>
         </member>
         <member name="T:FastAdminAPI.Core.Services.UserService">
