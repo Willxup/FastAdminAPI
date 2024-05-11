@@ -68,7 +68,7 @@ namespace FastAdminAPI.Core.Services
                                                              S08.S07_EmployeeId == S07.S07_EmployeeId)
                                         .Select((S06, S08) => S06.S06_PostName),
                     EmployeeName = S07.S07_Name,
-                    Phone = S07.S07_Phone
+                    Contact = S07.S07_Phone
                 });
 
             //获取用户权限
@@ -97,7 +97,7 @@ namespace FastAdminAPI.Core.Services
                                                              S08.S07_EmployeeId == S07.S07_EmployeeId)
                                         .Select((S06, S08) => S06.S06_PostName),
                     EmployeeName = S07.S07_Name,
-                    Phone = S07.S07_Phone
+                    Contact = S07.S07_Phone
                 });
 
             return await _dbContext.Union(rolePermssions, userPermssions).ToListResultAsync(pageSearch.Index, pageSearch.Size);

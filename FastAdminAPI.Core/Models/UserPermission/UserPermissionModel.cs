@@ -34,6 +34,14 @@ namespace FastAdminAPI.Core.Models.UserPermission
     public class UserPermssionPageResult
     {
         /// <summary>
+        /// 模块id
+        /// </summary>
+        public long ModuleId { get; set; }
+        /// <summary>
+        /// 模块名称
+        /// </summary>
+        public string ModuleName { get; set; }
+        /// <summary>
         /// 部门名称
         /// </summary>
         public string DepartName { get; set; }
@@ -48,14 +56,8 @@ namespace FastAdminAPI.Core.Models.UserPermission
         /// <summary>
         /// 联系方式
         /// </summary>
-        public string Phone { get; set; }
-        /// <summary>
-        /// 模块名称
-        /// </summary>
-        public string ModuleName { get; set; }
-        /// <summary>
-        /// 模块id
-        /// </summary>
-        public long ModuleId { get; set; }
+        public string Contact { get; set; }
+
+
     }
 }

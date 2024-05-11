@@ -2793,6 +2793,16 @@
             用户权限返回结果
             </summary>
         </member>
+        <member name="P:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageResult.ModuleId">
+            <summary>
+            模块id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageResult.ModuleName">
+            <summary>
+            模块名称
+            </summary>
+        </member>
         <member name="P:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageResult.DepartName">
             <summary>
             部门名称
@@ -2808,19 +2818,9 @@
             员工姓名
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageResult.Phone">
+        <member name="P:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageResult.Contact">
             <summary>
             联系方式
-            </summary>
-        </member>
-        <member name="P:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageResult.ModuleName">
-            <summary>
-            模块名称
-            </summary>
-        </member>
-        <member name="P:FastAdminAPI.Core.Models.UserPermission.UserPermssionPageResult.ModuleId">
-            <summary>
-            模块id
             </summary>
         </member>
         <member name="P:FastAdminAPI.Core.Models.Users.CheckPageSearch.Category">
