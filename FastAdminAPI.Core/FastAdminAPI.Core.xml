@@ -829,7 +829,7 @@
             <param name="pageSearch"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.UserController.ApprovalApplication(FastAdminAPI.Core.Models.Users.ApprovalModel)">
+        <member name="M:FastAdminAPI.Core.Controllers.UserController.ProcessApplication(FastAdminAPI.Core.Models.Users.ApprovalModel)">
             <summary>
             审批申请
             </summary>
@@ -1460,7 +1460,7 @@
             <param name="pageSearch"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IUserService.ApprovalApplication(FastAdminAPI.Core.Models.Users.ApprovalModel)">
+        <member name="M:FastAdminAPI.Core.IServices.IUserService.ProcessApplication(FastAdminAPI.Core.Models.Users.ApprovalModel)">
             <summary>
             审批申请
             </summary>
@@ -3892,7 +3892,7 @@
             <param name="pageSearch"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.UserService.ApprovalApplication(FastAdminAPI.Core.Models.Users.ApprovalModel)">
+        <member name="M:FastAdminAPI.Core.Services.UserService.ProcessApplication(FastAdminAPI.Core.Models.Users.ApprovalModel)">
             <summary>
             审批申请
             </summary>

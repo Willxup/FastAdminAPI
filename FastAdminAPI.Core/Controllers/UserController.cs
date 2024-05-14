@@ -71,9 +71,9 @@ namespace FastAdminAPI.Core.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<ResponseModel> ApprovalApplication([FromBody] ApprovalModel model)
+        public async Task<ResponseModel> ProcessApplication([FromBody] ApprovalModel model)
         {
-            return await _userService.ApprovalApplication(model);
+            return await _userService.ProcessApplication(model);
         }
         /// <summary>
         /// 撤销申请

@@ -37,7 +37,7 @@ namespace FastAdminAPI.Core.IServices
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task<ResponseModel> ApprovalApplication(ApprovalModel model);
+        Task<ResponseModel> ProcessApplication(ApprovalModel model);
         /// <summary>
         /// 撤销申请
         /// </summary>

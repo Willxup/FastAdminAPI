@@ -187,7 +187,7 @@ namespace FastAdminAPI.Core.Services
         /// <param name="model"></param>
         /// <returns></returns>
         /// <exception cref="UserOperationException"></exception>
-        public async Task<ResponseModel> ApprovalApplication(ApprovalModel model)
+        public async Task<ResponseModel> ProcessApplication(ApprovalModel model)
         {
             if (model?.CheckIds?.Count > 0)
             {
