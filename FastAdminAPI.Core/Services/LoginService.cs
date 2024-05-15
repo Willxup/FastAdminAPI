@@ -1,10 +1,14 @@
 ﻿using FastAdminAPI.Common.Attributes;
+using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Enums;
+using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Models.Users;
 using FastAdminAPI.Core.Services.BASE;
 using FastAdminAPI.Framework.Entities;
+using FastAdminAPI.Framework.Extensions;
 using SqlSugar;
+using System;
 using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.Services
@@ -95,6 +99,37 @@ namespace FastAdminAPI.Core.Services
             employee.UserId = user.UserId;
             employee.Account = user.Account;
             return employee;
+        }
+        /// <summary>
+        /// 记录用户登录
+        /// </summary>
+        /// <param name="userId">用户Id</param>
+        /// <param name="employeeId">员工Id</param>
+        /// <param name="device">登录设备</param>
+        /// <returns></returns>
+        public async Task RecordLogin(long userId, long employeeId, int device)
+        {
+            try
+            {
+                S14_LoginRecords login = new()
+                {
+                    S01_UserId = userId,
+                    S07_EmployeeId = employeeId,
+                    S14_Device = device,
+                    S14_Time = _dbContext.GetDate()
+                };
+
+                var result = await _dbContext.Insertable(login).ExecuteAsync();
+
+                if (result.Code != ResponseCode.Success)
+                {
+                    NLogHelper.Error($"记录用户登录失败!{result.Message}");
+                }
+            }
+            catch (Exception ex)
+            {
+                NLogHelper.Error($"记录用户登录出错!{ex.Message}", ex);
+            }
         }
     }
 }

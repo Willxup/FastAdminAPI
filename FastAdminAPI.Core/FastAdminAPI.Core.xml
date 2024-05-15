@@ -1179,6 +1179,15 @@
             <returns></returns>
             <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
         </member>
+        <member name="M:FastAdminAPI.Core.IServices.ILoginService.RecordLogin(System.Int64,System.Int64,System.Int32)">
+            <summary>
+            记录用户登录
+            </summary>
+            <param name="userId">用户Id</param>
+            <param name="employeeId">员工Id</param>
+            <param name="device">登录设备</param>
+            <returns></returns>
+        </member>
         <member name="T:FastAdminAPI.Core.IServices.IModuleService">
             <summary>
             模块
@@ -3508,6 +3517,15 @@
             <param name="password">密码</param>
             <returns></returns>
             <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="M:FastAdminAPI.Core.Services.LoginService.RecordLogin(System.Int64,System.Int64,System.Int32)">
+            <summary>
+            记录用户登录
+            </summary>
+            <param name="userId">用户Id</param>
+            <param name="employeeId">员工Id</param>
+            <param name="device">登录设备</param>
+            <returns></returns>
         </member>
         <member name="T:FastAdminAPI.Core.Services.ModuleService">
             <summary>

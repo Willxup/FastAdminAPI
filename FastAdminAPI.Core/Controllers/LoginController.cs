@@ -131,6 +131,9 @@ namespace FastAdminAPI.Core.Controllers
                 if (!isSuccess)
                     throw new Exception("登录失败，redis缓存失败!");
 
+                //登录记录
+                await _loginService.RecordLogin(jwt.UserId, jwt.EmployeeId, jwt.Device);
+
                 return Success(token);
             }
             catch (UserOperationException)
@@ -185,6 +188,9 @@ namespace FastAdminAPI.Core.Controllers
                         bool isSuccess = await _redis.StringSetAsync(key, token, TimeSpan.FromSeconds(LOGIN_PERMIT_EXPIRES));
                         if (!isSuccess)
                             throw new Exception("企业微信登录失败，redis缓存失败!");
+
+                        //登录记录
+                        await _loginService.RecordLogin(jwt.UserId, jwt.EmployeeId, jwt.Device);
 
                         //返回体
                         LoginByQyWechatResponseModel result = new()

@@ -24,5 +24,13 @@ namespace FastAdminAPI.Core.IServices
         /// <returns></returns>
         /// <exception cref="UserOperationException"></exception>
         Task<UserModel> GetUser(string account, string password);
+        /// <summary>
+        /// 记录用户登录
+        /// </summary>
+        /// <param name="userId">用户Id</param>
+        /// <param name="employeeId">员工Id</param>
+        /// <param name="device">登录设备</param>
+        /// <returns></returns>
+        Task RecordLogin(long userId, long employeeId, int device);
     }
 }
