@@ -51,6 +51,6 @@ namespace FastAdminAPI.Framework.Entities
            /// Nullable:False
            /// </summary>
         
-        public DateTime S24_Time{get;set;}
+        public DateTime S14_Time{get;set;}
     }
 }

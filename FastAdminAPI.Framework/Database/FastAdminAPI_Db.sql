@@ -341,7 +341,7 @@ CREATE TABLE `S14_LoginRecords`  (
   `S01_UserId` bigint NOT NULL COMMENT '用户Id',
   `S07_EmployeeId` bigint NOT NULL COMMENT '员工Id',
   `S14_Device` int DEFAULT NULL COMMENT '终端 0PC',
-  `S24_Time` datetime(3) NOT NULL COMMENT '时间',
+  `S14_Time` datetime(3) NOT NULL COMMENT '时间',
   PRIMARY KEY (`S14_LoginRecordId`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '登录记录' ROW_FORMAT = Dynamic;
 
