@@ -7,21 +7,21 @@ using System.Threading.Tasks;
 namespace FastAdminAPI.EventBus.Controllers
 {
     /// <summary>
-    /// 系统
+    /// 信息中心
     /// </summary>
-    public class SystemController : ControllerBase
+    public class MessageController : ControllerBase
     {
         /// <summary>
         /// 系统Service
         /// </summary>
-        private readonly ISystemService _systemService;
+        private readonly IMessageService _messageService;
 
         /// <summary>
         /// 构造
         /// </summary>
-        public SystemController(ISystemService systemService) 
+        public MessageController(IMessageService systemService) 
         {
-            _systemService = systemService;
+            _messageService = systemService;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace FastAdminAPI.EventBus.Controllers
         [CapSubscribe(SystemSubscriber.NOTIFY_MESSAGE)]
         public async Task SendMessage(string msg)
         {
-            await _systemService.SendMessage(msg);
+            await _messageService.SendMessage(msg);
         }
     }
 }

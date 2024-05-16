@@ -3,9 +3,9 @@
 namespace FastAdminAPI.EventBus.IServices
 {
     /// <summary>
-    /// 系统
+    /// 信息中心
     /// </summary>
-    public interface ISystemService
+    public interface IMessageService
     {
         /// <summary>
         /// 发送信息

@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 namespace FastAdminAPI.EventBus.Services
 {
     /// <summary>
-    /// 系统
+    /// 信息中心
     /// </summary>
-    public class SystemService : BaseService, ISystemService
+    public class MessageService : BaseService, IMessageService
     {
         /// <summary>
         /// 构造
         /// </summary>
         /// <param name="dbContext"></param>
-        public SystemService(ISqlSugarClient dbContext):base(dbContext) { }
+        public MessageService(ISqlSugarClient dbContext):base(dbContext) { }
 
 
         /// <summary>
