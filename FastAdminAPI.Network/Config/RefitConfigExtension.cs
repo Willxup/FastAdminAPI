@@ -30,7 +30,7 @@ namespace FastAdminAPI.Network.Config
         /// <returns></returns>
         public static IServiceCollection AddRefitClients(this IServiceCollection services, IConfiguration configuration)
         {
-            //qywechat
+            // qywechat
             services.AddRefitClient<IQyWechatApi>(REFIT_SETTINGS)
                     .ConfigureHttpClient(c =>
                     {
@@ -38,13 +38,21 @@ namespace FastAdminAPI.Network.Config
                         c.Timeout = TimeSpan.FromSeconds(60);
                     });
 
-            //email
+            // email
             services.AddRefitClient<IEmailApi>(REFIT_SETTINGS)
                     .ConfigureHttpClient(c =>
                     {
                         c.BaseAddress = new Uri(configuration.GetValue<string>("FastAdminAPI.Core.Url")); //appsettings配置
                         c.Timeout = TimeSpan.FromSeconds(60);
                     });
+
+            // wechat
+            services.AddRefitClient<IWechatApi>(REFIT_SETTINGS)
+                .ConfigureHttpClient(c =>
+                {
+                    c.BaseAddress = new Uri(configuration.GetValue<string>("FastAdminAPI.Core.Url")); //appsettings配置
+                    c.Timeout = TimeSpan.FromSeconds(60);
+                });
 
             return services;
         }
