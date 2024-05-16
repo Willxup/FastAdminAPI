@@ -1,4 +1,6 @@
-﻿namespace FastAdminAPI.Network.Models.Wechat
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FastAdminAPI.Network.Models.Wechat
 {
     public class WeChatSignModel
     {
@@ -30,8 +32,9 @@
         /// </summary>
         public string Url { get; set; }
         /// <summary>
-        /// 微信公众号内部序号 1韩流姐微信公众号(默认) 2菲律宾留学通 3学在白石 4韩腾教育
+        /// 微信公众号AppId
         /// </summary>
-        public int? WechatOfficialAccountNo { get; set; } = 1;
+        [Required]
+        public string AppId { get; set; }
     }
 }

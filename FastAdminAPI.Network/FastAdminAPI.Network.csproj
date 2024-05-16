@@ -15,10 +15,4 @@
     <ProjectReference Include="..\FastAdminAPI.Common\FastAdminAPI.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Wechat\Common\" />
-    <Folder Include="Wechat\Config\" />
-    <Folder Include="Wechat\Models\" />
-  </ItemGroup>
-
 </Project>
