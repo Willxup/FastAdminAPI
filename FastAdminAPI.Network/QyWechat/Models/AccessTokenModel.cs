@@ -1,6 +1,6 @@
-namespace FastAdminAPI.Network.QyWechat.Model
+锘縩amespace FastAdminAPI.Network.QyWechat.Models
 {
-#pragma warning disable IDE1006 // 命名样式
+#pragma warning disable IDE1006 // 鍛藉悕鏍峰紡
     public class AccessTokenModel
     {
         public int errcode { get; set; }
@@ -10,5 +10,5 @@ namespace FastAdminAPI.Network.QyWechat.Model
         public string access_token { get; set; }
         public int expires_in { get; set; }
     }
-#pragma warning restore IDE1006 // 命名样式
+#pragma warning restore IDE1006 // 鍛藉悕鏍峰紡
 }

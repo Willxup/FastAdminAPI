@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FastAdminAPI.Network.QyWechat.Model
+namespace FastAdminAPI.Network.QyWechat.Models
 {
 #pragma warning disable IDE1006 // 命名样式
     public class QyUserInfoModel

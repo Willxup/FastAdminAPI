@@ -1,4 +1,4 @@
-using FastAdminAPI.Network.QyWechat.Model;
+﻿using FastAdminAPI.Network.QyWechat.Models;
 
 namespace FastAdminAPI.Network.Models.QyWechat
 {
