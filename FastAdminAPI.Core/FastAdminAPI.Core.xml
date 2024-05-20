@@ -216,6 +216,7 @@
         <member name="T:FastAdminAPI.Core.Controllers.EmailApiController">
             <summary>
             EmailAPI
+            可由EventBus跨服务调用
             </summary>
         </member>
         <member name="M:FastAdminAPI.Core.Controllers.EmailApiController.#ctor">
@@ -589,6 +590,7 @@
         <member name="T:FastAdminAPI.Core.Controllers.QyWechatApiController">
             <summary>
             企业微信API
+            可由EventBus跨服务调用
             </summary>
         </member>
         <member name="F:FastAdminAPI.Core.Controllers.QyWechatApiController._qyWechatApiService">
@@ -883,6 +885,7 @@
         <member name="T:FastAdminAPI.Core.Controllers.WechatApiController">
             <summary>
             微信API
+            可由EventBus跨服务调用
             </summary>
         </member>
         <member name="F:FastAdminAPI.Core.Controllers.WechatApiController._wechatApiService">

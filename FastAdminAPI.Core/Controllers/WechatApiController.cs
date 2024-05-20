@@ -10,6 +10,7 @@ namespace FastAdminAPI.Core.Controllers
 {
     /// <summary>
     /// 微信API
+    /// 可由EventBus跨服务调用
     /// </summary>
     public class WechatApiController : BaseController
     {

@@ -9,6 +9,7 @@ namespace FastAdminAPI.Core.Controllers
 {
     /// <summary>
     /// EmailAPI
+    /// 可由EventBus跨服务调用
     /// </summary>
     public class EmailApiController : BaseController
     {
