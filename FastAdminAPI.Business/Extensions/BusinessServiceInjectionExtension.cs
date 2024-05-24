@@ -1,6 +1,6 @@
-﻿using FastAdminAPI.Business.Interfaces;
+﻿using FastAdminAPI.Business.Implements;
+using FastAdminAPI.Business.Interfaces;
 using FastAdminAPI.Business.PrivateFunc.Applications;
-using FastAdminAPI.Business.Implements;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FastAdminAPI.Business.Extensions
@@ -11,7 +11,6 @@ namespace FastAdminAPI.Business.Extensions
         /// 注入 全部 业务服务
         /// </summary>
         /// <param name="services"></param>
-        /// <param name="serviceLifetime"></param>
         /// <returns></returns>
         public static IServiceCollection AddBusinessServices(this IServiceCollection services)
         {
