@@ -42,10 +42,10 @@ namespace FastAdminAPI.Common.Authentications
                };
 
                 // 秘钥 (SymmetricSecurityKey 对安全性的要求，密钥的长度太短会报出异常)
-                SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Define.TOKEN_SECRET));
+                SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(Define.TOKEN_SECRET));
 
                 // 证书
-                SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                SigningCredentials creds = new(key, SecurityAlgorithms.HmacSha256);
 
                 // 生成令牌
                 JwtSecurityToken jwt = new(
