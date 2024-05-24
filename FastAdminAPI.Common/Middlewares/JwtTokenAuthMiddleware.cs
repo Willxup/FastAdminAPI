@@ -70,36 +70,38 @@ namespace FastAdminAPI.Common.Middlewares
         /// <returns></returns>
         public async Task Invoke(HttpContext httpContext)
         {
-            //健康检查
+            // 健康检查
             if (httpContext.Request.Path.Value.ToLower().Contains("/api/healthcheck"))
             {
                 await _next(httpContext);
                 return;
             }
-            //无需token校验
+
+            // 无需token校验
             if (httpContext.Request.Path.Value.ToLower().Contains("/api/tokenpass"))
             {
                 await _next(httpContext);
                 return;
             }
-            //白名单
+
+            // 白名单
             if (WHITE_LIST?.Contains(httpContext.Request.Path.Value.ToLower()) ?? false)
             {
                 await _next(httpContext);
                 return;
             }
 
-            //是否包含Authorization请求头
+            // 是否包含Authorization请求头
             if (string.IsNullOrEmpty(httpContext.Request.Headers.Authorization))
             {
-                await FailAuth(httpContext, GetUnauthorizedResponse());
+                await FailAuth(httpContext, GetUnAuthorizedResponse());
                 return;
             }
 
-            //获取header中的JWTToken
+            // 获取header中的JWTToken
             var token = httpContext.Request.Headers.Authorization.ToString();
 
-            //校验是否有Bearer前缀
+            // 校验是否有Bearer前缀
             if (!token.Contains("Bearer "))
             {
                 await FailAuth(httpContext, GetInvalidTokenResponse());
@@ -107,66 +109,68 @@ namespace FastAdminAPI.Common.Middlewares
             }
             else
             {
-                token = token.Replace("Bearer ", ""); //将Bearer去除
+                token = token.Replace("Bearer ", ""); // 将Bearer去除
             }
 
-            //jwttoken长度不能小于128
+            // token长度不能小于128
             if (token.Length < 128)
             {
                 await FailAuth(httpContext, GetInvalidTokenResponse());
                 return;
             }
 
-            //解析JWT Token
-            JwtTokenModel jwt;
-            try
-            {
-                jwt = JwtHelper.SerializeJwt(token);
-            }
-            catch (Exception) //解析token失败
-            {
-                await FailAuth(httpContext, GetInvalidTokenResponse());
-                return;
-            }
-
-            //滑动过期时间下，令牌中的过期时间不能过期4小时以上
-            if (DateTime.Now.Subtract(jwt.Expires).Hours > 4)
-            {
-                await FailAuth(httpContext, GetInvalidTokenResponse());
-                return;
-            }
-
-            //校验令牌
+            // 校验是否为系统颁发的令牌
             if (!JwtHelper.ValidateJwtToken(token))
             {
                 await FailAuth(httpContext, GetInvalidTokenResponse());
                 return;
             }
 
-            //登录许可的redis key
+            // 解析JWT Token
+            JwtTokenModel jwt;
+
+            try
+            {
+                jwt = JwtHelper.SerializeJwt(token);
+            }
+            catch (Exception) // 解析token失败
+            {
+                await FailAuth(httpContext, GetInvalidTokenResponse());
+                return;
+            }
+
+            // 滑动过期时间下，令牌中的过期时间超过8小时，需要重新登录
+            // 这里存在token里的过期时间可以看JwtHelper中的设置，两者配合处理token在滑动过期下的最终过期时间
+            if (DateTime.Now.Subtract(jwt.Expires).Hours > 8)
+            {
+                await FailAuth(httpContext, GetExpirationTokenResponse());
+                return;
+            }
+
+            // 登录许可的redis key
             string permitKey = LOGIN_PERMIT_KEY + jwt.UserId + ":" + jwt.Device;
 
-            //获取登录许可(token)
+            // 获取登录许可(token)
             string tokenByRedis = await _redis.StringGetAsync(permitKey);
 
-            //如果许可已不存在于Redis中，说明令牌过期
+            // 如果许可已不存在于Redis中，说明令牌过期
             if (string.IsNullOrEmpty(tokenByRedis))
             {
                 await FailAuth(httpContext, GetExpirationTokenResponse());
                 return;
             }
 
-            //如果登录许可(token)与传入的token不一致，说明在其他设备登录
+            // 如果登录许可(token)与传入的token不一致，说明在其他设备登录
             if (tokenByRedis != token)
             {
                 await FailAuth(httpContext, GetOtherDeviceLoginResponse());
                 return;
             }
 
-            //获取登录许可的有效时间
+            // 获取登录许可的有效时间
             double expires = (await _redis.KeyTimeToLiveAsync(permitKey)) ?? 0;
 
-            //如果 [登录许可有效期] 与 [登录有效期] 之间的差 小于等于 [登录许可差异]， 更新登录许可的有效期
+            // 如果 [登录许可有效期] 与 [登录有效期] 之间的差 小于等于 [登录许可差异]， 更新登录许可的有效期，以保持滑动过期
             if ((LOGIN_PERMIT_EXPIRES - expires) >= LOGIN_PERMIT_EXPIRES_DIFF)
             {
                 await _redis.KeySetExpireAsync(permitKey, TimeSpan.FromSeconds(LOGIN_PERMIT_EXPIRES));
@@ -179,18 +183,18 @@ namespace FastAdminAPI.Common.Middlewares
         /// 校验失败
         /// </summary>
         /// <param name="httpContext"></param>
-        /// <param name="responseModel"></param>
+        /// <param name="response"></param>
         /// <returns></returns>
-        private static async Task FailAuth(HttpContext httpContext, ResponseModel responseModel)
+        private static async Task FailAuth(HttpContext httpContext, ResponseModel response)
         {
             httpContext.Response.StatusCode = 200;
-            await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(responseModel));
+            await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(response));
         }
         /// <summary>
         /// 获取 未授权 响应
         /// </summary>
         /// <returns></returns>
-        private static ResponseModel GetUnauthorizedResponse()
+        private static ResponseModel GetUnAuthorizedResponse()
         {
             ResponseModel response = new()
             {

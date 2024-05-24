@@ -1,6 +1,5 @@
 ﻿using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
-using FastAdminAPI.Common.Converters;
 using FastAdminAPI.Common.Datetime;
 using FastAdminAPI.Common.Logs;
 using Microsoft.Extensions.Configuration;
@@ -19,47 +18,49 @@ namespace FastAdminAPI.Common.Authentications
         /// <summary>
         /// 颁发JWT字符串
         /// </summary>
-        /// <param name="tokenModel"></param>
+        /// <param name="token"></param>
         /// <param name="configuration"></param>
         /// <returns></returns>
-        public static string IssueJwt(JwtTokenModel tokenModel, IConfiguration configuration)
+        public static string IssueJwt(JwtTokenModel token, IConfiguration configuration)
         {
             try
             {
-                var claims = new List<Claim>
+                // 1. 这里将用户的部分信息，比如 uid 存到了Claim 中，如果你想知道如何在其他地方将这个 UserId 从 Token 中取出来，请看下边的SerializeJwt()方法的调用。
+                // 2. 也可以研究下 HttpContext.User.Claims
+                List<Claim> claims = new()
                 {
-                     /*
-                       1、这里将用户的部分信息，比如 uid 存到了Claim 中，如果你想知道如何在其他地方将这个 uid从 Token 中取出来，请看下边的SerializeJwt()方法的调用。
-                       2、你也可以研究下 HttpContext.User.Claims
-                     */
-                    new("UserId", tokenModel.UserId.ToString()),
-                    new("Account", tokenModel.Account),
-                    new("EmployeeId", tokenModel.EmployeeId.ToString()),
-                    new("EmployeeName", tokenModel.EmployeeName),
-                    new("Avatar", tokenModel.Avatar?? string.Empty),
-                    new("Device", tokenModel.Device.ToString()),
+                    new("UserId", token.UserId.ToString()),
+                    new("Account", token.Account),
+                    new("EmployeeId", token.EmployeeId.ToString()),
+                    new("EmployeeName", token.EmployeeName),
+                    new("Avatar", token.Avatar?? string.Empty),
+                    new("Device", token.Device.ToString()),
 
                     // 过期时间可自定义，注意JWT有自己的缓冲过期时间
                     new("Expires", DateTime.Now.AddSeconds(configuration.GetValue<int>("Redis.LoginPermit.Expires"))
                         .ToString("yyyy-MM-dd HH:mm:ss", DateTimeFormatInfo.InvariantInfo)),
                };
 
-                //秘钥 (SymmetricSecurityKey 对安全性的要求，密钥的长度太短会报出异常)
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Define.TOKEN_SECRET));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                // 秘钥 (SymmetricSecurityKey 对安全性的要求，密钥的长度太短会报出异常)
+                SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Define.TOKEN_SECRET));
 
-                var jwt = new JwtSecurityToken(
+                // 证书
+                SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+                // 生成令牌
+                JwtSecurityToken jwt = new(
                     issuer: Define.ISSUER,
                     audience: Define.AUDIENCE,
                     claims: claims,
                     signingCredentials: creds,
-                    expires: DateTime.Now.AddSeconds(DateTool.GetRemainingTimeOfDay()) //获取当天剩余的时间，token有效期到今晚24时
-                    );
+                    expires: DateTime.Now.AddSeconds(DateTool.GetRemainingTimeOfDay())); // 获取当天剩余的时间，token最终有效期到今晚24时
 
-                var jwtHandler = new JwtSecurityTokenHandler();
-                var encodedJwt = jwtHandler.WriteToken(jwt);
+                // 令牌处理器
+                JwtSecurityTokenHandler jwtHandler = new();
 
-                return encodedJwt;
+                // 生成token
+                return jwtHandler.WriteToken(jwt);
+
             }
             catch (Exception ex)
             {
@@ -77,8 +78,10 @@ namespace FastAdminAPI.Common.Authentications
         {
             try
             {
-                var jwtHandler = new JwtSecurityTokenHandler();
+                // 令牌处理器
+                JwtSecurityTokenHandler jwtHandler = new();
 
+                // 读取token信息
                 JwtSecurityToken jwtToken = jwtHandler.ReadJwtToken(jwtStr);
 
                 jwtToken.Payload.TryGetValue("UserId", out object userId);
@@ -89,7 +92,8 @@ namespace FastAdminAPI.Common.Authentications
 
                 jwtToken.Payload.TryGetValue("Device", out object device);
                 jwtToken.Payload.TryGetValue("Expires", out object expires);
-                var jwt = new JwtTokenModel
+
+                JwtTokenModel jwt = new()
                 {
                     UserId = userId != null ? Convert.ToInt64(userId) : -1,
                     Account = account != null ? account.ToString() : string.Empty,
@@ -100,6 +104,7 @@ namespace FastAdminAPI.Common.Authentications
                     Device = device != null ? Convert.ToInt32(device) : -1,
                     Expires = Convert.ToDateTime(expires),
                 };
+
                 return jwt;
             }
             catch (Exception ex)
@@ -119,7 +124,10 @@ namespace FastAdminAPI.Common.Authentications
         {
             try
             {
+                // 令牌处理器
                 JwtSecurityTokenHandler jwtHandler = new();
+
+                // 校验token
                 jwtHandler.ValidateToken(jwtStr, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
