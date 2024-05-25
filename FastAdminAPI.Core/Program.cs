@@ -81,11 +81,11 @@ try
     builder.Services.AddHttpClientConfig();
     builder.Services.AddRefitClients(configuration);
 
-    // 服务层注入
-    builder.Services.AddAllServices();
-
-    //业务服务层
+    // 业务服务注入
     builder.Services.AddBusinessServices();
+
+    //通用业务服务注入
+    builder.Services.AddCommonBusinessServices();
     #endregion
 
     #region SqlSugar ORM框架

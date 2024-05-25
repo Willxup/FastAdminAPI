@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,7 +20,7 @@ namespace FastAdminAPI.Common.Extensions
         /// <param name="services"></param>
         /// <param name="serviceLifetime">生命周期(默认Scope)</param>
         /// <returns></returns>
-        public static IServiceCollection AddAllServices(this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
+        public static IServiceCollection AddBusinessServices(this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
         {
             // 获取当前程序集 注入所有服务类
             //var assembly = Assembly.GetAssembly(typeof(ServiceInjectionExtensions));

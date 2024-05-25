@@ -79,8 +79,8 @@ try
     builder.Services.AddHttpClientConfig();
     builder.Services.AddRefitClients(configuration);
 
-    // 服务层注入
-    builder.Services.AddAllServices();
+    // 业务服务注入
+    builder.Services.AddBusinessServices();
     #endregion
 
     #region 缓存

@@ -12,7 +12,7 @@ namespace FastAdminAPI.Business.Extensions
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddBusinessServices(this IServiceCollection services)
+        public static IServiceCollection AddCommonBusinessServices(this IServiceCollection services)
         {
             //数据权限
             services.AddScoped<IDataPermissionService, DataPermissionService>();
