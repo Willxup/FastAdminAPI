@@ -84,7 +84,7 @@ namespace FastAdminAPI.Network.Wechat
                     throw new UserOperationException($"获取微信公众号Token失败:{result.errmsg}");
                 }
             }
-            catch(UserOperationException)
+            catch (UserOperationException)
             {
                 throw;
             }
@@ -97,7 +97,6 @@ namespace FastAdminAPI.Network.Wechat
         /// <summary>
         /// 获取JsApiTicket
         /// </summary>
-        /// <param name="accessToken"></param>
         /// <returns></returns>
         private async Task<string> GetJsApiTicket()
         {
@@ -173,10 +172,15 @@ namespace FastAdminAPI.Network.Wechat
 #pragma warning disable SYSLIB0021 // 类型或成员已过时
             SHA1 sha1 = new SHA1CryptoServiceProvider();
 #pragma warning restore SYSLIB0021 // 类型或成员已过时
+
             byte[] bytes_sha1_in = Encoding.Default.GetBytes(str);
+
             byte[] bytes_sha1_out = sha1.ComputeHash(bytes_sha1_in);
+
             string signature = BitConverter.ToString(bytes_sha1_out);
+
             signature = signature.Replace("-", "").ToLower();
+
             return signature;
         }
         /// <summary>
@@ -198,11 +202,14 @@ namespace FastAdminAPI.Network.Wechat
         {
             Random r = new();
             var sb = new StringBuilder();
+
             var length = _randomStr.Length;
+
             for (int i = 0; i < 15; i++)
             {
                 sb.Append(_randomStr[r.Next(length - 1)]);
             }
+
             return sb.ToString();
         }
         /// <summary>
@@ -217,11 +224,14 @@ namespace FastAdminAPI.Network.Wechat
         {
             if (string.IsNullOrEmpty(jsapi_ticket) || string.IsNullOrEmpty(noncestr) || string.IsNullOrEmpty(timestamp) || string.IsNullOrEmpty(url))
                 return null;
+
             var string1Builder = new StringBuilder();
+
             string1Builder.Append("jsapi_ticket=").Append(jsapi_ticket).Append('&')
                           .Append("noncestr=").Append(noncestr).Append('&')
                           .Append("timestamp=").Append(timestamp).Append('&')
                           .Append("url=").Append(url.Contains('#', StringComparison.CurrentCulture) ? url[..url.IndexOf("#")] : url);
+
             return Sha1Sign(string1Builder.ToString());
         }
         #endregion
@@ -237,12 +247,15 @@ namespace FastAdminAPI.Network.Wechat
             string key = BaseWechatConfiguration.WECHAT_TOKEN_REDIS_KEY + "_" + WECHAT_APP_ID;
 
             if (_redis.KeyExists(key))
+            {
                 token = await _redis.StringGetAsync(key);
+            }
             else
             {
                 await _redis.StringSetAsync(key, await GetAccessToken(), TimeSpan.FromSeconds(BaseWechatConfiguration.WECHAT_TOKEN_REDIS_EXPIRES));
                 token = await _redis.StringGetAsync(key);
             }
+
             return token;
         }
         /// <summary>
@@ -256,12 +269,15 @@ namespace FastAdminAPI.Network.Wechat
             string key = BaseWechatConfiguration.WECHAT_TICKET_REDIS_KEY + "_" + WECHAT_APP_ID;
 
             if (_redis.KeyExists(key))
+            {
                 ticket = await _redis.StringGetAsync(key);
+            }
             else
             {
                 await _redis.StringSetAsync(key, await GetJsApiTicket(), TimeSpan.FromSeconds(BaseWechatConfiguration.WECHAT_TICKET_REDIS_EXPIRES));
                 ticket = await _redis.StringGetAsync(key);
             }
+
             return ticket;
         }
         /// <summary>
@@ -276,7 +292,9 @@ namespace FastAdminAPI.Network.Wechat
                 string key = BaseWechatConfiguration.WECHAT_SIGN_REDIS_KEY + "_" + url;
 
                 if (_redis.KeyExists(key))
+                {
                     return _redis.StringGet<WeChatSignModel>(key);
+                }
                 else
                 {
                     WeChatSignModel signResult = new()
@@ -286,8 +304,11 @@ namespace FastAdminAPI.Network.Wechat
                         Timestamp = GetTimeStamp(),
                         JsApiTicket = await GetTicket()
                     };
+
                     signResult.Sign = GetSignature(signResult.JsApiTicket, signResult.Noncestr, signResult.Timestamp, url);
+
                     await _redis.StringSetAsync(key, signResult, TimeSpan.FromSeconds(BaseWechatConfiguration.WECHAT_SIGN_REDIS_EXPIRES));
+
                     return _redis.StringGet<WeChatSignModel>(key);
                 }
             }
