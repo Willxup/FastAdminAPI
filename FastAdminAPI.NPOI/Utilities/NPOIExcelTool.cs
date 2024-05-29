@@ -1,4 +1,4 @@
-using FastAdminAPI.NPOI.Models;
+﻿using FastAdminAPI.NPOI.Models;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
@@ -18,15 +18,15 @@ namespace FastAdminAPI.NPOI.Utilities
         {
             XSSFCellStyle style = (XSSFCellStyle)workbook.CreateCellStyle();
 
-            //设置单元格样式
-            style.Alignment = HorizontalAlignment.Justify; //两端自动对齐（自动换行）
-            style.VerticalAlignment = VerticalAlignment.Center; //垂直居中对齐
+            // 设置单元格样式
+            style.Alignment = HorizontalAlignment.Justify; // 两端自动对齐（自动换行）
+            style.VerticalAlignment = VerticalAlignment.Center; // 垂直居中对齐
 
-            //设置单元格格式
+            // 设置单元格格式
             IDataFormat dataformat = workbook.CreateDataFormat(); 
-            style.DataFormat = dataformat.GetFormat("@"); //dataformat.GetFormat("test") 两种方式都可以
+            style.DataFormat = dataformat.GetFormat("@"); // dataformat.GetFormat("test") 两种方式都可以
 
-            //设置单元格字体
+            // 设置单元格字体
             style.SetFont(GetFontStyle(workbook, "Arial", 10, true));
 
             return style;
@@ -42,10 +42,10 @@ namespace FastAdminAPI.NPOI.Utilities
         public static IFont GetFontStyle(IWorkbook workbook, string fontName, short point, bool isBold = false)
         {
             XSSFFont font = (XSSFFont)workbook.CreateFont();
-            font.FontName = fontName; //字体名称
-            font.FontHeightInPoints = point; //字体大小
+            font.FontName = fontName; // 字体名称
+            font.FontHeightInPoints = point; // 字体大小
             if (isBold)
-                font.IsBold = true; //是否加粗
+                font.IsBold = true; // 是否加粗
             return font;
         }
         /// <summary>
@@ -59,18 +59,18 @@ namespace FastAdminAPI.NPOI.Utilities
         {
             XSSFCellStyle titleStyle = (XSSFCellStyle)workbook.CreateCellStyle();
             
-            //设置单元格样式
-            titleStyle.Alignment = HorizontalAlignment.Center; //两端居中对齐
-            titleStyle.VerticalAlignment = VerticalAlignment.Center; //垂直居中对齐
+            // 设置单元格样式
+            titleStyle.Alignment = HorizontalAlignment.Center; // 两端居中对齐
+            titleStyle.VerticalAlignment = VerticalAlignment.Center; // 垂直居中对齐
 
-            //设置单元格格式
+            // 设置单元格格式
             IDataFormat dataformat = workbook.CreateDataFormat();
-            titleStyle.DataFormat = dataformat.GetFormat("@"); //dataformat.GetFormat("text") 两种方式都可以
+            titleStyle.DataFormat = dataformat.GetFormat("@"); // dataformat.GetFormat("text") 两种方式都可以
 
-            //设置单元格字体
+            // 设置单元格字体
             titleStyle.SetFont(fontStyle);
 
-            //设置填充颜色
+            // 设置填充颜色
             if (color != null)
             {
                 titleStyle.FillForegroundColorColor = color;
@@ -83,21 +83,21 @@ namespace FastAdminAPI.NPOI.Utilities
         /// 获取普通单元格样式
         /// </summary>
         /// <param name="workbook">工作簿</param>
-        /// <param name="font"></param>
+        /// <param name="font">字体</param>
         /// <returns></returns>
         public static XSSFCellStyle GetNormalCellStyle(IWorkbook workbook, IFont font)
         {
             XSSFCellStyle cellStyle = (XSSFCellStyle)workbook.CreateCellStyle();
 
-            //设置单元格样式
-            cellStyle.Alignment = HorizontalAlignment.Justify; //两端自动对齐（自动换行）
-            cellStyle.VerticalAlignment = VerticalAlignment.Center; //垂直居中对齐
+            // 设置单元格样式
+            cellStyle.Alignment = HorizontalAlignment.Justify; // 两端自动对齐（自动换行）
+            cellStyle.VerticalAlignment = VerticalAlignment.Center; // 垂直居中对齐
 
-            //设置单元格格式
+            // 设置单元格格式
             IDataFormat dataformat = workbook.CreateDataFormat();
-            cellStyle.DataFormat = dataformat.GetFormat("@"); //dataformat.GetFormat("text") 两种方式都可以
+            cellStyle.DataFormat = dataformat.GetFormat("@"); // dataformat.GetFormat("text") 两种方式都可以
 
-            //设置单元格字体
+            // 设置单元格字体
             cellStyle.SetFont(font);
 
             return cellStyle;
@@ -112,7 +112,9 @@ namespace FastAdminAPI.NPOI.Utilities
         /// <returns></returns>
         public static List<NPOIExcelTitleCellModel> GetExcelTemplateTitleRow(Dictionary<string, int> cellInfoDic, ICellStyle[] cellStyleList)
         {
+            // 标题行列表
             List<NPOIExcelTitleCellModel> titleCellList = null;
+
             if (cellInfoDic?.Count > 0 && cellStyleList?.Length > 0)
             {
                 titleCellList = new List<NPOIExcelTitleCellModel>();
@@ -121,9 +123,10 @@ namespace FastAdminAPI.NPOI.Utilities
                 {
                     NPOIExcelTitleCellModel cell = new()
                     {
-                        TitleCellName = cellInfo.Key, //key为单元格内容
-                        TitleCellStyle = cellStyleList[cellInfo.Value] //value为单元格样式
+                        TitleCellName = cellInfo.Key, // key为单元格内容
+                        TitleCellStyle = cellStyleList[cellInfo.Value] // value为单元格样式
                     };
+
                     titleCellList.Add(cell);
                 }
             }
@@ -139,46 +142,44 @@ namespace FastAdminAPI.NPOI.Utilities
         /// <param name="columnWidth">单元格宽度(默认30 * 256[15个字符])</param>
         public static void SetTitleRow(ISheet sheet, List<NPOIExcelTitleCellModel> cellInfoList, ICellStyle columnStyle, float heightInPoint = 27, int columnWidth = 15)
         {
-            //创建行
+            // 创建行
             IRow title = sheet.CreateRow(0);
-            //设置行高
+            // 设置行高
             title.HeightInPoints = heightInPoint;
 
-            //循环设置标题
+            // 循环设置标题
             if (cellInfoList?.Count > 0)
             {
                 for (int i = 0; i < cellInfoList.Count; i++)
                 {
-                    //获取单元格设置
+                    // 获取单元格设置
                     var cellInfo = cellInfoList[i];
 
-                    //设置列默认样式
+                    // 设置列默认样式
                     sheet.SetDefaultColumnStyle(i, columnStyle);
 
-                    //创建单元格并赋值
+                    // 创建单元格并赋值
                     title.CreateCell(i).SetCellValue(cellInfo.TitleCellName);
 
-                    //设置单元格样式
+                    // 设置单元格样式
                     title.GetCell(i).CellStyle = cellInfo.TitleCellStyle;
 
-                    //包含项目，加大单元格宽度
+                    // 包含项目，加大单元格宽度
                     if (cellInfo.TitleCellName.Contains("项目"))
                     {
                         sheet.SetColumnWidth(i, (columnWidth + 7) * 256);
                     }
-                    //长度大于10字符，按照每超过3字符加5字符单元格宽度 不足3字符当作3字符计算
+                    // 长度大于10字符，按照每超过3字符加5字符单元格宽度 不足3字符当作3字符计算
                     else if (cellInfo.TitleCellName.Length > 10)
                     {
                         sheet.SetColumnWidth(i, (columnWidth + ((cellInfo.TitleCellName.Length - 10) / 3 + 1) * 5) * 256);
                     }
-                    //其他
+                    // 其他
                     else
                     {
                         sheet.SetColumnWidth(i, columnWidth * 256);
                     }
                 }
-
-
             }
         }
 
@@ -187,36 +188,37 @@ namespace FastAdminAPI.NPOI.Utilities
         /// 设置内容行
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="sheet"></param>
-        /// <param name="contentList"></param>
-        /// <param name="cellStyle"></param>
+        /// <param name="sheet">表</param>
+        /// <param name="contentList">单元格内容</param>
+        /// <param name="cellStyle">单元格样式</param>
         public static void SetContentRows<T>(ISheet sheet, List<T> contentList, ICellStyle cellStyle) where T : class, new()
         {
             if (contentList?.Count > 0)
             {
-                //获取泛型的所有属性
+                // 获取泛型的所有属性
                 PropertyInfo[] propertyInfos = typeof(T).GetProperties();
 
-                //行号，从1开始（0为标题）
+                // 行号，从1开始（0为标题）
                 int rowNum = 1;
                 foreach (var item in contentList)
                 {
-                    //创建行
+                    // 创建行
                     IRow row = sheet.CreateRow(rowNum);
-                    //单元格序号
+                    // 单元格序号
                     int cellNum = 0;
 
-                    //循环反射赋值
+                    // 循环反射赋值
                     foreach (PropertyInfo p in propertyInfos)
                     {
-                        //创建单元格，设置单元格内容
+                        // 创建单元格，设置单元格内容
                         row.CreateCell(cellNum).SetCellValue(p.GetValue(item).ToString());
 
-                        //设置单元格样式
+                        // 设置单元格样式
                         row.GetCell(cellNum).CellStyle = cellStyle;
 
                         cellNum++;
                     }
+
                     rowNum++;
                 }
             }
@@ -233,19 +235,19 @@ namespace FastAdminAPI.NPOI.Utilities
         /// <param name="lastRow">需要下拉列表的单元格结束行(默认65535)</param>
         public static void SetLessDropDownList(XSSFSheet sheet, string[] dropDownList, int column, int startRow = 1, int lastRow = 65535)
         {
-            //数据校验帮助类
+            // 数据校验帮助类
             XSSFDataValidationHelper dvHelper = new(sheet);
 
-            //创建需要校验的数据
+            // 创建需要校验的数据
             XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint)dvHelper.CreateExplicitListConstraint(dropDownList);
 
-            //被数据校验的单元格范围
+            // 被数据校验的单元格范围
             CellRangeAddressList addressList = new(startRow, lastRow, column, column);
 
-            //创建数据校验
+            // 创建数据校验
             XSSFDataValidation validation = (XSSFDataValidation)dvHelper.CreateValidation(dvConstraint, addressList);
 
-            //添加数据校验
+            // 添加数据校验
             sheet.AddValidationData(validation);
         }
         /// <summary>
@@ -263,10 +265,10 @@ namespace FastAdminAPI.NPOI.Utilities
 
             IWorkbook workbook = sheet.Workbook;
 
-            //创建 数据校验sheet
+            // 创建 数据校验sheet
             ISheet hiddenSheet = workbook.CreateSheet(sheetName); ;
 
-            //循环将数据填入 数据校验sheet 中
+            // 循环将数据填入 数据校验sheet 中
             for (int i = 0, length = dropDownList.Count; i < length; i++)
             {
                 string value = dropDownList[i];
@@ -275,30 +277,30 @@ namespace FastAdminAPI.NPOI.Utilities
                 cell.SetCellValue(value);
             }
 
-            //创建单元格范围
+            // 创建单元格范围
             IName namedCell = workbook.CreateName();
             namedCell.NameName = sheetName;
             namedCell.RefersToFormula = sheetName + "!$A$1:$A$" + dropDownList.Count;
 
-            //数据校验帮助类
+            // 数据校验帮助类
             XSSFDataValidationHelper dvHelper = new(sheet);
 
-            //创建需要校验的数据
+            // 创建需要校验的数据
             XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint)dvHelper.CreateFormulaListConstraint(sheetName);
 
-            //被数据校验的单元格范围
+            // 被数据校验的单元格范围
             CellRangeAddressList addressList = new(startRow, lastRow, column, column);
 
-            //创建数据校验
+            // 创建数据校验
             XSSFDataValidation validation = (XSSFDataValidation)dvHelper.CreateValidation(dvConstraint, addressList);
 
-            //获取 数据校验sheet 的索引
+            // 获取 数据校验sheet 的索引
             int hiddenSheetIndex = workbook.GetSheetIndex(hiddenSheet);
 
-            //设置该 数据校验sheet 为隐藏sheet
+            // 设置该 数据校验sheet 为隐藏sheet
             workbook.SetSheetHidden(hiddenSheetIndex, SheetState.Hidden);
 
-            //添加数据校验
+            // 添加数据校验
             sheet.AddValidationData(validation);
         }
     }
