@@ -8,6 +8,8 @@ namespace FastAdminAPI.Framework.Extensions
         /// <summary>
         /// 生成数据库实体类
         /// </summary>
+        /// <param name="db"></param>
+        /// <param name="serviceName">服务名称</param>
         public static void GenerateDbEntities(ISqlSugarClient db, string serviceName = "FastAdminAPI.Core")
         {
             string path = Directory.GetCurrentDirectory();
@@ -15,11 +17,13 @@ namespace FastAdminAPI.Framework.Extensions
             GenerateDbEntitiesByCustom(db, path + @"FastAdminAPI.Framework\Entities", "FastAdminAPI.Framework.Entities", null, "", true);
         }
         /// <summary>
-        /// 生成数据库实体类
+        /// <summary>
+        /// 按指定表生成数据库实体类
         /// </summary>
+        /// <param name="db"></param>
         /// <param name="tables">需要生成的表</param>
         /// <param name="serviceName">服务名称</param>
-        public static void GenerateDbEntitiesByCustom(ISqlSugarClient db, string[] tables = null, string serviceName = "FastAdminAPI.Core")
+        public static void GenerateDbEntitiesByAssignTables(ISqlSugarClient db, string[] tables = null, string serviceName = "FastAdminAPI.Core")
         {
             string path = Directory.GetCurrentDirectory();
             path = path.Replace(serviceName, "");
@@ -28,21 +32,37 @@ namespace FastAdminAPI.Framework.Extensions
         /// <summary>
         /// 自定义生成数据库实体类
         /// </summary>
-        /// <param name="path">生成路径(默认)</param>
-        /// <param name="nameSpace">命名空间(默认)</param>
-        /// <param name="tablesName">指定表名</param>
-        /// <param name="interfaceName">继承接口/类</param>
+        /// <param name="db"></param>
+        /// <param name="tables">需要生成的表</param>
+        /// <param name="interfaceName">继承的接口/类</param>
         /// <param name="isSerializable">是否序列化(默认否)</param>
         /// <param name="tableNameStartWith">以[当前字符串]开头的表</param>
-        public static void GenerateDbEntitiesByCustom(ISqlSugarClient db, string path, string nameSpace, string[] tablesName = null,
+        public static void GenerateDbEntitiesByCustom(ISqlSugarClient db, string[] tables = null,
+            string interfaceName = null, bool isSerializable = false, string tableNameStartWith = null)
+        {
+            string path = Directory.GetCurrentDirectory();
+            path = path.Replace("FastAdminAPI.Core", "");
+
+            GenerateDbEntitiesByCustom(db, path + @"FastAdminAPI.Framework\Entities", "FastAdminAPI.Framework.Entities", tables, interfaceName, isSerializable, tableNameStartWith);
+        }
+        /// <summary>
+        /// 自定义生成数据库实体类
+        /// </summary>
+        /// <param name="path">生成路径</param>
+        /// <param name="nameSpace">命名空间</param>
+        /// <param name="tables">指定表名</param>
+        /// <param name="interfaceName">继承的接口/类</param>
+        /// <param name="isSerializable">是否序列化(默认否)</param>
+        /// <param name="tableNameStartWith">以[当前字符串]开头的表</param>
+        private static void GenerateDbEntitiesByCustom(ISqlSugarClient db, string path, string nameSpace, string[] tables = null,
             string interfaceName = null, bool isSerializable = false, string tableNameStartWith = null)
         {
             path = !string.IsNullOrEmpty(path) ? path : Directory.GetCurrentDirectory() + @"FastAdminAPI.Framework\Entities";
             nameSpace = !string.IsNullOrEmpty(nameSpace) ? nameSpace : "FastAdminAPI.Framework.Entities";
 
-            if (tablesName != null && tablesName.Length > 0)
+            if (tables != null && tables.Length > 0)
             {
-                db.DbFirst.Where(tablesName).IsCreateDefaultValue().IsCreateAttribute()
+                db.DbFirst.Where(tables).IsCreateDefaultValue().IsCreateAttribute()
                     .SettingClassTemplate(p => p = @"
 {using}
 

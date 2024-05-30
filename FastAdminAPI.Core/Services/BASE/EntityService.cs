@@ -17,12 +17,12 @@ namespace FastAdminAPI.Core.Services.BASE
             DbEntitiesGenerator.GenerateDbEntities(_dbContext);
         }
         /// <summary>
-        /// 按所需表生成实体(本地环境使用)
+        /// 按指定表生成实体(本地环境使用)
         /// </summary>
         /// <param name="tables">需要生成的表</param>
-        public void GenerateEntitiesByTables(string[] tables)
+        public void GenerateEntitiesByAssignTables(string[] tables)
         {
-            DbEntitiesGenerator.GenerateDbEntitiesByCustom(_dbContext, tables);
+            DbEntitiesGenerator.GenerateDbEntitiesByAssignTables(_dbContext, tables);
         }
         /// <summary>
         /// 自定义生成实体(本地环境使用)
@@ -30,7 +30,7 @@ namespace FastAdminAPI.Core.Services.BASE
         /// <param name="model"></param>
         public void GenerateEntitiesByCustom(GenerateDbEntitiesModel model)
         {
-            DbEntitiesGenerator.GenerateDbEntitiesByCustom(_dbContext, model.Path, model.Namespace, model.TablesName, model.InterfaceName, model.IsSerializable);
+            DbEntitiesGenerator.GenerateDbEntitiesByCustom(_dbContext, model.TablesName, model.InterfaceName, model.IsSerializable);
         }
     }
 }

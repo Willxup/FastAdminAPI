@@ -1,4 +1,4 @@
-using FastAdminAPI.Core.IServices.BASE;
+﻿using FastAdminAPI.Core.IServices.BASE;
 using FastAdminAPI.Core.Models.BASE;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,26 +27,26 @@ namespace FastAdminAPI.Core.Controllers.BASE
             _entityService.GenerateEntities();
         }
         /// <summary>
-        /// 按所需表生成实体(本地环境使用)
+        /// 按指定表生成实体(本地环境使用)
         /// </summary>
         /// <param name="tables">需要生成的表</param>
         [HttpGet]
         #if !DEBUG
         [NonAction]
         #endif
-        public void GenerateEntitiesByTables(string[] tables)
+        public void GenerateEntitiesByAssignTables(string[] tables)
         {
-            _entityService.GenerateEntitiesByTables(tables);
+            _entityService.GenerateEntitiesByAssignTables(tables);
         }
         /// <summary>
         /// 自定义生成实体(本地环境使用)
         /// </summary>
         /// <param name="model"></param>
-        [HttpGet]
+        [HttpPost]
         #if !DEBUG
         [NonAction]
         #endif
-        public void GenerateEntitiesByCustom(GenerateDbEntitiesModel model)
+        public void GenerateEntitiesByCustom([FromBody] GenerateDbEntitiesModel model)
         {
             _entityService.GenerateEntitiesByCustom(model);
         }

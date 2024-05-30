@@ -9,10 +9,10 @@ namespace FastAdminAPI.Core.IServices.BASE
         /// </summary>
         void GenerateEntities();
         /// <summary>
-        /// 按所需表生成实体(本地环境使用)
+        /// 按指定表生成实体(本地环境使用)
         /// </summary>
         /// <param name="tables">需要生成的表</param>
-        void GenerateEntitiesByTables(string[] tables);
+        void GenerateEntitiesByAssignTables(string[] tables);
         /// <summary>
         /// 自定义生成实体(本地环境使用)
         /// </summary>

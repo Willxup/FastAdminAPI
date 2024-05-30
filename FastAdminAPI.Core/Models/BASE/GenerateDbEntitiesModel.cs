@@ -3,14 +3,6 @@
     public class GenerateDbEntitiesModel
     {
         /// <summary>
-        /// 生成路径（默认）
-        /// </summary>
-        public string Path { get; set; } = string.Empty;
-        /// <summary>
-        /// 命名空间（默认）
-        /// </summary>
-        public string Namespace { get; set; } = string.Empty;
-        /// <summary>
         /// 指定表名
         /// </summary>
         public string[] TablesName { get; set; } = null;

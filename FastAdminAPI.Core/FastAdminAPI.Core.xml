@@ -44,9 +44,9 @@
             生成实体类(本地环境使用)
             </summary>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.BASE.EntityController.GenerateEntitiesByTables(System.String[])">
+        <member name="M:FastAdminAPI.Core.Controllers.BASE.EntityController.GenerateEntitiesByAssignTables(System.String[])">
             <summary>
-            按所需表生成实体(本地环境使用)
+            按指定表生成实体(本地环境使用)
             </summary>
             <param name="tables">需要生成的表</param>
         </member>
@@ -919,9 +919,9 @@
             生成实体类(本地环境使用)
             </summary>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.BASE.IEntityService.GenerateEntitiesByTables(System.String[])">
+        <member name="M:FastAdminAPI.Core.IServices.BASE.IEntityService.GenerateEntitiesByAssignTables(System.String[])">
             <summary>
-            按所需表生成实体(本地环境使用)
+            按指定表生成实体(本地环境使用)
             </summary>
             <param name="tables">需要生成的表</param>
         </member>
@@ -1550,16 +1550,6 @@
             <param name="appId">微信公众号AppId</param>
             <param name="code">授权code</param>
             <returns></returns>
-        </member>
-        <member name="P:FastAdminAPI.Core.Models.BASE.GenerateDbEntitiesModel.Path">
-            <summary>
-            生成路径（默认）
-            </summary>
-        </member>
-        <member name="P:FastAdminAPI.Core.Models.BASE.GenerateDbEntitiesModel.Namespace">
-            <summary>
-            命名空间（默认）
-            </summary>
         </member>
         <member name="P:FastAdminAPI.Core.Models.BASE.GenerateDbEntitiesModel.TablesName">
             <summary>
@@ -3196,9 +3186,9 @@
             生成实体类(本地环境使用)
             </summary>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.BASE.EntityService.GenerateEntitiesByTables(System.String[])">
+        <member name="M:FastAdminAPI.Core.Services.BASE.EntityService.GenerateEntitiesByAssignTables(System.String[])">
             <summary>
-            按所需表生成实体(本地环境使用)
+            按指定表生成实体(本地环境使用)
             </summary>
             <param name="tables">需要生成的表</param>
         </member>
