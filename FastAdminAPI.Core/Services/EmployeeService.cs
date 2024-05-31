@@ -66,6 +66,7 @@ namespace FastAdminAPI.Core.Services
             //创建List储存功能权限
             List<S09_UserPermission> permissionList = new();
 
+            //数据库时间
             DateTime dbTime = _dbContext.GetDate();
 
             //循环获取角色
@@ -81,6 +82,7 @@ namespace FastAdminAPI.Core.Services
                     S09_CreateBy = _employeeName,
                     S09_CreateTime = dbTime
                 };
+
                 //添加到List
                 permissionList.Add(permission);
             });
@@ -171,6 +173,7 @@ namespace FastAdminAPI.Core.Services
         /// <returns></returns>
         public async Task<List<EmployeeSimpleModel>> GetSubordinateEmployeeList()
         {
+            //数据权限
             var dataPermission = await _dataPermission.Get();
 
             return await _dbContext.Queryable<S07_Employee>()
@@ -262,6 +265,8 @@ namespace FastAdminAPI.Core.Services
                                                      S03.S03_RoleId == S09.S09_CommonId)
                                        .Select(S03 => S03.S03_RoleName)
                         }).ToListAsync();
+                    
+                    //循环获取用户角色
                     list.ForEach(item =>
                     {
                         if (item.UserId != null)
@@ -287,6 +292,7 @@ namespace FastAdminAPI.Core.Services
         /// <returns></returns>
         public async Task<EmployeeInfoModel> GetEmployeeInfo(long employeeId)
         {
+            //获取员工信息
             var employee = await _dbContext.Queryable<S07_Employee>()
                 .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S07.S07_EmployeeId == employeeId)
                 .Select(S07 => new EmployeeInfoModel
@@ -310,11 +316,12 @@ namespace FastAdminAPI.Core.Services
                     TerminationDate = S07.S07_TerminationDate,
                 })
                 .FirstAsync();
+
             if (employee != null)
             {
                 //查询部门岗位
                 var employeePostList = await _dbContext.Queryable<S08_EmployeePost>()
-                                       .Where(S08 => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
+                                       .Where(S08 => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                                      S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True) //查询主岗位
 
                                        .Select(S08 => new
@@ -327,12 +334,16 @@ namespace FastAdminAPI.Core.Services
                                                                    .Where(S05 => S05.S05_DepartId == S08.S05_DepartId)
                                                                    .Select(S05 => S05.S05_DepartName),
                                        }).ToListAsync();
+
                 //部门
                 employee.DepartmentName = employeePostList.Where(c => c.EmployeeId == employee.EmployeeId)
-                                                              .Select(c => c.DepartmentName).FirstOrDefault();
+                                                          .Select(c => c.DepartmentName)
+                                                          .FirstOrDefault();
+
                 //岗位
                 employee.PostName = employeePostList.Where(c => c.EmployeeId == employee.EmployeeId)
-                                                .Select(c => c.PostName).FirstOrDefault();
+                                                    .Select(c => c.PostName)
+                                                    .FirstOrDefault();
                 //判断是否存在用户Id
                 if (employee.UserId != null)
                 {
@@ -346,6 +357,7 @@ namespace FastAdminAPI.Core.Services
                             Password = c.S01_Password,
                             AccountStatus = c.S01_AccountStatus
                         }).FirstAsync();
+
                     //查询员工功能权限
                     var permissionList = await _dbContext.Queryable<S09_UserPermission>()
                         .Where(S09 => S09.S01_UserId == employee.UserId)
@@ -355,8 +367,12 @@ namespace FastAdminAPI.Core.Services
                             S09.S09_PermissionType,
                             S09.S09_CommonId
                         }).ToListAsync();
+
                     //员工角色
-                    var roleIds = permissionList?.Where(c => c.S09_PermissionType == (byte)BusinessEnums.PermissionType.Role).Select(c => c.S09_CommonId).ToList();
+                    var roleIds = permissionList?.Where(c => c.S09_PermissionType == (byte)BusinessEnums.PermissionType.Role)
+                                                 .Select(c => c.S09_CommonId)
+                                                 .ToList();
+                    
                     if (roleIds?.Count > 0)
                     {
                         employee.Roles = await _dbContext.Queryable<S03_Role>()
@@ -367,8 +383,12 @@ namespace FastAdminAPI.Core.Services
                                 RoleName = S03.S03_RoleName
                             }).ToListAsync();
                     }
+
                     //员工模块
-                    var moduleIds = permissionList?.Where(c => c.S09_PermissionType == (byte)BusinessEnums.PermissionType.User).Select(c => c.S09_CommonId).ToList();
+                    var moduleIds = permissionList?.Where(c => c.S09_PermissionType == (byte)BusinessEnums.PermissionType.User)
+                                                   .Select(c => c.S09_CommonId)
+                                                   .ToList();
+                    
                     if (moduleIds?.Count > 0)
                     {
                         employee.Permissions = await _dbContext.Queryable<S02_Module>()
@@ -382,6 +402,7 @@ namespace FastAdminAPI.Core.Services
                     }
                 }
             }
+
             return employee;
         }
         /// <summary>
@@ -406,11 +427,12 @@ namespace FastAdminAPI.Core.Services
                 //用户Id
                 long? userId = null;
 
-                //判断是否创建用户
+                //用户相关 判断是否创建用户
                 if (model.AccountStatus)
                 {
                     if (model.Account == null)
                         throw new UserOperationException("账号不能为空!");
+
                     if (model.Password == null)
                         throw new UserOperationException("密码不能为空!");
 
@@ -433,18 +455,19 @@ namespace FastAdminAPI.Core.Services
                         S01_CreateBy = _employeeName,
                         S01_CreateTime = _dbContext.GetDate()
                     };
-                    //创建用户返回主键
+
                     result = await _dbContext.Insertable(user).ExecuteAsync();
 
+                    //创建用户角色权限
                     if (result?.Code == ResponseCode.Success)
                     {
                         userId = Convert.ToInt64(result.Data);
 
-                        //创建用户角色权限
                         result = await AddUserPermission(model, (long)userId, false);
                     }
                 }
 
+                //员工相关
                 if (result?.Code == ResponseCode.Success)
                 {
                     //创建员工
@@ -470,6 +493,7 @@ namespace FastAdminAPI.Core.Services
                         S07_CreateBy = _employeeName,
                         S07_CreateTime = _dbContext.GetDate()
                     };
+
                     //创建员工返回主键
                     result = await _dbContext.Insertable(employee).ExecuteAsync();
 
@@ -491,15 +515,17 @@ namespace FastAdminAPI.Core.Services
                             S08_CreateBy = _employeeName,
                             S08_CreateTime = _dbContext.GetDate()
                         };
-                        result = await _dbContext.Insertable(employeePost).ExecuteAsync();
 
-                        if (result?.Code == ResponseCode.Success)
-                        {
-                            //清除数据权限
-                            await _dataPermission.Release();
-                        }
+                        result = await _dbContext.Insertable(employeePost).ExecuteAsync();
                     }
                 }
+
+                //清除数据权限
+                if (result?.Code == ResponseCode.Success)
+                {
+                    await _dataPermission.Release();
+                }
+
                 return result;
             });
         }
@@ -553,6 +579,7 @@ namespace FastAdminAPI.Core.Services
                     {
                         if (model.Account == null)
                             throw new UserOperationException("账号不能为空!");
+
                         if (model.Password == null)
                             throw new UserOperationException("密码不能为空!");
 
@@ -565,6 +592,7 @@ namespace FastAdminAPI.Core.Services
                                               S01.S01_Account == model.Account)
                                 .AnyAsync();
                             if (isExist) throw new UserOperationException("账号已存在!");
+
                             //创建用户
                             S01_User user = new()
                             {
@@ -577,14 +605,14 @@ namespace FastAdminAPI.Core.Services
                                 S01_CreateBy = _employeeName,
                                 S01_CreateTime = _dbContext.GetDate()
                             };
-                            //创建用户返回主键
+
                             result = await _dbContext.Insertable(user).ExecuteAsync();
 
+                            //创建用户角色权限
                             if (result?.Code == ResponseCode.Success)
                             {
                                 userId = Convert.ToInt64(result.Data);
 
-                                //创建用户角色权限
                                 result = await AddUserPermission(model, (long)userId, false); //新增用户，无需删除角色权限
                             }
                         }
@@ -612,6 +640,7 @@ namespace FastAdminAPI.Core.Services
                                 })
                                 .Where(S01 => S01.S01_UserId == userId)
                                 .ExecuteAsync();
+
                             if (result?.Code == ResponseCode.Success)
                             {
                                 //先删除已存在的用户角色权限，在新增用户角色权限
@@ -638,6 +667,7 @@ namespace FastAdminAPI.Core.Services
 
                     }
                 }
+
                 return result;
             });
         }
@@ -714,6 +744,7 @@ namespace FastAdminAPI.Core.Services
                 {
                     await _dataPermission.Release();
                 }
+
                 return result;
             });
         }
@@ -837,11 +868,13 @@ namespace FastAdminAPI.Core.Services
                 .AnyAsync();
             if (isExist) throw new UserOperationException("该岗位已存在!");
 
-            //不存在岗位的员工默认设置的第一条为主岗位
-            if (!await _dbContext.Queryable<S08_EmployeePost>()
+            bool isExistPost = await _dbContext.Queryable<S08_EmployeePost>()
                 .Where(S08 => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                               S08.S07_EmployeeId == model.EmployeeId)
-                .AnyAsync())
+                .AnyAsync();
+
+            //不存在岗位的员工默认设置的第一条为主岗位
+            if (!isExistPost)
             {
                 model.IsMainPost = (byte)BaseEnums.TrueOrFalse.True;
             }
@@ -849,12 +882,16 @@ namespace FastAdminAPI.Core.Services
             model.OperationId = _employeeId;
             model.OperationName = _employeeName;
             model.OperationTime = _dbContext.GetDate();
+
             var result = await _dbContext.InsertResultAsync<AddEmployeePostModel, S08_EmployeePost>(model);
+
+            //释放数据权限
             if (result?.Code == ResponseCode.Success)
             {
-                //释放数据权限
+                
                 await _dataPermission.Release();
             }
+
             return result;
         }
         /// <summary>
@@ -881,7 +918,7 @@ namespace FastAdminAPI.Core.Services
             //开启事务
             return await _dbContext.TransactionAsync(async () =>
             {
-                //去除当前操作的岗位，更新该员工其他岗位为副岗位
+                //更新该员工其他岗位为副岗位
                 var result = await _dbContext.Updateable<S08_EmployeePost>()
                             .SetColumns(S08 => new S08_EmployeePost
                             {
@@ -892,6 +929,8 @@ namespace FastAdminAPI.Core.Services
                             })
                             .Where(S08 => S08.S07_EmployeeId == employeePostInfo.S07_EmployeeId && S08.S08_EmployeePostId != employeePostId)
                             .ExecuteAsync();
+
+                //更新当前岗位为主岗位
                 if (result?.Code == ResponseCode.Success)
                 {
                     result = await _dbContext.Updateable<S08_EmployeePost>()
@@ -905,11 +944,13 @@ namespace FastAdminAPI.Core.Services
                                 .Where(S08 => S08.S08_EmployeePostId == employeePostId)
                                 .ExecuteAsync();
                 }
+
+                //释放数据权限
                 if (result?.Code == ResponseCode.Success)
                 {
-                    //释放数据权限
                     await _dataPermission.Release();
                 }
+
                 return result;
             });
 
@@ -935,6 +976,7 @@ namespace FastAdminAPI.Core.Services
             if (employeePostInfo.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True)
                 throw new UserOperationException("当前为主岗位,不允许删除!");
 
+            //软删除员工岗位
             var result = await _dbContext.Deleteable<S08_EmployeePost>()
                 .Where(S08 => S08.S08_EmployeePostId == employeePostId)
                 .SoftDeleteAsync(S08 => new S08_EmployeePost 
@@ -945,11 +987,12 @@ namespace FastAdminAPI.Core.Services
                     S08_DeleteTime = SqlFunc.GetDate()
                 });
 
+            //释放数据权限
             if (result?.Code == ResponseCode.Success)
             {
-                //释放数据权限
                 await _dataPermission.Release();
             }
+
             return result;
         }
         #endregion
