@@ -46,7 +46,7 @@ namespace FastAdminAPI.Framework.Extensions
             db.CurrentConnectionConfig.MoreSettings = new ConnMoreSettings() { IsAutoRemoveDataCache = true };
             db.CurrentConnectionConfig.ConfigureExternalServices = new ConfigureExternalServices()
             {
-                SqlFuncServices = DbExtension.CustomSqlFunc()
+                SqlFuncServices = CustomSqlFunc()
             };
             if (EnvTool.IsDevelop)
             {
