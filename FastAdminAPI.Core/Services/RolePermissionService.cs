@@ -44,10 +44,9 @@ namespace FastAdminAPI.Core.Services
                               S09.S01_UserId == _userId)
                 .Select(S09 => S09.S09_CommonId)
                 .ToListAsync();
+
             if(roleIds?.Count > 0)
             {
-                List<long> parentRoles = new();
-
                 //全部角色
                 var roles = await _dbContext.Queryable<S03_Role>()
                     .Where(S03 => S03.S03_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
@@ -84,8 +83,10 @@ namespace FastAdminAPI.Core.Services
             model.OperationId = _employeeId;
             model.OperationName = _employeeName;
             model.OperationTime = _dbContext.GetDate();
+
             model.CornerMark = await CornerMarkGenerator.GetCornerMark(_dbContext, "S03_Role", "S03_RoleId",
                 "S03_CornerMark", "S03_ParentRoleId", model.ParentRoleId.ToString());
+
             return await _dbContext.InsertResultAsync<AddRoleModel, S03_Role>(model);
         }
         /// <summary>
@@ -98,6 +99,7 @@ namespace FastAdminAPI.Core.Services
             model.OperationId = _employeeId;
             model.OperationName = _employeeName;
             model.OperationTime = _dbContext.GetDate();
+
             return await _dbContext.UpdateResultAsync<EditRoleModel, S03_Role>(model);
         }
         /// <summary>
@@ -143,6 +145,7 @@ namespace FastAdminAPI.Core.Services
                 .Where(S04 => S04.S03_RoleId == model.SourceRoleId)
                 .Select(S04 => S04.S02_ModuleId)
                 .ToListAsync();
+
             if(rolePermissions?.Count > 0)
             {
                 return await _dbContext.TransactionAsync(async () => 
@@ -152,13 +155,16 @@ namespace FastAdminAPI.Core.Services
                     {
                         S03_RoleName = model.RoleName,
                         S03_ParentRoleId = model.ParentRoleId,
+
                         S03_CornerMark = await CornerMarkGenerator.GetCornerMark(_dbContext, "S03_Role", "S03_RoleId",
                             "S03_CornerMark", "S03_ParentRoleId", model.ParentRoleId.ToString()),
+
                         S03_IsDelete = (byte)BaseEnums.TrueOrFalse.False,
                         S03_CreateId = _employeeId,
                         S03_CreateBy = _employeeName,
                         S03_CreateTime = _dbContext.GetDate()
                     };
+
                     var result = await _dbContext.Insertable(role).ExecuteAsync();
 
                     if(result?.Code == ResponseCode.Success)
@@ -170,6 +176,7 @@ namespace FastAdminAPI.Core.Services
 
                         //批量插入权限
                         List<S04_RolePermission> permissions = new();
+
                         rolePermissions.ForEach(item =>
                         {
                             permissions.Add(new S04_RolePermission
@@ -186,9 +193,9 @@ namespace FastAdminAPI.Core.Services
                     }
 
                     return result;
-
                 });
             }
+
             throw new UserOperationException("源角色未配置权限，请先配置源角色的权限!");
         }
         #endregion
@@ -242,8 +249,10 @@ namespace FastAdminAPI.Core.Services
                                 S04_CreateBy = _employeeName,
                                 S04_CreateTime = _dbContext.GetDate()
                             };
+
                             permissions.Add(permission);
                         }
+
                         result = await _dbContext.Insertable(permissions).ExecuteAsync();
                     }
 
