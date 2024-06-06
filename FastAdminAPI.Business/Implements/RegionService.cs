@@ -58,7 +58,8 @@ namespace FastAdminAPI.Business.Implements
         public async Task<List<RegionModel>> Get(int RetryTimes = 2)
         {
             var regionInfo = await _redis.StringGetAsync<List<RegionModel>>("Common:RegionInfo");
-            if (regionInfo == null || regionInfo.Count <= 0)
+
+            if (!regionInfo?.Any() ?? true)
             {
                 regionInfo = null;//默认值
                 for (int i = 0; i < RetryTimes; i++)

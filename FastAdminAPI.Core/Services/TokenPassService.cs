@@ -121,31 +121,32 @@ namespace FastAdminAPI.Core.Services
         {
             RegionStructureModel regionStruc = new();
 
-            var regionList = await _regionService.Get();//从redis取出所有区域信息
-            if (regionList?.Count <= 0 || regionList == null)
-            {
+            //从redis取出所有区域信息
+            var regionList = await _regionService.Get();
+
+            //校验数据是否存在
+            if (!regionList?.Any() ?? true)
                 return regionStruc;
-            }
 
             //所有省份
             var provinceList = regionList?.Where(r => r.ParentId == 1)
                                          .Select(r => new { r.RegionCode, r.RegionName, r.RegionId }).ToList();
             //省份Id 用来查询城市
             var provinceIds = provinceList?.Select(c => c.RegionId).ToList();
-            if (provinceIds?.Count <= 0 || provinceIds == null)
-            {
+
+            //校验数据是否存在
+            if (!provinceIds?.Any() ?? true)
                 return regionStruc;
-            }
 
             //所有城市
             var cityList = regionList?.Where(r => provinceIds.Contains((long)r.ParentId))
                                      .Select(r => new { r.RegionCode, r.RegionName, r.RegionId }).ToList();
             //城市Id 用来查询区县
             var cityIds = cityList?.Select(c => c.RegionId).ToList();
-            if (cityIds?.Count <= 0 || cityIds == null)
-            {
+
+            //校验数据是否存在
+            if (!cityIds?.Any() ?? true)
                 return regionStruc;
-            }
 
             //所有区县
             var areaList = regionList?.Where(r => cityIds.Contains((long)r.ParentId))

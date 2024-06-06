@@ -168,7 +168,8 @@ namespace FastAdminAPI.Business.Implements
                 var employeePosts = await _dbContext.Queryable<S08_EmployeePost>()
                     .Where(S08 => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S08.S07_EmployeeId == _employeeId)
                     .Select(S08 => new { S08.S06_PostId, S08.S05_DepartId }).ToListAsync();
-                if (employeePosts == null || employeePosts.Count <= 0)
+
+                if (!employeePosts?.Any() ?? true)
                 {
                     throw new UserOperationException("获取员工信息失败!");
                 }
