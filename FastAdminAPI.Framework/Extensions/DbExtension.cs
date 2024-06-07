@@ -573,6 +573,34 @@ namespace FastAdminAPI.Framework.Extensions
         }
         #endregion
 
+        #region Ado
+        /// <summary>
+        /// Ado 直接返回通用消息类
+        /// </summary>
+        /// <param name="ado">SqlSugar ado</param>
+        /// <param name="sql">sql</param>
+        /// <param name="parameters">参数</param>
+        /// <param name="isCheckAffectedRows">是否校验受影响行数大于0(默认是)</param>
+        /// <param name="errorMessage">错误信息</param>
+        /// <returns></returns>
+        public static async Task<ResponseModel> ExecuteAsync(this IAdo ado, string sql, List<SugarParameter> parameters,
+            bool isCheckAffectedRows = true, string errorMessage = null)
+        {
+            try
+            {
+                var res = await ado.ExecuteCommandAsync(sql, parameters);
+                if (res > 0 || !isCheckAffectedRows)
+                    return ResponseModel.Success();
+                else
+                    throw new UserOperationException("更新失败!");
+            }
+            catch (Exception ex)
+            {
+                return ResponseModel.Error(!string.IsNullOrEmpty(errorMessage) ? errorMessage : ex.Message);
+            }
+        }
+        #endregion
+
         #region 事务
         /// <summary>
         /// 事务 直接返回通用消息类
