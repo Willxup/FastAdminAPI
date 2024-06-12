@@ -3802,28 +3802,28 @@
         </member>
         <member name="M:FastAdminAPI.Core.Services.TestService.GetCodeListWithAttributes(FastAdminAPI.Core.Models.Test.CodePageSearch)">
             <summary>
-            获取code列表 AutoBox方式
+            获取code列表 Attribute方式
             </summary>
             <param name="search"></param>
             <returns></returns>
         </member>
         <member name="M:FastAdminAPI.Core.Services.TestService.AddCode(FastAdminAPI.Core.Models.Test.AddCodeModel)">
             <summary>
-            新增Code
+            新增Code Attribute方式
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
         <member name="M:FastAdminAPI.Core.Services.TestService.EditCode(FastAdminAPI.Core.Models.Test.EditCodeModel)">
             <summary>
-            编辑Code
+            编辑Code Attribute方式
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
         <member name="M:FastAdminAPI.Core.Services.TestService.DelCode(FastAdminAPI.Core.Models.Test.DelCodeModel)">
             <summary>
-            删除Code
+            删除Code Attribute方式
             </summary>
             <param name="model"></param>
             <returns></returns>

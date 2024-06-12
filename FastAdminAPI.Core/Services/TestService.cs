@@ -40,7 +40,7 @@ namespace FastAdminAPI.Core.Services
             return result;
         }
         /// <summary>
-        /// 获取code列表 AutoBox方式
+        /// 获取code列表 Attribute方式
         /// </summary>
         /// <param name="search"></param>
         /// <returns></returns>
@@ -51,7 +51,7 @@ namespace FastAdminAPI.Core.Services
                 .ToListResultAsync(search, new CodePageResult()); //查询条件 - 查询结果
         }
         /// <summary>
-        /// 新增Code
+        /// 新增Code Attribute方式
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -63,7 +63,7 @@ namespace FastAdminAPI.Core.Services
             return await _dbContext.InsertResultAsync<AddCodeModel, S99_Code>(model);
         }
         /// <summary>
-        /// 编辑Code
+        /// 编辑Code Attribute方式
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -75,7 +75,7 @@ namespace FastAdminAPI.Core.Services
             return await _dbContext.UpdateResultAsync<EditCodeModel, S99_Code>(model);
         }
         /// <summary>
-        /// 删除Code
+        /// 删除Code Attribute方式
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
