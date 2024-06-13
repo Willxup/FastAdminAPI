@@ -28,7 +28,7 @@ namespace FastAdminAPI.Core.Services
         /// </summary>
         /// <param name="dbContext"></param>
         /// <param name="httpContext"></param>
-        public RolePermissionService(ISqlSugarClient dbContext, IHttpContextAccessor httpContext) : base(dbContext, httpContext){ }
+        public RolePermissionService(ISqlSugarClient dbContext, IHttpContextAccessor httpContext) : base(dbContext, httpContext) { }
 
         #region 角色
         /// <summary>
@@ -38,14 +38,16 @@ namespace FastAdminAPI.Core.Services
         /// <returns></returns>
         public async Task<string> GetRoleTree(string roleName)
         {
+            string jsonTree = string.Empty;
+
             //用户角色Ids
             var roleIds = await _dbContext.Queryable<S09_UserPermission>()
-                .Where(S09 => S09.S09_PermissionType == (byte)BusinessEnums.PermissionType.Role && 
+                .Where(S09 => S09.S09_PermissionType == (byte)BusinessEnums.PermissionType.Role &&
                               S09.S01_UserId == _userId)
                 .Select(S09 => S09.S09_CommonId)
                 .ToListAsync();
 
-            if(roleIds?.Count > 0)
+            if (roleIds?.Count > 0)
             {
                 //全部角色
                 var roles = await _dbContext.Queryable<S03_Role>()
@@ -61,17 +63,18 @@ namespace FastAdminAPI.Core.Services
                 var rolesByUser = roles.Where(c => roleIds.Contains(c.Id)).ToList();
 
                 //角色为超级管理员
-                if(rolesByUser.Where(c => c.ParentId == null).Any()) 
+                if (rolesByUser.Where(c => c.ParentId == null).Any())
                 {
-                    return JsonTree.CreateJsonTrees(roles, roleName);
+                    jsonTree = JsonTree.CreateJsonTrees(roles, roleName);
                 }
                 //其他角色
                 else
                 {
-                    return JsonTree.CreateCustomJsonTrees(rolesByUser, roles, roleName);
+                    jsonTree = JsonTree.CreateCustomJsonTrees(rolesByUser, roles, roleName);
                 }
             }
-            return null;
+
+            return jsonTree;
         }
         /// <summary>
         /// 新增角色
@@ -139,64 +142,63 @@ namespace FastAdminAPI.Core.Services
                 .AnyAsync();
             if (!isValidRole)
                 throw new UserOperationException("找不到源角色，请重试!");
-            
+
             //获取源角色的权限
             var rolePermissions = await _dbContext.Queryable<S04_RolePermission>()
                 .Where(S04 => S04.S03_RoleId == model.SourceRoleId)
                 .Select(S04 => S04.S02_ModuleId)
                 .ToListAsync();
 
-            if(rolePermissions?.Count > 0)
+            if (!rolePermissions?.Any() ?? true)
+                throw new UserOperationException("源角色未配置权限，请先配置源角色的权限!");
+
+            return await _dbContext.TransactionAsync(async () =>
             {
-                return await _dbContext.TransactionAsync(async () => 
+                //创建新的角色
+                S03_Role role = new()
                 {
-                    //创建新的角色
-                    S03_Role role = new()
+                    S03_RoleName = model.RoleName,
+                    S03_ParentRoleId = model.ParentRoleId,
+
+                    S03_CornerMark = await CornerMarkGenerator.GetCornerMark(_dbContext, "S03_Role", "S03_RoleId",
+                        "S03_CornerMark", "S03_ParentRoleId", model.ParentRoleId.ToString()),
+
+                    S03_IsDelete = (byte)BaseEnums.TrueOrFalse.False,
+                    S03_CreateId = _employeeId,
+                    S03_CreateBy = _employeeName,
+                    S03_CreateTime = _dbContext.GetDate()
+                };
+
+                var result = await _dbContext.Insertable(role).ExecuteAsync();
+
+                if (result?.Code == ResponseCode.Success)
+                {
+                    long roleId = Convert.ToInt64(result.Data);
+
+                    //批量插入时获取统一时间
+                    DateTime dbTime = _dbContext.GetDate();
+
+                    //批量插入权限
+                    List<S04_RolePermission> permissions = new();
+
+                    rolePermissions.ForEach(item =>
                     {
-                        S03_RoleName = model.RoleName,
-                        S03_ParentRoleId = model.ParentRoleId,
-
-                        S03_CornerMark = await CornerMarkGenerator.GetCornerMark(_dbContext, "S03_Role", "S03_RoleId",
-                            "S03_CornerMark", "S03_ParentRoleId", model.ParentRoleId.ToString()),
-
-                        S03_IsDelete = (byte)BaseEnums.TrueOrFalse.False,
-                        S03_CreateId = _employeeId,
-                        S03_CreateBy = _employeeName,
-                        S03_CreateTime = _dbContext.GetDate()
-                    };
-
-                    var result = await _dbContext.Insertable(role).ExecuteAsync();
-
-                    if(result?.Code == ResponseCode.Success)
-                    {
-                        long roleId = Convert.ToInt64(result.Data);
-
-                        //批量插入时获取统一时间
-                        DateTime dbTime = _dbContext.GetDate();
-
-                        //批量插入权限
-                        List<S04_RolePermission> permissions = new();
-
-                        rolePermissions.ForEach(item =>
+                        permissions.Add(new S04_RolePermission
                         {
-                            permissions.Add(new S04_RolePermission
-                            {
-                                S03_RoleId = roleId,
-                                S02_ModuleId = item,
-                                S04_CreateId = _employeeId,
-                                S04_CreateBy = _employeeName,
-                                S04_CreateTime = dbTime
-                            });
+                            S03_RoleId = roleId,
+                            S02_ModuleId = item,
+                            S04_CreateId = _employeeId,
+                            S04_CreateBy = _employeeName,
+                            S04_CreateTime = dbTime
                         });
+                    });
 
-                        result = await _dbContext.Insertable(permissions).ExecuteAsync();
-                    }
+                    result = await _dbContext.Insertable(permissions).ExecuteAsync();
+                }
 
-                    return result;
-                });
-            }
+                return result;
+            });
 
-            throw new UserOperationException("源角色未配置权限，请先配置源角色的权限!");
         }
         #endregion
 
@@ -221,46 +223,44 @@ namespace FastAdminAPI.Core.Services
         /// <exception cref="UserOperationException"></exception>
         public async Task<ResponseModel> SaveRolePermission(SaveRolePermissionModel model)
         {
-            if (model.ModuleIds?.Count > 0)
+            if (!model.ModuleIds?.Any() ?? true)
+                throw new UserOperationException("请选择需要设置的权限!");
+
+            return await _dbContext.TransactionAsync(async () =>
             {
-                return await _dbContext.TransactionAsync(async () => 
+                //先删除旧的角色权限
+                var result = await _dbContext.Deleteable<S04_RolePermission>()
+                .Where(S04 => S04.S03_RoleId == model.RoleId)
+                .ExecuteAsync();
+
+                if (result?.Code == ResponseCode.Success)
                 {
-                    //先删除旧的角色权限
-                    var result = await _dbContext.Deleteable<S04_RolePermission>()
-                    .Where(S04 => S04.S03_RoleId == model.RoleId)
-                    .ExecuteAsync();
-
-                    if(result?.Code == ResponseCode.Success)
+                    //新增新的角色权限
+                    List<S04_RolePermission> permissions = new();
+                    foreach (var item in model.ModuleIds)
                     {
-                        //新增新的角色权限
-                        List<S04_RolePermission> permissions = new();
-                        foreach (var item in model.ModuleIds)
+                        //如果模块Id小于等于0，就跳过，因为不存在这种模块
+                        if (item <= 0)
+                            continue;
+
+                        //模块
+                        S04_RolePermission permission = new()
                         {
-                            //如果模块Id小于等于0，就跳过，因为不存在这种模块
-                            if (item <= 0)
-                                continue;
+                            S03_RoleId = (long)model.RoleId,
+                            S02_ModuleId = item,
+                            S04_CreateId = _employeeId,
+                            S04_CreateBy = _employeeName,
+                            S04_CreateTime = _dbContext.GetDate()
+                        };
 
-                            //模块
-                            S04_RolePermission permission = new()
-                            {
-                                S03_RoleId = (long)model.RoleId,
-                                S02_ModuleId = item,
-                                S04_CreateId = _employeeId,
-                                S04_CreateBy = _employeeName,
-                                S04_CreateTime = _dbContext.GetDate()
-                            };
-
-                            permissions.Add(permission);
-                        }
-
-                        result = await _dbContext.Insertable(permissions).ExecuteAsync();
+                        permissions.Add(permission);
                     }
 
-                    return result;
-                });
-            }
-            else
-                throw new UserOperationException("请选择需要设置的权限!");
+                    result = await _dbContext.Insertable(permissions).ExecuteAsync();
+                }
+
+                return result;
+            });
         }
         #endregion
     }

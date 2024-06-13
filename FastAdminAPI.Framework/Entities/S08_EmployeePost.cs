@@ -124,6 +124,5 @@ namespace FastAdminAPI.Framework.Entities
         /// </summary>
 
         public DateTime? S08_DeleteTime { get; set; }
-        public byte S08_IsValid { get; set; }
     }
 }

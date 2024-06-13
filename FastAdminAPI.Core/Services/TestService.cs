@@ -60,6 +60,7 @@ namespace FastAdminAPI.Core.Services
             model.OperationId = -1;
             model.OperationName = "test";
             model.OperationTime = _dbContext.GetDate();
+
             return await _dbContext.InsertResultAsync<AddCodeModel, S99_Code>(model);
         }
         /// <summary>
@@ -72,6 +73,7 @@ namespace FastAdminAPI.Core.Services
             model.OperationId = -1;
             model.OperationName = "test";
             model.OperationTime = _dbContext.GetDate();
+
             return await _dbContext.UpdateResultAsync<EditCodeModel, S99_Code>(model);
         }
         /// <summary>
@@ -84,6 +86,7 @@ namespace FastAdminAPI.Core.Services
             model.OperationId = -1;
             model.OperationName = "test";
             model.OperationTime = _dbContext.GetDate();
+
             return await _dbContext.SoftDeleteAsync<DelCodeModel, S99_Code>(model);
         }
         /// <summary>

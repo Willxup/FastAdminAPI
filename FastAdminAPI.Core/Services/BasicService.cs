@@ -88,8 +88,8 @@ namespace FastAdminAPI.Core.Services
         public async Task<ResponseModel> EditCode(EditCodeModel model)
         {
             bool isSysFlag = await _dbContext.Queryable<S99_Code>()
-                .Where(S99 => S99.S99_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
-                              S99.S99_SysFlag == (byte)BaseEnums.SystemFlag.System && 
+                .Where(S99 => S99.S99_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
+                              S99.S99_SysFlag == (byte)BaseEnums.SystemFlag.System &&
                               S99.S99_CodeId == model.CodeId)
                 .AnyAsync();
             if (isSysFlag)
@@ -98,6 +98,7 @@ namespace FastAdminAPI.Core.Services
             model.OperationId = _employeeId;
             model.OperationName = _employeeName;
             model.OperationTime = _dbContext.GetDate();
+
             return await _dbContext.UpdateResultAsync<EditCodeModel, S99_Code>(model);
         }
         /// <summary>
@@ -109,8 +110,8 @@ namespace FastAdminAPI.Core.Services
         public async Task<ResponseModel> DelCode(long codeId)
         {
             bool isSysFlag = await _dbContext.Queryable<S99_Code>()
-                .Where(S99 => S99.S99_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
-                              S99.S99_SysFlag == (byte)BaseEnums.SystemFlag.System && 
+                .Where(S99 => S99.S99_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
+                              S99.S99_SysFlag == (byte)BaseEnums.SystemFlag.System &&
                               S99.S99_CodeId == codeId)
                 .AnyAsync();
             if (isSysFlag)
@@ -125,7 +126,6 @@ namespace FastAdminAPI.Core.Services
                     S99_DeleteBy = _employeeName,
                     S99_DeleteTime = SqlFunc.GetDate()
                 });
-
         }
         #endregion
 
@@ -139,9 +139,11 @@ namespace FastAdminAPI.Core.Services
         {
             var result = await _dbContext.Queryable<S10_DataPermission>()
                 .ToListResultAsync(pageSearch, new DataPermissionSettingsPageResult());
+
             if (result?.Code == ResponseCode.Success)
             {
                 var list = result.ToConvertData<List<DataPermissionSettingsPageResult>>();
+
                 if (list?.Count > 0)
                 {
                     //获取全部有效部门
@@ -166,9 +168,11 @@ namespace FastAdminAPI.Core.Services
                             item.PermitDepartsName = string.Join(" ", departs.Where(c => item.PermitDepartIdList.Contains(c.S05_DepartId)).Select(c => c.S05_DepartName));
                         }
                     });
+
                     result.Data = list;
                 }
             }
+
             return result;
         }
         /// <summary>
@@ -179,30 +183,29 @@ namespace FastAdminAPI.Core.Services
         /// <exception cref="UserOperationException"></exception>
         public async Task<ResponseModel> AddDataPermissionSetting(AddDataPermissionSettingModel model)
         {
-            if (model.DepartIdList?.Count > 0)
-            {
-                bool isExist = await _dbContext.Queryable<S10_DataPermission>()
+            if (!model.DepartIdList?.Any() ?? true)
+                throw new UserOperationException("请选择授权部门!");
+
+            bool isExist = await _dbContext.Queryable<S10_DataPermission>()
                     .Where(S10 => S10.S07_EmployeeId == model.EmployeeId)
                     .AnyAsync();
-                if (isExist)
-                    throw new UserOperationException("当前员工已设置过数据权限!");
+            if (isExist)
+                throw new UserOperationException("当前员工已设置过数据权限!");
 
-                model.OperationId = _employeeId;
-                model.OperationName = _employeeName;
-                model.OperationTime = _dbContext.GetDate();
+            model.OperationId = _employeeId;
+            model.OperationName = _employeeName;
+            model.OperationTime = _dbContext.GetDate();
 
-                //新增数据权限
-                var result = await _dbContext.InsertResultAsync<AddDataPermissionSettingModel, S10_DataPermission>(model);
+            //新增数据权限
+            var result = await _dbContext.InsertResultAsync<AddDataPermissionSettingModel, S10_DataPermission>(model);
 
-                if (result?.Code == ResponseCode.Success)
-                {
-                    //释放数据权限
-                    await _dataPermission.Release((long)model.EmployeeId);
-                }
-                return result;
+            if (result?.Code == ResponseCode.Success)
+            {
+                //释放数据权限
+                await _dataPermission.Release((long)model.EmployeeId);
             }
-            else
-                throw new UserOperationException("请选择授权部门!");
+
+            return result;
         }
         /// <summary>
         /// 编辑数据权限设置
@@ -212,37 +215,35 @@ namespace FastAdminAPI.Core.Services
         /// <exception cref="UserOperationException"></exception>
         public async Task<ResponseModel> EditDataPermissionSetting(EditDataPermissionSettingModel model)
         {
-            if (model.DepartIdList?.Count > 0)
-            {
-                //获取数据权限信息
-                var dataPermission = await _dbContext.Queryable<S10_DataPermission>()
-                    .Where(S10 => S10.S10_DataPermissionId == model.DataPermissionId)
-                    .Select(S10 => new
-                    {
-                        DataPermissionId = S10.S10_DataPermissionId,
-                        EmployeeId = S10.S07_EmployeeId,
-                        DepartIds = S10.S05_DepartIds
-                    })
-                    .FirstAsync() ?? throw new UserOperationException("找不到该数据权限设置!");
-
-                model.OperationId = _employeeId;
-                model.OperationName = _employeeName;
-                model.OperationTime = _dbContext.GetDate();
-
-                //更新数据权限
-                var result = await _dbContext.UpdateResultAsync<EditDataPermissionSettingModel, S10_DataPermission>(model);
-
-                if (result?.Code == ResponseCode.Success)
-                {
-                    //释放员工数据权限
-                    await _dataPermission.Release((long)model.EmployeeId);
-                    await _dataPermission.Release(dataPermission.EmployeeId);
-                }
-
-                return result;
-            }
-            else
+            if (!model.DepartIdList?.Any() ?? true)
                 throw new UserOperationException("请选择授权部门!");
+
+            //获取数据权限信息
+            var dataPermission = await _dbContext.Queryable<S10_DataPermission>()
+                .Where(S10 => S10.S10_DataPermissionId == model.DataPermissionId)
+                .Select(S10 => new
+                {
+                    DataPermissionId = S10.S10_DataPermissionId,
+                    EmployeeId = S10.S07_EmployeeId,
+                    DepartIds = S10.S05_DepartIds
+                })
+                .FirstAsync() ?? throw new UserOperationException("找不到该数据权限设置!");
+
+            model.OperationId = _employeeId;
+            model.OperationName = _employeeName;
+            model.OperationTime = _dbContext.GetDate();
+
+            //更新数据权限
+            var result = await _dbContext.UpdateResultAsync<EditDataPermissionSettingModel, S10_DataPermission>(model);
+
+            if (result?.Code == ResponseCode.Success)
+            {
+                //释放员工数据权限
+                await _dataPermission.Release((long)model.EmployeeId);
+                await _dataPermission.Release(dataPermission.EmployeeId);
+            }
+
+            return result;
         }
         /// <summary>
         /// 删除数据权限设置
@@ -272,6 +273,7 @@ namespace FastAdminAPI.Core.Services
                 //释放数据权限
                 await _dataPermission.Release(dataPermission.EmployeeId);
             }
+
             return result;
         }
         #endregion
@@ -306,16 +308,18 @@ namespace FastAdminAPI.Core.Services
                     Remark = S11.S11_Remark
                 })
                 .ToListResultAsync(pageSearch.Index, pageSearch.Size);
+
             if (result?.Code == ResponseCode.Success)
             {
                 var list = result.ToConvertData<List<CheckProcessPageResult>>();
+
                 if (list?.Count > 0)
                 {
                     //获取所有在职员工信息
                     var employees = await _dbContext.Queryable<S07_Employee>()
                         .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
-                    .Select(S07 => new { S07.S07_EmployeeId, S07.S07_Name })
-                    .ToListAsync();
+                        .Select(S07 => new { S07.S07_EmployeeId, S07.S07_Name })
+                        .ToListAsync();
 
                     foreach (var item in list)
                     {
@@ -326,6 +330,7 @@ namespace FastAdminAPI.Core.Services
                             item.ApplicantName = string.Join(",", employees.Where(S07 => applicantIds.Contains(S07.S07_EmployeeId.ToString()))
                                                                            .Select(S07 => S07.S07_Name).ToList());
                         }
+
                         //审核人
                         if (!string.IsNullOrEmpty(item.Approvers))
                         {
@@ -333,10 +338,12 @@ namespace FastAdminAPI.Core.Services
                             if (approverIds?.Count > 0)
                             {
                                 List<string> employeeNameList = new();
+
                                 foreach (var approverId in approverIds)
                                 {
                                     employeeNameList.Add(employees.Where(S07 => S07.S07_EmployeeId == Convert.ToInt64(approverId)).Select(S07 => S07.S07_Name).FirstOrDefault());
                                 }
+
                                 item.ApproverName = string.Join(",", employeeNameList);
                             }
                         }
@@ -346,6 +353,7 @@ namespace FastAdminAPI.Core.Services
                             if (item.ApproveType == (byte)ApplicationEnums.ApproveType.Superior)
                                 item.ApproverName = "上级";
                         }
+
                         //抄送人
                         if (!string.IsNullOrEmpty(item.CarbonCopies))
                         {
@@ -354,9 +362,11 @@ namespace FastAdminAPI.Core.Services
                                                                              .Select(S07 => S07.S07_Name).ToList());
                         }
                     };
+
                     result.Data = list;
                 }
             }
+
             return result;
         }
         /// <summary>
@@ -464,6 +474,7 @@ namespace FastAdminAPI.Core.Services
             model.OperationId = _employeeId;
             model.OperationName = _employeeName;
             model.OperationTime = _dbContext.GetDate();
+
             return await _dbContext.InsertResultAsync<AddCheckProcessModel, S11_CheckProcess>(model);
         }
         /// <summary>
@@ -572,6 +583,7 @@ namespace FastAdminAPI.Core.Services
             model.OperationId = _employeeId;
             model.OperationName = _employeeName;
             model.OperationTime = _dbContext.GetDate();
+
             return await _dbContext.UpdateResultAsync<EditCheckProcessModel, S11_CheckProcess>(model);
         }
         /// <summary>
@@ -583,7 +595,7 @@ namespace FastAdminAPI.Core.Services
         {
             return await _dbContext.Deleteable<S11_CheckProcess>()
                 .Where(S11 => S11.S11_CheckProcessId == checkProcessId)
-                .SoftDeleteAsync(S11 => new S11_CheckProcess 
+                .SoftDeleteAsync(S11 => new S11_CheckProcess
                 {
                     S11_IsDelete = (byte)BaseEnums.TrueOrFalse.True,
                     S11_DeleteId = _employeeId,

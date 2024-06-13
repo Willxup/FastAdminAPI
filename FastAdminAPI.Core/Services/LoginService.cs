@@ -58,6 +58,7 @@ namespace FastAdminAPI.Core.Services
 
             employee.UserId = user.UserId;
             employee.Account = user.Account;
+
             return employee;
         }
         /// <summary>
@@ -98,6 +99,7 @@ namespace FastAdminAPI.Core.Services
 
             employee.UserId = user.UserId;
             employee.Account = user.Account;
+
             return employee;
         }
         /// <summary>

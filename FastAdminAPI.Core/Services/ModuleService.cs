@@ -63,6 +63,7 @@ namespace FastAdminAPI.Core.Services
             model.OperationTime = _dbContext.GetDate();
             model.CornerMark = await CornerMarkGenerator.GetCornerMark(_dbContext, "S02_Module", "S02_ModuleId",
                 "S02_CornerMark", "S02_ParentModuleId", model.ParentModuleId.ToString());
+
             return await _dbContext.InsertResultAsync<AddModuleModel, S02_Module>(model);
         }
         /// <summary>
@@ -75,6 +76,7 @@ namespace FastAdminAPI.Core.Services
             model.OperationId = _employeeId;
             model.OperationName = _employeeName;
             model.OperationTime = _dbContext.GetDate();
+
             return await _dbContext.UpdateResultAsync<EditModuleModel, S02_Module>(model);
         }
         /// <summary>

@@ -32,8 +32,8 @@ namespace FastAdminAPI.Core.Services
         /// <param name="dbContext"></param>
         /// <param name="httpContext"></param>
         /// <param name="dataPermissionService"></param>
-        public PostService(ISqlSugarClient dbContext, IHttpContextAccessor httpContext, 
-            IDataPermissionService dataPermissionService) : base(dbContext, httpContext) 
+        public PostService(ISqlSugarClient dbContext, IHttpContextAccessor httpContext,
+            IDataPermissionService dataPermissionService) : base(dbContext, httpContext)
         {
             _dataPermissionService = dataPermissionService;
         }
@@ -138,14 +138,18 @@ namespace FastAdminAPI.Core.Services
             model.OperationId = _employeeId;
             model.OperationName = _employeeName;
             model.OperationTime = _dbContext.GetDate();
+
             model.CornerMark = await CornerMarkGenerator.GetCornerMark(_dbContext, "S06_Post", "S06_PostId",
                 "S06_CornerMark", "S06_ParentPostId", model.ParentPostId.ToString());
+
             var result = await _dbContext.InsertResultAsync<AddPostModel, S06_Post>(model);
+
             if (result?.Code == ResponseCode.Success)
             {
                 //释放数据权限
                 await _dataPermissionService.Release();
             }
+
             return result;
         }
         /// <summary>
@@ -158,12 +162,15 @@ namespace FastAdminAPI.Core.Services
             model.OperationId = _employeeId;
             model.OperationName = _employeeName;
             model.OperationTime = _dbContext.GetDate();
+
             var result = await _dbContext.UpdateResultAsync<EditPostModel, S06_Post>(model);
+
             if (result?.Code == ResponseCode.Success)
             {
                 //释放数据权限
                 await _dataPermissionService.Release();
             }
+
             return result;
         }
         /// <summary>
@@ -189,7 +196,7 @@ namespace FastAdminAPI.Core.Services
 
             var result = await _dbContext.Deleteable<S06_Post>()
                 .Where(S06 => S06.S06_PostId == postId)
-                .SoftDeleteAsync(S06 => new S06_Post 
+                .SoftDeleteAsync(S06 => new S06_Post
                 {
                     S06_IsDelete = (byte)BaseEnums.TrueOrFalse.True,
                     S06_DeleteId = _employeeId,
@@ -202,6 +209,7 @@ namespace FastAdminAPI.Core.Services
                 //释放数据权限
                 await _dataPermissionService.Release();
             }
+
             return result;
         }
     }

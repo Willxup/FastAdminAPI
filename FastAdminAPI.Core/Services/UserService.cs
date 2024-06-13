@@ -195,6 +195,7 @@ namespace FastAdminAPI.Core.Services
                     .Where(S12 => S12.S12_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                   S12.S12_IsFinishCheck == (byte)BaseEnums.IsFinish.Unfinish)
                     .ToListAsync();
+
                 if (checks?.Count > 0)
                 {
                     int successCount = 0;
@@ -289,7 +290,7 @@ namespace FastAdminAPI.Core.Services
         {
             var isExist = await _dbContext.Queryable<S12_Check>()
                 .Where(S12 => S12.S12_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
-                              S12.S12_IsFinishCheck == (byte)BaseEnums.IsFinish.Unfinish && 
+                              S12.S12_IsFinishCheck == (byte)BaseEnums.IsFinish.Unfinish &&
                               S12.S12_CheckId == checkId)
                 .AnyAsync();
             if (!isExist)
@@ -333,6 +334,7 @@ namespace FastAdminAPI.Core.Services
                 var approvers = JsonConvert.DeserializeObject<List<ApproverInfoModel>>(check.S12_ApproversData);
 
                 List<CheckRecordModel> list = new();
+
                 if (approvers?.Count > 0)
                 {
                     var records = await _dbContext.Queryable<S13_CheckRecords>()

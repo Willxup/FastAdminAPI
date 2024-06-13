@@ -39,7 +39,9 @@ namespace FastAdminAPI.Core.Services
             try
             {
                 QyWechatClient client = new(_redis);
+
                 string result = await client.GetUserId(code);
+
                 return ResponseModel.Success(result);
             }
             catch (Exception ex)
@@ -59,6 +61,7 @@ namespace FastAdminAPI.Core.Services
             try
             {
                 QyWechatClient client = new(_redis);
+
                 return await client.SendMessage(model);
             }
             catch (Exception ex)
@@ -78,6 +81,7 @@ namespace FastAdminAPI.Core.Services
             try
             {
                 QyWechatClient client = new(_redis);
+
                 return await client.SendMessage(model);
             }
             catch (Exception ex)

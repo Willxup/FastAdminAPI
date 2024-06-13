@@ -57,13 +57,13 @@ namespace FastAdminAPI.Core.Services
                                         .Select(S02 => S02.S02_ModuleName),
                     DepartName = SqlFunc.Subqueryable<S05_Department>()
                                         .InnerJoin<S08_EmployeePost>((S05, S08) => S05.S05_DepartId == S08.S05_DepartId)
-                                        .Where((S05, S08) => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
-                                                             S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True && 
+                                        .Where((S05, S08) => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
+                                                             S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True &&
                                                              S08.S07_EmployeeId == S07.S07_EmployeeId)
                                         .Select((S05, S08) => S05.S05_DepartName),
                     PostName = SqlFunc.Subqueryable<S06_Post>()
                                         .InnerJoin<S08_EmployeePost>((S06, S08) => S06.S06_PostId == S08.S06_PostId)
-                                        .Where((S06, S08) => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
+                                        .Where((S06, S08) => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                                              S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True &&
                                                              S08.S07_EmployeeId == S07.S07_EmployeeId)
                                         .Select((S06, S08) => S06.S06_PostName),
@@ -86,13 +86,13 @@ namespace FastAdminAPI.Core.Services
                                         .Select(S02 => S02.S02_ModuleName),
                     DepartName = SqlFunc.Subqueryable<S05_Department>()
                                         .InnerJoin<S08_EmployeePost>((S05, S08) => S05.S05_DepartId == S08.S05_DepartId)
-                                        .Where((S05, S08) => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
+                                        .Where((S05, S08) => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                                              S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True &&
                                                              S08.S07_EmployeeId == S07.S07_EmployeeId)
                                         .Select((S05, S08) => S05.S05_DepartName),
                     PostName = SqlFunc.Subqueryable<S06_Post>()
                                         .InnerJoin<S08_EmployeePost>((S06, S08) => S06.S06_PostId == S08.S06_PostId)
-                                        .Where((S06, S08) => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
+                                        .Where((S06, S08) => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                                              S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True &&
                                                              S08.S07_EmployeeId == S07.S07_EmployeeId)
                                         .Select((S06, S08) => S06.S06_PostName),

@@ -81,6 +81,7 @@ namespace FastAdminAPI.Core.Services
         {
             if (model.DepartLabelList?.Count < 0)
                 throw new UserOperationException("部门标签不能为空!");
+
             if (model.DepartLabelList?.Count > 4)
                 throw new UserOperationException("部门标签不能多超过三个!");
 
@@ -91,12 +92,15 @@ namespace FastAdminAPI.Core.Services
             model.OperationTime = _dbContext.GetDate();
             model.CornerMark = await CornerMarkGenerator.GetCornerMark(_dbContext, "S05_Department", "S05_DepartId",
                 "S05_CornerMark", "S05_ParentDepartId", model.ParentDepartId.ToString());
+
             var result = await _dbContext.InsertResultAsync<AddDepartModel, S05_Department>(model);
+
             if (result?.Code == ResponseCode.Success)
             {
                 //释放数据权限
                 await _dataPermissionService.Release();
             }
+
             return result;
         }
         /// <summary>
@@ -106,18 +110,21 @@ namespace FastAdminAPI.Core.Services
         /// <returns></returns>
         public async Task<ResponseModel> EditDepartment(EditDepartModel model)
         {
-            if(model.DepartLabelList?.Count > 0)
+            if (model.DepartLabelList?.Count > 0)
                 model.Label = string.Join(",", model.DepartLabelList);
 
             model.OperationId = _employeeId;
             model.OperationName = _employeeName;
             model.OperationTime = _dbContext.GetDate();
+
             var result = await _dbContext.UpdateResultAsync<EditDepartModel, S05_Department>(model);
+
             if (result?.Code == ResponseCode.Success)
             {
                 //释放数据权限
                 await _dataPermissionService.Release();
             }
+
             return result;
         }
         /// <summary>
@@ -143,7 +150,7 @@ namespace FastAdminAPI.Core.Services
 
             var result = await _dbContext.Deleteable<S05_Department>()
                 .Where(S05 => S05.S05_DepartId == departId)
-                .SoftDeleteAsync(S05 => new S05_Department 
+                .SoftDeleteAsync(S05 => new S05_Department
                 {
                     S05_IsDelete = (byte)BaseEnums.TrueOrFalse.True,
                     S05_DeleteId = _employeeId,
@@ -156,6 +163,7 @@ namespace FastAdminAPI.Core.Services
                 //释放数据权限
                 await _dataPermissionService.Release();
             }
+
             return result;
         }
         /// <summary>
@@ -173,6 +181,7 @@ namespace FastAdminAPI.Core.Services
                               S05.S05_CornerMark.StartsWith(cornerMark))
                 .Select(S05 => S05.S05_DepartId)
                 .ToListAsync();
+
             if (departIds?.Count >= 1)
             {
                 //查询岗位信息
@@ -203,9 +212,11 @@ namespace FastAdminAPI.Core.Services
                     PostSum = postList?.Count,
                     MaxEmployeeNums = $"{employeePostList?.Count}/{postList.Sum(c => c.S06_MaxEmployeeNums)}"
                 };
+
                 response.Data = maxEmployeeNums;
                 return response;
             }
+
             return response;
         }
     }

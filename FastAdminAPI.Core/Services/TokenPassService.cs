@@ -61,6 +61,7 @@ namespace FastAdminAPI.Core.Services
         public async Task<Dictionary<string, List<CodeModel>>> GetMultiCodeList(List<string> codeList)
         {
             Dictionary<string, List<CodeModel>> result = new();
+
             if (codeList?.Count > 0)
             {
                 var list = await _dbContext.Queryable<S99_Code>()

@@ -37,16 +37,19 @@ namespace FastAdminAPI.Core.Services
         public async Task<ResponseModel> GetWechatSign(WeChatSignRequestModel model)
         {
             ResponseModel result = ResponseModel.Success();
+
             try
             {
 
                 WeChatOfficialAccountsClient share = new(_redis, model.AppId);
+
                 result.Data = await share.GetSign(model.Url);
             }
             catch (Exception ex)
             {
                 throw new UserOperationException($"获取微信公众号签名失败：{ex.Message}");
             }
+
             return result;
         }
         /// <summary>
@@ -58,16 +61,19 @@ namespace FastAdminAPI.Core.Services
         public async Task<ResponseModel> GetWechatUserOpenId(string appId, string code)
         {
             ResponseModel result = ResponseModel.Success();
+
             try
             {
 
                 WeChatOfficialAccountsClient share = new(_redis, appId);
+
                 result.Data = await share.GetWechatUserOpenId(code);
             }
             catch (Exception ex)
             {
                 throw new UserOperationException($"{ex.Message}");
             }
+
             return result;
         }
     }
