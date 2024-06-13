@@ -81,8 +81,10 @@ namespace FastAdminAPI.Core.IServices
         /// 获取员工岗位列表
         /// </summary>
         /// <param name="employeeId">员工Id</param>
+        /// <param name="index">页数</param>
+        /// <param name="size">行数</param>
         /// <returns></returns>
-        Task<ResponseModel> GetEmployeePostList(long employeeId);
+        Task<ResponseModel> GetEmployeePostList(long employeeId, int? index, int? size);
         /// <summary>
         /// 新增员工岗位
         /// </summary>

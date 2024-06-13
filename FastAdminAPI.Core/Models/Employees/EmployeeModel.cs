@@ -277,9 +277,17 @@ namespace FastAdminAPI.Core.Models.Employee
         public DateTime? TerminationDate { get; set; }
 
         /// <summary>
+        /// 部门Id
+        /// </summary>
+        public long? DepartId { get; set; }
+        /// <summary>
         /// 部门名称
         /// </summary>
-        public string DepartmentName { get; set; }
+        public string DepartName { get; set; }
+        /// <summary>
+        /// 岗位Id
+        /// </summary>
+        public long? PostId { get; set; }
         /// <summary>
         /// 岗位名称
         /// </summary>

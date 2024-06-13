@@ -304,7 +304,7 @@
             <param name="pageSearch"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.GetEmployeeInfo(System.Nullable{System.Int64})">
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.GetEmployeeInfo(System.Nullable{System.Int64},System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
             获取员工信息
             </summary>
@@ -325,25 +325,27 @@
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.DimissionEmployee(System.Nullable{System.Int64})">
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.DimissionEmployee(System.Nullable{System.Int64},System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
             离职员工
             </summary>
             <param name="employeeId">员工Id</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.DelEmployee(System.Nullable{System.Int64})">
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.DelEmployee(System.Nullable{System.Int64},System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
             删除员工
             </summary>
             <param name="employeeId">员工Id</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.GetEmployeePostList(System.Nullable{System.Int64})">
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.GetEmployeePostList(System.Nullable{System.Int64},System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
             获取员工岗位列表
             </summary>
             <param name="employeeId">员工Id</param>
+            <param name="index">页数</param>
+            <param name="size">行数</param>
             <returns></returns>
         </member>
         <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.AddEmployeePost(FastAdminAPI.Core.Models.Employee.AddEmployeePostModel)">
@@ -1145,11 +1147,13 @@
             <param name="employeeId">员工Id</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IEmployeeService.GetEmployeePostList(System.Int64)">
+        <member name="M:FastAdminAPI.Core.IServices.IEmployeeService.GetEmployeePostList(System.Int64,System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
             获取员工岗位列表
             </summary>
             <param name="employeeId">员工Id</param>
+            <param name="index">页数</param>
+            <param name="size">行数</param>
             <returns></returns>
         </member>
         <member name="M:FastAdminAPI.Core.IServices.IEmployeeService.AddEmployeePost(FastAdminAPI.Core.Models.Employee.AddEmployeePostModel)">
@@ -2231,9 +2235,19 @@
             离职日期
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.DepartmentName">
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.DepartId">
+            <summary>
+            部门Id
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.DepartName">
             <summary>
             部门名称
+            </summary>
+        </member>
+        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.PostId">
+            <summary>
+            岗位Id
             </summary>
         </member>
         <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeInfoModel.PostName">
@@ -3467,11 +3481,13 @@
             <param name="employeeId">员工Id</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.EmployeeService.GetEmployeePostList(System.Int64)">
+        <member name="M:FastAdminAPI.Core.Services.EmployeeService.GetEmployeePostList(System.Int64,System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
             获取员工岗位列表
             </summary>
             <param name="employeeId">员工Id</param>
+            <param name="index">页数</param>
+            <param name="size">行数</param>
             <returns></returns>
         </member>
         <member name="M:FastAdminAPI.Core.Services.EmployeeService.AddEmployeePost(FastAdminAPI.Core.Models.Employee.AddEmployeePostModel)">

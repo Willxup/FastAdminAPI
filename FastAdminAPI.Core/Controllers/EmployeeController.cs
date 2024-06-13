@@ -102,7 +102,7 @@ namespace FastAdminAPI.Core.Controllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(EmployeeInfoModel), 200)]
-        public async Task<ResponseModel> GetEmployeeInfo([FromQuery][Required(ErrorMessage = "岗位Id不能为空!")] long? employeeId)
+        public async Task<ResponseModel> GetEmployeeInfo([FromQuery][Required(ErrorMessage = "岗位Id不能为空!")] long? employeeId, int? index, int? size)
         {
             return Success(await _employeeService.GetEmployeeInfo((long)employeeId));
         }
@@ -132,7 +132,7 @@ namespace FastAdminAPI.Core.Controllers
         /// <param name="employeeId">员工Id</param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<ResponseModel> DimissionEmployee([FromQuery][Required(ErrorMessage = "员工Id不能为空!")] long? employeeId)
+        public async Task<ResponseModel> DimissionEmployee([FromQuery][Required(ErrorMessage = "员工Id不能为空!")] long? employeeId, int? index, int? size)
         {
             return await _employeeService.DimissionEmployee((long)employeeId);
         }
@@ -142,7 +142,7 @@ namespace FastAdminAPI.Core.Controllers
         /// <param name="employeeId">员工Id</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<ResponseModel> DelEmployee([FromQuery][Required(ErrorMessage = "员工Id不能为空!")] long? employeeId)
+        public async Task<ResponseModel> DelEmployee([FromQuery][Required(ErrorMessage = "员工Id不能为空!")] long? employeeId, int? index, int? size)
         {
             return await _employeeService.DelEmployee((long)employeeId);
         }
@@ -153,12 +153,14 @@ namespace FastAdminAPI.Core.Controllers
         /// 获取员工岗位列表
         /// </summary>
         /// <param name="employeeId">员工Id</param>
+        /// <param name="index">页数</param>
+        /// <param name="size">行数</param>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(EmployeePostResult), 200)]
-        public async Task<ResponseModel> GetEmployeePostList([FromQuery][Required(ErrorMessage = "员工Id不能为空!")] long? employeeId)
+        public async Task<ResponseModel> GetEmployeePostList([FromQuery][Required(ErrorMessage = "员工Id不能为空!")] long? employeeId, int? index, int? size)
         {
-            return await _employeeService.GetEmployeePostList((long)employeeId);
+            return await _employeeService.GetEmployeePostList((long)employeeId, index, size);
         }
         /// <summary>
         /// 新增员工岗位
