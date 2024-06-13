@@ -366,55 +366,59 @@ namespace FastAdminAPI.Core.Services
         /// <returns></returns>
         public async Task<ResponseModel> AddCheckProcess(AddCheckProcessModel model)
         {
-            //获取指定申请类型的所有申请人
-            var applicants = await _dbContext.Queryable<S11_CheckProcess>()
-                .Where(S11 => S11.S11_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S11.S99_ApplicationType == model.ApplicationType)
-                .Select(S11 => S11.S07_Applicants).ToListAsync();
-
-            if (applicants?.Count > 0)
-            {
-                //统计是否有相同的通用审批(无申请人)
-                int commonCheckNums = 0;
-
-                //获取所有申请人
-                List<string> applicantIds = new();
-
-                foreach (var item in applicants)
+            #region 校验
+            // 获取相同类型的审批流程
+            var checkProcesses = await _dbContext.Queryable<S11_CheckProcess>()
+                .Where(S11 => S11.S11_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
+                              S11.S99_ApplicationType == model.ApplicationType)
+                .Select(S11 => new
                 {
-                    if (!string.IsNullOrEmpty(item))
-                    {
-                        applicantIds.AddRange(item.Split(",").ToList());
-                    }
-                    else
-                    {
-                        commonCheckNums++;
-                    }
-                }
+                    CheckProcessId = S11.S11_CheckProcessId,
+                    Applicants = S11.S07_Applicants
+                }).ToListAsync();
 
+            if (checkProcesses?.Count > 0)
+            {
+                // 如果有申请人，说明不是通用审批流程
                 if (model.ApplicantList?.Count > 0)
                 {
+                    // 获取所有申请人
+                    List<string> applicantIds = new();
+
+                    // 将本次审批流程中的申请人一起加入
                     applicantIds.AddRange(model.ApplicantList);
 
-                    //判断申请人是否已经存在
+                    // 将所有相同类型的审批流程的申请人取出
+                    foreach (var item in checkProcesses.Where(c => !string.IsNullOrEmpty(c.Applicants)))
+                    {
+                        applicantIds.AddRange(item.Applicants.Split(",").ToList());
+                    }
+
+                    // 判断申请人是否重复出现过
                     if (applicantIds.GroupBy(i => i).Any(g => g.Count() > 1))
                     {
                         throw new UserOperationException("已存在相同类型相同申请人的审批流程!");
                     }
                 }
+                // 如果没有申请人，说明是通用审批流程
                 else
                 {
-                    //判断通用审批(无申请人)是否存在
-                    if (commonCheckNums > 0)
-                        throw new UserOperationException("已存在相同类型的通用审批流程!");
+                    bool isSameCommonCheck = checkProcesses.Where(c => string.IsNullOrEmpty(c.Applicants)).Any();
+
+                    if (isSameCommonCheck)
+                    {
+                        throw new UserOperationException("已存在相同类型相同申请人的审批流程!");
+                    }
                 }
             }
+            #endregion
 
-            //上级
+            // 上级
             if (model.ApproveType == (byte)ApplicationEnums.ApproveType.Superior)
             {
                 model.Approvers = null;
             }
-            //指定人员
+            // 指定人员
             else if (model.ApproveType == (byte)ApplicationEnums.ApproveType.Designee)
             {
                 if (model.ApproverList?.Count > 0)
@@ -427,12 +431,12 @@ namespace FastAdminAPI.Core.Services
                 else
                     throw new UserOperationException("请选择审批人!");
             }
-            //自定义
+            // 自定义
             else if (model.ApproveType == (byte)ApplicationEnums.ApproveType.Customize)
             {
                 model.Approvers = null;
             }
-            //上级+指定人员
+            // 上级+指定人员
             else if (model.ApproveType == (byte)ApplicationEnums.ApproveType.SuperiorAndDesignee)
             {
                 if (model.ApproverList?.Count > 0)
@@ -446,12 +450,12 @@ namespace FastAdminAPI.Core.Services
                     throw new UserOperationException("请选择审批人!");
             }
 
-            //申请人
+            // 申请人
             if (model.ApplicantList?.Count > 0)
             {
                 model.Applicants = string.Join(",", model.ApplicantList);
             }
-            //抄送人
+            // 抄送人
             if (model.CarbonCopieList?.Count > 0)
             {
                 model.CarbonCopies = string.Join(",", model.CarbonCopieList);
@@ -469,56 +473,60 @@ namespace FastAdminAPI.Core.Services
         /// <returns></returns>
         public async Task<ResponseModel> EditCheckProcess(EditCheckProcessModel model)
         {
-            //查询当前被修改审批流程之外的审批流程
-            var applicants = await _dbContext.Queryable<S11_CheckProcess>()
-                .Where(S11 => S11.S11_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
+            #region 校验
+            // 获取相同类型的审批流程(除了当前编辑的流程)
+            var checkProcesses = await _dbContext.Queryable<S11_CheckProcess>()
+                .Where(S11 => S11.S11_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                               S11.S99_ApplicationType == model.ApplicationType &&
                               S11.S11_CheckProcessId != model.CheckProcessId)
-                .Select(S11 => S11.S07_Applicants).ToListAsync();
-
-            if (applicants?.Count > 0)
-            {
-                //统计是否有相同的通用审批(无申请人)
-                int commonCheckNums = 0;
-
-                //获取所有申请人
-                List<string> applicantIds = new();
-                foreach (var item in applicants)
+                .Select(S11 => new
                 {
-                    if (!string.IsNullOrEmpty(item))
-                    {
-                        applicantIds.AddRange(item.Split(",").ToList());
-                    }
-                    else
-                    {
-                        commonCheckNums++;
-                    }
-                }
+                    CheckProcessId = S11.S11_CheckProcessId,
+                    Applicants = S11.S07_Applicants
+                }).ToListAsync();
 
+            if (checkProcesses?.Count > 0)
+            {
+                // 如果有申请人，说明不是通用审批流程
                 if (model.ApplicantList?.Count > 0)
                 {
+                    // 获取所有申请人
+                    List<string> applicantIds = new();
+
+                    // 将本次审批流程中的申请人一起加入
                     applicantIds.AddRange(model.ApplicantList);
 
-                    //判断申请人是否已经存在
+                    // 将所有相同类型的审批流程的申请人取出
+                    foreach (var item in checkProcesses.Where(c => !string.IsNullOrEmpty(c.Applicants)))
+                    {
+                        applicantIds.AddRange(item.Applicants.Split(",").ToList());
+                    }
+
+                    // 判断申请人是否重复出现过
                     if (applicantIds.GroupBy(i => i).Any(g => g.Count() > 1))
                     {
                         throw new UserOperationException("已存在相同类型相同申请人的审批流程!");
                     }
                 }
+                // 如果没有申请人，说明是通用审批流程
                 else
                 {
-                    //判断通用审批(无申请人)是否存在
-                    if (commonCheckNums > 0)
-                        throw new UserOperationException("已存在相同类型的通用审批流程!");
+                    bool isSameCommonCheck = checkProcesses.Where(c => string.IsNullOrEmpty(c.Applicants)).Any();
+
+                    if (isSameCommonCheck)
+                    {
+                        throw new UserOperationException("已存在相同类型相同申请人的审批流程!");
+                    }
                 }
             }
+            #endregion
 
-            //上级
+            // 上级
             if (model.ApproveType == (byte)ApplicationEnums.ApproveType.Superior)
             {
                 model.Approvers = null;
             }
-            //指定人员
+            // 指定人员
             else if (model.ApproveType == (byte)ApplicationEnums.ApproveType.Designee)
             {
                 if (model.ApproverList?.Count > 0)
@@ -531,12 +539,12 @@ namespace FastAdminAPI.Core.Services
                 else
                     throw new UserOperationException("请选择审批人!");
             }
-            //自定义
+            // 自定义
             else if (model.ApproveType == (byte)ApplicationEnums.ApproveType.Customize)
             {
                 model.Approvers = null;
             }
-            //上级+指定人员
+            // 上级+指定人员
             else if (model.ApproveType == (byte)ApplicationEnums.ApproveType.SuperiorAndDesignee)
             {
                 if (model.ApproverList?.Count > 0)
@@ -550,12 +558,12 @@ namespace FastAdminAPI.Core.Services
                     throw new UserOperationException("请选择审批人!");
             }
 
-            //申请人
+            // 申请人
             if (model.ApplicantList?.Count > 0)
             {
                 model.Applicants = string.Join(",", model.ApplicantList);
             }
-            //抄送人
+            // 抄送人
             if (model.CarbonCopieList?.Count > 0)
             {
                 model.CarbonCopies = string.Join(",", model.CarbonCopieList);
