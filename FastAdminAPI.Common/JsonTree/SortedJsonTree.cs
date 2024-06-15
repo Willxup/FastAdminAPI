@@ -51,15 +51,20 @@ namespace FastAdminAPI.Common.JsonTree
         {
             if (dataSource?.Count > 0)
             {
+                //获取父级
                 var parents = dataSource.Where(c => c.ParentId == null || c.ParentId == 0)?.OrderBy(c => c.Priority)?.ToList();
+
+                //获取子级
                 var childs = dataSource.Where(c => c.ParentId != null && c.ParentId != 0)?.OrderBy(c => c.Priority)?.ToList();
 
                 parents?.ForEach(item =>
                 {
                     item.AddChildren(childs);
                 });
+
                 return parents;
             }
+
             return new List<T>();
         }
         /// <summary>
@@ -72,11 +77,15 @@ namespace FastAdminAPI.Common.JsonTree
         public static string CreateJsonTrees<T>(List<T> dataSource, string keyWord = null)
             where T : SortedJsonTree
         {
+            //创建树结构
             var trees = CreateTrees(dataSource);
+
+            //关键字过滤
             if (!string.IsNullOrWhiteSpace(keyWord))
             {
                 trees = FilterKeyWord(trees, keyWord);
             }
+
             return JsonConvert.SerializeObject(trees);
         }
 
@@ -96,8 +105,10 @@ namespace FastAdminAPI.Common.JsonTree
                 {
                     item.AddChildren(childs);
                 });
+
                 return parents;
             }
+
             return new List<T>();
         }
         /// <summary>
@@ -111,11 +122,14 @@ namespace FastAdminAPI.Common.JsonTree
         public static string CreateCustomJsonTrees<T>(List<T> parents, List<T> childs, string keyWord = null)
             where T : SortedJsonTree
         {
+            //创建树结构
             var trees = CreateCustomTrees(parents, childs);
+
             if (!string.IsNullOrWhiteSpace(keyWord))
             {
                 trees = FilterKeyWord(trees, keyWord);
             }
+
             return JsonConvert.SerializeObject(trees);
         }
 
@@ -126,15 +140,18 @@ namespace FastAdminAPI.Common.JsonTree
         private void AddChildren<TParameter>(List<TParameter> dataSource)
             where TParameter : SortedJsonTree
         {
-            var result = dataSource.Where(p => p.ParentId == this.Id).OrderBy(p => p.Priority).ThenBy(p => p.Id).ToList();
-            if (result?.Count > 0)
+            var childs = dataSource.Where(p => p.ParentId == this.Id).OrderBy(p => p.Priority).ThenBy(p => p.Id).ToList();
+
+            if (childs?.Count > 0)
             {
-                var children = new List<SortedJsonTree>();
-                foreach (var item in result)
+                List<SortedJsonTree> children = new();
+
+                foreach (var item in childs)
                 {
                     item.AddChildren(dataSource);
                     children.Add(item);
                 }
+
                 this.Children = children;
             }
         }
@@ -147,7 +164,8 @@ namespace FastAdminAPI.Common.JsonTree
         private static List<T> FilterKeyWord<T>(List<T> trees, string KeyWord)
             where T : SortedJsonTree
         {
-            var result = trees;
+            List<T> result = trees;
+
             if (trees?.Count > 0)
             {
                 for (int i = 0; i < trees?.Count; i++)
@@ -167,6 +185,7 @@ namespace FastAdminAPI.Common.JsonTree
                             continue;
                         }
                     }
+
                     //再次判断这个节点是否还包含子节点
                     //如果不包含则说明子节点都不包含关键字,需要移除父节点
                     if (!trees[i].Name.Contains(KeyWord) && (trees[i].Children == null || trees[i].Children.Count == 0))
@@ -176,6 +195,7 @@ namespace FastAdminAPI.Common.JsonTree
                     }
                 }
             }
+
             return result;
         }
     }

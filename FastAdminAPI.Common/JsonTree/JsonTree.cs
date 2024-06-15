@@ -46,15 +46,20 @@ namespace FastAdminAPI.Common.JsonTree
         {
             if (dataSource?.Count > 0)
             {
+                //获取父级
                 var parents = dataSource.Where(c => c.ParentId == null || c.ParentId == 0)?.ToList();
+
+                //获取子级
                 var childs = dataSource.Where(c => c.ParentId != null && c.ParentId != 0)?.ToList();
 
                 parents?.ForEach(item =>
                 {
                     item.AddChildren(childs);
                 });
+
                 return parents;
             }
+
             return new List<T>();
         }
         /// <summary>
@@ -67,11 +72,15 @@ namespace FastAdminAPI.Common.JsonTree
         public static string CreateJsonTrees<T>(List<T> dataSource, string keyWord = null)
             where T : JsonTree
         {
+            //创建树结构
             var trees = CreateTrees(dataSource);
+
+            //关键字过滤
             if (!string.IsNullOrWhiteSpace(keyWord))
             {
                 trees = FilterKeyWord(trees, keyWord);
             }
+
             return JsonConvert.SerializeObject(trees);
         }
 
@@ -85,14 +94,16 @@ namespace FastAdminAPI.Common.JsonTree
         public static List<T> CreateCustomTrees<T>(List<T> parents, List<T> childs)
             where T : JsonTree
         {
-            if(parents?.Count > 0 && childs?.Count > 0)
+            if (parents?.Count > 0 && childs?.Count > 0)
             {
                 parents?.ForEach(item =>
                 {
                     item.AddChildren(childs);
                 });
+
                 return parents;
             }
+
             return new List<T>();
         }
         /// <summary>
@@ -106,11 +117,14 @@ namespace FastAdminAPI.Common.JsonTree
         public static string CreateCustomJsonTrees<T>(List<T> parents, List<T> childs, string keyWord = null)
             where T : JsonTree
         {
+            //创建树结构
             var trees = CreateCustomTrees(parents, childs);
+
             if (!string.IsNullOrWhiteSpace(keyWord))
             {
                 trees = FilterKeyWord(trees, keyWord);
             }
+
             return JsonConvert.SerializeObject(trees);
         }
 
@@ -122,14 +136,17 @@ namespace FastAdminAPI.Common.JsonTree
             where TParameter : JsonTree
         {
             var childs = dataSource?.Where(p => p.ParentId == this.Id)?.ToList();
+
             if (childs?.Count > 0)
             {
-                var children = new List<JsonTree>();
+                List<JsonTree> children = new();
+
                 foreach (var item in childs)
                 {
                     item.AddChildren(dataSource);
                     children.Add(item);
                 }
+
                 this.Children = children;
             }
         }
@@ -142,7 +159,8 @@ namespace FastAdminAPI.Common.JsonTree
         private static List<T> FilterKeyWord<T>(List<T> trees, string KeyWord)
             where T : JsonTree
         {
-            var result = trees;
+            List<T> result = trees;
+
             if (trees?.Count > 0)
             {
                 for (int i = 0; i < trees?.Count; i++)
@@ -162,6 +180,7 @@ namespace FastAdminAPI.Common.JsonTree
                             continue;
                         }
                     }
+
                     //再次判断这个节点是否还包含子节点
                     //如果不包含则说明子节点都不包含关键字,需要移除父节点
                     if (!trees[i].Name.Contains(KeyWord) && (trees[i].Children == null || trees[i].Children.Count == 0))
@@ -171,6 +190,7 @@ namespace FastAdminAPI.Common.JsonTree
                     }
                 }
             }
+
             return result;
         }
     }
