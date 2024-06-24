@@ -107,11 +107,12 @@ namespace FastAdminAPI.EventBus.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         [ProducesResponseType(typeof(WeChatSignModel), 200)]
-        public async Task<ResponseModel> GetWeChatAccessToken([FromBody] WeChatSignRequestModel model)
+        public async Task<ResponseModel> GetWeChatAccessToken([FromQuery][Required(ErrorMessage = "微信公众号AppId不能为空！")] string appId,
+            [FromQuery][Required(ErrorMessage = "请求地址不能为空!")] string url)
         {
-            return await _wechatApi.GetWechatSign(model);
+            return await _wechatApi.GetWechatSign(appId, url);
         }
         /// <summary>
         /// 获取微信公众号用户OpenId

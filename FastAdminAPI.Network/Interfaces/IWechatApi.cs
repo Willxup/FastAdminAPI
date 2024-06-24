@@ -1,5 +1,4 @@
 ﻿using FastAdminAPI.Common.BASE;
-using FastAdminAPI.Network.Models.Wechat;
 using Refit;
 using System.Threading.Tasks;
 
@@ -12,8 +11,8 @@ namespace FastAdminAPI.Network.Interfaces
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [Post("/api/WechatApi/GetWechatSign")]
-        Task<ResponseModel> GetWechatSign([Body] WeChatSignRequestModel model);
+        [Get("/api/WechatApi/GetWechatSign")]
+        Task<ResponseModel> GetWechatSign([Query] string appId, [Query] string url);
         /// <summary>
         /// 获取微信公众号用户OpenId
         /// </summary>

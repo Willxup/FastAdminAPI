@@ -25,16 +25,4 @@ namespace FastAdminAPI.Network.Models.Wechat
         /// </summary>
         public string Sign { get; set; }
     }
-    public class WeChatSignRequestModel
-    {
-        /// <summary>
-        /// 请求完整地址
-        /// </summary>
-        public string Url { get; set; }
-        /// <summary>
-        /// 微信公众号AppId
-        /// </summary>
-        [Required]
-        public string AppId { get; set; }
-    }
 }
