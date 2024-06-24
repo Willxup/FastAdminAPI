@@ -12,9 +12,10 @@ namespace FastAdminAPI.Core.IServices
         /// <summary>
         /// 获取微信接口调用权限签名
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="appId">微信公众号AppId</param>
+        /// <param name="url">请求完整地址</param>
         /// <returns></returns>
-        Task<ResponseModel> GetWechatSign(WeChatSignRequestModel model);
+        Task<ResponseModel> GetWechatSign(string appId, string url);
         /// <summary>
         /// 获取微信公众号用户OpenId
         /// </summary>

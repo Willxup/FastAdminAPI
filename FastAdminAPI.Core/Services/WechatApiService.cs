@@ -32,18 +32,19 @@ namespace FastAdminAPI.Core.Services
         /// <summary>
         /// 获取微信接口调用权限签名
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="appId">微信公众号AppId</param>
+        /// <param name="url">请求完整地址</param>
         /// <returns></returns>
-        public async Task<ResponseModel> GetWechatSign(WeChatSignRequestModel model)
+        public async Task<ResponseModel> GetWechatSign(string appId, string url)
         {
             ResponseModel result = ResponseModel.Success();
 
             try
             {
 
-                WeChatOfficialAccountsClient share = new(_redis, model.AppId);
+                WeChatOfficialAccountsClient share = new(_redis, appId);
 
-                result.Data = await share.GetSign(model.Url);
+                result.Data = await share.GetSign(url);
             }
             catch (Exception ex)
             {

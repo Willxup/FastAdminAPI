@@ -31,13 +31,15 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 获取微信接口调用权限签名
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="appId">微信公众号AppId</param>
+        /// <param name="url">请求完整地址</param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         [ProducesResponseType(typeof(WeChatSignModel), 200)]
-        public async Task<ResponseModel> GetWechatSign([FromBody] WeChatSignRequestModel model)
+        public async Task<ResponseModel> GetWechatSign([FromQuery][Required(ErrorMessage = "微信公众号AppId不能为空！")] string appId, 
+            [FromQuery][Required(ErrorMessage = "请求地址不能为空!")] string url)
         {
-            return await _wechatApiService.GetWechatSign(model);
+            return await _wechatApiService.GetWechatSign(appId, url);
         }
         /// <summary>
         /// 获取微信公众号用户OpenId

@@ -901,11 +901,12 @@
             </summary>
             <param name="wechatApiService"></param>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.WechatApiController.GetWechatSign(FastAdminAPI.Network.Models.Wechat.WeChatSignRequestModel)">
+        <member name="M:FastAdminAPI.Core.Controllers.WechatApiController.GetWechatSign(System.String,System.String)">
             <summary>
             获取微信接口调用权限签名
             </summary>
-            <param name="model"></param>
+            <param name="appId">微信公众号AppId</param>
+            <param name="url">请求完整地址</param>
             <returns></returns>
         </member>
         <member name="M:FastAdminAPI.Core.Controllers.WechatApiController.GetWechatUserOpenId(System.String,System.String)">
@@ -1540,11 +1541,12 @@
             微信API
             </summary>
         </member>
-        <member name="M:FastAdminAPI.Core.IServices.IWechatApiService.GetWechatSign(FastAdminAPI.Network.Models.Wechat.WeChatSignRequestModel)">
+        <member name="M:FastAdminAPI.Core.IServices.IWechatApiService.GetWechatSign(System.String,System.String)">
             <summary>
             获取微信接口调用权限签名
             </summary>
-            <param name="model"></param>
+            <param name="appId">微信公众号AppId</param>
+            <param name="url">请求完整地址</param>
             <returns></returns>
         </member>
         <member name="M:FastAdminAPI.Core.IServices.IWechatApiService.GetWechatUserOpenId(System.String,System.String)">
@@ -4016,11 +4018,12 @@
             </summary>
             <param name="redis"></param>
         </member>
-        <member name="M:FastAdminAPI.Core.Services.WechatApiService.GetWechatSign(FastAdminAPI.Network.Models.Wechat.WeChatSignRequestModel)">
+        <member name="M:FastAdminAPI.Core.Services.WechatApiService.GetWechatSign(System.String,System.String)">
             <summary>
             获取微信接口调用权限签名
             </summary>
-            <param name="model"></param>
+            <param name="appId">微信公众号AppId</param>
+            <param name="url">请求完整地址</param>
             <returns></returns>
         </member>
         <member name="M:FastAdminAPI.Core.Services.WechatApiService.GetWechatUserOpenId(System.String,System.String)">
