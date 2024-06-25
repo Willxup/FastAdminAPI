@@ -42,9 +42,12 @@ namespace FastAdminAPI.Core.Services
 
             //获取角色权限
             var rolePermssions = _dbContext.Queryable<S01_User>()
-                .InnerJoin<S09_UserPermission>((S01, S09) => S09.S01_UserId == S01.S01_UserId && S09.S09_PermissionType == (byte)BusinessEnums.PermissionType.Role)
-                .InnerJoin<S07_Employee>((S01, S09, S07) => S07.S01_UserId == S01.S01_UserId && S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
-                .InnerJoin<S03_Role>((S01, S09, S07, S03) => S03.S03_RoleId == S09.S09_CommonId && S03.S03_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
+                .InnerJoin<S09_UserPermission>((S01, S09) => S09.S01_UserId == S01.S01_UserId && 
+                                                             S09.S09_PermissionType == (byte)BusinessEnums.PermissionType.Role)
+                .InnerJoin<S07_Employee>((S01, S09, S07) => S07.S01_UserId == S01.S01_UserId && 
+                                                            S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
+                .InnerJoin<S03_Role>((S01, S09, S07, S03) => S03.S03_RoleId == S09.S09_CommonId && 
+                                                             S03.S03_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                 .InnerJoin<S04_RolePermission>((S01, S09, S07, S03, S04) => S04.S03_RoleId == S03.S03_RoleId)
                 .Where((S01, S09, S07, S03, S04) => S01.S01_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                 .WhereIF(pageSearch.ModuleIds?.Count > 0, (S01, S09, S07, S03, S04) => pageSearch.ModuleIds.Contains(S04.S02_ModuleId))
@@ -73,8 +76,10 @@ namespace FastAdminAPI.Core.Services
 
             //获取用户权限
             var userPermssions = _dbContext.Queryable<S01_User>()
-                 .InnerJoin<S09_UserPermission>((S01, S09) => S09.S01_UserId == S01.S01_UserId && S09.S09_PermissionType == (byte)BusinessEnums.PermissionType.User)
-                 .InnerJoin<S07_Employee>((S01, S09, S07) => S07.S01_UserId == S01.S01_UserId && S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
+                 .InnerJoin<S09_UserPermission>((S01, S09) => S09.S01_UserId == S01.S01_UserId && 
+                                                              S09.S09_PermissionType == (byte)BusinessEnums.PermissionType.User)
+                 .InnerJoin<S07_Employee>((S01, S09, S07) => S07.S01_UserId == S01.S01_UserId && 
+                                                             S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                  .Where((S01, S09, S07) => S01.S01_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                  .WhereIF(pageSearch.ModuleIds?.Count > 0, (S01, S09, S07) => pageSearch.ModuleIds.Contains(S09.S09_CommonId))
                  .WhereIF(pageSearch.EmployeeIds?.Count > 0, (S01, S09, S07) => pageSearch.EmployeeIds.Contains(S07.S07_EmployeeId))
@@ -100,6 +105,7 @@ namespace FastAdminAPI.Core.Services
                     Contact = S07.S07_Phone
                 });
 
+            //合并查询
             return await _dbContext.Union(rolePermssions, userPermssions).ToListResultAsync(pageSearch.Index, pageSearch.Size);
 
         }
