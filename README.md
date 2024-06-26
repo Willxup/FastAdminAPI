@@ -566,6 +566,8 @@ new BasicAuthAuthorizationUser
 > 多个定时任务以`;`分号分隔
 > 也可以直接配置`cron`，例如：TestTask,cron, `0 0/2 * * *`，每两小时整执行一次。
 
+
+
 # 🍾 感谢
 
 以下是该项目用到的部分开源项目：
@@ -579,3 +581,11 @@ new BasicAuthAuthorizationUser
 - [jstedfast/MailKit](https://github.com/jstedfast/MailKit)
 
 感谢所有开源项目的贡献，好的项目需要大家共同维护和分享。
+
+
+
+# 💛 Sponsor
+
+感谢`JetBrains`对本项目的支持。
+
+ [![Jetbrains](https://github.com/joaomatossilva/DateTimeExtensions/raw/master/assets/jetbrains/jetbrains-variant-4-200.png)](https://www.jetbrains.com/)
