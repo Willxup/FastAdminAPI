@@ -24,7 +24,7 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 发布信息
         /// </summary>
-        /// <param name="msg"></param>
+        /// <param name="msg">信息</param>
         /// <returns></returns>
         [HttpGet]
         public async Task PublishMessage([FromQuery][Required(ErrorMessage = "信息不能为空!")] string msg)

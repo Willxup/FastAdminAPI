@@ -37,7 +37,7 @@ namespace FastAdminAPI.Core.IServices
         /// <summary>
         /// 按模块Id获取员工列表
         /// </summary>
-        /// <param name="moduleId"></param>
+        /// <param name="moduleId">模块Id</param>
         /// <returns></returns>
         Task<List<long>> GetEmployeeListByModuleId(long moduleId);
     }

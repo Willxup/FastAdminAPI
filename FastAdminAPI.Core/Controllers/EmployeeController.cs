@@ -76,7 +76,7 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 通过部门Id获取员工(只能获取主岗位)列表(包含子部门)
         /// </summary>
-        /// <param name="departId"></param>
+        /// <param name="departId">部门Id</param>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(List<EmployeePageResult>), 200)]

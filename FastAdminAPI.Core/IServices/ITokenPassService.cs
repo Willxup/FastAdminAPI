@@ -10,7 +10,6 @@ namespace FastAdminAPI.Core.IServices
     /// </summary>
     public interface ITokenPassService
     {
-
         #region 字典
         /// <summary>
         /// 获取一组字典列表
@@ -27,7 +26,7 @@ namespace FastAdminAPI.Core.IServices
         /// <summary>
         /// 获取一组字典树(多层)
         /// </summary>
-        /// <param name="code"></param>
+        /// <param name="code">分组代号</param>
         /// <returns></returns>
         Task<string> GetCodeTree(string code);
         #endregion

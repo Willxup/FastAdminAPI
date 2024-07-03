@@ -29,7 +29,7 @@ namespace FastAdminAPI.Core.Services
         /// <summary>
         /// 发布信息
         /// </summary>
-        /// <param name="msg"></param>
+        /// <param name="msg">信息</param>
         /// <returns></returns>
         public async Task PublishMessage(string msg)
         {

@@ -11,8 +11,9 @@ namespace FastAdminAPI.Core.IServices
     public interface ITestService
     {
         /// <summary>
-        /// 获取code列表 mapster方式
+        ///  获取code列表 mapster方式
         /// </summary>
+        /// <param name="code">字典code</param>
         /// <returns></returns>
         Task<List<CodeMapsterModel>> GetCodeListWithMapster(string code);
         /// <summary>
@@ -42,7 +43,7 @@ namespace FastAdminAPI.Core.IServices
         /// <summary>
         /// 通过Id删除Code
         /// </summary>
-        /// <param name="codeId"></param>
+        /// <param name="codeId">字典Id</param>
         /// <returns></returns>
         Task<ResponseModel> DelCodeById(long codeId);
     }

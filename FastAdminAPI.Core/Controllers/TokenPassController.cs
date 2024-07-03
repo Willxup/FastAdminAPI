@@ -56,7 +56,7 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 获取一组字典树(多层)
         /// </summary>
-        /// <param name="code"></param>
+        /// <param name="code">分组代号</param>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(List<SortedJsonTree>), 200)]

@@ -95,7 +95,7 @@ namespace FastAdminAPI.Core.Services
         /// <summary>
         /// 获取一组字典树(多层)
         /// </summary>
-        /// <param name="code"></param>
+        /// <param name="code">分组代号</param>
         /// <returns></returns>
         public async Task<string> GetCodeTree(string code)
         {

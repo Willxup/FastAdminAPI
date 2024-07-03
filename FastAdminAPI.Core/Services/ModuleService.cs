@@ -106,7 +106,7 @@ namespace FastAdminAPI.Core.Services
         /// <summary>
         /// 按模块Id获取员工列表
         /// </summary>
-        /// <param name="moduleId"></param>
+        /// <param name="moduleId">模块Id</param>
         /// <returns></returns>
         public async Task<List<long>> GetEmployeeListByModuleId(long moduleId)
         {

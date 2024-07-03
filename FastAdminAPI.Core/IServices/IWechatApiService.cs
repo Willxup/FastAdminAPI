@@ -1,5 +1,4 @@
 ﻿using FastAdminAPI.Common.BASE;
-using FastAdminAPI.Network.Models.Wechat;
 using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.IServices

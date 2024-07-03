@@ -35,7 +35,7 @@ namespace FastAdminAPI.Core.IServices
         /// <summary>
         /// 通过部门Id获取员工(主岗位)列表(包含子部门)
         /// </summary>
-        /// <param name="departId"></param>
+        /// <param name="departId">部门Id</param>
         /// <returns></returns>
         Task<ResponseModel> GetEmployeeListByDepartId(long departId);
         /// <summary>

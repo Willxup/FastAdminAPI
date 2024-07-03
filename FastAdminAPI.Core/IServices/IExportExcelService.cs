@@ -7,7 +7,7 @@ namespace FastAdminAPI.Core.IServices
     /// </summary>
     public interface IExportExcelService
     {
-        #region 通用审批
+        #region 通用
         /// <summary>
         /// 导出EXCEL模板
         /// </summary>

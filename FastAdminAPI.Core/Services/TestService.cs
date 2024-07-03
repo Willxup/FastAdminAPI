@@ -24,8 +24,9 @@ namespace FastAdminAPI.Core.Services
         public TestService(ISqlSugarClient dbContext) : base(dbContext) { }
 
         /// <summary>
-        /// 获取code列表 mapster方式
+        ///  获取code列表 mapster方式
         /// </summary>
+        /// <param name="code">字典code</param>
         /// <returns></returns>
         public async Task<List<CodeMapsterModel>> GetCodeListWithMapster(string code)
         {
@@ -92,7 +93,7 @@ namespace FastAdminAPI.Core.Services
         /// <summary>
         /// 通过Id删除Code
         /// </summary>
-        /// <param name="codeId"></param>
+        /// <param name="codeId">字典Id</param>
         /// <returns></returns>
         public async Task<ResponseModel> DelCodeById(long codeId)
         {

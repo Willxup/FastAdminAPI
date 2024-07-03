@@ -248,7 +248,7 @@ namespace FastAdminAPI.Core.Services
         /// <summary>
         /// 删除数据权限设置
         /// </summary>
-        /// <param name="dataPermissionId"></param>
+        /// <param name="dataPermissionId">数据权限设置Id</param>
         /// <returns></returns>
         public async Task<ResponseModel> DelDataPermissionSetting(long dataPermissionId)
         {

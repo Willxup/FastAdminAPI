@@ -35,7 +35,7 @@ namespace FastAdminAPI.Core.Controllers
         /// <summary>
         /// 获取code列表 mapster方式
         /// </summary>
-        /// <param name="code"></param>
+        /// <param name="code">字典code</param>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(List<CodeMapsterModel>), 200)]
