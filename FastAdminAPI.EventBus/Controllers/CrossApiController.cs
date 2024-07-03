@@ -105,7 +105,8 @@ namespace FastAdminAPI.EventBus.Controllers
         /// <summary>
         /// 获取微信接口调用权限签名
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="appId">微信公众号AppId</param>
+        /// <param name="url">url地址</param>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(WeChatSignModel), 200)]
@@ -132,7 +133,7 @@ namespace FastAdminAPI.EventBus.Controllers
         /// <summary>
         /// 获取企业微信UserId
         /// </summary>
-        /// <param name="code"></param>
+        /// <param name="code">企业微信code</param>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(ResponseModel), 200)]
@@ -144,8 +145,6 @@ namespace FastAdminAPI.EventBus.Controllers
         /// 发送企业微信文本消息
         /// </summary>
         /// <param name="model"></param>
-        /// <param name="id"></param>
-        /// <param name="task"></param>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(ResponseModel), 200)]
@@ -157,8 +156,6 @@ namespace FastAdminAPI.EventBus.Controllers
         /// 发送企业微信卡片消息
         /// </summary>
         /// <param name="model"></param>
-        /// <param name="id"></param>
-        /// <param name="task"></param>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(ResponseModel), 200)]

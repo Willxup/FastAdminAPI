@@ -10,7 +10,7 @@ namespace FastAdminAPI.Network.Interfaces
         /// <summary>
         /// 获取企业微信UserId
         /// </summary>
-        /// <param name="code"></param>
+        /// <param name="code">企业微信code</param>
         /// <returns></returns>
         [Get("/api/QyWechatApi/GeUserId")]
         Task<ResponseModel> GetUserId([Query] string code);
