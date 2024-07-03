@@ -21,7 +21,7 @@
   <ItemGroup>
     <PackageReference Include="MySqlConnector" Version="2.3.7" />
     <PackageReference Include="SqlSugar.Attributes" Version="1.0.5" />
-    <PackageReference Include="SqlSugarCoreNoDrive" Version="5.1.4.154" />
+    <PackageReference Include="SqlSugarCoreNoDrive" Version="5.1.4.160" />
   </ItemGroup>
 
 </Project>
