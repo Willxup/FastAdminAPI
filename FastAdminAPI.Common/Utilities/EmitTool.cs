@@ -4,6 +4,9 @@ using System.Reflection.Emit;
 
 namespace FastAdminAPI.Common.Utilities
 {
+    /// <summary>
+    /// EMIT工具
+    /// </summary>
     public static class EmitTool
     {
         /// <summary>

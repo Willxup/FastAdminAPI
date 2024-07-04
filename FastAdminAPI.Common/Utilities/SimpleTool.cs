@@ -2,6 +2,9 @@
 
 namespace FastAdminAPI.Common.Utilities
 {
+    /// <summary>
+    /// 简易工具
+    /// </summary>
     public static class SimpleTool
     {
         /// <summary>

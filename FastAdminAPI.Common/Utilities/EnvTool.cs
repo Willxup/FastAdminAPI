@@ -1,7 +1,10 @@
-using System;
+﻿using System;
 
 namespace FastAdminAPI.Common.Utilities
 {
+    /// <summary>
+    /// 环境工具
+    /// </summary>
     public static class EnvTool
     {
         /// <summary>
