@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace FastAdminAPI.Common.Utilities
 {
@@ -19,7 +18,11 @@ namespace FastAdminAPI.Common.Utilities
         {
             bool isNullOrEmpty = false;
 
-            if (!list?.Any() ?? true)
+            // linq方式
+            //if (!list?.Any() ?? true)
+            //    isNullOrEmpty = true;
+
+            if (list == null || list?.Count <= 0)
                 isNullOrEmpty = true;
 
             return isNullOrEmpty;
