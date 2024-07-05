@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace FastAdminAPI.Network.Interfaces
 {
+    /// <summary>
+    /// 邮件API
+    /// </summary>
     public interface IEmailApi
     {
         /// <summary>

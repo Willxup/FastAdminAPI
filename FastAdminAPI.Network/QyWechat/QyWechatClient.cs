@@ -101,7 +101,7 @@ namespace FastAdminAPI.Network.QyWechat
         /// <summary>
         /// 获取企业微信UserId
         /// </summary>
-        /// <param name="code"></param>
+        /// <param name="code">企业微信Code</param>
         /// <returns></returns>
         public async Task<string> GetUserId(string code)
         {

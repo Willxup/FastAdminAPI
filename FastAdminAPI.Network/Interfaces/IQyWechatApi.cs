@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace FastAdminAPI.Network.Interfaces
 {
+    /// <summary>
+    /// 企业微信API
+    /// </summary>
     public interface IQyWechatApi
     {
         /// <summary>

@@ -165,7 +165,7 @@ namespace FastAdminAPI.Network.Wechat
         /// <summary>
         /// Sha1加密签名
         /// </summary>
-        /// <param name="str"></param>
+        /// <param name="str">需要加密的字符串</param>
         /// <returns></returns>
         private static string Sha1Sign(string str)
         {
@@ -283,7 +283,7 @@ namespace FastAdminAPI.Network.Wechat
         /// <summary>
         /// 获取微信分享签名
         /// </summary>
-        /// <param name="url"></param>
+        /// <param name="url">分享链接</param>
         /// <returns></returns>
         public async Task<WeChatSignModel> GetSign(string url)
         {
