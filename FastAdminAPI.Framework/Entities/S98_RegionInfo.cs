@@ -1,13 +1,11 @@
 ﻿
-using System;
-using System.Linq;
-using System.Text;
 using SqlSugar;
+using System;
 
 
 namespace FastAdminAPI.Framework.Entities
 {
-        ///<summary>
+    ///<summary>
     /// 区域
     ///</summary>
     [SugarTable("S98_RegionInfo")]
