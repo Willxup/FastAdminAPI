@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace FastAdminAPI.Common.Utilities
 {
@@ -26,7 +27,21 @@ namespace FastAdminAPI.Common.Utilities
                 isNullOrEmpty = true;
 
             return isNullOrEmpty;
-        } 
+        }
+        /// <summary>
+        /// 数组是否为空或null
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static bool IsNullOrEmpty(this Array array)
+        {
+            bool isNullOrEmpty = false;
+
+            if (array == null || array?.Length <= 0)
+                isNullOrEmpty = true;
+
+            return isNullOrEmpty;
+        }
         #endregion
     }
 }
