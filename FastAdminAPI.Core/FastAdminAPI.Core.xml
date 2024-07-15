@@ -304,7 +304,7 @@
             <param name="pageSearch"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.GetEmployeeInfo(System.Nullable{System.Int64},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.GetEmployeeInfo(System.Nullable{System.Int64})">
             <summary>
             获取员工信息
             </summary>
@@ -325,14 +325,14 @@
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.DimissionEmployee(System.Nullable{System.Int64},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.DimissionEmployee(System.Nullable{System.Int64})">
             <summary>
             离职员工
             </summary>
             <param name="employeeId">员工Id</param>
             <returns></returns>
         </member>
-        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.DelEmployee(System.Nullable{System.Int64},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+        <member name="M:FastAdminAPI.Core.Controllers.EmployeeController.DelEmployee(System.Nullable{System.Int64})">
             <summary>
             删除员工
             </summary>

@@ -102,7 +102,7 @@ namespace FastAdminAPI.Core.Controllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(EmployeeInfoModel), 200)]
-        public async Task<ResponseModel> GetEmployeeInfo([FromQuery][Required(ErrorMessage = "岗位Id不能为空!")] long? employeeId, int? index, int? size)
+        public async Task<ResponseModel> GetEmployeeInfo([FromQuery][Required(ErrorMessage = "员工Id不能为空!")] long? employeeId)
         {
             return Success(await _employeeService.GetEmployeeInfo((long)employeeId));
         }
@@ -132,7 +132,7 @@ namespace FastAdminAPI.Core.Controllers
         /// <param name="employeeId">员工Id</param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<ResponseModel> DimissionEmployee([FromQuery][Required(ErrorMessage = "员工Id不能为空!")] long? employeeId, int? index, int? size)
+        public async Task<ResponseModel> DimissionEmployee([FromQuery][Required(ErrorMessage = "员工Id不能为空!")] long? employeeId)
         {
             return await _employeeService.DimissionEmployee((long)employeeId);
         }
@@ -142,7 +142,7 @@ namespace FastAdminAPI.Core.Controllers
         /// <param name="employeeId">员工Id</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<ResponseModel> DelEmployee([FromQuery][Required(ErrorMessage = "员工Id不能为空!")] long? employeeId, int? index, int? size)
+        public async Task<ResponseModel> DelEmployee([FromQuery][Required(ErrorMessage = "员工Id不能为空!")] long? employeeId)
         {
             return await _employeeService.DelEmployee((long)employeeId);
         }
