@@ -354,31 +354,36 @@ namespace FastAdminAPI.Framework.Extensions
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="db"></param>
         /// <param name="dto">dto模型</param>
+        /// <param name="isCheckAffectedRows">是否校验受影响行数大于0(默认是)</param>
         /// <param name="errorMessage">错误信息</param>
         /// <returns></returns>
-        public static async Task<ResponseModel> InsertResultAsync<TDto, TEntity>(this SqlSugarScope db, TDto dto, string errorMessage = null)
+        public static async Task<ResponseModel> InsertResultAsync<TDto, TEntity>(this SqlSugarScope db, TDto dto, bool isCheckAffectedRows = true, string errorMessage = null)
             where TDto : DbOperationBaseModel, new()
             where TEntity : class, new()
         {
-            return await db.Insertable<TDto, TEntity>(dto).ExecuteAsync(errorMessage);
+            return await db.Insertable<TDto, TEntity>(dto).ExecuteAsync(isCheckAffectedRows, errorMessage);
         }
         /// <summary>
         /// 自定义新增 直接返回通用消息类
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="db">SqlSugar插入条件</param>
+        /// <param name="isCheckAffectedRows">是否校验受影响行数大于0(默认是)</param>
         /// <param name="errorMessage">错误信息</param>
         /// <returns></returns>
-        public static async Task<ResponseModel> ExecuteAsync<T>(this IInsertable<T> db, string errorMessage = null)
+        public static async Task<ResponseModel> ExecuteAsync<T>(this IInsertable<T> db, bool isCheckAffectedRows = true, string errorMessage = null)
             where T : class, new()
         {
             try
             {
                 var provider = db as InsertableProvider<T>;
+
+                //判断是批量插入还是单个插入
                 if (provider.InsertObjs?.Length > 1)
                 {
                     var res = await db.ExecuteCommandAsync();
-                    if (res > 0)
+
+                    if (res > 0 || !isCheckAffectedRows)
                         return ResponseModel.Success(res);
                     else
                         throw new UserOperationException("未插入任何数据!");
@@ -390,7 +395,8 @@ namespace FastAdminAPI.Framework.Extensions
                     {
                         //有自增 返回主键
                         var res = await db.ExecuteReturnBigIdentityAsync();
-                        if (res > 0)
+
+                        if (res > 0 || !isCheckAffectedRows)
                             return ResponseModel.Success(res);
                         else
                             throw new UserOperationException("未插入任何数据!");
@@ -399,7 +405,8 @@ namespace FastAdminAPI.Framework.Extensions
                     {
                         //无自增 不返回主键
                         var res = await db.ExecuteCommandAsync();
-                        if (res > 0)
+
+                        if (res > 0 || !isCheckAffectedRows)
                             return ResponseModel.Success(res);
                         else
                             throw new UserOperationException("未插入任何数据!");
