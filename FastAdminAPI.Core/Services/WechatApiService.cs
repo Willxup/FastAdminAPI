@@ -28,8 +28,34 @@ namespace FastAdminAPI.Core.Services
             _redis = redis;
         }
 
+
         /// <summary>
-        /// 获取微信接口调用权限签名
+        /// 获取微信用户OpenId
+        /// </summary>
+        /// <param name="appId">微信AppId</param>
+        /// <param name="code">授权code</param>
+        /// <returns></returns>
+        public async Task<ResponseModel> GetWechatUserOpenId(string appId, string code)
+        {
+            ResponseModel result = ResponseModel.Success();
+
+            try
+            {
+
+                WeChatClient share = new(_redis, appId);
+
+                result.Data = await share.GetWechatUserOpenId(code);
+            }
+            catch (Exception ex)
+            {
+                throw new UserOperationException($"{ex.Message}");
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 获取微信公众号接口调用权限签名
         /// </summary>
         /// <param name="appId">微信公众号AppId</param>
         /// <param name="url">请求完整地址</param>
@@ -41,37 +67,13 @@ namespace FastAdminAPI.Core.Services
             try
             {
 
-                WeChatOfficialAccountsClient share = new(_redis, appId);
+                WeChatClient share = new(_redis, appId);
 
                 result.Data = await share.GetSign(url);
             }
             catch (Exception ex)
             {
                 throw new UserOperationException($"获取微信公众号签名失败：{ex.Message}");
-            }
-
-            return result;
-        }
-        /// <summary>
-        /// 获取微信公众号用户OpenId
-        /// </summary>
-        /// <param name="appId">微信公众号AppId</param>
-        /// <param name="code">授权code</param>
-        /// <returns></returns>
-        public async Task<ResponseModel> GetWechatUserOpenId(string appId, string code)
-        {
-            ResponseModel result = ResponseModel.Success();
-
-            try
-            {
-
-                WeChatOfficialAccountsClient share = new(_redis, appId);
-
-                result.Data = await share.GetWechatUserOpenId(code);
-            }
-            catch (Exception ex)
-            {
-                throw new UserOperationException($"{ex.Message}");
             }
 
             return result;

@@ -901,20 +901,20 @@
             </summary>
             <param name="wechatApiService"></param>
         </member>
+        <member name="M:FastAdminAPI.Core.Controllers.WechatApiController.GetWechatUserOpenId(System.String,System.String)">
+            <summary>
+            获取微信用户OpenId
+            </summary>
+            <param name="appId">微信AppId</param>
+            <param name="code">授权code</param>
+            <returns></returns>
+        </member>
         <member name="M:FastAdminAPI.Core.Controllers.WechatApiController.GetWechatSign(System.String,System.String)">
             <summary>
-            获取微信接口调用权限签名
+            获取微信公众号接口调用权限签名
             </summary>
             <param name="appId">微信公众号AppId</param>
             <param name="url">请求完整地址</param>
-            <returns></returns>
-        </member>
-        <member name="M:FastAdminAPI.Core.Controllers.WechatApiController.GetWechatUserOpenId(System.String,System.String)">
-            <summary>
-            获取微信公众号用户OpenId
-            </summary>
-            <param name="appId">微信公众号AppId</param>
-            <param name="code">授权code</param>
             <returns></returns>
         </member>
         <member name="M:FastAdminAPI.Core.IServices.BASE.IEntityService.GenerateEntities">
@@ -1542,20 +1542,20 @@
             微信API
             </summary>
         </member>
+        <member name="M:FastAdminAPI.Core.IServices.IWechatApiService.GetWechatUserOpenId(System.String,System.String)">
+            <summary>
+            获取微信用户OpenId
+            </summary>
+            <param name="appId">微信AppId</param>
+            <param name="code">授权code</param>
+            <returns></returns>
+        </member>
         <member name="M:FastAdminAPI.Core.IServices.IWechatApiService.GetWechatSign(System.String,System.String)">
             <summary>
-            获取微信接口调用权限签名
+            获取微信公众号接口调用权限签名
             </summary>
             <param name="appId">微信公众号AppId</param>
             <param name="url">请求完整地址</param>
-            <returns></returns>
-        </member>
-        <member name="M:FastAdminAPI.Core.IServices.IWechatApiService.GetWechatUserOpenId(System.String,System.String)">
-            <summary>
-            获取微信公众号用户OpenId
-            </summary>
-            <param name="appId">微信公众号AppId</param>
-            <param name="code">授权code</param>
             <returns></returns>
         </member>
         <member name="P:FastAdminAPI.Core.Models.BASE.GenerateDbEntitiesModel.TablesName">
@@ -4020,20 +4020,20 @@
             </summary>
             <param name="redis"></param>
         </member>
+        <member name="M:FastAdminAPI.Core.Services.WechatApiService.GetWechatUserOpenId(System.String,System.String)">
+            <summary>
+            获取微信用户OpenId
+            </summary>
+            <param name="appId">微信AppId</param>
+            <param name="code">授权code</param>
+            <returns></returns>
+        </member>
         <member name="M:FastAdminAPI.Core.Services.WechatApiService.GetWechatSign(System.String,System.String)">
             <summary>
-            获取微信接口调用权限签名
+            获取微信公众号接口调用权限签名
             </summary>
             <param name="appId">微信公众号AppId</param>
             <param name="url">请求完整地址</param>
-            <returns></returns>
-        </member>
-        <member name="M:FastAdminAPI.Core.Services.WechatApiService.GetWechatUserOpenId(System.String,System.String)">
-            <summary>
-            获取微信公众号用户OpenId
-            </summary>
-            <param name="appId">微信公众号AppId</param>
-            <param name="code">授权code</param>
             <returns></returns>
         </member>
     </members>
