@@ -5,7 +5,7 @@ using FastAdminAPI.Common.Redis;
 using System;
 using System.Text;
 
-namespace FastAdminAPI.CommonSerialNumber
+namespace FastAdminAPI.Common.SerialNumber
 {
     /// <summary>
     /// 编号生成器

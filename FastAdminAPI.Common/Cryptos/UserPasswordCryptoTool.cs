@@ -1,10 +1,9 @@
-﻿using System;
-using FastAdminAPI.Common.Attributes;
+﻿using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
-using FastAdminAPI.Common.Cryptos;
 using FastAdminAPI.Common.Logs;
+using System;
 
-namespace FastAdminAPI.Common.Cryption
+namespace FastAdminAPI.Common.Cryptos
 {
     public static class UserPasswordCryptoTool
     {
