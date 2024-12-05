@@ -115,7 +115,7 @@ namespace FastAdminAPI.EventBus.Controllers
             return await _wechatApi.GetWechatUserOpenId(appId, code);
         }
         /// <summary>
-        /// 获取微信接口调用权限签名
+        /// 获取微信公众号接口调用权限签名
         /// </summary>
         /// <param name="appId">微信公众号AppId</param>
         /// <param name="url">url地址</param>
