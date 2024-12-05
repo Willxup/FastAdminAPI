@@ -33,6 +33,10 @@ namespace FastAdminAPI.Business.Implements
         /// </summary>
         private readonly long DEFAULT_APPROVER;
         /// <summary>
+        /// 根部门Id(最高部门)
+        /// </summary>
+        private readonly long ROOT_DEPART_ID = 1;
+        /// <summary>
         /// 员工审批流程Rediskey缓存
         /// </summary>
         private readonly string APPROVAL_DATA_REDIS_KEY = "Applications:ApprovalInfo";
@@ -140,7 +144,7 @@ namespace FastAdminAPI.Business.Implements
             ApproverInfoModel superior = null;
 
             //如果当前部门为顶级部门，且前一步按岗位递归寻找上级未找到上级，说明该用户为最高上级
-            if (operationDepartId == 1) 
+            if (operationDepartId == ROOT_DEPART_ID)
             {
                 superior = new ApproverInfoModel
                 {
@@ -241,7 +245,7 @@ namespace FastAdminAPI.Business.Implements
             //获取当前操作人的主岗位
             var mainPost = await _dbContext.Queryable<S08_EmployeePost>()
                 .Where(S08 => S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
-                              S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True && 
+                              S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True &&
                               S08.S07_EmployeeId == operationId)
                 .Select(S08 => new { PostId = S08.S06_PostId, DepartId = S08.S05_DepartId }).FirstAsync();
 
@@ -278,7 +282,7 @@ namespace FastAdminAPI.Business.Implements
             {
                 //查询设置的审批人
                 var approvers = await _dbContext.Queryable<S07_Employee>()
-                    .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
+                    .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                   approverIds.Contains(S07.S07_EmployeeId))
                     .Select(S07 => new
                     {
@@ -300,7 +304,7 @@ namespace FastAdminAPI.Business.Implements
                 approverIds.ForEach(item =>
                 {
                     var approver = approvers?.Where(c => c.EmployeeId == item).FirstOrDefault();
-                    
+
                     //判断审批人是否存在，不存在使用默认审批人
                     if (approver != null)
                     {
@@ -348,7 +352,7 @@ namespace FastAdminAPI.Business.Implements
             {
                 //查询自选的审批人
                 var approvers = await _dbContext.Queryable<S07_Employee>()
-                    .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
+                    .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                   approverIds.Contains(S07.S07_EmployeeId))
                     .Select(S07 => new
                     {
@@ -412,7 +416,7 @@ namespace FastAdminAPI.Business.Implements
         private async Task<ApproverInfoModel> GetDefaultApprover()
         {
             var defaultApprover = await _dbContext.Queryable<S07_Employee>()
-                        .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
+                        .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                       S07.S07_EmployeeId == DEFAULT_APPROVER)
                         .Select(S07 => new ApproverInfoModel
                         {
@@ -446,7 +450,7 @@ namespace FastAdminAPI.Business.Implements
             {
                 //查询设置的审批人
                 var ccReceivers = await _dbContext.Queryable<S07_Employee>()
-                    .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
+                    .Where(S07 => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                   carbonCopiesIds.Contains(S07.S07_EmployeeId))
                     .Select(S07 => new CarbonCopiesInfoModel
                     {
@@ -461,7 +465,7 @@ namespace FastAdminAPI.Business.Implements
                 carbonCopiesIds.ForEach(item =>
                 {
                     var ccReceiver = ccReceivers?.Where(c => c.EmployeeId == item).FirstOrDefault();
-                    
+
                     if (ccReceiver != null)
                     {
                         carbonCopiesList.Add(new CarbonCopiesInfoModel
@@ -494,12 +498,12 @@ namespace FastAdminAPI.Business.Implements
 
             //查询当前审批类型的所有审批流程
             var processList = await _dbContext.Queryable<S11_CheckProcess>()
-                .Where(Z04 => Z04.S11_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
+                .Where(Z04 => Z04.S11_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                               Z04.S99_ApplicationType == checkProcessType)
                 //.Where(Z04 => DbExtension.FindInSetWhere(employeeId.ToString(), Z04.S07_Applicants))
                 .ToListAsync();
 
-            if (processList?.Count > 0) 
+            if (processList?.Count > 0)
             {
                 //循环查看是否有当前申请人
                 foreach (var item in processList)
@@ -520,7 +524,7 @@ namespace FastAdminAPI.Business.Implements
             if (process == null)
             {
                 process = await _dbContext.Queryable<S11_CheckProcess>()
-                    .Where(Z04 => Z04.S11_IsDelete == (byte)BaseEnums.TrueOrFalse.False && 
+                    .Where(Z04 => Z04.S11_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                                   Z04.S99_ApplicationType == checkProcessType &&
                                   (Z04.S07_Applicants == null || Z04.S07_Applicants == ""))
                     .FirstAsync();
