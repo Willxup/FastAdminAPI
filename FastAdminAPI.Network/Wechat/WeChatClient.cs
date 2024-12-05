@@ -16,16 +16,16 @@ using System.Threading.Tasks;
 namespace FastAdminAPI.Network.Wechat
 {
     /// <summary>
-    /// 微信公众号Client
+    /// 微信Client
     /// </summary>
-    public class WeChatOfficialAccountsClient
+    public class WeChatClient
     {
         /// <summary>
-        /// 微信公众号AppId
+        /// 微信AppId
         /// </summary>
         private readonly string WECHAT_APP_ID;
         /// <summary>
-        /// 微信公众号App密钥
+        /// 微信App密钥
         /// </summary>
         private readonly string WECHAT_APP_SECRET;
         /// <summary>
@@ -38,15 +38,15 @@ namespace FastAdminAPI.Network.Wechat
         /// </summary>
         private readonly IRedisHelper _redis;
         /// <summary>
-        /// 微信公众号
+        /// 微信
         /// </summary>
-        private readonly IWechatOfficialAccountsProvider _wechatOfficialAccountsProvider;
+        private readonly IWechatProvider _wechatProvider;
 
         /// <summary>
         /// .ctor
         /// </summary>
         /// <param name="redis">redis缓存</param>
-        public WeChatOfficialAccountsClient(IRedisHelper redis, string appId)
+        public WeChatClient(IRedisHelper redis, string appId)
         {
             // 获取AppId和App密钥
             if (BaseWechatConfiguration.WECHAT_APP_DIC.TryGetValue(appId, out string appSecret))
@@ -59,71 +59,12 @@ namespace FastAdminAPI.Network.Wechat
 
             _redis = redis;
 
-            _wechatOfficialAccountsProvider = RestService.For<IWechatOfficialAccountsProvider>(BaseWechatConfiguration.WECHAT_DOMAIN_ADDRESS, RefitConfigExtension.REFIT_SETTINGS);
+            _wechatProvider = RestService.For<IWechatProvider>(BaseWechatConfiguration.WECHAT_DOMAIN_ADDRESS, RefitConfigExtension.REFIT_SETTINGS);
         }
 
+        #region 通用
 
         #region 内部调用
-        /// <summary>
-        /// 获取token
-        /// </summary>
-        /// <returns></returns>
-        private async Task<string> GetAccessToken()
-        {
-            try
-            {
-                var result = await _wechatOfficialAccountsProvider.GetWechatToken(WECHAT_APP_ID, WECHAT_APP_SECRET);
-
-                if (result.errcode == 0)
-                {
-                    return result.access_token;
-                }
-                else
-                {
-                    NLogHelper.Error($"获取微信公众号Token失败:{JsonConvert.SerializeObject(result)}");
-                    throw new UserOperationException($"获取微信公众号Token失败:{result.errmsg}");
-                }
-            }
-            catch (UserOperationException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                NLogHelper.Error($"获取微信公众号Token出错，{ex.Message}", ex);
-                throw new UserOperationException($"获取微信公众号Token失败!");
-            }
-        }
-        /// <summary>
-        /// 获取JsApiTicket
-        /// </summary>
-        /// <returns></returns>
-        private async Task<string> GetJsApiTicket()
-        {
-            try
-            {
-                var result = await _wechatOfficialAccountsProvider.GetWechatTicket(await GetToken(), "jsapi");
-
-                if (result.errcode == 0)
-                {
-                    return result.ticket;
-                }
-                else
-                {
-                    NLogHelper.Error($"获取微信公众号Ticket失败:{JsonConvert.SerializeObject(result)}");
-                    throw new UserOperationException($"获取微信公众号Ticket失败:{result.errmsg}");
-                }
-            }
-            catch (UserOperationException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                NLogHelper.Error($"获取微信公众号Ticket出错:{ex.Message}", ex);
-                throw new UserOperationException($"获取微信公众号Ticket失败!");
-            }
-        }
         /// <summary>
         /// 获取微信网页授权
         /// </summary>
@@ -134,7 +75,7 @@ namespace FastAdminAPI.Network.Wechat
         {
             try
             {
-                var result = await _wechatOfficialAccountsProvider.GetWechatWebAuthorization(WECHAT_APP_ID, WECHAT_APP_SECRET, code, "authorization_code");
+                var result = await _wechatProvider.GetWechatWebAuthorization(WECHAT_APP_ID, WECHAT_APP_SECRET, code, "authorization_code");
 
                 // success
                 if (result.errcode == 0)
@@ -162,6 +103,85 @@ namespace FastAdminAPI.Network.Wechat
                 throw new UserOperationException($"获取微信公众号网页授权失败!");
             }
         }
+        #endregion
+
+        /// <summary>
+        /// 获取微信用户OpenId
+        /// </summary>
+        /// <param name="code">授权code</param>
+        /// <returns></returns>
+        public async Task<string> GetWechatUserOpenId(string code)
+        {
+            var result = await GetWechatWebAuthorization(code);
+
+            return result.openid;
+        }
+        #endregion
+
+        #region 公众号
+
+        #region 内部调用
+        /// <summary>
+        /// 获取微信公众号token
+        /// </summary>
+        /// <returns></returns>
+        private async Task<string> GetAccessToken()
+        {
+            try
+            {
+                var result = await _wechatProvider.GetWechatToken(WECHAT_APP_ID, WECHAT_APP_SECRET);
+
+                if (result.errcode == 0)
+                {
+                    return result.access_token;
+                }
+                else
+                {
+                    NLogHelper.Error($"获取微信公众号Token失败:{JsonConvert.SerializeObject(result)}");
+                    throw new UserOperationException($"获取微信公众号Token失败:{result.errmsg}");
+                }
+            }
+            catch (UserOperationException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                NLogHelper.Error($"获取微信公众号Token出错，{ex.Message}", ex);
+                throw new UserOperationException($"获取微信公众号Token失败!");
+            }
+        }
+        /// <summary>
+        /// 获取微信公众号JsApiTicket
+        /// </summary>
+        /// <returns></returns>
+        private async Task<string> GetJsApiTicket()
+        {
+            try
+            {
+                var result = await _wechatProvider.GetWechatTicket(await GetToken(), "jsapi");
+
+                if (result.errcode == 0)
+                {
+                    return result.ticket;
+                }
+                else
+                {
+                    NLogHelper.Error($"获取微信公众号Ticket失败:{JsonConvert.SerializeObject(result)}");
+                    throw new UserOperationException($"获取微信公众号Ticket失败:{result.errmsg}");
+                }
+            }
+            catch (UserOperationException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                NLogHelper.Error($"获取微信公众号Ticket出错:{ex.Message}", ex);
+                throw new UserOperationException($"获取微信公众号Ticket失败!");
+            }
+        }
+
         /// <summary>
         /// Sha1加密签名
         /// </summary>
@@ -237,7 +257,7 @@ namespace FastAdminAPI.Network.Wechat
         #endregion
 
         /// <summary>
-        /// 获取token
+        /// 获取微信公众号token
         /// </summary>       
         /// <returns></returns>
         public async Task<string> GetToken()
@@ -259,7 +279,7 @@ namespace FastAdminAPI.Network.Wechat
             return token;
         }
         /// <summary>
-        /// 获取ticket
+        /// 获取微信公众号ticket
         /// </summary>
         /// <returns></returns>
         public async Task<string> GetTicket()
@@ -281,7 +301,7 @@ namespace FastAdminAPI.Network.Wechat
             return ticket;
         }
         /// <summary>
-        /// 获取微信分享签名
+        /// 获取微信公众号分享签名
         /// </summary>
         /// <param name="url">分享链接</param>
         /// <returns></returns>
@@ -319,16 +339,7 @@ namespace FastAdminAPI.Network.Wechat
                 throw new Exception($"获取微信公众号权限签名失败!");
             }
         }
-        /// <summary>
-        /// 获取微信公众号用户OpenId
-        /// </summary>
-        /// <param name="code">授权code</param>
-        /// <returns></returns>
-        public async Task<string> GetWechatUserOpenId(string code)
-        {
-            var result = await GetWechatWebAuthorization(code);
+        #endregion
 
-            return result.openid;
-        }
     }
 }
