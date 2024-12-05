@@ -103,6 +103,18 @@ namespace FastAdminAPI.EventBus.Controllers
 
         #region 微信
         /// <summary>
+        /// 获取微信用户OpenId
+        /// </summary>
+        /// <param name="appId">微信AppId</param>
+        /// <param name="code">授权code</param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ResponseModel> GetWechatUserOpenId([FromQuery][Required(ErrorMessage = "微信公众号AppId不能为空!")] string appId,
+            [FromQuery][Required(ErrorMessage = "授权code不能为空!")] string code)
+        {
+            return await _wechatApi.GetWechatUserOpenId(appId, code);
+        }
+        /// <summary>
         /// 获取微信接口调用权限签名
         /// </summary>
         /// <param name="appId">微信公众号AppId</param>
@@ -114,18 +126,6 @@ namespace FastAdminAPI.EventBus.Controllers
             [FromQuery][Required(ErrorMessage = "请求地址不能为空!")] string url)
         {
             return await _wechatApi.GetWechatSign(appId, url);
-        }
-        /// <summary>
-        /// 获取微信公众号用户OpenId
-        /// </summary>
-        /// <param name="appId">微信公众号AppId</param>
-        /// <param name="code">授权code</param>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<ResponseModel> GetWechatUserOpenId([FromQuery][Required(ErrorMessage = "微信公众号AppId不能为空!")] string appId,
-            [FromQuery][Required(ErrorMessage = "授权code不能为空!")] string code)
-        {
-            return await _wechatApi.GetWechatUserOpenId(appId, code);
         }
         #endregion
 
