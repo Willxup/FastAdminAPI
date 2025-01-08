@@ -107,7 +107,7 @@ namespace FastAdminAPI.Framework.Extensions
                     {
                         if(dbType == DbType.MySql)
                         {
-                            return $"FIND_IN_SET('{expInfo.Args[0].MemberValue}', {expInfo.Args[1].MemberName} ) > 0";
+                            return $"FIND_IN_SET({expInfo.Args[1].MemberName}, {expInfo.Args[0].MemberName} ) > 0";
                         }
                         else
                         {
@@ -141,7 +141,7 @@ namespace FastAdminAPI.Framework.Extensions
         /// <param name="separator"></param>
         /// <returns></returns>
         /// <exception cref="NotSupportedException"></exception>
-        public static bool FindInSet<T>(T column, string separator)
+        public static bool FindInSet<T>(T column, string constant)
         {
             throw new NotSupportedException("Can only be used in expressions");
         }
