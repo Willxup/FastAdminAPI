@@ -55,15 +55,6 @@ namespace FastAdminAPI.Common.SerialNumber
             }
         }
         /// <summary>
-        /// 获取两位0-9的随机数
-        /// </summary>
-        /// <returns></returns>
-        private static string GetRandomNo()
-        {
-            Random random = new();
-            return random.Next(0, 100) + "";
-        }
-        /// <summary>
         /// Id参数格式化
         /// </summary>
         /// <param name="id"></param>
@@ -91,13 +82,50 @@ namespace FastAdminAPI.Common.SerialNumber
         #endregion
 
         /// <summary>
+        /// 生成指定长度随机数字
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static string GenerateRandomNumber(int length)
+        {
+            const string chars = "0123456789";
+            var random = new Random();
+            char[] stringChars = new char[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                stringChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(stringChars);
+        }
+        /// <summary>
+        /// 生成指定长度随机字符串
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static string GenerateRandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var random = new Random();
+            char[] stringChars = new char[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                stringChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(stringChars);
+        }
+
+        /// <summary>
         /// 创建账单编号 RB + 产品(0001) + yyMMdd + 日流水(0001) + 随机数(00)
         /// </summary>
         /// <param name="redis"></param>
         /// <param name="productId">产品Id</param>
         /// <returns></returns>
         /// <exception cref="UserOperationException"></exception>
-        public static string CreateBillNo(IRedisHelper redis,  long productId)
+        public static string CreateBillNo(IRedisHelper redis, long productId)
         {
             try
             {
@@ -106,7 +134,7 @@ namespace FastAdminAPI.Common.SerialNumber
                 builder.Append(IdFormat(productId));
                 builder.Append(DateTime.Now.ToString("yyMMdd"));
                 builder.Append(GetTransactiontNo(redis, BILL_REDIS_KEY));
-                builder.Append(GetRandomNo());
+                builder.Append(GenerateRandomNumber(2));
                 return builder.ToString();
             }
             catch (Exception ex)
@@ -131,7 +159,7 @@ namespace FastAdminAPI.Common.SerialNumber
                 builder.Append(IdFormat(productId));
                 builder.Append($"{DateTime.Now.ToString("yyMMddHHmmssfff")}");
                 builder.Append(GetTransactiontNo(redis, BILL_RECORD_REDIS_KEY));
-                builder.Append(GetRandomNo());
+                builder.Append(GenerateRandomNumber(2));
                 return builder.ToString();
             }
             catch (Exception ex)
