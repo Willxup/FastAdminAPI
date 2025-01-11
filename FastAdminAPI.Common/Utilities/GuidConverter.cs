@@ -1,6 +1,6 @@
 using System;
 
-namespace FastAdminAPI.Common.Converters
+namespace FastAdminAPI.Common.Utilities
 {
     public static class GuidConverter
     {
