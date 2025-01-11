@@ -1,9 +1,9 @@
 ﻿using FastAdminAPI.Common.Attributes;
-using FastAdminAPI.Common.Authentications;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Common.Utilities;
+using FastAdminAPI.Configuration.Authentications;
 using FastAdminAPI.Core.Controllers.BASE;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Models.Login;

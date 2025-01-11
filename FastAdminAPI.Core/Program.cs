@@ -2,13 +2,13 @@
 using FastAdminAPI.Business.Extensions;
 using FastAdminAPI.CAP.Extensions;
 using FastAdminAPI.Common.Attributes.CheckValidators;
-using FastAdminAPI.Common.Extensions;
 using FastAdminAPI.Common.Filters;
 using FastAdminAPI.Common.Logs;
-using FastAdminAPI.Common.Middlewares;
 using FastAdminAPI.Common.Redis;
-using FastAdminAPI.Common.Swagger;
 using FastAdminAPI.Common.Utilities;
+using FastAdminAPI.Configuration.Extensions;
+using FastAdminAPI.Configuration.Middlewares;
+using FastAdminAPI.Configuration.Swagger;
 using FastAdminAPI.Framework.Extensions;
 using FastAdminAPI.Network.Config;
 using Microsoft.AspNetCore.Builder;

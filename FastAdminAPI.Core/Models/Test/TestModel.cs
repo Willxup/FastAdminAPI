@@ -1,5 +1,5 @@
 ﻿using FastAdminAPI.Common.Enums;
-using FastAdminAPI.Framework.Extensions.Models;
+using FastAdminAPI.Framework.Models;
 using Mapster;
 using Newtonsoft.Json;
 using SqlSugar.Attributes.Extension.Common;

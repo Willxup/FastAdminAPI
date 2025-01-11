@@ -1,6 +1,6 @@
 ﻿using FastAdminAPI.Common.Attributes.CheckValidators;
 using FastAdminAPI.Common.Enums;
-using FastAdminAPI.Framework.Extensions.Models;
+using FastAdminAPI.Framework.Models;
 using SqlSugar.Attributes.Extension.Common;
 using SqlSugar.Attributes.Extension.Extensions.Attributes.Query;
 using System;

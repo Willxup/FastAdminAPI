@@ -1,4 +1,4 @@
-﻿using FastAdminAPI.Framework.Extensions.Models;
+﻿using FastAdminAPI.Framework.Models;
 using Newtonsoft.Json;
 using SqlSugar.Attributes.Extension.Common;
 using SqlSugar.Attributes.Extension.Extensions;
