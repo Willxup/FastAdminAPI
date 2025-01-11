@@ -1,11 +1,11 @@
 ﻿using Autofac.Extensions.DependencyInjection;
 using FastAdminAPI.CAP.Extensions;
 using FastAdminAPI.Common.Attributes.CheckValidators;
-using FastAdminAPI.Common.Extensions;
 using FastAdminAPI.Common.Filters;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Common.Utilities;
+using FastAdminAPI.Configuration.Extensions;
 using FastAdminAPI.Framework.Extensions;
 using FastAdminAPI.Network.Config;
 using Microsoft.AspNetCore.Builder;
