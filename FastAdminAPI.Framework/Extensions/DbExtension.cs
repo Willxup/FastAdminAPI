@@ -3,7 +3,7 @@ using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Datetime;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Utilities;
-using FastAdminAPI.Framework.Extensions.Models;
+using FastAdminAPI.Framework.Models;
 using SqlSugar;
 using SqlSugar.Attributes.Extension.Extensions;
 using System;

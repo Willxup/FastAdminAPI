@@ -1,6 +1,6 @@
 ﻿using SqlSugar.Attributes.Extension.Extensions;
 
-namespace FastAdminAPI.Framework.Extensions.Models
+namespace FastAdminAPI.Framework.Models
 {
     public class DbQueryBaseModel
     {
