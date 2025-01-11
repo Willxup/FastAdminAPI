@@ -1,5 +1,4 @@
 ﻿using FastAdminAPI.Common.Attributes;
-using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Logs;
 using System;
 
@@ -7,6 +6,12 @@ namespace FastAdminAPI.Common.Cryptos
 {
     public static class UserPasswordCryptoTool
     {
+        /// <summary>
+        /// 密码密钥
+        /// </summary>
+
+        public const string PASSWORD_CRYPTO_KEY = "fastadminapiwxdaelzekf884knywill";
+
         /// <summary>
         /// 加密用户密码
         /// </summary>
@@ -16,7 +21,7 @@ namespace FastAdminAPI.Common.Cryptos
         {
             try
             {
-                return CryptoTool.RijndaelEncrypt(plaintext, Define.PASSWORD_CRYPTO_KEY);
+                return CryptoTool.RijndaelEncrypt(plaintext, PASSWORD_CRYPTO_KEY);
             }
             catch (Exception ex)
             {
@@ -34,7 +39,7 @@ namespace FastAdminAPI.Common.Cryptos
         {
             try
             {
-                return CryptoTool.RijndaelDecrypt(ciphertext, Define.PASSWORD_CRYPTO_KEY);
+                return CryptoTool.RijndaelDecrypt(ciphertext, PASSWORD_CRYPTO_KEY);
             }
             catch (Exception ex)
             {

@@ -1,7 +1,7 @@
 ﻿using FastAdminAPI.Common.Attributes;
-using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Datetime;
 using FastAdminAPI.Common.Logs;
+using FastAdminAPI.Configuration.BASE;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -11,7 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace FastAdminAPI.Common.Authentications
+namespace FastAdminAPI.Configuration.Authentications
 {
     public class JwtHelper
     {

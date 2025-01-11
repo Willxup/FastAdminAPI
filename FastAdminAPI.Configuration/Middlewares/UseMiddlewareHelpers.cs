@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 
-namespace FastAdminAPI.Common.Middlewares
+namespace FastAdminAPI.Configuration.Middlewares
 {
     public static class UseMiddlewareHelpers
     {
         /// <summary>
-        /// JWT认证
+        /// JWT锟斤拷证
         /// </summary>
         /// <param name="app"></param>
         /// <returns></returns>
@@ -14,7 +14,7 @@ namespace FastAdminAPI.Common.Middlewares
             return app.UseMiddleware<JwtTokenAuthMiddleware>();
         }
         /// <summary>
-        /// 请求响应日志
+        /// 锟斤拷锟斤拷锟斤拷应锟斤拷志
         /// </summary>
         /// <param name="app"></param>
         /// <returns></returns>

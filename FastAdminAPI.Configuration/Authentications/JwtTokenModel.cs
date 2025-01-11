@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FastAdminAPI.Common.Authentications
+namespace FastAdminAPI.Configuration.Authentications
 {
     /// <summary>
     /// 令牌

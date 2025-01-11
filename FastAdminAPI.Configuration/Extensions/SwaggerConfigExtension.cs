@@ -1,12 +1,12 @@
-﻿using FastAdminAPI.Common.BASE;
+﻿using FastAdminAPI.Configuration.BASE;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
 using System.Linq;
-using static FastAdminAPI.Common.Swagger.CustomApiVersion;
+using static FastAdminAPI.Configuration.Swagger.CustomApiVersion;
 
-namespace FastAdminAPI.Common.Extensions
+namespace FastAdminAPI.Configuration.Extensions
 {
     /// <summary>
     /// Swagger配置

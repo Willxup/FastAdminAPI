@@ -1,12 +1,12 @@
-using System;
-using System.Text;
-using System.Threading.Tasks;
-using FastAdminAPI.Common.BASE;
+using FastAdminAPI.Configuration.BASE;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace FastAdminAPI.Common.Extensions
+namespace FastAdminAPI.Configuration.Extensions
 {
     /// <summary>
     /// 身份认证配置

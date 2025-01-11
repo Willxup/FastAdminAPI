@@ -1,4 +1,4 @@
-namespace FastAdminAPI.Common.BASE
+namespace FastAdminAPI.Configuration.BASE
 {
     /// <summary>
     /// 常量定义

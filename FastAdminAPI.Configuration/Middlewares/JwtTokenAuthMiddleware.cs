@@ -1,6 +1,6 @@
-﻿using FastAdminAPI.Common.Authentications;
-using FastAdminAPI.Common.BASE;
+﻿using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Redis;
+using FastAdminAPI.Configuration.Authentications;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FastAdminAPI.Common.Middlewares
+namespace FastAdminAPI.Configuration.Middlewares
 {
     /// <summary>
     /// Token认证

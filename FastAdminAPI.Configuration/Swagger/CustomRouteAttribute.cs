@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using System;
-using static FastAdminAPI.Common.Swagger.CustomApiVersion;
+using static FastAdminAPI.Configuration.Swagger.CustomApiVersion;
 
-namespace FastAdminAPI.Common.Swagger
+namespace FastAdminAPI.Configuration.Swagger
 {
     /// <summary>
     /// 自定义路由 /api/{version}/[controler]/[action]

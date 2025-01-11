@@ -1,8 +1,8 @@
-﻿using System.Linq;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace FastAdminAPI.Common.Extensions
+namespace FastAdminAPI.Configuration.Extensions
 {
     /// <summary>
     /// Service注入配置

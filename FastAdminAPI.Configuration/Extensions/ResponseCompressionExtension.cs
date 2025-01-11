@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO.Compression;
 
-namespace FastAdminAPI.Common.Extensions
+namespace FastAdminAPI.Configuration.Extensions
 {
     /// <summary>
     /// 响应压缩

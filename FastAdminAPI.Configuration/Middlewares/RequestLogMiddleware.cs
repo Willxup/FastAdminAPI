@@ -1,6 +1,6 @@
-using FastAdminAPI.Common.Authentications;
 using FastAdminAPI.Common.Datetime;
 using FastAdminAPI.Common.Logs;
+using FastAdminAPI.Configuration.Authentications;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FastAdminAPI.Common.Middlewares
+namespace FastAdminAPI.Configuration.Middlewares
 {
     /// <summary>
     /// 请求和响应

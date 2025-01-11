@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Linq;
-using static FastAdminAPI.Common.Swagger.CustomApiVersion;
+using static FastAdminAPI.Configuration.Swagger.CustomApiVersion;
 
-namespace FastAdminAPI.Common.Swagger
+namespace FastAdminAPI.Configuration.Swagger
 {
     /// <summary>
     /// SwaggerUI配置

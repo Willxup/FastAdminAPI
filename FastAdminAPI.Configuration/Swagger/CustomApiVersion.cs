@@ -1,4 +1,4 @@
-﻿namespace FastAdminAPI.Common.Swagger
+﻿namespace FastAdminAPI.Configuration.Swagger
 {
     /// <summary>
     /// 自定义接口版本
