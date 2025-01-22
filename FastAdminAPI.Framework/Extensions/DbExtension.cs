@@ -5,6 +5,7 @@ using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Utilities;
 using FastAdminAPI.Framework.Models;
 using SqlSugar;
+using SqlSugar.Attributes.Extension.Common;
 using SqlSugar.Attributes.Extension.Extensions;
 using System;
 using System.Collections.Generic;
@@ -170,26 +171,33 @@ namespace FastAdminAPI.Framework.Extensions
             int? index, int? size, RefAsync<int> totalCount = null, RefAsync<int> totalPage = null)
             where TSearch : DbQueryBaseModel
         {
-            var query = queryable.Where(search).Select(result)
-                        .GroupBy(result).Having(result)
-                        .OrderBy(search);
-
-            //是否需要分页
-            if (index != null && size != null)
+            try
             {
-                //是否需要返回总页数和总行数
-                if(totalCount != null && totalPage != null)
+                var query = queryable.Where(search).Select(result)
+                    .GroupBy(result).Having(result)
+                    .OrderBy(search);
+
+                //是否需要分页
+                if (index != null && size != null)
                 {
-                    return await query.ToPageListAsync((int)index, (int)size, totalCount, totalPage);
+                    //是否需要返回总页数和总行数
+                    if (totalCount != null && totalPage != null)
+                    {
+                        return await query.ToPageListAsync((int)index, (int)size, totalCount, totalPage);
+                    }
+                    else
+                    {
+                        return await query.ToPageListAsync((int)index, (int)size);
+                    }
                 }
                 else
                 {
-                    return await query.ToPageListAsync((int)index, (int)size);
+                    return await query.ToListAsync();
                 }
             }
-            else
+            catch (GlobalException ex)
             {
-                return await query.ToListAsync();
+                throw new UserOperationException(ex.Message);
             }
         }
         /// <summary>
@@ -222,6 +230,10 @@ namespace FastAdminAPI.Framework.Extensions
                     return ResponseModel.Success(result);
 
                 }
+            }
+            catch (GlobalException ex)
+            {
+                throw new UserOperationException(ex.Message);
             }
             catch (Exception ex)
             {
@@ -263,6 +275,10 @@ namespace FastAdminAPI.Framework.Extensions
                     return ResponseModel.Success(list);
                 }
             }
+            catch (GlobalException ex)
+            {
+                throw new UserOperationException(ex.Message);
+            }
             catch (Exception ex)
             {
                 return ResponseModel.Error(ex.Message);
@@ -296,7 +312,14 @@ namespace FastAdminAPI.Framework.Extensions
         public static async Task<TResult> ToFirstAsync<T, TSearch, TResult>(this ISugarQueryable<T> queryable, TSearch search, TResult result)
             where TSearch : class, new()
         {
-            return await queryable.Where(search).Select(result).FirstAsync();
+            try
+            {
+                return await queryable.Where(search).Select(result).FirstAsync();
+            }
+            catch (GlobalException ex)
+            {
+                throw new UserOperationException(ex.Message);
+            }
         }
         /// <summary>
         /// 自动装箱查询DTO 直接返回通用消息类
@@ -314,6 +337,10 @@ namespace FastAdminAPI.Framework.Extensions
                 var query = await queryable.Select(result).FirstAsync();
 
                 return ResponseModel.Success(query);
+            }
+            catch (GlobalException ex)
+            {
+                throw new UserOperationException(ex.Message);
             }
             catch (Exception ex)
             {
@@ -339,6 +366,10 @@ namespace FastAdminAPI.Framework.Extensions
 
                 return ResponseModel.Success(query);
             }
+            catch (GlobalException ex)
+            {
+                throw new UserOperationException(ex.Message);
+            }
             catch (Exception ex)
             {
                 return ResponseModel.Error(ex.Message);
@@ -361,7 +392,14 @@ namespace FastAdminAPI.Framework.Extensions
             where TDto : DbOperationBaseModel, new()
             where TEntity : class, new()
         {
-            return await db.Insertable<TDto, TEntity>(dto).ExecuteAsync(isCheckAffectedRows, errorMessage);
+            try
+            {
+                return await db.Insertable<TDto, TEntity>(dto).ExecuteAsync(isCheckAffectedRows, errorMessage);
+            }
+            catch (GlobalException ex)
+            {
+                throw new UserOperationException(ex.Message);
+            }
         }
         /// <summary>
         /// 自定义新增 直接返回通用消息类
@@ -459,7 +497,14 @@ namespace FastAdminAPI.Framework.Extensions
             where TDto : DbOperationBaseModel, new()
             where TEntity : class, new()
         {
-            return await db.Updateable<TDto, TEntity>(dto).ExecuteAsync(isCheckAffectedRows, errorMessage);
+            try
+            {
+                return await db.Updateable<TDto, TEntity>(dto).ExecuteAsync(isCheckAffectedRows, errorMessage);
+            }
+            catch (GlobalException ex)
+            {
+                throw new UserOperationException(ex.Message);
+            }
         }
         /// <summary>
         /// 自定义更新 直接返回通用消息类
@@ -502,7 +547,19 @@ namespace FastAdminAPI.Framework.Extensions
             where TDto : DbOperationBaseModel, new()
             where TEntity : class, new()
         {
-            return await db.Updateable<TDto, TEntity>(dto).ExecuteAsync(isCheckAffectedRows, errorMessage);
+            try
+            {
+                return await db.Updateable<TDto, TEntity>(dto).ExecuteAsync(isCheckAffectedRows, errorMessage);
+            }
+            catch (GlobalException ex)
+            {
+                throw new UserOperationException(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return ResponseModel.Error(!string.IsNullOrEmpty(errorMessage) ? errorMessage : ex.Message);
+            }
+
         }
         /// <summary>
         /// 软删除 直接返回通用消息类
