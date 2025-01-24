@@ -1,0 +1,209 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FastAdminAPI.OSS</name>
+    </assembly>
+    <members>
+        <member name="T:FastAdminAPI.OSS.Controllers.BASE.BaseController">
+            <summary>
+            控制器基类
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.OSS.Controllers.BASE.BaseController.Success(System.Object,System.String)">
+            <summary>
+            通用响应-成功
+            </summary>
+            <param name="data"></param>
+            <param name="msg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.OSS.Controllers.BASE.BaseController.Error(System.String,FastAdminAPI.Common.BASE.ResponseCode)">
+            <summary>
+            通用响应-错误
+            </summary>
+            <param name="msg"></param>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.OSS.Controllers.BASE.BaseController.Warn(System.String,System.Object,FastAdminAPI.Common.BASE.ResponseCode)">
+            <summary>
+            通用响应-警告
+            </summary>
+            <param name="msg"></param>
+            <param name="data"></param>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.OSS.Controllers.FilesController">
+            <summary>
+            文件
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.OSS.Controllers.FilesController._files">
+            <summary>
+            文件Service
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.OSS.Controllers.FilesController.#ctor(FastAdminAPI.OSS.IServices.IFilesService)">
+            <summary>
+            构造
+            </summary>
+            <param name="files"></param>
+        </member>
+        <member name="M:FastAdminAPI.OSS.Controllers.FilesController.GetServerDomain">
+            <summary>
+            获取服务器域名
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.OSS.Controllers.FilesController.Upload(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            上传
+            </summary>
+            <param name="file">文件</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.OSS.Controllers.FilesController.Download(System.String,System.String)">
+            <summary>
+            下载
+            </summary>
+            <param name="filepath">文件地址</param>
+            <param name="filename">文件名(可选)</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.OSS.Controllers.FilesController.Delete(System.String)">
+            <summary>
+            删除文件
+            </summary>
+            <param name="filepath">文件地址</param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.OSS.IServices.IFilesService">
+            <summary>
+            文件
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.OSS.IServices.IFilesService.GetServerDomain">
+            <summary>
+            获取服务器域名
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.OSS.IServices.IFilesService.Upload(Microsoft.AspNetCore.Http.IFormFile,System.String)">
+            <summary>
+            上传
+            </summary>
+            <param name="directory">目录名</param>
+            <param name="file">文件</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.OSS.IServices.IFilesService.Download(System.String)">
+            <summary>
+            下载
+            </summary>
+            <param name="filepath">文件地址</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.OSS.IServices.IFilesService.Delete(System.String)">
+            <summary>
+            删除文件
+            </summary>
+            <param name="filepath">文件地址</param>
+            <returns></returns>
+        </member>
+        <member name="T:FastAdminAPI.OSS.Services.BASE.BaseService">
+            <summary>
+            服务层公用部分
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.OSS.Services.BASE.BaseService._userId">
+            <summary>
+            用户Id
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.OSS.Services.BASE.BaseService._account">
+            <summary>
+            账号
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.OSS.Services.BASE.BaseService._employeeId">
+            <summary>
+            员工Id
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.OSS.Services.BASE.BaseService._employeeName">
+            <summary>
+            员工名称
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.OSS.Services.BASE.BaseService._avatar">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.OSS.Services.BASE.BaseService._dbContext">
+            <summary>
+            SugarScope
+            </summary>
+        </member>
+        <member name="T:FastAdminAPI.OSS.Services.FilesService">
+            <summary>
+            文件
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.OSS.Services.FilesService.SERVER_DOMAIN">
+            <summary>
+            服务域名
+            </summary>
+        </member>
+        <member name="F:FastAdminAPI.OSS.Services.FilesService.STORAGE_PATH">
+            <summary>
+            文件存储目录
+            </summary>
+        </member>
+        <member name="M:FastAdminAPI.OSS.Services.FilesService.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Http.IHttpContextAccessor,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            构造
+            </summary>
+            <param name="dbContext"></param>
+            <param name="httpContext"></param>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:FastAdminAPI.OSS.Services.FilesService.FormatUrl(System.String)">
+            <summary>
+            格式化url
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.OSS.Services.FilesService.GetServerDomain">
+            <summary>
+            获取服务器域名
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.OSS.Services.FilesService.Upload(Microsoft.AspNetCore.Http.IFormFile,System.String)">
+            <summary>
+            上传
+            </summary>
+            <param name="directory">目录名</param>
+            <param name="file">文件</param>
+            <returns></returns>
+            <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
+        </member>
+        <member name="M:FastAdminAPI.OSS.Services.FilesService.Download(System.String)">
+            <summary>
+            下载
+            </summary>
+            <param name="filepath">文件地址</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastAdminAPI.OSS.Services.FilesService.Delete(System.String)">
+            <summary>
+            删除文件
+            </summary>
+            <param name="filepath">文件地址</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

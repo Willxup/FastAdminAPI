@@ -33,7 +33,7 @@ namespace FastAdminAPI.Configuration.Middlewares
         public RequestLogMiddleware(RequestDelegate next, IConfiguration configuration)
         {
             _next = next;
-            REQUEST_FILTER_WHITE_URL = configuration.GetValue<string>("RequestFilter.WhiteList").ToLower().Split(",");
+            REQUEST_FILTER_WHITE_URL = configuration.GetValue<string>("RequestFilter.WhiteList")?.ToLower()?.Split(",");
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace FastAdminAPI.Configuration.Middlewares
             }
 
             //白名单
-            if (REQUEST_FILTER_WHITE_URL.Contains(context.Request.Path.Value.ToLower()))
+            if (REQUEST_FILTER_WHITE_URL?.Contains(context.Request.Path.Value.ToLower()) ?? false)
             {
                 await _next(context);
                 return;
@@ -121,7 +121,8 @@ namespace FastAdminAPI.Configuration.Middlewares
                 //log内容
                 string content = string.Empty;
 
-                if (request.Path.Value.ToLower().Contains("excel"))
+                if (request.Path.Value.ToLower().Contains("import") ||
+                    request.Path.Value.ToLower().Contains("export"))
                 {
                     content = $"ConnectId:{connectId}\r\n" +
                               $"QueryData:{request.Path + request.QueryString}\r\n" +
@@ -175,7 +176,8 @@ namespace FastAdminAPI.Configuration.Middlewares
                 //响应体
                 string body = string.Empty;
 
-                if (response.HttpContext.Request.Path.Value.ToLower().Contains("excel"))
+                if (response.HttpContext.Request.Path.Value.ToLower().Contains("import") ||
+                    response.HttpContext.Request.Path.Value.ToLower().Contains("export"))
                 {
                     body = $"ConnectId:{connectId}\r\n";
                 }

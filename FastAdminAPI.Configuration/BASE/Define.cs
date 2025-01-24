@@ -33,8 +33,12 @@ namespace FastAdminAPI.Configuration.BASE
         /// <summary>
         /// 密码密钥
         /// </summary>
-
         public const string PASSWORD_CRYPTO_KEY = "fastadminapiwxdaelzekf884knywill";
+
+        /// <summary>
+        /// 文件存储目录
+        /// </summary>
+        public const string STORAGE_DIRECTORY = "oss";
 
     }
 }

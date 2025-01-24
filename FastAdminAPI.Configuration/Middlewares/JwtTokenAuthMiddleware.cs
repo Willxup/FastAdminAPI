@@ -3,6 +3,7 @@ using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Configuration.Authentications;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
@@ -70,6 +71,7 @@ namespace FastAdminAPI.Configuration.Middlewares
         /// <returns></returns>
         public async Task Invoke(HttpContext httpContext)
         {
+            #region 白名单
             // 健康检查
             if (httpContext.Request.Path.Value.ToLower().Contains("/api/healthcheck"))
             {
@@ -90,7 +92,84 @@ namespace FastAdminAPI.Configuration.Middlewares
                 await _next(httpContext);
                 return;
             }
+            #endregion
 
+            #region 静态文件访问
+            // 静态文件访问
+            if (httpContext.Request.Path.Value.ToLower().StartsWith("/oss"))
+            {
+                // 提取链接上的token
+                if (httpContext.Request.Query.TryGetValue("token", out StringValues value))
+                {
+                    // token
+                    string tokenByQuery = value.ToString();
+
+                    // token长度不能小于128
+                    if (tokenByQuery.Length < 128)
+                    {
+                        await FailAuth(httpContext, GetInvalidTokenResponse());
+                        return;
+                    }
+
+                    // 校验是否为系统颁发的令牌
+                    if (!JwtHelper.ValidateJwtToken(tokenByQuery))
+                    {
+                        await FailAuth(httpContext, GetInvalidTokenResponse());
+                        return;
+                    }
+
+                    JwtTokenModel jwtByQuery;
+                    try
+                    {
+                        // 解析JWT Token
+                        jwtByQuery = JwtHelper.SerializeJwt(tokenByQuery);
+                    }
+                    catch (Exception)
+                    {
+                        await FailAuth(httpContext, GetInvalidTokenResponse());
+                        return;
+                    }
+
+                    // 滑动过期时间下，令牌中的过期时间超过8小时，需要重新登录
+                    // 这里存在token里的过期时间可以看JwtHelper中的设置，两者配合处理token在滑动过期下的最终过期时间
+                    if (DateTime.Now.Subtract(jwtByQuery.Expires).Hours > 8)
+                    {
+                        await FailAuth(httpContext, GetExpirationTokenResponse());
+                        return;
+                    }
+
+                    // 登录许可的redis key
+                    string permitKey1 = LOGIN_PERMIT_KEY + jwtByQuery.UserId + ":" + jwtByQuery.Device;
+
+                    // 获取登录许可(token)
+                    string tokenByRedis1 = await _redis.StringGetAsync(permitKey1);
+
+                    // 如果许可已不存在于Redis中，说明令牌过期
+                    if (string.IsNullOrEmpty(tokenByRedis1))
+                    {
+                        await FailAuth(httpContext, GetExpirationTokenResponse());
+                        return;
+                    }
+
+                    // 如果登录许可(token)与传入的token不一致，说明在其他设备登录
+                    if (tokenByRedis1 != tokenByQuery)
+                    {
+                        await FailAuth(httpContext, GetOtherDeviceLoginResponse());
+                        return;
+                    }
+                }
+                else
+                {
+                    await FailAuth(httpContext, GetUnAuthorizedResponse());
+                    return;
+                }
+
+                await _next(httpContext);
+                return;
+            }
+            #endregion
+
+            #region 接口请求访问
             // 是否包含Authorization请求头
             if (string.IsNullOrEmpty(httpContext.Request.Headers.Authorization))
             {
@@ -176,7 +255,8 @@ namespace FastAdminAPI.Configuration.Middlewares
                 await _redis.KeySetExpireAsync(permitKey, TimeSpan.FromSeconds(LOGIN_PERMIT_EXPIRES));
             }
 
-            await _next(httpContext);
+            await _next(httpContext); 
+            #endregion
         }
 
         /// <summary>

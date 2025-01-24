@@ -5,7 +5,7 @@ namespace FastAdminAPI.Configuration.Middlewares
     public static class UseMiddlewareHelpers
     {
         /// <summary>
-        /// JWT��֤
+        /// JWT认证
         /// </summary>
         /// <param name="app"></param>
         /// <returns></returns>
@@ -14,7 +14,7 @@ namespace FastAdminAPI.Configuration.Middlewares
             return app.UseMiddleware<JwtTokenAuthMiddleware>();
         }
         /// <summary>
-        /// ������Ӧ��־
+        /// 请求响应日志
         /// </summary>
         /// <param name="app"></param>
         /// <returns></returns>
