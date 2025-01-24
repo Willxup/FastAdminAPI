@@ -137,6 +137,10 @@ try
     app.UseRequestResponseLog();
     #endregion
 
+    #region 跨域
+    app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().SetIsOriginAllowed(o => true).AllowCredentials());
+    #endregion
+
     #region 校验
     app.UseAuthentication();
     app.UseJwtTokenAuth();//Token校验

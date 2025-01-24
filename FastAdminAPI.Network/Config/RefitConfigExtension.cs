@@ -34,7 +34,7 @@ namespace FastAdminAPI.Network.Config
             services.AddRefitClient<IQyWechatApi>(REFIT_SETTINGS)
                     .ConfigureHttpClient(c =>
                     {
-                        c.BaseAddress = new Uri(configuration.GetValue<string>("FastAdminAPI.Core.Url")); //appsettings配置
+                        c.BaseAddress = new Uri(configuration.GetValue<string>("FastAdminAPI.Core.Domain")); //appsettings配置
                         c.Timeout = TimeSpan.FromSeconds(60);
                     });
 
@@ -42,7 +42,7 @@ namespace FastAdminAPI.Network.Config
             services.AddRefitClient<IEmailApi>(REFIT_SETTINGS)
                     .ConfigureHttpClient(c =>
                     {
-                        c.BaseAddress = new Uri(configuration.GetValue<string>("FastAdminAPI.Core.Url")); //appsettings配置
+                        c.BaseAddress = new Uri(configuration.GetValue<string>("FastAdminAPI.Core.Domain")); //appsettings配置
                         c.Timeout = TimeSpan.FromSeconds(60);
                     });
 
@@ -50,7 +50,7 @@ namespace FastAdminAPI.Network.Config
             services.AddRefitClient<IWechatApi>(REFIT_SETTINGS)
                 .ConfigureHttpClient(c =>
                 {
-                    c.BaseAddress = new Uri(configuration.GetValue<string>("FastAdminAPI.Core.Url")); //appsettings配置
+                    c.BaseAddress = new Uri(configuration.GetValue<string>("FastAdminAPI.Core.Domain")); //appsettings配置
                     c.Timeout = TimeSpan.FromSeconds(60);
                 });
 
