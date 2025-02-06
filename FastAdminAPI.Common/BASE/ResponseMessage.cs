@@ -3,7 +3,7 @@
     /// <summary>
     /// 业务响应描述
     /// </summary>
-    public class MessageModel
+    public class ResponseMessage
     {
         #region 通用
         /// <summary>

@@ -20,7 +20,7 @@ namespace FastAdminAPI.Common.BASE
         /// <summary>
         /// 消息
         /// </summary>
-        public string Message { get; set; } = MessageModel.Success;
+        public string Message { get; set; } = ResponseMessage.Success;
 
         /// <summary>
         /// 数据

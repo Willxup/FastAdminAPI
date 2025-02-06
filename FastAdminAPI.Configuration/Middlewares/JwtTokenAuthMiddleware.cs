@@ -279,7 +279,7 @@ namespace FastAdminAPI.Configuration.Middlewares
             ResponseModel response = new()
             {
                 Code = ResponseCode.Unauthorized,
-                Message = MessageModel.Unauthorized
+                Message = ResponseMessage.Unauthorized
             };
             return response;
         }
@@ -292,7 +292,7 @@ namespace FastAdminAPI.Configuration.Middlewares
             ResponseModel response = new()
             {
                 Code = ResponseCode.ExpirationToken,
-                Message = MessageModel.ExpirationToken
+                Message = ResponseMessage.ExpirationToken
             };
             return response;
         }
@@ -305,7 +305,7 @@ namespace FastAdminAPI.Configuration.Middlewares
             ResponseModel response = new()
             {
                 Code = ResponseCode.InvalidToken,
-                Message = MessageModel.InvalidToken
+                Message = ResponseMessage.InvalidToken
             };
             return response;
         }
@@ -318,7 +318,7 @@ namespace FastAdminAPI.Configuration.Middlewares
             ResponseModel response = new()
             {
                 Code = ResponseCode.OtherDeviceLogin,
-                Message = MessageModel.OtherDeviceLogin
+                Message = ResponseMessage.OtherDeviceLogin
             };
             return response;
         }
