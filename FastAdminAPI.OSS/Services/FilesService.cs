@@ -86,7 +86,7 @@ namespace FastAdminAPI.OSS.Services
             string[] splits = fileName.Split(".");
             if (splits == null || splits.Length < 2)
                 throw new Exception("获取文件格式失败");
-            string type = splits[1];
+            string type = splits[^1];
             string name = string.Join("", splits[..^1]).Replace("-", "").Replace(":", "").Replace(Path.DirectorySeparatorChar + "", "");
 
             fileName = $"{GuidConverter.GenerateShortGuid()}{name}.{type}";
