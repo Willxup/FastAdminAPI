@@ -6,7 +6,7 @@ using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Utilities;
 
-namespace FastAdminAPI.Common.Filters
+namespace FastAdminAPI.Configuration.Filters
 {
     /// <summary>
     /// 全局异常日志

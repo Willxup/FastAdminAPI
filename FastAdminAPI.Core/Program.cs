@@ -2,7 +2,7 @@
 using FastAdminAPI.Business.Extensions;
 using FastAdminAPI.CAP.Extensions;
 using FastAdminAPI.Common.Attributes.CheckValidators;
-using FastAdminAPI.Common.Filters;
+using FastAdminAPI.Configuration.Filters;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Common.Utilities;
