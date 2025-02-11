@@ -17,7 +17,7 @@
   - [NPOI](#FastAdminAPINPOI)
   - [Network](#FastAdminAPINetwork)
   - [EventBus](#FastAdminAPIEventBus)
-  - [Tasks](#FastAdminAPITasks)
+  - [Schedules](#FastAdminAPISchedules)
 - [感谢](#chapter-4)
 - [Sponsor](#chapter-5)
 
@@ -554,7 +554,7 @@ public class Test
 
 `CAP`的配置放在`appsettings.json`文件中，可以按需求修改。
 
-## FastAdminAPI.Tasks
+## FastAdminAPI.Schedules
 
 定时任务，基于[HangfireIO/Hangfire开源项目](https://github.com/HangfireIO/Hangfire)进行开发，依赖于`Redis`。简化了相关配置。
 
@@ -569,14 +569,23 @@ new BasicAuthAuthorizationUser
 ```
 
 ### 配置
-- 定时任务只需要继承`BaseTask.cs`基类即可，要配置定时任务执行的周期，可以在`appsettings.json中进行配置`。
+- 定时任务只需要继承`BaseScheduleJob.cs`基类即可，要配置定时任务执行的周期，可以在`appsettings.json中进行配置`。
 ```json
-"Task.Configures": "TestTask,daily,1,0;TestTask2,min,5"
+"ScheduleJob": [
+  {
+    "IsEnable": false,
+    "JobName": "example",
+    "Frequency": "minutes/hours/daily/weekly/monthly/yearly",
+    "Minute": "minutes/dailyweekly",
+    "Hour": "hours/daily/weekly/monthly",
+    "Day": "monthly/yearly",
+    "DayOfWeek": "weekly",
+    "Month": "yearly",
+    "Description": "description"
+  }
+]
 ```
-> 配置方式：任务名称，任务执行周期`min/hour/daily/monthly/yearly/cron`，任务时间
-> 多个定时任务以`;`分号分隔
-> 也可以直接配置`cron`，例如：TestTask,cron, `0 0/2 * * *`，每两小时整执行一次。
-
+只需要根据不同的定时任务，配置不同的配置即可，配置类为`ScheduleJobOptions`
 
 
 # <span id='chapter-4'>🍾 感谢</span>
