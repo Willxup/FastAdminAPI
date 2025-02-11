@@ -10,6 +10,7 @@
 - [项目内容](#chapter-3)
   - [Core](#FastAdminAPICore)
   - [Common](#FastAdminAPICommon)
+  - [Configuration](#FastAdminAPIConfiguration)
   - [Framework](#FastAdminAPIFramework)
   - [Business](#FastAdminAPIBusiness)
   - [CAP](#FastAdminAPICAP)
@@ -102,30 +103,34 @@ Services/      服务层-业务数据操作
 ### 结构
 ```bash
 Attributes/           各类特性类
-Authentications/      jwt校验
 BASE/                 返回统一参数，通用参数等
-Converters/           对象转换
-Cryptions/            加解密
+Cryptos/              加解密
 Datetime/             时间帮助类
 Enums/                通用枚举
-Extensions/           通用配置
-Filters/              全局过滤
 JsonTree/             json树结构转换
 Logs/                 日志相关
-Middlewares/          通用中间件
-Network/              网络工具类
 QRCode/               二维码生成工具
 Redis/                Redis工具类
-Reflections/          反射
 SerialNumber/         编号/序列号生成器
-Swagger/              Swagger配置
-SystemUtilities/      系统工具
 Utilities/            实用工具
 ```
 
-在以上工具类中，有一些是配置，需要在`program.cs`文件中进行配置。
+
+
+## FastAdminAPI.Configuration
+
+### 结构
+```bash
+Authentications/      jwt校验
+BASE/                 全局参数
+Extensions/           通用配置
+Filters/              全局过滤
+Middlewares/          通用中间件
+Swagger/              Swagger配置
+```
 
 ### 配置
+
 #### 配置Model规则验证和全局异常捕获
 ```C#
 //配置 Model规则有效性验证 和 全局异常捕获
@@ -136,22 +141,6 @@ builder.Services.AddControllers(c =>
 		//配置全局异常捕获
 		c.Filters.Add(typeof(GlobalExceptionsFilter));
 	});
-```
-
-#### 配置Redis
-
-```C#
-// Redis
-builder.Services.AddSingleton<IRedisHelper, RedisHelper>();
-```
-
-#### 配置HttpClient
-
-```C#
-//使用Refit的情况下，可以不注入
-// HttpClient & Helper
-builder.Services.AddHttpClient();
-builder.Services.AddSingleton<HttpClientHelper>();
 ```
 
 #### 配置service层
@@ -192,6 +181,7 @@ builder.Services.AddJwtAuthentication();
 app.UseAuthentication();
 app.UseJwtTokenAuth();
 ```
+
 
 ## FastAdminAPI.Framework
 
