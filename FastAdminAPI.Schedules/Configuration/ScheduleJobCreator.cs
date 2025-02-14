@@ -5,12 +5,14 @@ using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Network.Interfaces;
 using FastAdminAPI.Network.Models.Schedules;
 using Hangfire;
+using Hangfire.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FastAdminAPI.Schedules.Configuration
 {
@@ -33,6 +35,8 @@ namespace FastAdminAPI.Schedules.Configuration
         public static void Init(IConfiguration configuration, IServiceProvider serviceProvider)
         {
             List<ScheduleJobOptions> jobOptions = configuration.GetSection("ScheduleJob").Get<List<ScheduleJobOptions>>();
+
+            DestroyAll(jobOptions);
 
             if (jobOptions?.Count > 0)
             {
@@ -131,6 +135,21 @@ namespace FastAdminAPI.Schedules.Configuration
         public static void Destroy(string jobName)
         {
             RecurringJob.RemoveIfExists($"Job.{jobName}");
+        }
+        /// <summary>
+        /// 销毁所有任务
+        /// </summary>
+        /// <param name="jobOptions"></param>
+        private static void DestroyAll(List<ScheduleJobOptions> jobOptions = null)
+        {
+            using var connection = JobStorage.Current.GetConnection();
+            foreach (var job in connection.GetRecurringJobs())
+            {
+                string jobname = job.Id[4..];
+                var existJob = jobOptions?.Where(c => c.JobName == jobname)?.FirstOrDefault();
+                if (existJob == null)
+                    RecurringJob.RemoveIfExists(job.Id);
+            }
         }
         /// <summary>
         /// 转换DayOfWeek枚举
