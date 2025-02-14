@@ -513,23 +513,6 @@ namespace FastAdminAPI.Common.Redis
 
         #region SortedSet
         /// <summary>
-        /// 集合中是否存在该值
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        bool SortedSetExist<T>(string key, T value);
-        /// <summary>
-        /// 集合中是否存在该值
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        Task<bool> SortedSetExistAsync<T>(string key, T value);
-
-        /// <summary>
         /// 获取集合中的数量
         /// </summary>
         /// <param name="key"></param>
