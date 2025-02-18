@@ -69,6 +69,12 @@
             </summary>
             <param name="jobName"></param>
         </member>
+        <member name="M:FastAdminAPI.Schedules.Configuration.ScheduleJobCreator.DestroyAll(System.Collections.Generic.List{FastAdminAPI.Network.Models.Schedules.ScheduleJobOptions})">
+            <summary>
+            销毁所有任务
+            </summary>
+            <param name="jobOptions"></param>
+        </member>
         <member name="M:FastAdminAPI.Schedules.Configuration.ScheduleJobCreator.ConvertDayOfWeek(System.String)">
             <summary>
             转换DayOfWeek枚举
