@@ -145,9 +145,12 @@ namespace FastAdminAPI.Schedules.Configuration
             using var connection = JobStorage.Current.GetConnection();
             foreach (var job in connection.GetRecurringJobs())
             {
-                string jobname = job.Id[4..];
+                string jobname = job.Id[4..]; //Job.xxxx
+
                 var existJob = jobOptions?.Where(c => c.JobName == jobname)?.FirstOrDefault();
-                if (existJob == null)
+
+                //如果任务不存在 或者 任务不启用，需要删除任务
+                if (existJob == null || (existJob != null && existJob.IsEnable == false))
                     RecurringJob.RemoveIfExists(job.Id);
             }
         }
