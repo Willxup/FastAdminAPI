@@ -86,42 +86,42 @@ namespace FastAdminAPI.Schedules.Configuration
                         () => job.Run(),
                         () => $"*/{jobOptions.Minute} * * * *",
                         options);
-                    NLogHelper.Debug($"定时任务【{jobOptions.JobName}】创建成功!");
+                    NLogHelper.Debug($"创建定时任务[{jobOptions.JobName}]创建!");
                     break;
                 case "hours":
                     RecurringJob.AddOrUpdate($"Job.{jobOptions.JobName}",
                         () => job.Run(),
                         () => $"0 */{jobOptions.Hour} * * *",
                         options);
-                    NLogHelper.Debug($"定时任务【{jobOptions.JobName}】创建成功!");
+                    NLogHelper.Debug($"创建定时任务[{jobOptions.JobName}]创建!");
                     break;
                 case "daily":
                     RecurringJob.AddOrUpdate($"Job.{jobOptions.JobName}",
                         () => job.Run(),
                         () => Cron.Daily(Convert.ToInt32(jobOptions.Hour), Convert.ToInt32(jobOptions.Minute)),
                         options);
-                    NLogHelper.Debug($"定时任务【{jobOptions.JobName}】创建成功!");
+                    NLogHelper.Debug($"创建定时任务[{jobOptions.JobName}]创建!");
                     break;
                 case "weekly":
                     RecurringJob.AddOrUpdate($"Job.{jobOptions.JobName}",
                         () => job.Run(),
                         () => Cron.Weekly(ConvertDayOfWeek(jobOptions.DayOfWeek), Convert.ToInt32(jobOptions.Hour), Convert.ToInt32(jobOptions.Minute)),
                         options);
-                    NLogHelper.Debug($"定时任务【{jobOptions.JobName}】创建成功!");
+                    NLogHelper.Debug($"创建定时任务[{jobOptions.JobName}]创建!");
                     break;
                 case "monthly":
                     RecurringJob.AddOrUpdate($"Job.{jobOptions.JobName}",
                         () => job.Run(),
                         () => Cron.Monthly(Convert.ToInt32(jobOptions.Day), Convert.ToInt32(jobOptions.Hour)),
                         options);
-                    NLogHelper.Debug($"定时任务【{jobOptions.JobName}】创建成功!");
+                    NLogHelper.Debug($"创建定时任务[{jobOptions.JobName}]创建!");
                     break;
                 case "yearly":
                     RecurringJob.AddOrUpdate($"Job.{jobOptions.JobName}",
                         () => job.Run(),
                         () => Cron.Yearly(Convert.ToInt32(jobOptions.Month), Convert.ToInt32(jobOptions.Day), Convert.ToInt32(jobOptions.Hour)),
                         options);
-                    NLogHelper.Debug($"定时任务【{jobOptions.JobName}】创建成功!");
+                    NLogHelper.Debug($"创建定时任务[{jobOptions.JobName}]创建!");
                     break;
                 default:
                     NLogHelper.Error($"定时任务【{jobOptions.JobName}】未匹配到任务计划，[{JsonConvert.SerializeObject(jobOptions)}]");
@@ -135,6 +135,7 @@ namespace FastAdminAPI.Schedules.Configuration
         public static void Destroy(string jobName)
         {
             RecurringJob.RemoveIfExists($"Job.{jobName}");
+            NLogHelper.Debug($"销毁定时任务[{jobName}]创建!");
         }
         /// <summary>
         /// 销毁所有任务
@@ -145,13 +146,16 @@ namespace FastAdminAPI.Schedules.Configuration
             using var connection = JobStorage.Current.GetConnection();
             foreach (var job in connection.GetRecurringJobs())
             {
-                string jobname = job.Id[4..]; //Job.xxxx
+                string jobName = job.Id[4..]; //Job.xxxx
 
-                var existJob = jobOptions?.Where(c => c.JobName == jobname)?.FirstOrDefault();
+                var existJob = jobOptions?.Where(c => c.JobName == jobName)?.FirstOrDefault();
 
                 //如果任务不存在 或者 任务不启用，需要删除任务
                 if (existJob == null || (existJob != null && existJob.IsEnable == false))
+                {
                     RecurringJob.RemoveIfExists(job.Id);
+                    NLogHelper.Debug($"销毁定时任务[{jobName}]创建!");
+                }
             }
         }
         /// <summary>
