@@ -4,9 +4,11 @@ using FastAdminAPI.Configuration.Authentications;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Primitives;
 using System;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace FastAdminAPI.Configuration.Middlewares
@@ -43,14 +45,14 @@ namespace FastAdminAPI.Configuration.Middlewares
         /// <returns></returns>
         public async Task InvokeAsync(HttpContext context)
         {
-            //健康检查
+            // 健康检查
             if (context.Request.Path.Value.ToLower().Contains("/api/healthcheck"))
             {
                 await _next(context);
                 return;
             }
 
-            //白名单
+            // 白名单
             if (REQUEST_FILTER_WHITE_URL?.Contains(context.Request.Path.Value.ToLower()) ?? false)
             {
                 await _next(context);
@@ -58,7 +60,7 @@ namespace FastAdminAPI.Configuration.Middlewares
             }
 
             // 拦截API接口
-            if (context.Request.Path.Value.ToLower().Contains("/api"))
+            if (context.Request.Path.Value.ToLower().StartsWith("/api"))
             {
                 context.Request.EnableBuffering();
 
