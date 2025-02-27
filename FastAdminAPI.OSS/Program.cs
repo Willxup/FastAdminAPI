@@ -7,7 +7,6 @@ using FastAdminAPI.Configuration.Extensions;
 using FastAdminAPI.Configuration.Filters;
 using FastAdminAPI.Configuration.Middlewares;
 using FastAdminAPI.Configuration.Swagger;
-using FastAdminAPI.Framework.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
@@ -15,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using NLog;
 using NLog.Web;
-using SqlSugar;
 using System;
 using System.IO;
 
@@ -77,17 +75,6 @@ try
 
     // 业务服务注入
     builder.Services.AddBusinessServices();
-    #endregion
-
-    #region SqlSugar ORM框架
-    builder.Services.AddSingleton<ISqlSugarClient>(sugar =>
-    {
-        return DbExtension.ConfigSqlSugar(configuration.GetValue<string>("Database.ConnectionString"));
-    });
-    #endregion
-
-    #region 缓存
-    builder.Services.AddMemoryCache();
     #endregion
 
     #region  响应结果压缩

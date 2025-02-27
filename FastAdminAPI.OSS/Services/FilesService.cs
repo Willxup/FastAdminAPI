@@ -7,7 +7,6 @@ using FastAdminAPI.OSS.IServices;
 using FastAdminAPI.OSS.Services.BASE;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using SqlSugar;
 using System;
 using System.IO;
 using System.Net.Http.Headers;
@@ -31,10 +30,9 @@ namespace FastAdminAPI.OSS.Services
         /// <summary>
         /// 构造
         /// </summary>
-        /// <param name="dbContext"></param>
         /// <param name="httpContext"></param>
         /// <param name="configuration"></param>
-        public FilesService(ISqlSugarClient dbContext, IHttpContextAccessor httpContext, IConfiguration configuration) : base(dbContext, httpContext)
+        public FilesService(IHttpContextAccessor httpContext, IConfiguration configuration) : base(httpContext)
         {
             SERVER_DOMAIN = configuration.GetValue<string>("FastAdminAPI.OSS.Domain");
         }

@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FastAdminAPI.Configuration\FastAdminAPI.Configuration.csproj" />
-    <ProjectReference Include="..\FastAdminAPI.Framework\FastAdminAPI.Framework.csproj" />
   </ItemGroup>
 
 </Project>

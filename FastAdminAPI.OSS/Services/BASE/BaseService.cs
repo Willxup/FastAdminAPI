@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using SqlSugar;
 using System;
 using System.Linq;
 
@@ -30,22 +29,11 @@ namespace FastAdminAPI.OSS.Services.BASE
         /// 头像
         /// </summary>
         protected readonly string _avatar;
-        /// <summary>
-        /// SugarScope
-        /// </summary>
-        protected SqlSugarScope _dbContext;
 
         public BaseService() { }
 
-        public BaseService(ISqlSugarClient dbContext)
+        public BaseService(IHttpContextAccessor httpContext)
         {
-            _dbContext = dbContext as SqlSugarScope;
-        }
-
-        public BaseService(ISqlSugarClient dbContext, IHttpContextAccessor httpContext)
-        {
-            _dbContext = dbContext as SqlSugarScope;
-
             _userId = Convert.ToInt64(httpContext.HttpContext.User.Claims.First(c => c.Type == "UserId").Value);
             _account = httpContext.HttpContext.User.Claims.First(c => c.Type == "Account").Value;
             _employeeId = Convert.ToInt64(httpContext.HttpContext.User.Claims.First(c => c.Type == "EmployeeId").Value);
