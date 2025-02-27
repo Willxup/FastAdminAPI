@@ -1,14 +1,15 @@
 using Autofac.Extensions.DependencyInjection;
 using FastAdminAPI.Common.Attributes.CheckValidators;
-using FastAdminAPI.Configuration.Filters;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Common.Utilities;
 using FastAdminAPI.Configuration.Extensions;
+using FastAdminAPI.Configuration.Filters;
 using FastAdminAPI.Configuration.Middlewares;
 using FastAdminAPI.Configuration.Swagger;
 using FastAdminAPI.Framework.Extensions;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
@@ -133,7 +134,29 @@ try
     #endregion
 
     #region 静态文件
-    app.UseStaticFiles();
+    // 保留默认格式映射，并新增两种格式映射
+    FileExtensionContentTypeProvider provider = new();
+    provider.Mappings[".wgt"] = "application/widget";
+    provider.Mappings[".apk"] = "application/vnd.android.package-archive";
+
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        ContentTypeProvider = provider
+        //FileProvider = new PhysicalFileProvider(Path.Combine(AppContext.BaseDirectory, "wwwroot")), // 指定文件路径
+        //ServeUnknownFileTypes = true, // 允许服务未知文件类型
+        //DefaultContentType = "application/octet-stream", // 覆盖默认MIME 类型
+        //OnPrepareResponse = ctx => // 设置特殊文件的内容格式
+        //{
+        //    if (ctx.File.Name.EndsWith(".wgt", StringComparison.OrdinalIgnoreCase))
+        //    {
+        //        ctx.Context.Response.Headers[HeaderNames.ContentType] = "application/widget";
+        //    }
+        //    if (ctx.File.Name.EndsWith(".apk", StringComparison.OrdinalIgnoreCase))
+        //    {
+        //        ctx.Context.Response.Headers[HeaderNames.ContentType] = "application/vnd.android.package-archive";
+        //    }
+        //}
+    });
     #endregion
 
     #region Map
