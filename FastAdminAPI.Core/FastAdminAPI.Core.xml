@@ -474,6 +474,13 @@
             <returns></returns>
             <exception cref="T:FastAdminAPI.Common.Attributes.UserOperationException"></exception>
         </member>
+        <member name="M:FastAdminAPI.Core.Controllers.LoginController.RefreshToken(System.String)">
+            <summary>
+            刷新令牌
+            </summary>
+            <param name="token">令牌</param>
+            <returns></returns>
+        </member>
         <member name="T:FastAdminAPI.Core.Controllers.ModuleController">
             <summary>
             模块

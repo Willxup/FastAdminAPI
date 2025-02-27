@@ -217,5 +217,75 @@ namespace FastAdminAPI.Core.Controllers
                 throw new UserOperationException("登录失败，请稍后再试!");
             }
         }
+        /// <summary>
+        /// 刷新令牌
+        /// </summary>
+        /// <param name="token">令牌</param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ResponseModel> RefreshToken([FromQuery] string token)
+        {
+            if (token.Length < 128)
+            {
+                return Error(ResponseMessage.InvalidToken, ResponseCode.InvalidToken);
+            }
+
+            if (!JwtHelper.ValidateJwtToken(token))
+            {
+                return Error(ResponseMessage.InvalidToken, ResponseCode.InvalidToken);
+            }
+
+            // 解析JWT Token
+            JwtTokenModel jwt;
+
+            try
+            {
+                jwt = JwtHelper.SerializeJwt(token);
+
+                // 登录许可的redis key
+                string permitKey = LOGIN_PERMIT_KEY + jwt.UserId + ":" + jwt.Device;
+
+                if (await _redis.KeyExistsAsync(permitKey))
+                {
+                    return Error(ResponseMessage.InvalidToken, ResponseCode.InvalidToken);
+                }
+
+                // 获取登录许可(token)
+                string tokenByRedis = await _redis.StringGetAsync(permitKey);
+
+                // 如果登录许可(token)与传入的token不一致，说明在其他设备登录
+                if (tokenByRedis != token)
+                {
+                    return Error(ResponseMessage.OtherDeviceLogin, ResponseCode.OtherDeviceLogin);
+                }
+
+                JwtTokenModel newJwt = new()
+                {
+                    UserId = jwt.UserId,
+                    Account = jwt.Account,
+                    EmployeeId = jwt.EmployeeId,
+                    EmployeeName = jwt.EmployeeName,
+                    Avatar = jwt.Avatar,
+                    Device = jwt.Device
+                };
+
+                //生成新token
+                string newToken = JwtHelper.IssueJwt(newJwt, _configuration);
+
+                //登录许可RedisKey
+                string key = LOGIN_PERMIT_KEY + newJwt.UserId + ":" + newJwt.Device;
+
+                //保存在Redis中
+                bool isSuccess = await _redis.StringSetAsync(key, newToken, TimeSpan.FromSeconds(LOGIN_PERMIT_EXPIRES));
+                if (!isSuccess)
+                    throw new Exception("登录失败，redis缓存失败!");
+
+                return Success(newToken);
+            }
+            catch (Exception) // 解析token失败
+            {
+                return Error(ResponseMessage.InvalidToken, ResponseCode.InvalidToken);
+            }
+        }
     }
 }
