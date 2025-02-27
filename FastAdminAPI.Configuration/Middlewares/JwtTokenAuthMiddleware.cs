@@ -229,15 +229,15 @@ namespace FastAdminAPI.Configuration.Middlewares
             // 登录许可的redis key
             string permitKey = LOGIN_PERMIT_KEY + jwt.UserId + ":" + jwt.Device;
 
-            // 获取登录许可(token)
-            string tokenByRedis = await _redis.StringGetAsync(permitKey);
-
             // 如果许可已不存在于Redis中，说明令牌过期
-            if (string.IsNullOrEmpty(tokenByRedis))
+            if (!await _redis.KeyExistsAsync(permitKey))
             {
                 await FailAuth(httpContext, GetExpirationTokenResponse());
                 return;
             }
+
+            // 获取登录许可(token)
+            string tokenByRedis = await _redis.StringGetAsync(permitKey);
 
             // 如果登录许可(token)与传入的token不一致，说明在其他设备登录
             if (tokenByRedis != token)
