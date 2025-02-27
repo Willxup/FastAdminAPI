@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignalR Demo with JWT</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+</head>
+<body>
+
+    <h1>消息数量: <span id="messageCount">0</span></h1>
+    <button id="updateMessage">更新消息数量</button>
+</body>
+</html>
+<script>
+    const token = "";
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("http://localhost:9004/hubs/me", { accessTokenFactory: () => token }) // 设置 JWT 令牌
+        .build();
+
+    connection.on("SetUnreadMessageCount", function (count) {
+        document.getElementById("messageCount").innerText = count;
+    });
+    connection.onclose(async () => 
+    {
+        console.log("连接已关闭!");
+    });
+
+    document.getElementById("updateMessage").addEventListener("click", async function () {
+        try {
+            await connection.invoke("GetUnreadMessageCount");
+        } catch (error) {
+            console.log(error);
+        }
+    });
+
+    connection.logging = true;
+
+    connection.start().then(function () {
+        console.log("连接成功!");
+    }).catch(function (err) {
+        console.log("连接失败!")
+        return console.error(err);
+    });
+
+
+</script>
