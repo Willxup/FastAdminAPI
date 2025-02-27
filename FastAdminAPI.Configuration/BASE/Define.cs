@@ -40,5 +40,7 @@ namespace FastAdminAPI.Configuration.BASE
         /// </summary>
         public const string STORAGE_DIRECTORY = "oss";
 
+        public const string HUB_CONNECT_REDIS_KEY = "HubConnection";
+
     }
 }

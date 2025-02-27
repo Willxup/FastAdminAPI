@@ -73,14 +73,14 @@ namespace FastAdminAPI.Configuration.Middlewares
         {
             #region 白名单
             // 健康检查
-            if (httpContext.Request.Path.Value.ToLower().Contains("/api/healthcheck"))
+            if (httpContext.Request.Path.Value.ToLower().StartsWith("/api/healthcheck"))
             {
                 await _next(httpContext);
                 return;
             }
 
             // 无需token校验
-            if (httpContext.Request.Path.Value.ToLower().Contains("/api/tokenpass"))
+            if (httpContext.Request.Path.Value.ToLower().StartsWith("/api/tokenpass"))
             {
                 await _next(httpContext);
                 return;
@@ -88,6 +88,13 @@ namespace FastAdminAPI.Configuration.Middlewares
 
             // 白名单
             if (WHITE_LIST?.Contains(httpContext.Request.Path.Value.ToLower()) ?? false)
+            {
+                await _next(httpContext);
+                return;
+            }
+
+            // SignalR hub(websocket) 校验放在hub及UseAuthentication中
+            if (httpContext.Request.Path.Value.ToLower().StartsWith("/hubs"))
             {
                 await _next(httpContext);
                 return;
