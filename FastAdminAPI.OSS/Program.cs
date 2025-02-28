@@ -21,8 +21,6 @@ try
 {
     //builder
     WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-    //获取配置
-    IConfiguration configuration = builder.Configuration;
     //服务名称
     string serviceName = "FastAdminAPI.OSS";
 
@@ -37,7 +35,7 @@ try
     .UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureAppConfiguration((hostingContext, config) =>
     {
-        //设置appsetting.json
+        //设置appsettings.json
         config.SetBasePath(Directory.GetCurrentDirectory())
                   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                   .AddJsonFile($"appsettings.{EnvTool.GetEnv()}.json", optional: true, reloadOnChange: true)
