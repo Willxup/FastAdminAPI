@@ -2,7 +2,6 @@
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Configuration.BASE;
 using FastAdminAPI.Hubs.Hubs.BASE;
-using FastAdminAPI.Hubs.Hubs.Interfaces;
 using System.Threading.Tasks;
 
 namespace FastAdminAPI.Hubs.Hubs

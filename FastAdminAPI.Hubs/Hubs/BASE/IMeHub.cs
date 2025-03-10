@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace FastAdminAPI.Hubs.Hubs.Interfaces
+namespace FastAdminAPI.Hubs.Hubs.BASE
 {
     /// <summary>
     /// MeHub 客户端方法
