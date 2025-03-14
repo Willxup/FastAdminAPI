@@ -670,8 +670,8 @@ namespace FastAdminAPI.Business.Implements
                 //校验是否已存在未完成审批的申请
                 bool isExist = await _dbContext.Queryable<S12_Check>()
                     .Where(S12 => S12.S12_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S12.S12_IsFinishCheck == (byte)BaseEnums.IsFinish.Unfinish &&
-                                  S12.S12_ApplicationCategory == model.ApplicationCategory &&
-                                  //S12.S99_ApplicationType == model.ApplicationType &&
+                                  //S12.S12_ApplicationCategory == model.ApplicationCategory &&
+                                  S12.S99_ApplicationType == model.ApplicationType &&
                                   S12.S12_ApplicationId == model.ApplicationId)
                     .AnyAsync();
                 if (isExist)
