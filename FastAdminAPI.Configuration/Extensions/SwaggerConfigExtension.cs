@@ -22,60 +22,65 @@ namespace FastAdminAPI.Configuration.Extensions
         /// <returns></returns>
         public static IServiceCollection AddSwagger(this IServiceCollection services, string serviceName, string basePath)
         {
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(options =>
             {
                 typeof(ApiVersions).GetEnumNames().ToList().ForEach(version =>
                 {
-                    c.SwaggerDoc(version, new OpenApiInfo
+                    options.SwaggerDoc(version, new OpenApiInfo
                     {
                         // {ApiName} 定义成全局变量
                         Title = $"{serviceName} 接口文档",
                         Description = $"{serviceName} " + version,
-                        //TermsOfService = "None",
+                        // TermsOfService = "None",
                         Contact = new OpenApiContact { Name = serviceName, Email = "fastadminapi@willxup.top" }
                     });
                     // 按相对路径排序
                     //c.OrderActionsBy(o => o.RelativePath);
                 });
-                //解决相同类名会报错的问题
-                c.CustomSchemaIds(type => type.FullName);
+                // 解决相同类名会报错的问题
+                options.CustomSchemaIds(type => type.FullName);
 
-                //配置的xml文件名
+                // 配置的xml文件名
                 var xmlPath = Path.Combine(basePath, $"{serviceName}.xml");
-                c.IncludeXmlComments(xmlPath, true);
+                // 将代码中的XML注释添加到swagger中，补充swagger文档细节
+                options.IncludeXmlComments(xmlPath, true);
 
                 #region Token绑定
-                //添加header验证信息
-                //c.OperationFilter<SwaggerHeader>();
+                // 添加header验证信息
+                // options.OperationFilter<SwaggerHeader>();
 
-                //发行人
-                var issuerName = Define.ISSUER;
-                var security = new OpenApiSecurityRequirement()
-                {
-                    {
-                        new OpenApiSecurityScheme{
-                            Reference = new OpenApiReference {
-                                        Type = ReferenceType.SecurityScheme,
-                                        Id = issuerName},
-                            //Name = issuerName
-                        }, Array.Empty<string>()
-                    }
-                };
-                c.AddSecurityRequirement(security);
-
-                c.AddSecurityDefinition(issuerName, new OpenApiSecurityScheme
+                // 设置一个安全定义
+                options.AddSecurityDefinition(Define.ISSUER, new OpenApiSecurityScheme
                 {
                     Description = "请在下框中输入Bearer {token}",
-                    Name = "Authorization", //jwt默认的参数名称
-                    In = ParameterLocation.Header, //jwt默认存放Authorization信息的位置(请求头中)
+                    Name = "Authorization", // jwt默认的参数名称
+                    In = ParameterLocation.Header, // jwt默认存放Authorization信息的位置(请求头中)
                     Type = SecuritySchemeType.ApiKey,
                     BearerFormat = "JWT",
                     Scheme = "Bearer"
                 });
+
+                // 添加安全需求
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            //Name = issuerName
+                            Reference = new OpenApiReference
+                            {
+                                        Type = ReferenceType.SecurityScheme,
+                                        Id = Define.ISSUER // 这个Id需要对应安全定义
+                            },
+
+                        }, Array.Empty<string>()
+                    }
+                });
                 #endregion
             });
 
-            services.AddSwaggerGenNewtonsoftSupport(); //使swagger支持newtonsoft.json
+            // 使swagger支持newtonsoft.json
+            services.AddSwaggerGenNewtonsoftSupport();
 
             return services;
         }
