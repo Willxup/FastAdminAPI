@@ -9,7 +9,6 @@ using FastAdminAPI.Framework.Entities;
 using FastAdminAPI.Framework.Extensions;
 using Microsoft.AspNetCore.Http;
 using SqlSugar;
-using SqlSugar.Attributes.Extension.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
