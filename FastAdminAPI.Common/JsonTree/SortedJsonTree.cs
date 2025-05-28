@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -72,18 +73,18 @@ namespace FastAdminAPI.Common.JsonTree
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="dataSource"></param>
-        /// <param name="keyWord"></param>
+        /// <param name="Keyword"></param>
         /// <returns></returns>
-        public static string CreateJsonTrees<T>(List<T> dataSource, string keyWord = null)
+        public static string CreateJsonTrees<T>(List<T> dataSource, string Keyword = null)
             where T : SortedJsonTree
         {
             //创建树结构
             var trees = CreateTrees(dataSource);
 
             //关键字过滤
-            if (!string.IsNullOrWhiteSpace(keyWord))
+            if (!string.IsNullOrWhiteSpace(Keyword))
             {
-                trees = FilterKeyWord(trees, keyWord);
+                trees = FilterKeyWord(trees, Keyword);
             }
 
             return JsonConvert.SerializeObject(trees);
@@ -117,17 +118,17 @@ namespace FastAdminAPI.Common.JsonTree
         /// <typeparam name="T"></typeparam>
         /// <param name="parents"></param>
         /// <param name="childs"></param>
-        /// <param name="keyWord"></param>
+        /// <param name="Keyword"></param>
         /// <returns></returns>
-        public static string CreateCustomJsonTrees<T>(List<T> parents, List<T> childs, string keyWord = null)
+        public static string CreateCustomJsonTrees<T>(List<T> parents, List<T> childs, string Keyword = null)
             where T : SortedJsonTree
         {
             //创建树结构
             var trees = CreateCustomTrees(parents, childs);
 
-            if (!string.IsNullOrWhiteSpace(keyWord))
+            if (!string.IsNullOrWhiteSpace(Keyword))
             {
-                trees = FilterKeyWord(trees, keyWord);
+                trees = FilterKeyWord(trees, Keyword);
             }
 
             return JsonConvert.SerializeObject(trees);
@@ -159,43 +160,28 @@ namespace FastAdminAPI.Common.JsonTree
         /// 过滤关键字
         /// </summary>
         /// <param name="trees"></param>
-        /// <param name="KeyWord"></param>
+        /// <param name="Keyword"></param>
         /// <returns></returns>
-        private static List<T> FilterKeyWord<T>(List<T> trees, string KeyWord)
+        private static List<T> FilterKeyWord<T>(List<T> trees, string Keyword)
             where T : SortedJsonTree
         {
-            List<T> result = trees;
+            List<T> result = new List<T>();
 
             if (trees?.Count > 0)
             {
-                for (int i = 0; i < trees?.Count; i++)
+                foreach (var item in trees)
                 {
-                    //如果包含子类就继续往下找
-                    if (trees[i].Children?.Count > 0)
-                    {
-                        FilterKeyWord(trees[i].Children, KeyWord);
-                    }
-                    else
-                    {
-                        //沒有子节点且不包含关键字的直接移除
-                        if (!trees[i].Name.Contains(KeyWord))
-                        {
-                            result.Remove(trees[i]);
-                            i--;
-                            continue;
-                        }
-                    }
+                    var children = FilterKeyWord(item.Children, Keyword);
+                    bool isMatch = item.Name.Contains(Keyword, StringComparison.OrdinalIgnoreCase);
 
-                    //再次判断这个节点是否还包含子节点
-                    //如果不包含则说明子节点都不包含关键字,需要移除父节点
-                    if (!trees[i].Name.Contains(KeyWord) && (trees[i].Children == null || trees[i].Children.Count == 0))
+                    if (isMatch || children?.Count > 0)
                     {
-                        result.Remove(trees[i]);
-                        --i;
+                        item.Children = children?.Count > 0 ? children : null;
+                        result.Add(item);
                     }
                 }
             }
-
+            
             return result;
         }
     }
