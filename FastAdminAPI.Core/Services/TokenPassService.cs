@@ -99,7 +99,7 @@ namespace FastAdminAPI.Core.Services
         /// <returns></returns>
         public async Task<string> GetCodeTree(string code)
         {
-            return SortedJsonTree.CreateJsonTrees(await _dbContext.Queryable<S99_Code>()
+            return SortedJsonTree.CreateJsonTree(await _dbContext.Queryable<S99_Code>()
                 .Where(S99 => S99.S99_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S99.S99_GroupCode == code)
                 .Select(S99 => new SortedJsonTree
                 {

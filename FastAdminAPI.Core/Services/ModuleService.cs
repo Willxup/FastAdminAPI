@@ -34,7 +34,7 @@ namespace FastAdminAPI.Core.Services
         /// <returns></returns>
         public async Task<string> GetModuleTree(string moduleName = null)
         {
-            return SortedJsonTree.CreateJsonTrees(await _dbContext.Queryable<S02_Module>()
+            return SortedJsonTree<ModuleInfoModel>.CreateJsonTree(await _dbContext.Queryable<S02_Module>()
                 .Where(S02 => S02.S02_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                 .Select(S02 => new ModuleInfoModel
                 {

@@ -13,7 +13,7 @@ namespace FastAdminAPI.Core.Models.Depart
     #region 部门
 
     #region 查询
-    public class DepartInfoModel : SortedJsonTree
+    public class DepartInfoModel : SortedJsonTree<DepartInfoModel>
     {
         /// <summary>
         /// 部门属性 S99_Code

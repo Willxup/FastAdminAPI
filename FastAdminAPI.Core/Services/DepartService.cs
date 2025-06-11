@@ -45,7 +45,7 @@ namespace FastAdminAPI.Core.Services
         /// <returns></returns>
         public async Task<string> GetDepartmentTree(string departName = null)
         {
-            return SortedJsonTree.CreateJsonTrees(await _dbContext.Queryable<S05_Department>()
+            return SortedJsonTree<DepartInfoModel>.CreateJsonTree(await _dbContext.Queryable<S05_Department>()
                .Where(S05 => S05.S05_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                .Select(S05 => new DepartInfoModel
                {

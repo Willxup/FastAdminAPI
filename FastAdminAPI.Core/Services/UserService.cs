@@ -161,7 +161,7 @@ namespace FastAdminAPI.Core.Services
                     CornerMark = S02.S02_CornerMark
                 }).ToListAsync();
 
-                return SortedJsonTree.CreateJsonTrees(result);
+                return SortedJsonTree<ModuleInfoModel>.CreateJsonTree(result);
             }
             return string.Empty;
         }

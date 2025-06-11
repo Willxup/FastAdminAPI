@@ -65,12 +65,12 @@ namespace FastAdminAPI.Core.Services
                 //角色为超级管理员
                 if (rolesByUser.Where(c => c.ParentId == null).Any())
                 {
-                    jsonTree = JsonTree.CreateJsonTrees(roles, roleName);
+                    jsonTree = JsonTree<RoleInfoModel>.CreateJsonTree(roles, roleName);
                 }
                 //其他角色
                 else
                 {
-                    jsonTree = JsonTree.CreateCustomJsonTrees(rolesByUser, roles, roleName);
+                    jsonTree = JsonTree<RoleInfoModel>.CreateCustomJsonTree(rolesByUser, roles, roleName);
                 }
             }
 

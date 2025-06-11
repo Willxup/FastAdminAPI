@@ -178,7 +178,7 @@ namespace FastAdminAPI.Business.Implements
                 foreach (var item in employeePosts.Select(c => c.S05_DepartId).Distinct())
                 {
                     //创建部门树
-                    var departTree = JsonTree.CreateCustomTrees(departs.Where(d => d.Id == item).ToList(), departs.Where(p => p.ParentId != null).ToList());
+                    var departTree = JsonTree.CreateCustomTree(departs.Where(d => d.Id == item).ToList(), departs.Where(p => p.ParentId != null).ToList());
                     //将树转为列表 
                     var departIds = JsonTreeToList(departTree).Select(d => d.Id).ToList();
                     //去除当前员工的部门，防止同级员工数据交错
@@ -191,7 +191,7 @@ namespace FastAdminAPI.Business.Implements
                 foreach (var item in employeePosts.Select(c => c.S06_PostId).Distinct())
                 {
                     //创建岗位树，根为当前员工的岗位
-                    var postTree = JsonTree.CreateCustomTrees(posts.Where(p => p.Id == item).ToList(), posts.Where(p => p.ParentId != null).ToList());
+                    var postTree = JsonTree.CreateCustomTree(posts.Where(p => p.Id == item).ToList(), posts.Where(p => p.ParentId != null).ToList());
                     //将json树转为列表 
                     postIds.AddRange(JsonTreeToList(postTree).Select(p => p.Id).ToList());
                     //去除当前用户的岗位，防止同级用户数据交错
@@ -214,7 +214,7 @@ namespace FastAdminAPI.Business.Implements
                         List<long> employeeDepartIds = departs.Where(c => ids.Contains(c.Id)).Select(c => c.Id).ToList();
 
                         //创建部门树，根为所设置部门
-                        var departTree = JsonTree.CreateCustomTrees(departs.Where(d => employeeDepartIds.Contains(d.Id)).ToList(), departs.Where(d => d.ParentId != null).ToList());
+                        var departTree = JsonTree.CreateCustomTree(departs.Where(d => employeeDepartIds.Contains(d.Id)).ToList(), departs.Where(d => d.ParentId != null).ToList());
 
                         //将部门树进行循环，寻找岗位
                         foreach (var item in JsonTreeToList(departTree)) //将json树转为列表

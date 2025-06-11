@@ -45,7 +45,7 @@ namespace FastAdminAPI.Core.Services
         /// <returns></returns>
         public async Task<string> GetPostTree(long departId)
         {
-            return JsonTree.CreateJsonTrees(await _dbContext.Queryable<S06_Post>()
+            return JsonTree<PostInfoModel>.CreateJsonTree(await _dbContext.Queryable<S06_Post>()
                .Where(S06 => S06.S06_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S06.S05_DepartId == departId)
                .Select(S06 => new PostInfoModel
                {
@@ -76,7 +76,7 @@ namespace FastAdminAPI.Core.Services
         {
             if (departIds?.Length > 0)
             {
-                return JsonTree.CreateJsonTrees(await _dbContext.Queryable<S06_Post>()
+                return JsonTree<PostInfoModel>.CreateJsonTree(await _dbContext.Queryable<S06_Post>()
                     .Where(S06 => S06.S06_IsDelete == (byte)BaseEnums.TrueOrFalse.False && departIds.Contains(S06.S05_DepartId))
                    .Select(S06 => new PostInfoModel
                    {

@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
 namespace FastAdminAPI.Core.Models.RolePermission
 {
     #region 查询
-    public class RoleInfoModel : JsonTree
+    public class RoleInfoModel : JsonTree<RoleInfoModel>
     {
     }
     #endregion

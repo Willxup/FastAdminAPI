@@ -11,7 +11,7 @@ namespace FastAdminAPI.Core.Models.Posts
     #region 岗位
 
     #region 查询
-    public class PostInfoModel : JsonTree
+    public class PostInfoModel : JsonTree<PostInfoModel>
     {
         /// <summary>
         /// 部门Id

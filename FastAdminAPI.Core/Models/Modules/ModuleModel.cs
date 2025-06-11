@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
 namespace FastAdminAPI.Core.Models.Modules
 {
     #region 查询
-    public class ModuleInfoModel : SortedJsonTree
+    public class ModuleInfoModel : SortedJsonTree<ModuleInfoModel>
     {
         /// <summary>
         /// 属性 0菜单 1页面 2按钮 3列表 9其他
