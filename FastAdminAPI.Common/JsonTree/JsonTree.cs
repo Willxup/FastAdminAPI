@@ -8,9 +8,14 @@ namespace FastAdminAPI.Common.JsonTree
     /// <summary>
     /// Json树结构
     /// </summary>
-    public class JsonTree
+    public class JsonTree : JsonTree<JsonTree> { }
+    
+    /// <summary>
+    /// Json树结构
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class JsonTree<T> where T : JsonTree<T>
     {
-        public JsonTree() { }
         /// <summary>
         /// Id
         /// </summary>
@@ -29,146 +34,156 @@ namespace FastAdminAPI.Common.JsonTree
         /// <summary>
         /// 额外信息字段
         /// </summary>
-        [JsonProperty(PropertyName = "Data")]
+        [JsonProperty(PropertyName = "Data", NullValueHandling = NullValueHandling.Ignore)]
         public object Data { get; set; }
         /// <summary>
         /// 子集
         /// </summary>
         [JsonProperty(PropertyName = "Children", NullValueHandling = NullValueHandling.Ignore)]
-        public List<JsonTree> Children { get; set; }
+        public List<T> Children { get; set; }
+
+        /// <summary>
+        /// 创建树
+        /// </summary>
+        /// <param name="dataSource"></param>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        public static List<T> CreateTree(List<T> dataSource, string keyword = null)
+        {
+            var tree = CreateTree(dataSource);
+            return !string.IsNullOrWhiteSpace(keyword) ? FilterKeyword(tree, keyword) : tree;
+        }
+
+        /// <summary>
+        /// 创建Json树
+        /// </summary>
+        /// <param name="dataSource"></param>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        public static string CreateJsonTree(List<T> dataSource, string keyword = null)
+        {
+            var tree = CreateTree(dataSource);
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                tree = FilterKeyword(tree, keyword);
+            }
+            
+            return JsonConvert.SerializeObject(tree);
+        }
+
+        /// <summary>
+        /// 创建自定义树
+        /// </summary>
+        /// <param name="dataSource"></param>
+        /// <param name="parents"></param>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        public static List<T> CreateCustomTree(List<T> dataSource, List<T> parents, string keyword = null)
+        {
+            var tree = CreateCustomTree(dataSource, parents);
+            return !string.IsNullOrWhiteSpace(keyword) ? FilterKeyword(tree, keyword) : tree;
+        }
+
+        /// <summary>
+        /// 创建自定义Json树
+        /// </summary>
+        /// <param name="dataSource"></param>
+        /// <param name="parents"></param>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        public static string CreateCustomJsonTree(List<T> dataSource, List<T> parents, string keyword = null)
+        {
+            var tree = CreateCustomTree(dataSource, parents);
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                tree = FilterKeyword(tree, keyword);
+            }
+            
+            return JsonConvert.SerializeObject(tree);
+        }
+
+        #region 私有方法
 
         /// <summary>
         /// 创建树
         /// </summary>
         /// <param name="dataSource"></param>
         /// <returns></returns>
-        public static List<T> CreateTrees<T>(List<T> dataSource)
-            where T : JsonTree
+        private static List<T> CreateTree(List<T> dataSource)
         {
             if (dataSource?.Count > 0)
             {
                 //获取父级
                 var parents = dataSource.Where(c => c.ParentId == null || c.ParentId == 0)?.ToList();
-
                 //获取子级
-                var childs = dataSource.Where(c => c.ParentId != null && c.ParentId != 0)?.ToList();
+                var children = dataSource.Where(c => c.ParentId != null && c.ParentId != 0)?.ToList();
 
                 parents?.ForEach(item =>
                 {
-                    item.AddChildren(childs);
+                    item.AddChildren(children);
                 });
 
                 return parents;
             }
-
             return new List<T>();
-        }
-        /// <summary>
-        /// 创建Json树
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dataSource"></param>
-        /// <param name="keyword"></param>
-        /// <returns></returns>
-        public static string CreateJsonTrees<T>(List<T> dataSource, string keyword = null)
-            where T : JsonTree
-        {
-            //创建树结构
-            var trees = CreateTrees(dataSource);
-
-            //关键字过滤
-            if (!string.IsNullOrWhiteSpace(keyword))
-            {
-                trees = FilterKeyWord(trees, keyword);
-            }
-
-            return JsonConvert.SerializeObject(trees);
         }
 
         /// <summary>
         /// 创建自定义树
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <param name="dataSource"></param>
         /// <param name="parents"></param>
-        /// <param name="childs"></param>
         /// <returns></returns>
-        public static List<T> CreateCustomTrees<T>(List<T> parents, List<T> childs)
-            where T : JsonTree
+        private static List<T> CreateCustomTree(List<T> dataSource, List<T> parents)
         {
-            if (parents?.Count > 0 && childs?.Count > 0)
+            if (dataSource?.Count > 0 && parents?.Count > 0)
             {
-                parents?.ForEach(item =>
+                parents.ForEach(item =>
                 {
-                    item.AddChildren(childs);
+                    item.AddChildren(dataSource);
                 });
-
+                
                 return parents;
             }
-
             return new List<T>();
         }
-        /// <summary>
-        /// 创建自定义Json树
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="parents"></param>
-        /// <param name="childs"></param>
-        /// <param name="keyword"></param>
-        /// <returns></returns>
-        public static string CreateCustomJsonTrees<T>(List<T> parents, List<T> childs, string keyword = null)
-            where T : JsonTree
-        {
-            //创建树结构
-            var trees = CreateCustomTrees(parents, childs);
-
-            if (!string.IsNullOrWhiteSpace(keyword))
-            {
-                trees = FilterKeyWord(trees, keyword);
-            }
-
-            return JsonConvert.SerializeObject(trees);
-        }
 
         /// <summary>
-        /// 添加当前父级的子集
+        /// 添加子集
         /// </summary>
         /// <param name="dataSource"></param>
-        private void AddChildren<TParameter>(List<TParameter> dataSource)
-            where TParameter : JsonTree
+        private void AddChildren(List<T> dataSource)
         {
-            var childs = dataSource?.Where(p => p.ParentId == this.Id)?.ToList();
-
-            if (childs?.Count > 0)
+            var childrenByParent = dataSource?.Where(c => c.ParentId == this.ParentId)?.ToList();
+            if (childrenByParent?.Count > 0)
             {
-                List<JsonTree> children = new();
-
-                foreach (var item in childs)
+                List<T> children = new();
+                foreach (var item in childrenByParent)
                 {
                     item.AddChildren(dataSource);
                     children.Add(item);
                 }
-
+                
                 this.Children = children;
             }
         }
+
         /// <summary>
         /// 过滤关键字
         /// </summary>
-        /// <param name="trees"></param>
-        /// <param name="Keyword"></param>
+        /// <param name="tree"></param>
+        /// <param name="keyword"></param>
         /// <returns></returns>
-        private static List<T> FilterKeyWord<T>(List<T> trees, string Keyword)
-            where T : JsonTree
+        private static List<T> FilterKeyword(List<T> tree, string keyword)
         {
             List<T> result = new List<T>();
-
-            if (trees?.Count > 0)
+            if (tree?.Count > 0)
             {
-                foreach (var item in trees)
+                foreach (var item in tree)
                 {
-                    var children = FilterKeyWord(item.Children, Keyword);
-                    bool isMatch = item.Name.Contains(Keyword, StringComparison.OrdinalIgnoreCase);
-
+                    var children = FilterKeyword(item.Children, keyword);
+                    
+                    bool isMatch = item.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase);
                     if (isMatch || children?.Count > 0)
                     {
                         item.Children = children?.Count > 0 ? children : null;
@@ -176,8 +191,10 @@ namespace FastAdminAPI.Common.JsonTree
                     }
                 }
             }
-            
             return result;
         }
+        
+        #endregion
     }
+    
 }
