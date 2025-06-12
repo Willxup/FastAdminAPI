@@ -1,8 +1,12 @@
-﻿using FastAdminAPI.Business.Utilities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using FastAdminAPI.Business.Utilities;
 using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Enums;
-using FastAdminAPI.Common.JsonTree;
+using FastAdminAPI.Common.Tree;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Models.RolePermission;
 using FastAdminAPI.Core.Services.BASE;
@@ -10,11 +14,6 @@ using FastAdminAPI.Framework.Entities;
 using FastAdminAPI.Framework.Extensions;
 using Microsoft.AspNetCore.Http;
 using SqlSugar;
-using SqlSugar.Attributes.Extension.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.Services
 {
@@ -28,9 +27,13 @@ namespace FastAdminAPI.Core.Services
         /// </summary>
         /// <param name="dbContext"></param>
         /// <param name="httpContext"></param>
-        public RolePermissionService(ISqlSugarClient dbContext, IHttpContextAccessor httpContext) : base(dbContext, httpContext) { }
+        public RolePermissionService(ISqlSugarClient dbContext, IHttpContextAccessor httpContext) : base(dbContext,
+            httpContext)
+        {
+        }
 
         #region 角色
+
         /// <summary>
         /// 获取角色树
         /// </summary>
@@ -63,19 +66,20 @@ namespace FastAdminAPI.Core.Services
                 var rolesByUser = roles.Where(c => roleIds.Contains(c.Id)).ToList();
 
                 //角色为超级管理员
-                if (rolesByUser.Where(c => c.ParentId == null).Any())
+                if (rolesByUser.Any(c => c.ParentId == null))
                 {
-                    jsonTree = JsonTree<RoleInfoModel>.CreateJsonTree(roles, roleName);
+                    jsonTree = BaseTree<RoleInfoModel>.BuildJsonTree(roles, roleName);
                 }
                 //其他角色
                 else
                 {
-                    jsonTree = JsonTree<RoleInfoModel>.CreateCustomJsonTree(rolesByUser, roles, roleName);
+                    jsonTree = BaseTree<RoleInfoModel>.BuildCustomJsonTree(roles, roleIds, roleName);
                 }
             }
 
             return jsonTree;
         }
+
         /// <summary>
         /// 新增角色
         /// </summary>
@@ -92,6 +96,7 @@ namespace FastAdminAPI.Core.Services
 
             return await _dbContext.InsertResultAsync<AddRoleModel, S03_Role>(model);
         }
+
         /// <summary>
         /// 编辑角色
         /// </summary>
@@ -105,6 +110,7 @@ namespace FastAdminAPI.Core.Services
 
             return await _dbContext.UpdateResultAsync<EditRoleModel, S03_Role>(model);
         }
+
         /// <summary>
         /// 删除角色
         /// </summary>
@@ -128,6 +134,7 @@ namespace FastAdminAPI.Core.Services
                     S03_DeleteTime = SqlFunc.GetDate()
                 });
         }
+
         /// <summary>
         /// 复制角色
         /// </summary>
@@ -138,7 +145,8 @@ namespace FastAdminAPI.Core.Services
         {
             //校验源角色是否可用
             bool isValidRole = await _dbContext.Queryable<S03_Role>()
-                .Where(S03 => S03.S03_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S03.S03_RoleId == model.SourceRoleId)
+                .Where(S03 =>
+                    S03.S03_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S03.S03_RoleId == model.SourceRoleId)
                 .AnyAsync();
             if (!isValidRole)
                 throw new UserOperationException("找不到源角色，请重试!");
@@ -198,11 +206,12 @@ namespace FastAdminAPI.Core.Services
 
                 return result;
             });
-
         }
+
         #endregion
 
         #region 权限
+
         /// <summary>
         /// 获取角色权限
         /// </summary>
@@ -215,6 +224,7 @@ namespace FastAdminAPI.Core.Services
                 .Select(S04 => S04.S02_ModuleId)
                 .ToListAsync();
         }
+
         /// <summary>
         /// 保存角色权限
         /// </summary>
@@ -230,8 +240,8 @@ namespace FastAdminAPI.Core.Services
             {
                 //先删除旧的角色权限
                 var result = await _dbContext.Deleteable<S04_RolePermission>()
-                .Where(S04 => S04.S03_RoleId == model.RoleId)
-                .ExecuteAsync();
+                    .Where(S04 => S04.S03_RoleId == model.RoleId)
+                    .ExecuteAsync();
 
                 if (result?.Code == ResponseCode.Success)
                 {
@@ -262,6 +272,7 @@ namespace FastAdminAPI.Core.Services
                 return result;
             });
         }
+
         #endregion
     }
 }

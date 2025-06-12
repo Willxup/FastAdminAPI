@@ -1,9 +1,11 @@
-﻿using FastAdminAPI.Business.Interfaces;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using FastAdminAPI.Business.Interfaces;
 using FastAdminAPI.Business.Utilities;
 using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Enums;
-using FastAdminAPI.Common.JsonTree;
+using FastAdminAPI.Common.Tree;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Models.Depart;
 using FastAdminAPI.Core.Services.BASE;
@@ -11,8 +13,6 @@ using FastAdminAPI.Framework.Entities;
 using FastAdminAPI.Framework.Extensions;
 using Microsoft.AspNetCore.Http;
 using SqlSugar;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.Services
 {
@@ -45,32 +45,34 @@ namespace FastAdminAPI.Core.Services
         /// <returns></returns>
         public async Task<string> GetDepartmentTree(string departName = null)
         {
-            return SortedJsonTree<DepartInfoModel>.CreateJsonTree(await _dbContext.Queryable<S05_Department>()
-               .Where(S05 => S05.S05_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
-               .Select(S05 => new DepartInfoModel
-               {
-                   Id = S05.S05_DepartId,
-                   Name = S05.S05_DepartName,
-                   ParentId = S05.S05_ParentDepartId,
-                   Priority = S05.S05_Priority ?? 0,
-                   Property = S05.S05_Property,
-                   PropertyName = SqlFunc.Subqueryable<S99_Code>()
-                                    .Where(S99 => S99.S99_CodeId == S05.S05_Property).Select(S99 => S99.S99_Name),
-                   Label = S05.S05_Label,
-                   ParentName = SqlFunc.Subqueryable<S05_Department>()
-                                    .Where(a => a.S05_DepartId == S05.S05_ParentDepartId).Select(a => a.S05_DepartName),
-                   CornerMark = S05.S05_CornerMark,
-                   DirectordName = SqlFunc.Subqueryable<S07_Employee>()
-                                   .LeftJoin<S08_EmployeePost>((S07, S08) => S07.S07_EmployeeId == S08.S07_EmployeeId)
-                                   .LeftJoin<S06_Post>((S07, S08, S06) => S08.S06_PostId == S06.S06_PostId)
-                                   .Where((S07, S08, S06) => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
-                                                             S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
-                                                             S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True &&
-                                                             S08.S05_DepartId == S05.S05_DepartId &&
-                                                             S06.S06_ParentPostId == null &&
-                                                             S06.S06_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
-                                   .Select((S07, S08, S06) => S07.S07_Name)
-               }).ToListAsync(), departName);
+            var departList = await _dbContext.Queryable<S05_Department>()
+                .Where(S05 => S05.S05_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
+                .Select(S05 => new DepartInfoModel
+                {
+                    Id = S05.S05_DepartId,
+                    Name = S05.S05_DepartName,
+                    ParentId = S05.S05_ParentDepartId,
+                    Priority = S05.S05_Priority ?? 0,
+                    Property = S05.S05_Property,
+                    PropertyName = SqlFunc.Subqueryable<S99_Code>()
+                        .Where(S99 => S99.S99_CodeId == S05.S05_Property).Select(S99 => S99.S99_Name),
+                    Label = S05.S05_Label,
+                    ParentName = SqlFunc.Subqueryable<S05_Department>()
+                        .Where(a => a.S05_DepartId == S05.S05_ParentDepartId).Select(a => a.S05_DepartName),
+                    CornerMark = S05.S05_CornerMark,
+                    DirectordName = SqlFunc.Subqueryable<S07_Employee>()
+                        .LeftJoin<S08_EmployeePost>((S07, S08) => S07.S07_EmployeeId == S08.S07_EmployeeId)
+                        .LeftJoin<S06_Post>((S07, S08, S06) => S08.S06_PostId == S06.S06_PostId)
+                        .Where((S07, S08, S06) => S07.S07_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
+                                                  S08.S08_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
+                                                  S08.S08_IsMainPost == (byte)BaseEnums.TrueOrFalse.True &&
+                                                  S08.S05_DepartId == S05.S05_DepartId &&
+                                                  S06.S06_ParentPostId == null &&
+                                                  S06.S06_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
+                        .Select((S07, S08, S06) => S07.S07_Name)
+                }).ToListAsync();
+
+            return SortedBaseTree<DepartInfoModel>.BuildJsonTree(departList, departName);
         }
         /// <summary>
         /// 新增部门

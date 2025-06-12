@@ -1,10 +1,15 @@
-﻿using FastAdminAPI.Business.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using FastAdminAPI.Business.Interfaces;
 using FastAdminAPI.Business.PrivateFunc.Applications.Models;
 using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Enums;
-using FastAdminAPI.Common.JsonTree;
 using FastAdminAPI.Common.Redis;
+using FastAdminAPI.Common.Tree;
 using FastAdminAPI.Common.Utilities;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Models.Modules;
@@ -16,11 +21,6 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using SqlSugar;
 using SqlSugar.Attributes.Extension.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.Services
 {
@@ -33,10 +33,12 @@ namespace FastAdminAPI.Core.Services
         /// 审批处理接口
         /// </summary>
         private readonly IApplicationHandler _applicationHandler;
+
         /// <summary>
         /// Redis
         /// </summary>
         private readonly IRedisHelper _redis;
+
         /// <summary>
         /// Redis锁前缀
         /// </summary>
@@ -57,6 +59,7 @@ namespace FastAdminAPI.Core.Services
         }
 
         #region 权限
+
         /// <summary>
         /// 获取模块功能
         /// 【角色权限+用户权限】
@@ -76,9 +79,9 @@ namespace FastAdminAPI.Core.Services
             {
                 //获取用户角色权限
                 var moduleIdsByRole = await _dbContext.Queryable<S04_RolePermission>()
-                .Where(S04 => roleIds.Contains(S04.S03_RoleId))
-                .Select(S04 => S04.S02_ModuleId)
-                .ToListAsync();
+                    .Where(S04 => roleIds.Contains(S04.S03_RoleId))
+                    .Select(S04 => S04.S02_ModuleId)
+                    .ToListAsync();
                 if (moduleIdsByRole?.Count > 0)
                 {
                     modules.AddRange(moduleIdsByRole);
@@ -100,6 +103,7 @@ namespace FastAdminAPI.Core.Services
             modules = modules.Distinct().ToList();
             return modules;
         }
+
         /// <summary>
         /// 获取功能权限(当前登录用户所有权限)
         /// 【角色权限+用户权限】
@@ -114,23 +118,26 @@ namespace FastAdminAPI.Core.Services
             if (modules?.Count > 0)
             {
                 return await _dbContext.Queryable<S02_Module>()
-                .Where(S02 => S02.S02_IsDelete == (byte)BaseEnums.TrueOrFalse.False && modules.Contains(S02.S02_ModuleId))
-                .Select(S02 => new ModuleInfoModel
-                {
-                    Id = S02.S02_ModuleId,
-                    Name = S02.S02_ModuleName,
-                    ParentId = S02.S02_ParentModuleId,
-                    Priority = S02.S02_Priority ?? 0,
-                    Kind = S02.S02_Kind,
-                    Depth = S02.S02_Depth,
-                    FrontRoute = S02.S02_FrontRoute,
-                    Logo = S02.S02_Logo,
-                    BackInterface = S02.S02_BackInterface,
-                    CornerMark = S02.S02_CornerMark
-                }).ToListAsync();
+                    .Where(S02 =>
+                        S02.S02_IsDelete == (byte)BaseEnums.TrueOrFalse.False && modules.Contains(S02.S02_ModuleId))
+                    .Select(S02 => new ModuleInfoModel
+                    {
+                        Id = S02.S02_ModuleId,
+                        Name = S02.S02_ModuleName,
+                        ParentId = S02.S02_ParentModuleId,
+                        Priority = S02.S02_Priority ?? 0,
+                        Kind = S02.S02_Kind,
+                        Depth = S02.S02_Depth,
+                        FrontRoute = S02.S02_FrontRoute,
+                        Logo = S02.S02_Logo,
+                        BackInterface = S02.S02_BackInterface,
+                        CornerMark = S02.S02_CornerMark
+                    }).ToListAsync();
             }
+
             return null;
         }
+
         /// <summary>
         /// 获取菜单权限树
         /// </summary>
@@ -144,30 +151,33 @@ namespace FastAdminAPI.Core.Services
             if (modules?.Count > 0)
             {
                 var result = await _dbContext.Queryable<S02_Module>()
-                .Where(S02 => S02.S02_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
-                              modules.Contains(S02.S02_ModuleId) &&
-                              S02.S02_Kind == (byte)BusinessEnums.ModuleKind.Menu)
-                .Select(S02 => new ModuleInfoModel
-                {
-                    Id = S02.S02_ModuleId,
-                    Name = S02.S02_ModuleName,
-                    ParentId = S02.S02_ParentModuleId,
-                    Priority = S02.S02_Priority ?? 0,
-                    Kind = S02.S02_Kind,
-                    Depth = S02.S02_Depth,
-                    FrontRoute = S02.S02_FrontRoute,
-                    Logo = S02.S02_Logo,
-                    BackInterface = S02.S02_BackInterface,
-                    CornerMark = S02.S02_CornerMark
-                }).ToListAsync();
-
-                return SortedJsonTree<ModuleInfoModel>.CreateJsonTree(result);
+                    .Where(S02 => S02.S02_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
+                                  modules.Contains(S02.S02_ModuleId) &&
+                                  S02.S02_Kind == (byte)BusinessEnums.ModuleKind.Menu)
+                    .Select(S02 => new ModuleInfoModel
+                    {
+                        Id = S02.S02_ModuleId,
+                        Name = S02.S02_ModuleName,
+                        ParentId = S02.S02_ParentModuleId,
+                        Priority = S02.S02_Priority ?? 0,
+                        Kind = S02.S02_Kind,
+                        Depth = S02.S02_Depth,
+                        FrontRoute = S02.S02_FrontRoute,
+                        Logo = S02.S02_Logo,
+                        BackInterface = S02.S02_BackInterface,
+                        CornerMark = S02.S02_CornerMark
+                    }).ToListAsync();
+                
+                return SortedBaseTree<ModuleInfoModel>.BuildJsonTree(result);
             }
+
             return string.Empty;
         }
+
         #endregion
 
         #region 通用审批
+
         /// <summary>
         /// 获取我的审批列表
         /// </summary>
@@ -181,6 +191,7 @@ namespace FastAdminAPI.Core.Services
                               S12.S07_ApproverId == _employeeId)
                 .ToListResultAsync(pageSearch, new CheckPageResult());
         }
+
         /// <summary>
         /// 审批申请
         /// </summary>
@@ -204,6 +215,7 @@ namespace FastAdminAPI.Core.Services
                     foreach (var checkId in model.CheckIds)
                     {
                         #region 数据获取及校验
+
                         //获取审批信息
                         var check = checks.Where(c => c.S12_CheckId == checkId).FirstOrDefault();
                         if (check == null)
@@ -212,9 +224,11 @@ namespace FastAdminAPI.Core.Services
                             failInfo.Append($"获取[{checkId}]审批信息失败，当前审批不存在或已完成审批!");
                             continue;
                         }
+
                         #endregion
 
                         #region Redis锁
+
                         //redis锁名
                         string lockName = REDIS_LOCK_PREFIX + check.S12_CheckId;
 
@@ -228,11 +242,13 @@ namespace FastAdminAPI.Core.Services
                             failInfo.Append($"审批[{checkId}]请求频繁，请稍后再试!");
                             continue;
                         }
+
                         #endregion
 
                         try
                         {
                             #region 数据库操作
+
                             //开启事务进行审批
                             var result = await _dbContext.TransactionAsync(async () =>
                             {
@@ -256,6 +272,7 @@ namespace FastAdminAPI.Core.Services
                                 failCount++;
                                 failInfo.Append($"[{checkId}]审批失败，{result?.Message}");
                             }
+
                             #endregion
                         }
                         catch (Exception ex)
@@ -280,6 +297,7 @@ namespace FastAdminAPI.Core.Services
             else
                 throw new UserOperationException("请选择要审批的数据!");
         }
+
         /// <summary>
         /// 通用撤销申请
         /// </summary>
@@ -304,6 +322,7 @@ namespace FastAdminAPI.Core.Services
                 .Where(S12 => S12.S12_CheckId == checkId)
                 .ExecuteAsync();
         }
+
         /// <summary>
         /// 获取我的审批记录列表
         /// </summary>
@@ -317,6 +336,7 @@ namespace FastAdminAPI.Core.Services
                                      S13.S07_ApproverId == _employeeId)
                 .ToListResultAsync(pageSearch, new CheckRecordPageResult());
         }
+
         /// <summary>
         /// 获取申请审批记录列表
         /// </summary>
@@ -370,6 +390,7 @@ namespace FastAdminAPI.Core.Services
                 throw new UserOperationException("该申请有误!");
             }
         }
+
         #endregion
     }
 }

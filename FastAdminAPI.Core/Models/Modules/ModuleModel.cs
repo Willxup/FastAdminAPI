@@ -1,15 +1,15 @@
-﻿using FastAdminAPI.Common.Enums;
-using FastAdminAPI.Common.JsonTree;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using FastAdminAPI.Common.Enums;
+using FastAdminAPI.Common.Tree;
 using FastAdminAPI.Framework.Models;
 using Newtonsoft.Json;
 using SqlSugar.Attributes.Extension.Extensions.Attributes.Operation;
-using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace FastAdminAPI.Core.Models.Modules
 {
     #region 查询
-    public class ModuleInfoModel : SortedJsonTree<ModuleInfoModel>
+    public class ModuleInfoModel : SortedBaseTree<ModuleInfoModel>
     {
         /// <summary>
         /// 属性 0菜单 1页面 2按钮 3列表 9其他

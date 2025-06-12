@@ -1,4 +1,6 @@
-﻿using FastAdminAPI.Common.BASE;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Enums;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Models.UserPermission;
@@ -7,8 +9,6 @@ using FastAdminAPI.Framework.Entities;
 using FastAdminAPI.Framework.Extensions;
 using Microsoft.AspNetCore.Http;
 using SqlSugar;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.Services
 {

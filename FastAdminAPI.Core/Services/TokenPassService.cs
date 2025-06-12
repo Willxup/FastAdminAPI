@@ -1,15 +1,15 @@
-﻿using FastAdminAPI.Business.Interfaces;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using FastAdminAPI.Business.Interfaces;
 using FastAdminAPI.Business.Models.Region;
 using FastAdminAPI.Common.Enums;
-using FastAdminAPI.Common.JsonTree;
+using FastAdminAPI.Common.Tree;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Models.TokenPass;
 using FastAdminAPI.Core.Services.BASE;
 using FastAdminAPI.Framework.Entities;
 using SqlSugar;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.Services
 {
@@ -99,16 +99,19 @@ namespace FastAdminAPI.Core.Services
         /// <returns></returns>
         public async Task<string> GetCodeTree(string code)
         {
-            return SortedJsonTree.CreateJsonTree(await _dbContext.Queryable<S99_Code>()
+            var codeList = await _dbContext.Queryable<S99_Code>()
                 .Where(S99 => S99.S99_IsDelete == (byte)BaseEnums.TrueOrFalse.False && S99.S99_GroupCode == code)
-                .Select(S99 => new SortedJsonTree
+                .Select(S99 => new SortedBaseTree()
                 {
                     Id = S99.S99_CodeId,
                     Name = S99.S99_Name,
                     ParentId = S99.S99_ParentCodeId,
                     Priority = S99.S99_SeqNo ?? 0
                 })
-                .ToListAsync());
+                .ToListAsync();
+
+            return SortedBaseTree.BuildJsonTree(codeList);
+
         }
 
         #endregion

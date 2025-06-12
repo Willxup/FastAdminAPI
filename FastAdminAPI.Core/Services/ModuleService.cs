@@ -1,8 +1,10 @@
-﻿using FastAdminAPI.Business.Utilities;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using FastAdminAPI.Business.Utilities;
 using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Enums;
-using FastAdminAPI.Common.JsonTree;
+using FastAdminAPI.Common.Tree;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Models.Modules;
 using FastAdminAPI.Core.Services.BASE;
@@ -10,8 +12,6 @@ using FastAdminAPI.Framework.Entities;
 using FastAdminAPI.Framework.Extensions;
 using Microsoft.AspNetCore.Http;
 using SqlSugar;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.Services
 {
@@ -34,7 +34,7 @@ namespace FastAdminAPI.Core.Services
         /// <returns></returns>
         public async Task<string> GetModuleTree(string moduleName = null)
         {
-            return SortedJsonTree<ModuleInfoModel>.CreateJsonTree(await _dbContext.Queryable<S02_Module>()
+            var moduleList = await _dbContext.Queryable<S02_Module>()
                 .Where(S02 => S02.S02_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
                 .Select(S02 => new ModuleInfoModel
                 {
@@ -49,7 +49,9 @@ namespace FastAdminAPI.Core.Services
                     Logo = S02.S02_Logo,
                     BackInterface = S02.S02_BackInterface,
                     CornerMark = S02.S02_CornerMark
-                }).ToListAsync(), moduleName);
+                }).ToListAsync();
+            
+            return SortedBaseTree<ModuleInfoModel>.BuildJsonTree(moduleList, moduleName);
         }
         /// <summary>
         /// 新增模块

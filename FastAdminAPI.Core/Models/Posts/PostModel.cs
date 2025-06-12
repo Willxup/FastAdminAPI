@@ -1,17 +1,17 @@
-﻿using FastAdminAPI.Common.Enums;
-using FastAdminAPI.Common.JsonTree;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using FastAdminAPI.Common.Enums;
+using FastAdminAPI.Common.Tree;
 using FastAdminAPI.Framework.Models;
 using Newtonsoft.Json;
 using SqlSugar.Attributes.Extension.Extensions.Attributes.Operation;
-using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace FastAdminAPI.Core.Models.Posts
 {
     #region 岗位
 
     #region 查询
-    public class PostInfoModel : JsonTree<PostInfoModel>
+    public class PostInfoModel : BaseTree<PostInfoModel>
     {
         /// <summary>
         /// 部门Id

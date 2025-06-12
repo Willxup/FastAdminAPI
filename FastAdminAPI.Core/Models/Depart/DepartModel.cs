@@ -1,19 +1,19 @@
-﻿using FastAdminAPI.Common.Enums;
-using FastAdminAPI.Common.JsonTree;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using FastAdminAPI.Common.Enums;
+using FastAdminAPI.Common.Tree;
 using FastAdminAPI.Framework.Models;
 using Newtonsoft.Json;
 using SqlSugar.Attributes.Extension.Extensions;
 using SqlSugar.Attributes.Extension.Extensions.Attributes.Operation;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace FastAdminAPI.Core.Models.Depart
 {
     #region 部门
 
     #region 查询
-    public class DepartInfoModel : SortedJsonTree<DepartInfoModel>
+    public class DepartInfoModel : SortedBaseTree<DepartInfoModel>
     {
         /// <summary>
         /// 部门属性 S99_Code

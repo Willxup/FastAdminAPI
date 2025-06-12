@@ -1,6 +1,5 @@
 ﻿using FastAdminAPI.Business.Models.Region;
 using FastAdminAPI.Common.BASE;
-using FastAdminAPI.Common.JsonTree;
 using FastAdminAPI.Core.Controllers.BASE;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Models.TokenPass;
@@ -8,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using FastAdminAPI.Common.Tree;
 
 namespace FastAdminAPI.Core.Controllers
 {
@@ -59,7 +59,7 @@ namespace FastAdminAPI.Core.Controllers
         /// <param name="code">分组代号</param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(List<SortedJsonTree>), 200)]
+        [ProducesResponseType(typeof(List<SortedBaseTree>), 200)]
         public async Task<ResponseModel> GetCodeTree([FromQuery][Required(ErrorMessage = "分组代号不能为空!")] string code)
         {
             return Success(await _tokenPassService.GetCodeTree(code));

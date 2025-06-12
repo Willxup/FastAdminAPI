@@ -1,18 +1,18 @@
-﻿using FastAdminAPI.Business.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using FastAdminAPI.Business.Interfaces;
 using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.Enums;
-using FastAdminAPI.Common.JsonTree;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Redis;
+using FastAdminAPI.Common.Tree;
 using FastAdminAPI.Common.Utilities;
 using FastAdminAPI.Framework.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using SqlSugar;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Business.Implements
 {
@@ -81,31 +81,6 @@ namespace FastAdminAPI.Business.Implements
 
         }
 
-        #region 内部方法
-        /// <summary>
-        /// Json树转列表
-        /// </summary>
-        /// <param name="dataSource"></param>
-        /// <returns></returns>
-        private static List<JsonTree> JsonTreeToList(List<JsonTree> dataSource)
-        {
-            List<JsonTree> list = new();
-            if (dataSource?.Count > 0)
-            {
-                foreach (var item in dataSource)
-                {
-                    if (item.Children?.Count > 0)
-                    {
-                        list.AddRange(JsonTreeToList(item.Children));
-                    }
-                    item.Children = null;
-                    list.Add(item);
-                }
-            }
-            return list;
-        }
-        #endregion
-
         /// <summary>
         /// 获取数据权限
         /// </summary>
@@ -144,7 +119,7 @@ namespace FastAdminAPI.Business.Implements
                 //获取全部部门
                 var departs = await _dbContext.Queryable<S05_Department>()
                     .Where(S05 => S05.S05_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
-                    .Select(S05 => new JsonTree
+                    .Select(S05 => new BaseTree
                     {
                         Id = S05.S05_DepartId,
                         Name = S05.S05_DepartName,
@@ -155,7 +130,7 @@ namespace FastAdminAPI.Business.Implements
                 //获取全部岗位
                 var posts = await _dbContext.Queryable<S06_Post>()
                     .Where(S06 => S06.S06_IsDelete == (byte)BaseEnums.TrueOrFalse.False)
-                    .Select(S06 => new JsonTree
+                    .Select(S06 => new BaseTree
                     {
                         Id = S06.S06_PostId,
                         Name = S06.S06_PostName,
@@ -177,10 +152,11 @@ namespace FastAdminAPI.Business.Implements
                 //对员工部门进行循环查找下级部门
                 foreach (var item in employeePosts.Select(c => c.S05_DepartId).Distinct())
                 {
-                    //创建部门树
-                    var departTree = JsonTree.CreateCustomTree(departs.Where(d => d.Id == item).ToList(), departs.Where(p => p.ParentId != null).ToList());
+                    var departTree = BaseTree.BuildCustomTree(
+                        dataSource: departs.Where(d => d.ParentId != null).ToList(),
+                        rootIds: new List<long> { item });
                     //将树转为列表 
-                    var departIds = JsonTreeToList(departTree).Select(d => d.Id).ToList();
+                    var departIds = BaseTree.FlattenTree(departTree).Select(c => c.Id).ToList();
                     //去除当前员工的部门，防止同级员工数据交错
                     departIds.Remove(item);
                     //添加部门下的岗位
@@ -191,9 +167,11 @@ namespace FastAdminAPI.Business.Implements
                 foreach (var item in employeePosts.Select(c => c.S06_PostId).Distinct())
                 {
                     //创建岗位树，根为当前员工的岗位
-                    var postTree = JsonTree.CreateCustomTree(posts.Where(p => p.Id == item).ToList(), posts.Where(p => p.ParentId != null).ToList());
+                    var postTree = BaseTree.BuildCustomTree(
+                        dataSource: posts.Where(d => d.ParentId != null).ToList(),
+                        rootIds: new List<long> { item });
                     //将json树转为列表 
-                    postIds.AddRange(JsonTreeToList(postTree).Select(p => p.Id).ToList());
+                    postIds.AddRange(BaseTree.FlattenTree(postTree).Select(c => c.Id).ToList());
                     //去除当前用户的岗位，防止同级用户数据交错
                     postIds.Remove(item);
                 }
@@ -214,10 +192,10 @@ namespace FastAdminAPI.Business.Implements
                         List<long> employeeDepartIds = departs.Where(c => ids.Contains(c.Id)).Select(c => c.Id).ToList();
 
                         //创建部门树，根为所设置部门
-                        var departTree = JsonTree.CreateCustomTree(departs.Where(d => employeeDepartIds.Contains(d.Id)).ToList(), departs.Where(d => d.ParentId != null).ToList());
-
+                        var departTree = BaseTree.BuildCustomTree(departs.Where(d => d.ParentId != null).ToList(), employeeDepartIds);
+                        
                         //将部门树进行循环，寻找岗位
-                        foreach (var item in JsonTreeToList(departTree)) //将json树转为列表
+                        foreach (var item in BaseTree.FlattenTree(departTree)) //将json树转为列表
                         {
                             //将部门下的岗位放入集合中
                             postIds.AddRange(posts.Where(p => Convert.ToInt64(p.Data) == item.Id).Select(p => p.Id).ToList());
