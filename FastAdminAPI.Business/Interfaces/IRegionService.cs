@@ -1,6 +1,6 @@
-﻿using FastAdminAPI.Business.Models.Region;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using FastAdminAPI.Business.Models.Region;
 
 namespace FastAdminAPI.Business.Interfaces
 {

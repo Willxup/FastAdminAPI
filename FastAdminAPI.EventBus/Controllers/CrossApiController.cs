@@ -1,13 +1,13 @@
-﻿using FastAdminAPI.Common.BASE;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
+using FastAdminAPI.Common.BASE;
 using FastAdminAPI.EventBus.Controllers.BASE;
 using FastAdminAPI.Network.Interfaces;
 using FastAdminAPI.Network.Models.Email;
 using FastAdminAPI.Network.Models.QyWechat;
 using FastAdminAPI.Network.Models.Wechat;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.EventBus.Controllers
 {

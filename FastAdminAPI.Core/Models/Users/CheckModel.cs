@@ -1,10 +1,10 @@
-﻿using FastAdminAPI.Common.Attributes.CheckValidators;
+﻿using System;
+using System.Collections.Generic;
+using FastAdminAPI.Common.Attributes.CheckValidators;
 using FastAdminAPI.Common.Enums;
 using FastAdminAPI.Framework.Models;
 using SqlSugar.Attributes.Extension.Common;
 using SqlSugar.Attributes.Extension.Extensions.Attributes.Query;
-using System;
-using System.Collections.Generic;
 
 namespace FastAdminAPI.Core.Models.Users
 {

@@ -1,7 +1,7 @@
-﻿using FastAdminAPI.Common.BASE;
+﻿using System.Threading.Tasks;
+using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Network.Models.QyWechat;
 using Refit;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Network.Interfaces
 {

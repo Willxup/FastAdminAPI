@@ -1,12 +1,12 @@
-﻿using FastAdminAPI.Common.Logs;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Network.Models.Email;
 using MailKit.Net.Smtp;
 using MimeKit;
 using MimeKit.Text;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Email.Extensions
 {

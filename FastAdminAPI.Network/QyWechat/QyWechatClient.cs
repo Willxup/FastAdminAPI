@@ -1,4 +1,6 @@
-﻿using FastAdminAPI.Common.BASE;
+﻿using System;
+using System.Threading.Tasks;
+using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Common.Utilities;
@@ -7,8 +9,6 @@ using FastAdminAPI.Network.QyWechat.Common;
 using FastAdminAPI.Network.QyWechat.Config;
 using FastAdminAPI.Network.QyWechat.Models;
 using Refit;
-using System;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Network.QyWechat
 {

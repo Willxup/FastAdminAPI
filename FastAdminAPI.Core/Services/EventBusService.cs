@@ -1,10 +1,10 @@
-﻿using DotNetCore.CAP;
+﻿using System.Threading.Tasks;
+using DotNetCore.CAP;
 using FastAdminAPI.CAP.Subscribes;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Services.BASE;
 using Microsoft.AspNetCore.Http;
 using SqlSugar;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.Services
 {

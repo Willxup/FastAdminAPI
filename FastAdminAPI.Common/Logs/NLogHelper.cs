@@ -1,6 +1,6 @@
+using System;
 using FastAdminAPI.Common.Datetime;
 using NLog;
-using System;
 
 namespace FastAdminAPI.Common.Logs
 {

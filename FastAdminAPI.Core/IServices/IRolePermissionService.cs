@@ -1,7 +1,7 @@
-﻿using FastAdminAPI.Common.BASE;
-using FastAdminAPI.Core.Models.RolePermission;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using FastAdminAPI.Common.BASE;
+using FastAdminAPI.Core.Models.RolePermission;
 
 namespace FastAdminAPI.Core.IServices
 {

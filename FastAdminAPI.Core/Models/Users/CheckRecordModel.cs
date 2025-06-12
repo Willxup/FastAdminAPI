@@ -1,5 +1,5 @@
-﻿using SqlSugar.Attributes.Extension.Extensions.Attributes.Query;
-using System;
+﻿using System;
+using SqlSugar.Attributes.Extension.Extensions.Attributes.Query;
 
 namespace FastAdminAPI.Core.Models.Users
 {

@@ -1,6 +1,6 @@
-﻿using FastAdminAPI.Common.Attributes;
+﻿using System;
+using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.Logs;
-using System;
 
 namespace FastAdminAPI.Common.Cryptos
 {

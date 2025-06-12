@@ -1,9 +1,9 @@
-﻿using FastAdminAPI.Common.Attributes;
+﻿using System;
+using System.Text;
+using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.Datetime;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Redis;
-using System;
-using System.Text;
 
 namespace FastAdminAPI.Common.SerialNumber
 {

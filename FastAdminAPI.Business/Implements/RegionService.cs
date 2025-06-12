@@ -1,11 +1,11 @@
-﻿using FastAdminAPI.Business.Interfaces;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using FastAdminAPI.Business.Interfaces;
 using FastAdminAPI.Business.Models.Region;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Framework.Entities;
 using SqlSugar;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Business.Implements
 {

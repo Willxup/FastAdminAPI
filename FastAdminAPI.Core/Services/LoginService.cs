@@ -1,4 +1,6 @@
-﻿using FastAdminAPI.Common.Attributes;
+﻿using System;
+using System.Threading.Tasks;
+using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Enums;
 using FastAdminAPI.Common.Logs;
@@ -8,8 +10,6 @@ using FastAdminAPI.Core.Services.BASE;
 using FastAdminAPI.Framework.Entities;
 using FastAdminAPI.Framework.Extensions;
 using SqlSugar;
-using System;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.Services
 {

@@ -1,6 +1,6 @@
-﻿using FastAdminAPI.Common.BASE;
+﻿using System.Threading.Tasks;
+using FastAdminAPI.Common.BASE;
 using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.OSS.IServices
 {

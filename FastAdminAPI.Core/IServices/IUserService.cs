@@ -1,8 +1,8 @@
-﻿using FastAdminAPI.Common.BASE;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Core.Models.Modules;
 using FastAdminAPI.Core.Models.Users;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.IServices
 {

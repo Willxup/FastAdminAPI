@@ -1,4 +1,8 @@
-﻿using FastAdminAPI.Common.Attributes;
+﻿using System;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
+using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Network.Config;
@@ -8,10 +12,6 @@ using FastAdminAPI.Network.Wechat.Config;
 using FastAdminAPI.Network.Wechat.Models;
 using Newtonsoft.Json;
 using Refit;
-using System;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Network.Wechat
 {

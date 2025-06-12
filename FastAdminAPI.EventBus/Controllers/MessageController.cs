@@ -1,8 +1,8 @@
-﻿using DotNetCore.CAP;
+﻿using System.Threading.Tasks;
+using DotNetCore.CAP;
 using FastAdminAPI.CAP.Subscribes;
 using FastAdminAPI.EventBus.IServices;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.EventBus.Controllers
 {

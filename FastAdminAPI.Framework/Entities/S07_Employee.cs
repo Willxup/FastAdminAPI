@@ -1,6 +1,6 @@
 ﻿
-using SqlSugar;
 using System;
+using SqlSugar;
 
 
 namespace FastAdminAPI.Framework.Entities

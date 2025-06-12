@@ -1,5 +1,5 @@
-﻿using SqlSugar;
-using System.IO;
+﻿using System.IO;
+using SqlSugar;
 
 namespace FastAdminAPI.Framework.Extensions
 {

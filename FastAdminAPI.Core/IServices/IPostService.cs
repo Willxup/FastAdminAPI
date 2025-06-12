@@ -1,6 +1,6 @@
-﻿using FastAdminAPI.Common.BASE;
+﻿using System.Threading.Tasks;
+using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Core.Models.Posts;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.IServices
 {

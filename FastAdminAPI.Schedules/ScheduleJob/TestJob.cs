@@ -1,4 +1,5 @@
-﻿using DotNetCore.CAP;
+﻿using System.Threading.Tasks;
+using DotNetCore.CAP;
 using FastAdminAPI.CAP.Subscribes;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Network.Interfaces;
@@ -7,7 +8,6 @@ using FastAdminAPI.Network.QyWechat.Common;
 using FastAdminAPI.Schedules.Configuration;
 using Microsoft.Extensions.Configuration;
 using SqlSugar;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Schedules.ScheduleJob
 {

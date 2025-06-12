@@ -1,8 +1,8 @@
-﻿using FastAdminAPI.Common.Logs;
+﻿using System;
+using System.Collections.Concurrent;
+using FastAdminAPI.Common.Logs;
 using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
-using System;
-using System.Collections.Concurrent;
 
 namespace FastAdminAPI.Common.Redis
 {

@@ -1,6 +1,6 @@
-﻿using FastAdminAPI.Business.PrivateFunc.Applications.Models;
+﻿using System.Threading.Tasks;
+using FastAdminAPI.Business.PrivateFunc.Applications.Models;
 using FastAdminAPI.Common.BASE;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Business.Interfaces
 {

@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Autofac.Extensions.DependencyInjection;
 using FastAdminAPI.Common.Attributes.CheckValidators;
 using FastAdminAPI.Common.Logs;
@@ -14,8 +16,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using NLog;
 using NLog.Web;
-using System;
-using System.IO;
 
 try
 {

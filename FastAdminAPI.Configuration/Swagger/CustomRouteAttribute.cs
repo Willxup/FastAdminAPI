@@ -1,6 +1,6 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using System;
 using static FastAdminAPI.Configuration.Swagger.CustomApiVersion;
 
 namespace FastAdminAPI.Configuration.Swagger

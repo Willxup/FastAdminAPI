@@ -1,4 +1,5 @@
-﻿using DotNetCore.CAP;
+﻿using System.Threading.Tasks;
+using DotNetCore.CAP;
 using FastAdminAPI.Business.PrivateFunc.Applications.Models;
 using FastAdminAPI.CAP.Subscribes;
 using FastAdminAPI.Common.Attributes;
@@ -10,7 +11,6 @@ using FastAdminAPI.Network.Models.QyWechat;
 using FastAdminAPI.Network.QyWechat.Common;
 using Microsoft.Extensions.Configuration;
 using SqlSugar;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Business.PrivateFunc.Applications.Business
 {

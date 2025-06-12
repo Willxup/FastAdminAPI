@@ -1,10 +1,12 @@
+using System;
+using System.IO;
 using FastAdminAPI.CAP.Extensions;
 using FastAdminAPI.Common.Attributes.CheckValidators;
-using FastAdminAPI.Configuration.Filters;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Common.Utilities;
 using FastAdminAPI.Configuration.Extensions;
+using FastAdminAPI.Configuration.Filters;
 using FastAdminAPI.Configuration.Middlewares;
 using FastAdminAPI.Configuration.Swagger;
 using FastAdminAPI.Framework.Extensions;
@@ -21,8 +23,6 @@ using NLog;
 using NLog.Web;
 using SqlSugar;
 using StackExchange.Redis;
-using System;
-using System.IO;
 
 try
 {

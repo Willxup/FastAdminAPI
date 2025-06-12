@@ -1,10 +1,10 @@
-﻿using FastAdminAPI.Common.Attributes;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Configuration.BASE;
 using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Hubs.Hubs.BASE
 {

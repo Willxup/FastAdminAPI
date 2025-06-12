@@ -1,11 +1,11 @@
-﻿using DotNetCore.CAP;
+﻿using System;
+using DotNetCore.CAP;
 using DotNetCore.CAP.Messages;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Network.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
-using System;
 
 namespace FastAdminAPI.CAP.Extensions
 {

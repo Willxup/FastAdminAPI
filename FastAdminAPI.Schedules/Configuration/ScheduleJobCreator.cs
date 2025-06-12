@@ -1,4 +1,7 @@
-﻿using DotNetCore.CAP;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using DotNetCore.CAP;
 using FastAdminAPI.Common.Enums;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Redis;
@@ -10,9 +13,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using SqlSugar;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FastAdminAPI.Schedules.Configuration
 {

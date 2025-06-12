@@ -1,7 +1,7 @@
-﻿using FastAdminAPI.Core.Controllers.BASE;
+﻿using System.Threading.Tasks;
+using FastAdminAPI.Core.Controllers.BASE;
 using FastAdminAPI.Core.IServices;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.Controllers
 {

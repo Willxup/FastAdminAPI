@@ -1,11 +1,11 @@
-﻿using FastAdminAPI.Common.Enums;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using FastAdminAPI.Common.Enums;
 using FastAdminAPI.Framework.Models;
 using Newtonsoft.Json;
 using SqlSugar.Attributes.Extension.Extensions;
 using SqlSugar.Attributes.Extension.Extensions.Attributes.Operation;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace FastAdminAPI.Core.Models.BasicSettings
 {

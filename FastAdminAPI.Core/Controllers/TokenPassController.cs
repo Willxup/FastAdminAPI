@@ -1,13 +1,13 @@
-﻿using FastAdminAPI.Business.Models.Region;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
+using FastAdminAPI.Business.Models.Region;
 using FastAdminAPI.Common.BASE;
+using FastAdminAPI.Common.Tree;
 using FastAdminAPI.Core.Controllers.BASE;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Models.TokenPass;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
-using FastAdminAPI.Common.Tree;
 
 namespace FastAdminAPI.Core.Controllers
 {

@@ -1,9 +1,9 @@
-﻿using FastAdminAPI.Configuration.BASE;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
+using FastAdminAPI.Configuration.BASE;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using static FastAdminAPI.Configuration.Swagger.CustomApiVersion;
 
 namespace FastAdminAPI.Configuration.Extensions

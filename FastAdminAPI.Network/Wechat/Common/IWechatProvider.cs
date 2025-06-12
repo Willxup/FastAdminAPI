@@ -1,7 +1,7 @@
-﻿using FastAdminAPI.Network.Wechat.Config;
+﻿using System.Threading.Tasks;
+using FastAdminAPI.Network.Wechat.Config;
 using FastAdminAPI.Network.Wechat.Models;
 using Refit;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Network.Wechat.Common
 {

@@ -1,4 +1,9 @@
-﻿using FastAdminAPI.Common.Attributes;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Redis;
@@ -10,11 +15,6 @@ using FastAdminAPI.Core.Models.Login;
 using FastAdminAPI.Network.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.Controllers
 {

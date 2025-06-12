@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Builder;
 using Swashbuckle.AspNetCore.SwaggerUI;
-using System.Linq;
 using static FastAdminAPI.Configuration.Swagger.CustomApiVersion;
 
 namespace FastAdminAPI.Configuration.Swagger

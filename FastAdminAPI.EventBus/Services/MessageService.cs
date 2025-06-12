@@ -1,8 +1,8 @@
-﻿using FastAdminAPI.EventBus.IServices;
+﻿using System;
+using System.Threading.Tasks;
+using FastAdminAPI.EventBus.IServices;
 using FastAdminAPI.EventBus.Services.BASE;
 using SqlSugar;
-using System;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.EventBus.Services
 {

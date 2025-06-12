@@ -1,5 +1,5 @@
-﻿using FastAdminAPI.Common.BASE;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using FastAdminAPI.Common.BASE;
 
 namespace FastAdminAPI.Core.IServices
 {

@@ -1,12 +1,12 @@
-﻿using FastAdminAPI.Common.Attributes;
+﻿using System;
+using System.Threading.Tasks;
+using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Services.BASE;
 using FastAdminAPI.Network.Models.QyWechat;
 using FastAdminAPI.Network.QyWechat;
-using System;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.Services
 {

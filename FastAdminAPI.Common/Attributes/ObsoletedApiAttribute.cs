@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
-using System;
+﻿using System;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace FastAdminAPI.Common.Attributes
 {

@@ -1,4 +1,6 @@
-﻿using DotNetCore.CAP;
+﻿using System;
+using System.Threading.Tasks;
+using DotNetCore.CAP;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Redis;
@@ -9,8 +11,6 @@ using FastAdminAPI.Schedules.Controllers.BASE;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using SqlSugar;
-using System;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Schedules.Controllers
 {

@@ -1,4 +1,8 @@
-﻿using FastAdminAPI.Common.Attributes;
+﻿using System;
+using System.IO;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Utilities;
@@ -7,10 +11,6 @@ using FastAdminAPI.OSS.IServices;
 using FastAdminAPI.OSS.Services.BASE;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.IO;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.OSS.Services
 {

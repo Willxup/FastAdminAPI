@@ -1,10 +1,10 @@
+using System;
+using System.Text;
+using System.Threading.Tasks;
 using FastAdminAPI.Configuration.BASE;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Configuration.Extensions
 {

@@ -1,8 +1,8 @@
-﻿using FastAdminAPI.Common.Attributes;
+﻿using System.Threading.Tasks;
+using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Configuration.BASE;
 using FastAdminAPI.Hubs.Hubs.BASE;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Hubs.Hubs
 {

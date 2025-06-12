@@ -1,6 +1,6 @@
-﻿using FastAdminAPI.Common.Attributes.CheckValidators;
+﻿using System.ComponentModel.DataAnnotations;
+using FastAdminAPI.Common.Attributes.CheckValidators;
 using FastAdminAPI.Common.Enums;
-using System.ComponentModel.DataAnnotations;
 
 namespace FastAdminAPI.Core.Models.Login
 {

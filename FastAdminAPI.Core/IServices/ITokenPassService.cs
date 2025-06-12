@@ -1,7 +1,7 @@
-﻿using FastAdminAPI.Business.Models.Region;
-using FastAdminAPI.Core.Models.TokenPass;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using FastAdminAPI.Business.Models.Region;
+using FastAdminAPI.Core.Models.TokenPass;
 
 namespace FastAdminAPI.Core.IServices
 {

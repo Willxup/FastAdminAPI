@@ -1,6 +1,6 @@
-﻿using FastAdminAPI.Framework.Entities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using FastAdminAPI.Framework.Entities;
 
 namespace FastAdminAPI.Business.PrivateFunc.Applications.Models
 {

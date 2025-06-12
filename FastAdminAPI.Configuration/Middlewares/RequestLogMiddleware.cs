@@ -1,3 +1,8 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using FastAdminAPI.Common.Datetime;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Configuration.Authentications;
@@ -5,11 +10,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
-using System;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Configuration.Middlewares
 {

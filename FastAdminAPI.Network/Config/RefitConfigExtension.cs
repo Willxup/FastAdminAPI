@@ -1,10 +1,10 @@
-﻿using FastAdminAPI.Network.Interfaces;
+﻿using System;
+using FastAdminAPI.Network.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Refit;
-using System;
 
 namespace FastAdminAPI.Network.Config
 {

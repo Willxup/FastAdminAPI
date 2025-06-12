@@ -1,10 +1,10 @@
-﻿using FastAdminAPI.Common.BASE;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
+using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Core.Controllers.BASE;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Network.Models.Wechat;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Core.Controllers
 {

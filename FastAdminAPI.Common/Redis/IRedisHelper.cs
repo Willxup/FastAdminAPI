@@ -1,8 +1,8 @@
-﻿using FastAdminAPI.Common.Redis.Model;
-using StackExchange.Redis;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FastAdminAPI.Common.Redis.Model;
+using StackExchange.Redis;
 
 namespace FastAdminAPI.Common.Redis
 {

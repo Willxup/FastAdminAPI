@@ -1,8 +1,8 @@
-﻿using FastAdminAPI.Common.BASE;
+﻿using System;
+using System.Linq;
+using FastAdminAPI.Common.BASE;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System;
-using System.Linq;
 
 namespace FastAdminAPI.Common.Attributes.CheckValidators
 {

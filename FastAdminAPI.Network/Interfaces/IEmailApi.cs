@@ -1,6 +1,6 @@
-﻿using FastAdminAPI.Network.Models.Email;
+﻿using System.Threading.Tasks;
+using FastAdminAPI.Network.Models.Email;
 using Refit;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Network.Interfaces
 {

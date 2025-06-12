@@ -1,7 +1,7 @@
-﻿using FastAdminAPI.Common.BASE;
-using FastAdminAPI.Core.Models.Test;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using FastAdminAPI.Common.BASE;
+using FastAdminAPI.Core.Models.Test;
 
 namespace FastAdminAPI.Core.IServices
 {

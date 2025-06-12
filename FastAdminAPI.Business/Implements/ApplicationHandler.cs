@@ -1,4 +1,8 @@
-﻿using DotNetCore.CAP;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using DotNetCore.CAP;
 using FastAdminAPI.Business.Interfaces;
 using FastAdminAPI.Business.PrivateFunc.Applications;
 using FastAdminAPI.Business.PrivateFunc.Applications.Models;
@@ -16,10 +20,6 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using SqlSugar;
 using SqlSugar.Attributes.Extension.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Business.Implements
 {

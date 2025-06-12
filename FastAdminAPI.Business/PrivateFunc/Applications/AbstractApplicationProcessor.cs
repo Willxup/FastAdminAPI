@@ -1,11 +1,11 @@
-﻿using DotNetCore.CAP;
+﻿using System.Threading.Tasks;
+using DotNetCore.CAP;
 using FastAdminAPI.Business.PrivateFunc.Applications.Models;
 using FastAdminAPI.Common.BASE;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Network.Interfaces;
 using Microsoft.Extensions.Configuration;
 using SqlSugar;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Business.PrivateFunc.Applications
 {

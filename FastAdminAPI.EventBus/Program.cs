@@ -1,11 +1,13 @@
-﻿using Autofac.Extensions.DependencyInjection;
+﻿using System;
+using System.IO;
+using Autofac.Extensions.DependencyInjection;
 using FastAdminAPI.CAP.Extensions;
 using FastAdminAPI.Common.Attributes.CheckValidators;
-using FastAdminAPI.Configuration.Filters;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Common.Redis;
 using FastAdminAPI.Common.Utilities;
 using FastAdminAPI.Configuration.Extensions;
+using FastAdminAPI.Configuration.Filters;
 using FastAdminAPI.Framework.Extensions;
 using FastAdminAPI.Network.Config;
 using Microsoft.AspNetCore.Builder;
@@ -15,8 +17,6 @@ using Newtonsoft.Json.Serialization;
 using NLog;
 using NLog.Web;
 using SqlSugar;
-using System;
-using System.IO;
 
 try
 {

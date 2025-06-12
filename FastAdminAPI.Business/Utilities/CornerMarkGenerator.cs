@@ -1,8 +1,8 @@
-﻿using FastAdminAPI.Common.Attributes;
+﻿using System;
+using System.Threading.Tasks;
+using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.Logs;
 using SqlSugar;
-using System;
-using System.Threading.Tasks;
 
 namespace FastAdminAPI.Business.Utilities
 {

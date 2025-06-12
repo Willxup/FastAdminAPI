@@ -1,15 +1,15 @@
-﻿using FastAdminAPI.Common.Attributes;
-using FastAdminAPI.Common.Datetime;
-using FastAdminAPI.Common.Logs;
-using FastAdminAPI.Configuration.BASE;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using FastAdminAPI.Common.Attributes;
+using FastAdminAPI.Common.Datetime;
+using FastAdminAPI.Common.Logs;
+using FastAdminAPI.Configuration.BASE;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FastAdminAPI.Configuration.Authentications
 {
