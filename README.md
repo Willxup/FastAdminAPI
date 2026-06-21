@@ -78,27 +78,27 @@ FastAdminAPI.sln         Solution
 
 
 
-# <span id='chapter-3'>🥩 项目内容</span>
+# <span id='chapter-3'>🥩 Project Contents</span>
 
 
 
 ## FastAdminAPI.Core
 
-核心项目，包含部门、岗位、员工、角色权限等功能，可以做到开箱即用。当然如果和现实情况不符，可进行再次开发。
+The core project includes departments, positions, employees, role permissions, and other features and can be used out of the box. If it does not fit your requirements, you can customize it through further development.
 
-在业务复杂的情况下，可以根据该项目结构进行复刻，建立多个不同的微服务进行业务拆分。
+For complex business requirements, use this project structure as a template to create multiple microservices and split up business functionality.
 
-本项目除了引用其他类库外，自身已包含所有业务相关代码，无其他依赖，结构简单，上手非常容易。
+Apart from references to other libraries, this project contains all of its business-related code and has no other dependencies. Its simple structure makes it easy to get started.
 
 ```bash
-Controllers/   Controller层-数据返回
-IServices/     服务层接口
-Models/        dto模型层-数据传输及ORM配置
-Properties/    项目启动配置
-Services/      服务层-业务数据操作
+Controllers/   Controller layer - returns data
+IServices/     Service layer interfaces
+Models/        DTO model layer - data transfer and ORM configuration
+Properties/    Project startup configuration
+Services/      Service layer - business data operations
 ```
 
-`Program.cs`文件中的配置都有相应的注释，方便学习。
+The configuration in `Program.cs` includes comments to help you understand it.
 
 ## FastAdminAPI.Common
 
