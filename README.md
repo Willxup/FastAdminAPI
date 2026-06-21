@@ -189,41 +189,41 @@ app.UseJwtTokenAuth();
 
 ## FastAdminAPI.Framework
 
-ORM框架，基于[DotNetNext/SqlSugar开源项目](https://github.com/DotNetNext/SqlSugar)进行开发，`sqlsugar`的用法直接看官方文档即可。另外引入了[SqlSugar.Attributes](https://github.com/Willxup/SqlSugar.Attributes)类库，只需要配置DTO模型，即可自动拼接SQL并映射查询条件及结果，非常方便。下面的扩展也是基于这个类库做的进一步封装。
+This ORM framework is built on the [DotNetNext/SqlSugar open-source project](https://github.com/DotNetNext/SqlSugar). Refer to its official documentation for `sqlsugar` usage. It also includes the [SqlSugar.Attributes](https://github.com/Willxup/SqlSugar.Attributes) library: configure DTO models to automatically build SQL and map query conditions and results. The extensions below provide further wrappers around this library.
 
-### 结构
+### Structure
 ```bash
-Database/        数据库SQL文件
-Entities/        数据库实体类
-Extensions/      ORM扩展
+Database/        Database SQL files
+Entities/        Database entity classes
+Extensions/      ORM extensions
 ```
 
-本项目类库增加了一些扩展，可以更加快速的进行业务开发。
-### ORM扩展
-#### 普通查询
+This library adds extensions to speed up business logic development.
+### ORM Extensions
+#### Basic Queries
 ```C#
 [DbDefaultOrderBy("t_Name", DbSortWay.DESC)]
 //[DbDefaultOrderBy("t.t_Name", DbSortWay.DESC)]
 public class Search : DbQueryBaseModel
 {
-	//[DbTableAlias("t")] //表别名，多表关联使用，单表需要查询时指定表别名
-	[DbQueryField("t_Name")] //字段名
-	[DbQueryOperator(DbOperator.Like)]  //操作符, Like查询
+	//[DbTableAlias("t")] //Table alias for multi-table joins; specify the alias when querying a single table
+	[DbQueryField("t_Name")] //Field name
+	[DbQueryOperator(DbOperator.Like)]  //Operator: LIKE query
 	public string Name { get; set; }
-	//[DbTableAlias("t")] //表别名，多表关联使用，单表需要查询时指定表别名
-	[DbQueryField("t_CodeId")] //字段名
-	[DbQueryOperator(DbOperator.In)] //操作符，IN查询
+	//[DbTableAlias("t")] //Table alias for multi-table joins; specify the alias when querying a single table
+	[DbQueryField("t_CodeId")] //Field name
+	[DbQueryOperator(DbOperator.In)] //Operator: IN query
 	public List<long> CodeIds { get; set; }
 }
 public class Result
 {
-	//[DbTableAlias("t")] //表别名，多表关联使用，单表需要查询时指定表别名
-	[DbQueryField("t_Id")] //字段名
+	//[DbTableAlias("t")] //Table alias for multi-table joins; specify the alias when querying a single table
+	[DbQueryField("t_Id")] //Field name
 	public long Id { get; set; }
-	//[DbTableAlias("t")] //表别名，多表关联使用，单表需要查询时指定表别名
-	[DbQueryField("t_Name")] //字段名
+	//[DbTableAlias("t")] //Table alias for multi-table joins; specify the alias when querying a single table
+	[DbQueryField("t_Name")] //Field name
 	public string Name { get; set; }
-    //子查询，如果指定了表别名，可以使用表别名，否则直接写表名
+    //Subquery: use the table alias if one is specified; otherwise, use the table name
 	//[DbSubQuery("(SELECT name FROM Table_Name2 WHERE t.t_Id = Id)")]
     [DbSubQuery("(SELECT name FROM Table_Name2 WHERE Table_Name.t_Id = Id)")]
     public string OtherName { get; set; }
@@ -232,21 +232,21 @@ public class Result
 
 
 
-- 查询方法
+- Query methods
 
 ```C#
-//自动包装映射
+//Automatically wrap and map the result
 await _dbContext.Queryable<Table_Name>().ToListResultAsync(search, new Result());
 
-//自动包装映射，指定表别名
+//Automatically wrap and map the result with a specified table alias
 await _dbContext.Queryable<Table_Name>("t").ToListResultAsync(search, new Result());
 ```
 
 
 
-上述生成的`SQL`如下：
+The generated `SQL` is shown below:
 
-- 正常查询
+- Query without a table alias
 
 ```sql
 SELECT 
@@ -258,7 +258,7 @@ WHERE t_Name LIKE '%@Name%' AND t_CodeId IN (@CodeIds)
 ORDER BY t_Name DESC;
 ```
 
-- 指定表别名查询
+- Query with a table alias
 
 ```sql
 SELECT 
@@ -272,50 +272,50 @@ ORDER BY t.t_Name DESC;
 
 
 
-#### 分组查询
+#### Grouped Queries
 
-- 创建查询的查询条件类
+- Create the query criteria class
 
 ```c#
 [DbDefaultOrderBy("CountNums", DbSortWay.DESC)]
 public class Search
 {
-    [DbQueryField("t_GroupCode")] //字段名
-	[DbQueryOperator(DbOperator.Like)]  //操作符, Like查询
+    [DbQueryField("t_GroupCode")] //Field name
+	[DbQueryOperator(DbOperator.Like)]  //Operator: LIKE query
 	public long GroupCode { get; set; }
-	[DbQueryField("t_GroupName")] //字段名
-	[DbQueryOperator(DbOperator.Like)]  //操作符, Like查询
+	[DbQueryField("t_GroupName")] //Field name
+	[DbQueryOperator(DbOperator.Like)]  //Operator: LIKE query
 	public string GroupName { get; set; }
 }
 ```
 
-- 创建查询的结果类
+- Create the query result class
 
 ```c#
 [DbHaving("CountNums > 0")]
 public class Result
 {
-	[DbQueryField("t_GroupCode")] //字段名
-	[DbGroupBy("t_GroupCode")] //分组
+	[DbQueryField("t_GroupCode")] //Field name
+	[DbGroupBy("t_GroupCode")] //Group by
 	public long GroupCode { get; set; }
-	[DbQueryField("t_GroupName")] //字段名
-    [DbGroupBy("t_GroupName")] //分组
+	[DbQueryField("t_GroupName")] //Field name
+    [DbGroupBy("t_GroupName")] //Group by
 	public string GroupName { get; set; }
     [DbSubQuery("Count(t_CodeId)")]
     public string CountNums { get; set; }
 }
 ```
 
-- 查询方法
+- Query methods
 
 ```c#
-//自动包装映射
+//Automatically wrap and map the result
 await _dbContext.Queryable<Table_Name>().ToListResultAsync(search, new Result());
 ```
 
 
 
-- 查询SQL
+- Generated SQL
 
 ```sql
 SELECT 
@@ -331,23 +331,23 @@ ORDER BY CountNums DESC;
 
 
 
-#### 结果转换
+#### Result Conversion
 
-以上查询方法返回结果为 统一返回结果(`ResponseModel`)，如需将结果转换回`List<T>`类型，可以使用下面的方法：
+The query methods above return a standard response (`ResponseModel`). To convert the result back to `List<T>`, use the following:
 
 ```C#
 var result = await _dbContext.Queryable<Table_Name>().ToAutoBoxResultAsync(search, new Result());
 
 if (result?.Code == ResponseCode.Success)
 {
-	//转换为List<T>
+	//Convert to List<T>
 	var list = result.ToConvertData<List<Result>>();
 }
 ```
 
 
 
-#### 新增
+#### Insert
 
 ```C#
 await _dbContext.InsertResultAsync<AddModel, Table_Name>(model)
@@ -364,12 +364,12 @@ public class AddModel : DbOperationBaseModel
 }
 ```
 
-上述生成的`SQL`如下：
+The generated `SQL` is shown below:
 ```sql
 INSERT INTO Table_Name (t_Name, t_Address) VALUES (@Name, @Address);
 ```
 
-#### 编辑
+#### Update
 
 ```C#
 await _dbContext.UpdateResultAsync<EditModel, Table_Name>(model);
@@ -378,7 +378,7 @@ await _dbContext.UpdateResultAsync<EditModel, Table_Name>(model);
 ```C#
 public class EditModel : DbOperationBaseModel
 {
-	[DbOperationField("t_Id", true)] //true代表更新条件
+	[DbOperationField("t_Id", true)] //true indicates an update condition
 	public long? Id { get; set; }
 	
 	[DbOperationField("t_Name")]
@@ -389,13 +389,13 @@ public class EditModel : DbOperationBaseModel
 }
 ```
 
-上述生成的`SQL`如下：
+The generated `SQL` is shown below:
 ```sql
 UPDATE Table_Name SET t_Name = @Name, t_Address = @Address 
 WHERE t_Id = @Id;
 ```
 
-#### 软删除
+#### Soft Delete
 
 ```C#
 await _dbContext.SoftDeleteAsync<DelModel, Table_Name>(model);
@@ -404,7 +404,7 @@ await _dbContext.SoftDeleteAsync<DelModel, Table_Name>(model);
 ```C#
 public class DelModel : DbOperationBaseModel
 {
-	[DbOperationField("t_Id", true)] //true代表更新条件
+	[DbOperationField("t_Id", true)] //true indicates an update condition
 	public long? Id { get; set; }
 	
 	[DbOperationField("t_IsValid")]
@@ -412,24 +412,24 @@ public class DelModel : DbOperationBaseModel
 }
 ```
 
-上述生成的`SQL`如下：
+The generated `SQL` is shown below:
 ```sql
 UPDATE Table_Name SET t_Name = @Name, t_IsValid = @IsValid 
 WHERE t_Id = @Id;
 ```
 
-#### 事务
+#### Transactions
 
 ```C#
 await _dbContext.TransactionAsync(async () => 
 {
-	//需要执行的sql
+	//SQL to execute
 });
 ```
 
-#### 执行结果转换
+#### Execution Result Conversion
 
-将`SqlSugar`的返回结果转换为 统一返回结果(`ResponseModel`)
+Convert the result returned by `SqlSugar` into a standard response (`ResponseModel`).
 ```C#
 await _dbContext.Updateable(entity).ExecuteAsync();
 ```
