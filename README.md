@@ -7,23 +7,23 @@
 
 
 
-# 🌏 目录
+# 🌏 Table of Contents
 
-- [快速开始](#chapter-1)
-- [项目结构](#chapter-2)
-- [项目内容](#chapter-3)
-  - [Core](#FastAdminAPICore)
-  - [Common](#FastAdminAPICommon)
-  - [Configuration](#FastAdminAPIConfiguration)
-  - [Framework](#FastAdminAPIFramework)
-  - [Business](#FastAdminAPIBusiness)
-  - [CAP](#FastAdminAPICAP)
-  - [Email](#FastAdminAPIEmail)
-  - [NPOI](#FastAdminAPINPOI)
-  - [Network](#FastAdminAPINetwork)
-  - [EventBus](#FastAdminAPIEventBus)
-  - [Schedules](#FastAdminAPISchedules)
-- [感谢](#chapter-4)
+- [Quick Start](#chapter-1)
+- [Project Structure](#chapter-2)
+- [Project Contents](#chapter-3)
+  - [Core](#fastadminapicore)
+  - [Common](#fastadminapicommon)
+  - [Configuration](#fastadminapiconfiguration)
+  - [Framework](#fastadminapiframework)
+  - [Business](#fastadminapibusiness)
+  - [CAP](#fastadminapicap)
+  - [Email](#fastadminapiemail)
+  - [NPOI](#fastadminapinpoi)
+  - [Network](#fastadminapinetwork)
+  - [EventBus](#fastadminapieventbus)
+  - [Schedules](#fastadminapischedules)
+- [Acknowledgments](#chapter-4)
 - [Sponsor](#chapter-5)
 
 
