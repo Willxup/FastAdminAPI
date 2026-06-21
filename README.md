@@ -102,21 +102,21 @@ The configuration in `Program.cs` includes comments to help you understand it.
 
 ## FastAdminAPI.Common
 
-通用工具类库，包含很多实用工具。
+A general utility library containing many useful tools.
 
-### 结构
+### Structure
 ```bash
-Attributes/           各类特性类
-BASE/                 返回统一参数，通用参数等
-Cryptos/              加解密
-Datetime/             时间帮助类
-Enums/                通用枚举
-JsonTree/             json树结构转换
-Logs/                 日志相关
-QRCode/               二维码生成工具
-Redis/                Redis工具类
-SerialNumber/         编号/序列号生成器
-Utilities/            实用工具
+Attributes/           Attribute classes
+BASE/                 Standard response parameters, common parameters, and more
+Cryptos/              Encryption and decryption
+Datetime/             Date and time helper classes
+Enums/                Common enums
+JsonTree/             JSON tree structure conversion
+Logs/                 Logging utilities
+QRCode/               QR code generation tools
+Redis/                Redis utility classes
+SerialNumber/         ID and serial number generators
+Utilities/            Utilities
 ```
 
 
