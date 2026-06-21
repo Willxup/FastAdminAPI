@@ -30,9 +30,9 @@
 
 
 
-# <span id='chapter-1'>🚀 快速开始</span>
+# <span id='chapter-1'>🚀 Quick Start</span>
 
-本项目启动需要以下环境，请先配置环境：
+Set up the following requirements before starting the project:
 
 - `MySQL`
 - `Redis`
@@ -41,22 +41,22 @@
 
 
 
-修改`appsettings.Development.json`文件
+Modify the `appsettings.Development.json` file:
 
 ```json
 {
-  "Database.ConnectionString": "数据库连接字符串",
-  "Redis.ConnectionString": "Redis连接字符串",
-  "Redis.DbNum": 0, #Redis库编号
-  "Login.IPAddress.WhiteList": "", #IP白名单
-  "Common.Applications.DefaultApprover": 1, #通用审批 默认审批人
-  "FastAdminAPI.Core.Url": "http://localhost:9000" #多服务用于配置RefitClient
+  "Database.ConnectionString": "Database connection string",
+  "Redis.ConnectionString": "Redis connection string",
+  "Redis.DbNum": 0, #Redis database number
+  "Login.IPAddress.WhiteList": "", #IP whitelist
+  "Common.Applications.DefaultApprover": 1, #Default approver for general approvals
+  "FastAdminAPI.Core.Url": "http://localhost:9000" #Configure RefitClient for multiple services
 }
 ```
 
 
 
-点击`vs2022`运行，将会启动`swagger`文档。
+Click Run in `vs2022` to launch the `swagger` documentation.
 
 
 
