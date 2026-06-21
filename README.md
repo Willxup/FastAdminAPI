@@ -60,20 +60,20 @@ Click Run in `vs2022` to launch the `swagger` documentation.
 
 
 
-# <span id='chapter-2'>🏗️ 项目结构</span>
+# <span id='chapter-2'>🏗️ Project Structure</span>
 
 ```bash
-FastAdminAPI.Business/   通用业务类库
-FastAdminAPI.CAP/        开源项目CAP类库(基于dotnetcore/CAP项目开发及配置)
-FastAdminAPI.Common/     通用工具类库
-FastAdminAPI.Core/       核心项目(可按该模板创建多个不同的微服务项目)
-FastAdminAPI.Email/      邮件收发类库(基于jstedfast/MailKit开源项目)
-FastAdminAPI.EventBus/   事件总线项目(基于dotnetcore/CAP开源项目)
-FastAdminAPI.Framework/  ORM类库(基于DotNetNext/SqlSugar开源项目)  
-FastAdminAPI.NPOI/       NPOI类库(基于nissl-lab/npoi开源项目)
-FastAdminAPI.Network/    网络请求类库(基于reactiveui/refit开源项目)
-FastAdminAPI.Tasks/      定时任务项目(基于HangfireIO/Hangfire开源项目)
-FastAdminAPI.sln         解决方案
+FastAdminAPI.Business/   General business library
+FastAdminAPI.CAP/        CAP library (developed and configured using the dotnetcore/CAP open-source project)
+FastAdminAPI.Common/     General utility library
+FastAdminAPI.Core/       Core project (use this template to create multiple distinct microservice projects)
+FastAdminAPI.Email/      Email sending and receiving library (based on the jstedfast/MailKit open-source project)
+FastAdminAPI.EventBus/   Event bus project (based on the dotnetcore/CAP open-source project)
+FastAdminAPI.Framework/  ORM library (based on the DotNetNext/SqlSugar open-source project)
+FastAdminAPI.NPOI/       NPOI library (based on the nissl-lab/npoi open-source project)
+FastAdminAPI.Network/    Network request library (based on the reactiveui/refit open-source project)
+FastAdminAPI.Tasks/      Scheduled task project (based on the HangfireIO/Hangfire open-source project)
+FastAdminAPI.sln         Solution
 ```
 
 
