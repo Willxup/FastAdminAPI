@@ -123,65 +123,65 @@ Utilities/            Utilities
 
 ## FastAdminAPI.Configuration
 
-### 结构
+### Structure
 ```bash
-Authentications/      jwt校验
-BASE/                 全局参数
-Extensions/           通用配置
-Filters/              全局过滤
-Middlewares/          通用中间件
-Swagger/              Swagger配置
+Authentications/      JWT validation
+BASE/                 Global parameters
+Extensions/           Common configuration
+Filters/              Global filters
+Middlewares/          Common middleware
+Swagger/              Swagger configuration
 ```
 
-### 配置
+### Configuration
 
-#### 配置Model规则验证和全局异常捕获
+#### Configure Model Validation and Global Exception Handling
 ```C#
-//配置 Model规则有效性验证 和 全局异常捕获
+//Configure model validation and global exception handling
 builder.Services.AddControllers(c =>
 	{
-		//配置Model规则有效性验证
+		//Configure model validation
 		c.Filters.Add<ModelValidationAttribute>();
-		//配置全局异常捕获
+		//Configure global exception handling
 		c.Filters.Add(typeof(GlobalExceptionsFilter));
 	});
 ```
 
-#### 配置service层
+#### Configure the Service Layer
 
 ```C#
-// 服务层注入 将所有Service文件注入
+// Register all service classes with the dependency injection container
 builder.Services.AddAllServices();
 ```
 
-#### 配置响应压缩
+#### Configure Response Compression
 
 ```C#
-//接口响应压缩
+//Compress API responses
 builder.Services.AddCompressResponse();
 
-//WebApplication app = builder.Build()构建后进行配置
+//Configure after creating the app with WebApplication app = builder.Build()
 app.UseResponseCompression();
 ```
 
-#### Swagger配置
+#### Swagger Configuration
 
 ```C#
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwagger(serviceName, AppContext.BaseDirectory);
 
-//WebApplication app = builder.Build()构建后进行配置
+//Configure after creating the app with WebApplication app = builder.Build()
 app.UseSwagger();
 app.UseSwaggerUI(c => { c.Configure(serviceName); });
 ```
 
-#### Jwt配置
+#### JWT Configuration
 
 ```C#
-//jwt配置
+//JWT configuration
 builder.Services.AddJwtAuthentication();
 
-//WebApplication app = builder.Build()构建后进行配置
+//Configure after creating the app with WebApplication app = builder.Build()
 app.UseAuthentication();
 app.UseJwtTokenAuth();
 ```
