@@ -468,14 +468,14 @@ builder.Services.AddBusinessServices();
 
 ## FastAdminAPI.CAP
 
-该类库是基于[dotnetcore/CAP开源项目](https://github.com/dotnetcore/CAP)进行开发的，将配置简单化，直接可以开始使用。该类库使用`MySQL`进行持久化存储，使用`Redis`进行消息的发布及消费。
+This library is built on the [dotnetcore/CAP open-source project](https://github.com/dotnetcore/CAP) and simplifies configuration so you can get started immediately. It uses `MySQL` for persistent storage and `Redis` to publish and consume messages.
 
-- 仅使用功能
+- For basic use
 ```C#
 builder.Services.AddEventBus(configuration);
 ```
 
-- 需要个性化配置
+- For custom configuration
 ```C#
 builder.Services.AddCap(opt =>
 {
@@ -484,9 +484,9 @@ builder.Services.AddCap(opt =>
 });
 ```
 
-需要说明的是，如果要编写 订阅 或 发布 时，需要指定 订阅 的名称，订阅的名称放在`FastAdminAPI.CAP/Subscribes`目录下，进行统一管理。
+When writing a subscription or publishing a message, specify the subscription name. Subscription names are managed centrally in the `FastAdminAPI.CAP/Subscribes` directory.
 
-`CAP`的配置放在`appsettings.json`文件中，可以按需求修改。
+`CAP` configuration is stored in `appsettings.json` and can be modified as needed.
 
 ## FastAdminAPI.Email
 
