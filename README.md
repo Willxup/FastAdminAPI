@@ -490,7 +490,7 @@ When writing a subscription or publishing a message, specify the subscription na
 
 ## FastAdminAPI.Email
 
-邮件相关的类库，基于[jstedfast/MailKit开源项目](https://github.com/jstedfast/MailKit)开发。
+An email library built on the [jstedfast/MailKit open-source project](https://github.com/jstedfast/MailKit).
 
 
 ## FastAdminAPI.NPOI
