@@ -436,33 +436,33 @@ await _dbContext.Updateable(entity).ExecuteAsync();
 
 ## FastAdminAPI.Business
 
-该类库包含一些通用的业务，例如：数据权限，通用审批等，多服务皆可引用该项目，减少重复代码，并降低修改代码带来的问题。
+This library contains common business functionality, such as data permissions and general approvals. Multiple services can reference it to reduce duplicate code and problems caused by code changes.
 
-### 结构
+### Structure
 ```bash
-Common/          公用类
-Extensions/      扩展配置文件
-IServices/       接口
-Models/          dto模型
-PrivateFunc/     接口实现的私有方法
-Services/        接口实现层
+Common/          Shared classes
+Extensions/      Extension configuration files
+IServices/       Interfaces
+Models/          DTO models
+PrivateFunc/     Private methods used by interface implementations
+Services/        Interface implementation layer
 ```
-### 配置
-引用该类库，需要依赖注入，相关依赖注入的配置如下：
+### Configuration
+To use this library, configure dependency injection as follows:
 ```C#
-//注入数据权限业务服务
+// Register the data permissions service
 builder.Services.AddDataPermissionService();
 
-//注入通用审批业务服务
+// Register the general approvals service
 builder.Services.AddApplicationService();
 
-//注入通用区域业务服务
+// Register the common region service
 builder.Services.AddRegionService();
 ```
 
-如果想要全部注入，可以这样进行配置：
+To register all business services, use the following configuration:
 ```C#
-//注入所有业务服务
+// Register all business services
 builder.Services.AddBusinessServices();
 ```
 
