@@ -502,21 +502,21 @@ An Excel library built on the [nissl-lab/npoi open-source project](https://githu
 
 ## FastAdminAPI.Network
 
-网络请求类库，基于[reactiveui/refit开源项目](https://github.com/reactiveui/refit)进行开发，进行了统一的配置。
+A network request library built on the [reactiveui/refit open-source project](https://github.com/reactiveui/refit), with unified configuration.
 
-### 配置
+### Configuration
 ```C#
-//配置refit，并依赖注入
+//Configure Refit and register it with dependency injection
 builder.Services.AddRefitClients(configuration);
 ```
 
-### 使用
-调用外部接口只需要像调用本地方法一样使用。
+### Usage
+Call external APIs just as you would call local methods.
 ```C#
 public interface IEmailApi
 {
 	/// <summary>
-	/// 发送Smtp邮件
+	/// Send an SMTP email
 	/// </summary>
 	/// <param name="model"></param>
 	/// <returns></returns>
@@ -526,7 +526,7 @@ public interface IEmailApi
 
 public class Test
 {
-	//依赖注入
+	//Dependency injection
 	private readonly IEmailApi _emailApi;
 	public Test(IEmailApi emailApi)
 	{
@@ -535,7 +535,7 @@ public class Test
 
 	public async Task SendEmail(model)
 	{
-		//直接使用
+		//Call directly
 		await emailApi.SendSmtpEmail(model);
 	} 
 }
