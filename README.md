@@ -495,10 +495,10 @@ An email library built on the [jstedfast/MailKit open-source project](https://gi
 
 ## FastAdminAPI.NPOI
 
-Excel相关类库，基于[nissl-lab/npoi开源项目](https://github.com/nissl-lab/npoi)开发。
+An Excel library built on the [nissl-lab/npoi open-source project](https://github.com/nissl-lab/npoi).
 
-- 如果仅仅是简单的使用Excel导入和导出，可以使用`FastAdminAPI.Common`中的`MiniExcel`，该功能是引入了[mini-software/MiniExcel开源项目](https://github.com/mini-software/MiniExcel)，更加高效快捷，无需引入`FastAdminAPI.NPOI`类库
-- 比较复杂的Excel操作可以引用`FastAdminAPI.NPOI`进行更多的操作。
+- For simple Excel imports and exports, use `MiniExcel` in `FastAdminAPI.Common`. It uses the [mini-software/MiniExcel open-source project](https://github.com/mini-software/MiniExcel) for a faster, more efficient option and does not require the `FastAdminAPI.NPOI` library.
+- For more complex Excel operations, reference `FastAdminAPI.NPOI` for additional functionality.
 
 ## FastAdminAPI.Network
 
