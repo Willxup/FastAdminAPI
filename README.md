@@ -550,10 +550,10 @@ An event bus built on the [dotnetcore/CAP open-source project](https://github.co
 
 ## FastAdminAPI.Schedules
 
-定时任务，基于[HangfireIO/Hangfire开源项目](https://github.com/HangfireIO/Hangfire)进行开发，依赖于`Redis`。简化了相关配置。
+Scheduled tasks built on the [HangfireIO/Hangfire open-source project](https://github.com/HangfireIO/Hangfire), with simplified configuration. They depend on `Redis`.
 
 ### Dashboard
-- 修改`dashboard`登录账号和密码，可以修改`Program.cs`文件。
+- To change the `dashboard` login and password, edit `Program.cs`.
 ```C#
 new BasicAuthAuthorizationUser
 {
@@ -562,8 +562,8 @@ new BasicAuthAuthorizationUser
 }
 ```
 
-### 配置
-- 定时任务只需要继承`BaseScheduleJob.cs`基类即可，要配置定时任务执行的周期，可以在`appsettings.json中进行配置`。
+### Configuration
+- To create scheduled tasks, inherit from the base class in `BaseScheduleJob.cs`. Configure the execution frequency in `appsettings.json`.
 ```json
 "ScheduleJob": [
   {
@@ -579,7 +579,7 @@ new BasicAuthAuthorizationUser
   }
 ]
 ```
-只需要根据不同的定时任务，配置不同的配置即可，配置类为`ScheduleJobOptions`
+Provide the appropriate configuration for each scheduled task. The configuration class is `ScheduleJobOptions`.
 
 
 # <span id='chapter-4'>🍾 感谢</span>
