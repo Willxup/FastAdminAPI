@@ -544,9 +544,9 @@ public class Test
 
 ## FastAdminAPI.EventBus
 
-事件总线，基于[dotnetcore/CAP开源项目](https://github.com/dotnetcore/CAP)进行开发，启动后会展示`CAP.Dashboard`，该事件总线使用`MySQL`进行持久化存储，使用`Redis`进行消息的发布及消费。当前项目主要用于消费业务数据。
+An event bus built on the [dotnetcore/CAP open-source project](https://github.com/dotnetcore/CAP). It displays `CAP.Dashboard` on startup, uses `MySQL` for persistent storage, and uses `Redis` to publish and consume messages. This project is currently used primarily to consume business data.
 
-`CAP`的配置放在`appsettings.json`文件中，可以按需求修改。
+`CAP` configuration is stored in `appsettings.json` and can be modified as needed.
 
 ## FastAdminAPI.Schedules
 
