@@ -582,9 +582,9 @@ new BasicAuthAuthorizationUser
 Provide the appropriate configuration for each scheduled task. The configuration class is `ScheduleJobOptions`.
 
 
-# <span id='chapter-4'>🍾 感谢</span>
+# <span id='chapter-4'>🍾 Acknowledgments</span>
 
-以下是该项目用到的部分开源项目：
+Below are some of the open-source projects used by this project:
 
 - [DotNetNext/SqlSugar](https://github.com/DotNetNext/SqlSugar)
 - [HangfireIO/Hangfire](https://github.com/HangfireIO/Hangfire)
@@ -594,7 +594,7 @@ Provide the appropriate configuration for each scheduled task. The configuration
 - [nissl-lab/npoi](https://github.com/nissl-lab/npoi)
 - [jstedfast/MailKit](https://github.com/jstedfast/MailKit)
 
-感谢所有开源项目的贡献，好的项目需要大家共同维护和分享。
+Thank you to all open-source projects for their contributions. Great projects depend on a community that maintains and shares them.
 
 
 
