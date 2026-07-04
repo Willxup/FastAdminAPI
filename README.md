@@ -600,6 +600,6 @@ Thank you to all open-source projects for their contributions. Great projects de
 
 # <span id='chapter-5'>💛 Sponsor</span>
 
-感谢`JetBrains`对本项目的支持。
+Thank you to `JetBrains` for supporting this project.
 
  [![Jetbrains](https://github.com/joaomatossilva/DateTimeExtensions/raw/master/assets/jetbrains/jetbrains-variant-4-200.png)](https://www.jetbrains.com/)
