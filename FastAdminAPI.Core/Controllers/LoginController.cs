@@ -225,7 +225,7 @@ namespace FastAdminAPI.Core.Controllers
         [HttpGet]
         public async Task<ResponseModel> RefreshToken([FromQuery] string token)
         {
-            if (token.Length < 128)
+            if (string.IsNullOrEmpty(token) || token.Length < 128)
             {
                 return Error(ResponseMessage.InvalidToken, ResponseCode.InvalidToken);
             }
@@ -245,7 +245,7 @@ namespace FastAdminAPI.Core.Controllers
                 // 登录许可的redis key
                 string permitKey = LOGIN_PERMIT_KEY + jwt.UserId + ":" + jwt.Device;
 
-                if (await _redis.KeyExistsAsync(permitKey))
+                if (!await _redis.KeyExistsAsync(permitKey))
                 {
                     return Error(ResponseMessage.InvalidToken, ResponseCode.InvalidToken);
                 }
