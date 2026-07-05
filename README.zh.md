@@ -69,10 +69,10 @@ FastAdminAPI.Common/     通用工具类库
 FastAdminAPI.Core/       核心项目(可按该模板创建多个不同的微服务项目)
 FastAdminAPI.Email/      邮件收发类库(基于jstedfast/MailKit开源项目)
 FastAdminAPI.EventBus/   事件总线项目(基于dotnetcore/CAP开源项目)
-FastAdminAPI.Framework/  ORM类库(基于DotNetNext/SqlSugar开源项目)  
+FastAdminAPI.Framework/  ORM类库(基于DotNetNext/SqlSugar开源项目)
 FastAdminAPI.NPOI/       NPOI类库(基于nissl-lab/npoi开源项目)
 FastAdminAPI.Network/    网络请求类库(基于reactiveui/refit开源项目)
-FastAdminAPI.Tasks/      定时任务项目(基于HangfireIO/Hangfire开源项目)
+FastAdminAPI.Schedules/  定时任务项目(基于HangfireIO/Hangfire开源项目)
 FastAdminAPI.sln         解决方案
 ```
 
@@ -249,9 +249,9 @@ await _dbContext.Queryable<Table_Name>("t").ToListResultAsync(search, new Result
 - 正常查询
 
 ```sql
-SELECT 
-t_Id as Id, 
-t_Name as Name, 
+SELECT
+t_Id as Id,
+t_Name as Name,
 (SELECT name FROM Table_Name2 WHERE Table_Name.t_Id = Id) AS OtherName
 FROM Table_Name
 WHERE t_Name LIKE '%@Name%' AND t_CodeId IN (@CodeIds)
@@ -261,8 +261,8 @@ ORDER BY t_Name DESC;
 - 指定表别名查询
 
 ```sql
-SELECT 
-t.t_Id as Id, 
+SELECT
+t.t_Id as Id,
 t.t_Name as Name,
 (SELECT name FROM Table_Name2 WHERE t.t_Id = Id) AS OtherName
 FROM Table_Name t
@@ -274,7 +274,7 @@ ORDER BY t.t_Name DESC;
 
 #### 分组查询
 
-- 创建查询的查询条件类
+- 创建查询条件类
 
 ```c#
 [DbDefaultOrderBy("CountNums", DbSortWay.DESC)]
@@ -318,9 +318,9 @@ await _dbContext.Queryable<Table_Name>().ToListResultAsync(search, new Result())
 - 查询SQL
 
 ```sql
-SELECT 
-t_GroupCode as GroupCode, 
-t_GroupName as t_GroupName, 
+SELECT
+t_GroupCode as GroupCode,
+t_GroupName as t_GroupName,
 (Count(t_CodeId)) AS CountNums
 FROM Table_Name
 GROUP BY t_GroupCode,t_GroupName
@@ -358,7 +358,7 @@ public class AddModel : DbOperationBaseModel
 {
 	[DbOperationField("t_Name")]
 	public string Name { get; set; }
-	
+
 	[DbOperationField("t_Address")]
 	public string Address { get; set; }
 }
@@ -380,10 +380,10 @@ public class EditModel : DbOperationBaseModel
 {
 	[DbOperationField("t_Id", true)] //true代表更新条件
 	public long? Id { get; set; }
-	
+
 	[DbOperationField("t_Name")]
 	public string Name { get; set; }
-	
+
 	[DbOperationField("t_Address")]
 	public string Address { get; set; }
 }
@@ -391,7 +391,7 @@ public class EditModel : DbOperationBaseModel
 
 上述生成的`SQL`如下：
 ```sql
-UPDATE Table_Name SET t_Name = @Name, t_Address = @Address 
+UPDATE Table_Name SET t_Name = @Name, t_Address = @Address
 WHERE t_Id = @Id;
 ```
 
@@ -406,7 +406,7 @@ public class DelModel : DbOperationBaseModel
 {
 	[DbOperationField("t_Id", true)] //true代表更新条件
 	public long? Id { get; set; }
-	
+
 	[DbOperationField("t_IsValid")]
 	public int IsValid { get; set; }
 }
@@ -414,14 +414,14 @@ public class DelModel : DbOperationBaseModel
 
 上述生成的`SQL`如下：
 ```sql
-UPDATE Table_Name SET t_Name = @Name, t_IsValid = @IsValid 
+UPDATE Table_Name SET t_Name = @Name, t_IsValid = @IsValid
 WHERE t_Id = @Id;
 ```
 
 #### 事务
 
 ```C#
-await _dbContext.TransactionAsync(async () => 
+await _dbContext.TransactionAsync(async () =>
 {
 	//需要执行的sql
 });
@@ -537,7 +537,7 @@ public class Test
 	{
 		//直接使用
 		await emailApi.SendSmtpEmail(model);
-	} 
+	}
 }
 ```
 
@@ -563,7 +563,7 @@ new BasicAuthAuthorizationUser
 ```
 
 ### 配置
-- 定时任务只需要继承`BaseScheduleJob.cs`基类即可，要配置定时任务执行的周期，可以在`appsettings.json中进行配置`。
+- 定时任务只需要继承`BaseScheduleJob.cs`基类即可，要配置定时任务执行的周期，可以在`appsettings.json`中进行配置。
 ```json
 "ScheduleJob": [
   {

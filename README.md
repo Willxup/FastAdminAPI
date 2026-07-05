@@ -72,7 +72,7 @@ FastAdminAPI.EventBus/   Event bus project (based on the dotnetcore/CAP open-sou
 FastAdminAPI.Framework/  ORM library (based on the DotNetNext/SqlSugar open-source project)
 FastAdminAPI.NPOI/       NPOI library (based on the nissl-lab/npoi open-source project)
 FastAdminAPI.Network/    Network request library (based on the reactiveui/refit open-source project)
-FastAdminAPI.Tasks/      Scheduled task project (based on the HangfireIO/Hangfire open-source project)
+FastAdminAPI.Schedules/  Scheduled task project (based on the HangfireIO/Hangfire open-source project)
 FastAdminAPI.sln         Solution
 ```
 
