@@ -2110,11 +2110,6 @@
             账号
             </summary>
         </member>
-        <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeAccountModel.Password">
-            <summary>
-            密码
-            </summary>
-        </member>
         <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeAccountModel.AccountStatus">
             <summary>
             账号状态 0启用 1禁用
@@ -2357,7 +2352,7 @@
         </member>
         <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.Password">
             <summary>
-            密码
+            密码（新建账号必填；编辑已有账号时不传或空字符串表示保留原密码）
             </summary>
         </member>
         <member name="P:FastAdminAPI.Core.Models.Employee.EmployeeBaseInfoModel.AccountStatus">

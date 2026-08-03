@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
+using FastAdminAPI.Common.Cryptos;
 using FastAdminAPI.Common.Enums;
 using FastAdminAPI.Common.Logs;
 using FastAdminAPI.Core.IServices;
@@ -70,21 +71,24 @@ namespace FastAdminAPI.Core.Services
         /// <exception cref="UserOperationException"></exception>
         public async Task<UserModel> GetUser(string account, string password)
         {
-            //密码进行解密
-            //password = UserPasswordCryptionHelper.DecryptPassword(password);
+            if (string.IsNullOrEmpty(account) || string.IsNullOrEmpty(password))
+                throw new UserOperationException("账号或密码错误!");
 
             //校验用户及获取用户信息
             var user = await _dbContext.Queryable<S01_User>()
                 .Where(S01 => S01.S01_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
                               S01.S01_AccountStatus == (byte)BusinessEnums.AccountStatus.Enable &&
-                              S01.S01_Account == account &&
-                              S01.S01_Password == password)
+                              S01.S01_Account == account)
                 .Select(S01 => new
                 {
                     UserId = S01.S01_UserId,
-                    Account = S01.S01_Account
+                    Account = S01.S01_Account,
+                    Password = S01.S01_Password
                 })
                 .FirstAsync() ?? throw new UserOperationException("账号或密码错误!");
+
+            if (!UserPasswordCryptoTool.VerifyPassword(password, user.Password))
+                throw new UserOperationException("账号或密码错误!");
 
             //获取员工信息
             var employee = await _dbContext.Queryable<S07_Employee>()
@@ -96,6 +100,19 @@ namespace FastAdminAPI.Core.Services
                     EmployeeName = S07.S07_Name,
                     Avatar = S07.S07_Avatar
                 }).FirstAsync() ?? throw new UserOperationException("获取用户信息失败!");
+
+            // 旧账号登录成功后升级，避免覆盖并发修改的密码
+            if (!UserPasswordCryptoTool.IsHashedPassword(user.Password))
+            {
+                string passwordHash = UserPasswordCryptoTool.HashPassword(password);
+                var result = await _dbContext.Updateable<S01_User>()
+                    .SetColumns(S01 => S01.S01_Password == passwordHash)
+                    .Where(S01 => S01.S01_UserId == user.UserId && S01.S01_Password == user.Password)
+                    .ExecuteAsync();
+
+                if (result?.Code != ResponseCode.Success)
+                    throw new UserOperationException("登录失败，请稍后再试!");
+            }
 
             employee.UserId = user.UserId;
             employee.Account = user.Account;

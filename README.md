@@ -39,6 +39,14 @@ Set up the following requirements before starting the project:
 - `.NET6`
 - `Microsoft Visual Studio 2022`
 
+For a new database, import `FastAdminAPI.Framework/Database/FastAdminAPI_Db.sql`. For an existing database, run the following statement once before starting the updated application; the application does not migrate the schema automatically:
+
+```sql
+ALTER TABLE `S01_User` MODIFY COLUMN `S01_Password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户密码';
+```
+
+New and changed account passwords are hashed on the server. Existing passwords are upgraded after a successful password login. Employee account responses no longer include passwords. When editing an existing account, omit `Password` or send an empty string to keep its password; creating an account still requires a nonempty password.
+
 
 
 Modify the `appsettings.Development.json` file:

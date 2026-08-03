@@ -162,10 +162,6 @@ namespace FastAdminAPI.Core.Models.Employee
         /// </summary>
         public string Account { get; set; }
         /// <summary>
-        /// 密码
-        /// </summary>
-        public string Password { get; set; }
-        /// <summary>
         /// 账号状态 0启用 1禁用
         /// </summary>
         public byte? AccountStatus { get; set; }
@@ -378,7 +374,7 @@ namespace FastAdminAPI.Core.Models.Employee
         /// </summary>
         public string Account { get; set; }
         /// <summary>
-        /// 密码
+        /// 密码（新建账号必填；编辑已有账号时不传或空字符串表示保留原密码）
         /// </summary>
         public string Password { get; set; }
         /// <summary>

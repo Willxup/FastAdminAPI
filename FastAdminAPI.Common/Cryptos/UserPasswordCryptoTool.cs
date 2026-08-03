@@ -1,50 +1,54 @@
-﻿using System;
+using System;
 using FastAdminAPI.Common.Attributes;
-using FastAdminAPI.Common.Logs;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 
 namespace FastAdminAPI.Common.Cryptos
 {
     public static class UserPasswordCryptoTool
     {
-        /// <summary>
-        /// 密码密钥
-        /// </summary>
-
-        public const string PASSWORD_CRYPTO_KEY = "fastadminapiwxdaelzekf884knywill";
+        private const string HASH_PREFIX = "{PBKDF2}";
+        private static readonly PasswordHasher<object> _passwordHasher = new(
+            Options.Create(new PasswordHasherOptions { IterationCount = 600000 }));
 
         /// <summary>
-        /// 加密用户密码
+        /// 生成用户密码哈希，盐由框架生成并保存在哈希中
         /// </summary>
-        /// <param name="plaintext"></param>
-        /// <returns></returns>
-        public static string EncryptPassword(string plaintext)
+        public static string HashPassword(string password)
         {
-            try
-            {
-                return CryptoTool.RijndaelEncrypt(plaintext, PASSWORD_CRYPTO_KEY);
-            }
-            catch (Exception ex)
-            {
-                NLogHelper.Error($"用户密码加密失败，原因：{ex.Message}", ex);
-                throw new UserOperationException("数据异常，请稍后再试!");
-            }
+            if (string.IsNullOrEmpty(password))
+                throw new UserOperationException("密码不能为空!");
 
+            return HASH_PREFIX + _passwordHasher.HashPassword(null, password);
         }
+
         /// <summary>
-        /// 解密用户密码
+        /// 是否为已升级的密码格式
         /// </summary>
-        /// <param name="ciphertext"></param>
-        /// <returns></returns>
-        public static string DecryptPassword(string ciphertext)
+        public static bool IsHashedPassword(string storedPassword)
         {
+            return storedPassword?.StartsWith(HASH_PREFIX, StringComparison.Ordinal) ?? false;
+        }
+
+        /// <summary>
+        /// 校验密码，兼容未升级的旧值；哈希验证失败时不回退比较旧值
+        /// </summary>
+        public static bool VerifyPassword(string password, string storedPassword)
+        {
+            if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(storedPassword))
+                return false;
+
+            if (!IsHashedPassword(storedPassword))
+                return string.Equals(password, storedPassword, StringComparison.Ordinal);
+
             try
             {
-                return CryptoTool.RijndaelDecrypt(ciphertext, PASSWORD_CRYPTO_KEY);
+                return _passwordHasher.VerifyHashedPassword(null,
+                    storedPassword.Substring(HASH_PREFIX.Length), password) != PasswordVerificationResult.Failed;
             }
-            catch (Exception ex)
+            catch (FormatException)
             {
-                NLogHelper.Error($"用户密码解密失败，原因：{ex.Message}", ex);
-                throw new UserOperationException("数据异常，请稍后再试!");
+                return false;
             }
         }
     }

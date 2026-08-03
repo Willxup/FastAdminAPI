@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FastAdminAPI.Business.Interfaces;
 using FastAdminAPI.Common.Attributes;
 using FastAdminAPI.Common.BASE;
+using FastAdminAPI.Common.Cryptos;
 using FastAdminAPI.Common.Enums;
 using FastAdminAPI.Core.IServices;
 using FastAdminAPI.Core.Models.Employee;
@@ -341,7 +342,6 @@ namespace FastAdminAPI.Core.Services
                         .Select(c => new EmployeeAccountModel
                         {
                             Account = c.S01_Account,
-                            Password = c.S01_Password,
                             AccountStatus = c.S01_AccountStatus
                         }).FirstAsync();
 
@@ -427,7 +427,7 @@ namespace FastAdminAPI.Core.Services
                     if (model.Account == null)
                         throw new UserOperationException("账号不能为空!");
 
-                    if (model.Password == null)
+                    if (string.IsNullOrEmpty(model.Password))
                         throw new UserOperationException("密码不能为空!");
 
                     //名称重复校验
@@ -441,7 +441,7 @@ namespace FastAdminAPI.Core.Services
                     S01_User user = new()
                     {
                         S01_Account = model.Account,
-                        S01_Password = model.Password,
+                        S01_Password = UserPasswordCryptoTool.HashPassword(model.Password),
                         S01_AccountStatus = (byte)BusinessEnums.AccountStatus.Enable,
 
                         S01_IsDelete = (byte)BaseEnums.TrueOrFalse.False,
@@ -566,9 +566,6 @@ namespace FastAdminAPI.Core.Services
 
                 if (result?.Code == ResponseCode.Success)
                 {
-                    //密码进行解密
-                    //model.Password = UserPasswordCryptionHelper.DecryptPassword(model.Password);
-
                     //查询该员工是否存在用户账号
                     var userId = await _dbContext.Queryable<S07_Employee>()
                                  .Where(S07 => S07.S07_EmployeeId == model.EmployeeId)
@@ -581,12 +578,12 @@ namespace FastAdminAPI.Core.Services
                         if (model.Account == null)
                             throw new UserOperationException("账号不能为空!");
 
-                        if (model.Password == null)
-                            throw new UserOperationException("密码不能为空!");
-
                         //用户不存在时 新增用户
                         if (userId == null)
                         {
+                            if (string.IsNullOrEmpty(model.Password))
+                                throw new UserOperationException("密码不能为空!");
+
                             //名称重复校验
                             bool isExist = await _dbContext.Queryable<S01_User>()
                                 .Where(S01 => S01.S01_IsDelete == (byte)BaseEnums.TrueOrFalse.False &&
@@ -598,7 +595,7 @@ namespace FastAdminAPI.Core.Services
                             S01_User user = new()
                             {
                                 S01_Account = model.Account,
-                                S01_Password = model.Password,
+                                S01_Password = UserPasswordCryptoTool.HashPassword(model.Password),
                                 S01_AccountStatus = (byte)BusinessEnums.AccountStatus.Enable,
 
                                 S01_IsDelete = (byte)BaseEnums.TrueOrFalse.False,
@@ -628,20 +625,22 @@ namespace FastAdminAPI.Core.Services
                                 .AnyAsync();
                             if (isExist) throw new UserOperationException("账号已存在!");
 
-                            //修改用户账号及密码
-                            result = await _dbContext.Updateable<S01_User>()
-                                .SetColumns(S01 => new S01_User
-                                {
-                                    S01_Account = model.Account,
-                                    S01_Password = model.Password,
-                                    S01_AccountStatus = (byte)BusinessEnums.AccountStatus.Enable,
+                            //修改账号信息，未传入密码或传入空字符串时保留原密码
+                            var updateUser = _dbContext.Updateable<S01_User>()
+                                .SetColumns(S01 => S01.S01_Account == model.Account)
+                                .SetColumns(S01 => S01.S01_AccountStatus == (byte)BusinessEnums.AccountStatus.Enable)
+                                .SetColumns(S01 => S01.S01_ModifyId == _employeeId)
+                                .SetColumns(S01 => S01.S01_ModifyBy == _employeeName)
+                                .SetColumns(S01 => S01.S01_ModifyTime == SqlFunc.GetDate())
+                                .Where(S01 => S01.S01_UserId == userId);
 
-                                    S01_ModifyId = _employeeId,
-                                    S01_ModifyBy = _employeeName,
-                                    S01_ModifyTime = SqlFunc.GetDate()
-                                })
-                                .Where(S01 => S01.S01_UserId == userId)
-                                .ExecuteAsync();
+                            if (!string.IsNullOrEmpty(model.Password))
+                            {
+                                string passwordHash = UserPasswordCryptoTool.HashPassword(model.Password);
+                                updateUser = updateUser.SetColumns(S01 => S01.S01_Password == passwordHash);
+                            }
+
+                            result = await updateUser.ExecuteAsync();
 
                             if (result?.Code == ResponseCode.Success)
                             {

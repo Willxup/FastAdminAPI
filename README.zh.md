@@ -39,6 +39,14 @@
 - `.NET6`
 - `Microsoft Visual Studio 2022`
 
+新建数据库请导入 `FastAdminAPI.Framework/Database/FastAdminAPI_Db.sql`。已有数据库请在启动新版应用前手工执行一次以下语句，应用不会自动修改表结构：
+
+```sql
+ALTER TABLE `S01_User` MODIFY COLUMN `S01_Password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户密码';
+```
+
+新建账号和修改密码均由服务端生成密码哈希；旧密码在成功进行密码登录后升级。员工账号响应不再包含密码。编辑已有账号时，不传 `Password` 或传空字符串表示保留原密码；创建账号仍须提供非空密码。
+
 
 
 修改`appsettings.Development.json`文件
