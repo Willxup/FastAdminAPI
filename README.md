@@ -47,6 +47,8 @@ ALTER TABLE `S01_User` MODIFY COLUMN `S01_Password` varchar(255) CHARACTER SET u
 
 New and changed account passwords are hashed on the server. Existing passwords are upgraded after a successful password login. Employee account responses no longer include passwords. When editing an existing account, omit `Password` or send an empty string to keep its password; creating an account still requires a nonempty password.
 
+Set the same random `Jwt.SecretKey` of at least 32 UTF-8 bytes in the `appsettings.Development.json` / `appsettings.Production.json` files of Core, OSS, Schedules, and Hubs. Schedules also requires `Hangfire.Dashboard.Username` and `Hangfire.Dashboard.Password`. These settings have no default credentials; missing or invalid settings stop startup. Restart the corresponding service after configuration changes. When rotating the JWT key, restart all related services and log in again.
+
 
 
 Modify the `appsettings.Development.json` file:
@@ -54,6 +56,7 @@ Modify the `appsettings.Development.json` file:
 ```json
 {
   "Database.ConnectionString": "Database connection string",
+  "Jwt.SecretKey": "", #Set the same random secret in each JWT-enabled service
   "Redis.ConnectionString": "Redis connection string",
   "Redis.DbNum": 0, #Redis database number
   "Login.IPAddress.WhiteList": "", #IP whitelist
@@ -187,7 +190,7 @@ app.UseSwaggerUI(c => { c.Configure(serviceName); });
 
 ```C#
 //JWT configuration
-builder.Services.AddJwtAuthentication();
+builder.Services.AddJwtAuthentication(configuration);
 
 //Configure after creating the app with WebApplication app = builder.Build()
 app.UseAuthentication();
@@ -561,14 +564,17 @@ An event bus built on the [dotnetcore/CAP open-source project](https://github.co
 Scheduled tasks built on the [HangfireIO/Hangfire open-source project](https://github.com/HangfireIO/Hangfire), with simplified configuration. They depend on `Redis`.
 
 ### Dashboard
-- To change the `dashboard` login and password, edit `Program.cs`.
-```C#
-new BasicAuthAuthorizationUser
+
+Set `Hangfire.Dashboard.Username` and `Hangfire.Dashboard.Password` in the Schedules service's `appsettings.Development.json` / `appsettings.Production.json` files. Both are required at startup:
+
+```json
 {
-	Login = "fastadminapi",
-	PasswordClear =  "123456"
+  "Hangfire.Dashboard.Username": "",
+  "Hangfire.Dashboard.Password": ""
 }
 ```
+
+Restart Schedules after updating these settings.
 
 ### Configuration
 - To create scheduled tasks, inherit from the base class in `BaseScheduleJob.cs`. Configure the execution frequency in `appsettings.json`.

@@ -47,6 +47,8 @@ ALTER TABLE `S01_User` MODIFY COLUMN `S01_Password` varchar(255) CHARACTER SET u
 
 新建账号和修改密码均由服务端生成密码哈希；旧密码在成功进行密码登录后升级。员工账号响应不再包含密码。编辑已有账号时，不传 `Password` 或传空字符串表示保留原密码；创建账号仍须提供非空密码。
 
+请在 Core、OSS、Schedules、Hubs 各服务的 `appsettings.Development.json` / `appsettings.Production.json` 中设置相同的 `Jwt.SecretKey` 随机密钥，UTF-8 长度至少为 32 字节。Schedules 还必须设置 `Hangfire.Dashboard.Username` 和 `Hangfire.Dashboard.Password`。这些配置不提供默认凭据，缺失或无效会阻止启动。修改配置后须重启对应服务；轮换 JWT 密钥时须重启所有相关服务并重新登录。
+
 
 
 修改`appsettings.Development.json`文件
@@ -54,6 +56,7 @@ ALTER TABLE `S01_User` MODIFY COLUMN `S01_Password` varchar(255) CHARACTER SET u
 ```json
 {
   "Database.ConnectionString": "数据库连接字符串",
+  "Jwt.SecretKey": "", #各启用JWT的服务须设置相同随机密钥
   "Redis.ConnectionString": "Redis连接字符串",
   "Redis.DbNum": 0, #Redis库编号
   "Login.IPAddress.WhiteList": "", #IP白名单
@@ -187,7 +190,7 @@ app.UseSwaggerUI(c => { c.Configure(serviceName); });
 
 ```C#
 //jwt配置
-builder.Services.AddJwtAuthentication();
+builder.Services.AddJwtAuthentication(configuration);
 
 //WebApplication app = builder.Build()构建后进行配置
 app.UseAuthentication();
@@ -561,14 +564,17 @@ public class Test
 定时任务，基于[HangfireIO/Hangfire开源项目](https://github.com/HangfireIO/Hangfire)进行开发，依赖于`Redis`。简化了相关配置。
 
 ### Dashboard
-- 修改`dashboard`登录账号和密码，可以修改`Program.cs`文件。
-```C#
-new BasicAuthAuthorizationUser
+
+在 Schedules 服务的 `appsettings.Development.json` / `appsettings.Production.json` 中配置 `Hangfire.Dashboard.Username` 和 `Hangfire.Dashboard.Password`，启动时两项均不能为空：
+
+```json
 {
-	Login = "fastadminapi",
-	PasswordClear =  "123456"
+  "Hangfire.Dashboard.Username": "",
+  "Hangfire.Dashboard.Password": ""
 }
 ```
+
+修改后重启 Schedules 服务。
 
 ### 配置
 - 定时任务只需要继承`BaseScheduleJob.cs`基类即可，要配置定时任务执行的周期，可以在`appsettings.json`中进行配置。

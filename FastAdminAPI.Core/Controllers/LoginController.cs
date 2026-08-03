@@ -230,7 +230,7 @@ namespace FastAdminAPI.Core.Controllers
                 return Error(ResponseMessage.InvalidToken, ResponseCode.InvalidToken);
             }
 
-            if (!JwtHelper.ValidateJwtToken(token))
+            if (!JwtHelper.ValidateJwtToken(token, _configuration))
             {
                 return Error(ResponseMessage.InvalidToken, ResponseCode.InvalidToken);
             }

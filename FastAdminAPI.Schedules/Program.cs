@@ -93,6 +93,11 @@ try
     #endregion
 
     #region hangfire定时任务
+    string dashboardUsername = configuration.GetValue<string>("Hangfire.Dashboard.Username");
+    string dashboardPassword = configuration.GetValue<string>("Hangfire.Dashboard.Password");
+    if (string.IsNullOrWhiteSpace(dashboardUsername) || string.IsNullOrWhiteSpace(dashboardPassword))
+        throw new InvalidOperationException("请配置 Hangfire.Dashboard.Username 和 Hangfire.Dashboard.Password!");
+
     // hangfire
     builder.Services.AddHangfire(config =>
     config
@@ -123,7 +128,7 @@ try
     #endregion
 
     #region 统一认证
-    builder.Services.AddJwtAuthentication();
+    builder.Services.AddJwtAuthentication(configuration);
     #endregion
 
     #region swagger文档配置
@@ -159,8 +164,8 @@ try
             {
                 new BasicAuthAuthorizationUser
                 {
-                    Login = "fastadminapi",
-                    PasswordClear =  "123456"
+                    Login = dashboardUsername,
+                    PasswordClear = dashboardPassword
                 }
             }
         })}

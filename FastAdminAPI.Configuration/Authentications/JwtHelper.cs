@@ -16,6 +16,18 @@ namespace FastAdminAPI.Configuration.Authentications
     public class JwtHelper
     {
         /// <summary>
+        /// 读取并校验JWT签名密钥，统一使用UTF-8
+        /// </summary>
+        public static SymmetricSecurityKey GetSigningKey(IConfiguration configuration)
+        {
+            string secretKey = configuration.GetValue<string>("Jwt.SecretKey");
+            if (string.IsNullOrWhiteSpace(secretKey) || Encoding.UTF8.GetByteCount(secretKey) < 32)
+                throw new InvalidOperationException("Jwt.SecretKey 未配置或不足32个UTF-8字节!");
+
+            return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+        }
+
+        /// <summary>
         /// 颁发JWT字符串
         /// </summary>
         /// <param name="token"></param>
@@ -42,7 +54,7 @@ namespace FastAdminAPI.Configuration.Authentications
                };
 
                 // 秘钥 (SymmetricSecurityKey 对安全性的要求，密钥的长度太短会报出异常)
-                SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(Define.TOKEN_SECRET));
+                SymmetricSecurityKey key = GetSigningKey(configuration);
 
                 // 证书
                 SigningCredentials creds = new(key, SecurityAlgorithms.HmacSha256);
@@ -119,8 +131,9 @@ namespace FastAdminAPI.Configuration.Authentications
         /// 校验JWTToken
         /// </summary>
         /// <param name="jwtStr"></param>
+        /// <param name="configuration"></param>
         /// <returns></returns>
-        public static bool ValidateJwtToken(string jwtStr)
+        public static bool ValidateJwtToken(string jwtStr, IConfiguration configuration)
         {
             try
             {
@@ -131,7 +144,7 @@ namespace FastAdminAPI.Configuration.Authentications
                 jwtHandler.ValidateToken(jwtStr, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Define.TOKEN_SECRET)),
+                    IssuerSigningKey = GetSigningKey(configuration),
                     ValidIssuer = Define.ISSUER,
                     ValidateIssuer = true,
                     ValidAudience = Define.AUDIENCE,

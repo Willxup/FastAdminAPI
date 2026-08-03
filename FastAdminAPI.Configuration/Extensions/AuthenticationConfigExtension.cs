@@ -1,8 +1,9 @@
 using System;
-using System.Text;
 using System.Threading.Tasks;
+using FastAdminAPI.Configuration.Authentications;
 using FastAdminAPI.Configuration.BASE;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
@@ -17,9 +18,12 @@ namespace FastAdminAPI.Configuration.Extensions
         /// JWT校验配置
         /// </summary>
         /// <param name="services"></param>
+        /// <param name="configuration"></param>
         /// <returns></returns>
-        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services)
+        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
+            // 注册时校验，缺少有效密钥时停止启动
+            SymmetricSecurityKey signingKey = JwtHelper.GetSigningKey(configuration);
 
             services.AddAuthentication(x =>
             {
@@ -32,7 +36,7 @@ namespace FastAdminAPI.Configuration.Extensions
                 option.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Define.TOKEN_SECRET)),
+                    IssuerSigningKey = signingKey,
                     ValidIssuer = Define.ISSUER,
                     ValidateIssuer = true,
                     ValidAudience = Define.AUDIENCE,

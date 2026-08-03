@@ -89,7 +89,7 @@ try
     #endregion
 
     #region 统一认证
-    builder.Services.AddJwtAuthentication();
+    builder.Services.AddJwtAuthentication(builder.Configuration);
     #endregion
 
     #endregion

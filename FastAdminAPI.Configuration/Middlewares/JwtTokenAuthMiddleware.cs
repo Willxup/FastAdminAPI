@@ -119,7 +119,7 @@ namespace FastAdminAPI.Configuration.Middlewares
                     }
 
                     // 校验是否为系统颁发的令牌
-                    if (!JwtHelper.ValidateJwtToken(tokenByQuery))
+                    if (!JwtHelper.ValidateJwtToken(tokenByQuery, _configuration))
                     {
                         await FailAuth(httpContext, GetInvalidTokenResponse());
                         return;
@@ -206,7 +206,7 @@ namespace FastAdminAPI.Configuration.Middlewares
             }
 
             // 校验是否为系统颁发的令牌
-            if (!JwtHelper.ValidateJwtToken(token))
+            if (!JwtHelper.ValidateJwtToken(token, _configuration))
             {
                 await FailAuth(httpContext, GetInvalidTokenResponse());
                 return;

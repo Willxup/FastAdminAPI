@@ -26,11 +26,6 @@ namespace FastAdminAPI.Configuration.BASE
         public const string AUDIENCE = "Api";
 
         /// <summary>
-        /// Token密钥
-        /// </summary>
-        public const string TOKEN_SECRET = "fastadminapitokmh20200330dfbnspertwill";
-
-        /// <summary>
         /// 密码密钥
         /// </summary>
         public const string PASSWORD_CRYPTO_KEY = "fastadminapiwxdaelzekf884knywill";

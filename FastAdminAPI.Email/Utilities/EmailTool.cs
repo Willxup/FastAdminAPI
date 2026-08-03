@@ -93,8 +93,6 @@ namespace FastAdminAPI.Email.Extensions
 
                 using SmtpClient client = new();
 
-                client.ServerCertificateValidationCallback = (s, c, h, e) => true;
-
                 client.Connect(emailModel.SmtpServer, (int)emailModel.SmtpPort, true);
 
                 client.Authenticate(emailModel.FromAccount, emailModel.FromPassword);
@@ -148,8 +146,6 @@ namespace FastAdminAPI.Email.Extensions
                     };
 
                     using SmtpClient client = new();
-
-                    client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 
                     client.Connect(emailModel.SmtpServer, (int)emailModel.SmtpPort, true);
 
