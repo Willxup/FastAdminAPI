@@ -245,13 +245,13 @@ namespace FastAdminAPI.Core.Controllers
                 // 登录许可的redis key
                 string permitKey = LOGIN_PERMIT_KEY + jwt.UserId + ":" + jwt.Device;
 
-                if (!await _redis.KeyExistsAsync(permitKey))
+                // 获取登录许可(token)
+                string tokenByRedis = await _redis.StringGetAsync(permitKey);
+
+                if (string.IsNullOrEmpty(tokenByRedis))
                 {
                     return Error(ResponseMessage.InvalidToken, ResponseCode.InvalidToken);
                 }
-
-                // 获取登录许可(token)
-                string tokenByRedis = await _redis.StringGetAsync(permitKey);
 
                 // 如果登录许可(token)与传入的token不一致，说明在其他设备登录
                 if (tokenByRedis != token)
